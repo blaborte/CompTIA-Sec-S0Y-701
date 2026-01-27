@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam A - Interactive Practice</title>
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.125);
+            --accent: #38bdf8;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 800px; width: 100%; }
+
+        h1 { text-align: center; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; }
+
+        .question-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .log-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            border: 1px solid var(--glass-border);
+            white-space: pre-wrap;
+        }
+
+        .q-number { font-weight: bold; color: var(--accent); margin-right: 10px; }
+        .q-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; display: block; }
+        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+        .option:hover { background: rgba(255, 255, 255, 0.08); }
+
+        .submit-btn {
+            background: var(--accent);
+            color: var(--primary-bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .submit-btn:active { transform: scale(0.95); }
+
+        .answer-key { display: none; margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2); }
+        .correct-label { display: block; font-weight: bold; margin-bottom: 5px; color: var(--success); }
+        .explanation { color: var(--text-dim); font-size: 0.95rem; }
+
+        .result-msg { font-weight: bold; margin-bottom: 10px; display: none; }
+        .is-correct { color: var(--success); }
+        .is-wrong { color: var(--error); }
+        
+        .correct-opt { border: 1px solid var(--success) !important; background: rgba(16, 185, 129, 0.1) !important; }
+        .wrong-opt { border: 1px solid var(--error) !important; background: rgba(239, 68, 68, 0.1) !important; }
+
+        footer { margin-top: 50px; color: var(--text-dim); text-align: center; padding-bottom: 40px; }
+		
+		.nav-header {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .home-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        color: var(--text-main);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .home-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: var(--accent);
+        transform: translateY(-2px);
+    }
+
+    .home-btn svg {
+        margin-right: 8px;
+        fill: var(--accent);
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+<div class="nav-header">
+        <a href="index.html" class="home-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+                <path d="M240-200h120v-240h240v240h120v-440L480-740 240-440v440Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/>
+            </svg>
+            Home
+        </a>
+    </div>
+    <h1>Security+ Practice Exam A</h1>
+
+    <div class="question-card" id="card-a6">
+        <span class="q-text"><span class="q-number">A6.</span>A company has hired a third-party to gather information about the company’s servers and data. This third-party will not have direct access to the company's internal network, but they can gather information from any other source. Which of the following would BEST describe this approach?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q6" value="A"> A. Vulnerability scanning</label>
+            <label class="option"><input type="radio" name="q6" value="B" data-correct="true"> B. Passive reconnaissance</label>
+            <label class="option"><input type="radio" name="q6" value="C"> C. Supply chain analysis</label>
+            <label class="option"><input type="radio" name="q6" value="D"> D. Regulatory audit</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a6')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Passive reconnaissance involves gathering information about a target without directly interacting with their systems or network, often using publicly available sources (OSINT).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a7">
+        <span class="q-text"><span class="q-number">A7.</span>A company's email server has received an email from a third-party, but the origination server does not match the list of authorized devices. Which of the following would determine the disposition of this message?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q7" value="A"> A. SPF</label>
+            <label class="option"><input type="radio" name="q7" value="B"> B. NAC</label>
+            <label class="option"><input type="radio" name="q7" value="C" data-correct="true"> C. DMARC</label>
+            <label class="option"><input type="radio" name="q7" value="D"> D. DKIM</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a7')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">DMARC (Domain-based Message Authentication, Reporting, and Conformance) uses SPF and DKIM to determine the "disposition" (pass, quarantine, or reject) of an email.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a8">
+        <span class="q-text"><span class="q-number">A8.</span>Which of these threat actors would be MOST likely to attack systems for direct financial gain?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q8" value="A" data-correct="true"> A. Organized crime</label>
+            <label class="option"><input type="radio" name="q8" value="B"> B. Hacktivist</label>
+            <label class="option"><input type="radio" name="q8" value="C"> C. Nation state</label>
+            <label class="option"><input type="radio" name="q8" value="D"> D. Shadow IT</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a8')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Organized crime groups are typically motivated by profit and direct financial gain through activities like ransomware and data theft.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a9">
+        <span class="q-text"><span class="q-number">A9.</span>A security administrator has examined a server recently compromised by an attacker, and has determined the system was exploited due to a known operating system vulnerability. Which of the following would BEST describe this finding?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q9" value="A" data-correct="true"> A. Root cause analysis</label>
+            <label class="option"><input type="radio" name="q9" value="B"> B. E-discovery</label>
+            <label class="option"><input type="radio" name="q9" value="C"> C. Risk appetite</label>
+            <label class="option"><input type="radio" name="q9" value="D"> D. Data subject</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a9')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Identifying the underlying reason an event occurred (in this case, an unpatched OS vulnerability) is the primary goal of root cause analysis.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a10">
+        <span class="q-text"><span class="q-number">A10.</span>A city is building an ambulance service network for emergency medical dispatching. Which of the following should have the highest priority?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q10" value="A"> A. Integration costs</label>
+            <label class="option"><input type="radio" name="q10" value="B"> B. Patch availability</label>
+            <label class="option"><input type="radio" name="q10" value="C" data-correct="true"> C. System availability</label>
+            <label class="option"><input type="radio" name="q10" value="D"> D. Power usage</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a10')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">For life-safety services like emergency medical dispatching, system availability is the most critical priority to ensure the service is always functional when needed.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a11">
+        <span class="q-text"><span class="q-number">A11.</span>A system administrator receives a text alert when access rights are changed on a database containing private customer information. Which of the following would describe this alert?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q11" value="A"> A. Maintenance window</label>
+            <label class="option"><input type="radio" name="q11" value="B"> B. Attestation and acknowledgment</label>
+            <label class="option"><input type="radio" name="q11" value="C" data-correct="true"> C. Automation</label>
+            <label class="option"><input type="radio" name="q11" value="D"> D. External audit</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a11')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">Automated alerts allow for immediate notification when specific security events occur, enabling faster response times.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a12">
+        <span class="q-text"><span class="q-number">A12.</span>A security administrator is concerned about the potential for data exfiltration using external storage drives. Which of the following would be the BEST way to prevent this method of data exfiltration?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q12" value="A" data-correct="true"> A. Create an operating system security policy to block the use of removable media</label>
+            <label class="option"><input type="radio" name="q12" value="B"> B. Monitor removable media usage in host-based firewall logs</label>
+            <label class="option"><input type="radio" name="q12" value="C"> C. Only allow applications that do not use removable media</label>
+            <label class="option"><input type="radio" name="q12" value="D"> D. Define a removable media block rule in the UTM</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a12')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Enforcing a policy at the OS level (like Group Policy in Windows) is the most effective way to prevent the system from even recognizing or mounting removable storage devices.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a13">
+        <span class="q-text"><span class="q-number">A13.</span>A company creates a standard set of government reports each calendar quarter. Which of the following would describe this type of data?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q13" value="A"> A. Data in use</label>
+            <label class="option"><input type="radio" name="q13" value="B"> B. Obfuscated</label>
+            <label class="option"><input type="radio" name="q13" value="C"> C. Trade secrets</label>
+            <label class="option"><input type="radio" name="q13" value="D" data-correct="true"> D. Regulated</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a13')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Government reports and compliance documents are considered regulated data because they must follow specific legal and professional standards.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a14">
+        <span class="q-text"><span class="q-number">A14.</span>An insurance company has requirements for data handling: Save/archive access records, report access outside work hours, restrict access to the country, and create logs from a single database. Which THREE should be implemented?</span>
+        <div class="options">
+            <label class="option"><input type="checkbox" name="q14" value="A" data-correct="true"> A. Restrict login access by IP address and GPS location</label>
+            <label class="option"><input type="checkbox" name="q14" value="B"> B. Require gov-issued ID during onboarding</label>
+            <label class="option"><input type="checkbox" name="q14" value="C"> C. Add additional password complexity</label>
+            <label class="option"><input type="checkbox" name="q14" value="D"> D. Conduct monthly permission auditing</label>
+            <label class="option"><input type="checkbox" name="q14" value="E" data-correct="true"> E. Consolidate all logs on a SIEM</label>
+            <label class="option"><input type="checkbox" name="q14" value="F"> F. Archive encryption keys</label>
+            <label class="option"><input type="checkbox" name="q14" value="G" data-correct="true"> G. Enable time-of-day restrictions on the authentication server</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkMultiAnswer('a14', 3)">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A, E, G</span>
+            <p class="explanation">A addresses geographic restrictions; E consolidates logs into a single database for archiving/auditing; G enforces work-hour restrictions.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a15">
+        <span class="q-text"><span class="q-number">A15.</span>A security engineer is viewing this record from the firewall logs:</span>
+        <div class="log-box">UTC 04/05/2023 03:09:15809 AV Gateway Alert
+136.127.92.171 80 -> 10.16.10.14 60818
+Gateway Anti-Virus Alert:
+XPACK.A_7854 (Trojan) blocked.</div>
+        <div class="options">
+            <label class="option"><input type="radio" name="q15" value="A"> A. The victim's IP address is 136.127.92.171</label>
+            <label class="option"><input type="radio" name="q15" value="B" data-correct="true"> B. A download was blocked from a web server</label>
+            <label class="option"><input type="radio" name="q15" value="C"> C. A botnet DDoS attack was blocked</label>
+            <label class="option"><input type="radio" name="q15" value="D"> D. The Trojan was blocked, but the file was not</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a15')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">The log shows traffic from an external IP on port 80 (HTTP) being blocked by the Gateway AV due to a Trojan, indicating an attempted web download was stopped.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a16">
+        <span class="q-text"><span class="q-number">A16.</span>A user connects to a third-party website and receives this message: "Your connection is not private. NET::ERR_CERT_INVALID". Which attack is the MOST likely reason?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q16" value="A"> A. Brute force</label>
+            <label class="option"><input type="radio" name="q16" value="B"> B. DoS</label>
+            <label class="option"><input type="radio" name="q16" value="C" data-correct="true"> C. On-path</label>
+            <label class="option"><input type="radio" name="q16" value="D"> D. Deauthentication</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a16')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">An invalid certificate error often indicates an on-path (Man-in-the-Middle) attack where the attacker is presenting a fraudulent certificate to intercept traffic.</p>
+        </div>
+		<div class="question-card" id="card-a17">
+        <span class="q-text"><span class="q-number">A17.</span>Which of the following would be the BEST way to provide a website login using existing credentials from a third-party site?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q17" value="A" data-correct="true"> A. Federation</label>
+            <label class="option"><input type="radio" name="q17" value="B"> B. 802.1X</label>
+            <label class="option"><input type="radio" name="q17" value="C"> C. EAP</label>
+            <label class="option"><input type="radio" name="q17" value="D"> D. SSO</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a17')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Federation allows for the use of credentials across different networks or organizations, enabling users to log in to one site using the identity managed by another (e.g., "Log in with Google").</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a18">
+        <span class="q-text"><span class="q-number">A18.</span>A system administrator needs to know how often firewall hardware is expected to fail between repairs to specify a minimum uptime. Which of the following would BEST describe this information?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q18" value="A" data-correct="true"> A. MTBF</label>
+            <label class="option"><input type="radio" name="q18" value="B"> B. RTO</label>
+            <label class="option"><input type="radio" name="q18" value="C"> C. MTTR</label>
+            <label class="option"><input type="radio" name="q18" value="D"> D. RPO</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a18')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Mean Time Between Failures (MTBF) is the predicted elapsed time between inherent failures of a mechanical or electronic system during normal system operation.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a19">
+        <span class="q-text"><span class="q-number">A19.</span>An attacker calls a company’s help desk pretending to be a director to get a password reset quickly for a meeting. What kind of attack is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q19" value="A" data-correct="true"> A. Social engineering</label>
+            <label class="option"><input type="radio" name="q19" value="B"> B. Supply chain</label>
+            <label class="option"><input type="radio" name="q19" value="C"> C. Watering hole</label>
+            <label class="option"><input type="radio" name="q19" value="D"> D. On-path</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a19')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Social engineering is the use of deception to manipulate individuals into divulging confidential or personal information, often using principles like authority and urgency.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a20">
+        <span class="q-text"><span class="q-number">A20.</span>Two companies want to qualify their partnership with a broad formal agreement between both organizations. Which of the following would describe this agreement?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q20" value="A"> A. SLA</label>
+            <label class="option"><input type="radio" name="q20" value="B"> B. SOW</label>
+            <label class="option"><input type="radio" name="q20" value="C" data-correct="true"> C. MOA</label>
+            <label class="option"><input type="radio" name="q20" value="D"> D. NDA</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a20')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">A Memorandum of Agreement (MOA) is a document describing a cooperative relationship between two organizations wishing to work together on a project or goal.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a21">
+        <span class="q-text"><span class="q-number">A21.</span>Which of the following would explain why a company would automatically add a digital signature to each outgoing email message?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q21" value="A"> A. Confidentiality</label>
+            <label class="option"><input type="radio" name="q21" value="B" data-correct="true"> B. Integrity</label>
+            <label class="option"><input type="radio" name="q21" value="C"> C. Authentication</label>
+            <label class="option"><input type="radio" name="q21" value="D"> D. Availability</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a21')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Digital signatures provide integrity by ensuring the message hasn't been altered in transit, and non-repudiation by verifying the sender's identity.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a22">
+        <span class="q-text"><span class="q-number">A22.</span>A time clock appliance is configured to reset and reboot on error. A startup error now causes it to constantly reboot. Which issue is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q22" value="A"> A. Memory injection</label>
+            <label class="option"><input type="radio" name="q22" value="B" data-correct="true"> B. Resource consumption</label>
+            <label class="option"><input type="radio" name="q22" value="C"> C. Race condition</label>
+            <label class="option"><input type="radio" name="q22" value="D"> D. Malicious update</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a22')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">This cycle is a form of resource exhaustion/consumption where the system cannot complete its tasks, rendering it unavailable due to the constant reboot loop.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a23">
+        <span class="q-text"><span class="q-number">A23.</span>Existing policies lack restrictions on password attempts and periodic changes. Which TWO would correct these?</span>
+        <div class="options">
+            <label class="option"><input type="checkbox" name="q23" value="A"> A. Password complexity</label>
+            <label class="option"><input type="checkbox" name="q23" value="B" data-correct="true"> B. Password expiration</label>
+            <label class="option"><input type="checkbox" name="q23" value="C"> C. Password reuse</label>
+            <label class="option"><input type="checkbox" name="q23" value="D" data-correct="true"> D. Account lockout</label>
+            <label class="option"><input type="checkbox" name="q23" value="E"> E. Password managers</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkMultiAnswer('a23', 2)">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B, D</span>
+            <p class="explanation">Password expiration forces periodic changes, and account lockout enforces a limit on failed password attempts.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a24">
+        <span class="q-text"><span class="q-number">A24.</span>What kind of security control is associated with a login banner?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q24" value="A"> A. Preventive</label>
+            <label class="option"><input type="radio" name="q24" value="B" data-correct="true"> B. Deterrent</label>
+            <label class="option"><input type="radio" name="q24" value="C"> C. Corrective</label>
+            <label class="option"><input type="radio" name="q24" value="D"> D. Detective</label>
+            <label class="option"><input type="radio" name="q24" value="E"> E. Compensating</label>
+            <label class="option"><input type="radio" name="q24" value="F"> F. Directive</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a24')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">A deterrent control discourages individuals from attempting a security violation by warning them of the consequences or policies.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a25">
+        <span class="q-text"><span class="q-number">A25.</span>Unpatched servers are found and patching will take two weeks. What is the best quick response in the meantime?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q25" value="A"> A. Purchase insurance</label>
+            <label class="option"><input type="radio" name="q25" value="B"> B. Implement an exception</label>
+            <label class="option"><input type="radio" name="q25" value="C" data-correct="true"> C. Move the servers to a protected segment</label>
+            <label class="option"><input type="radio" name="q25" value="D"> D. Hire a third-party audit</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a25')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">Isolating vulnerable servers in a protected or restricted network segment reduces the attack surface while testing for patches is underway.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a26">
+        <span class="q-text"><span class="q-number">A26.</span>Steps for processing orders if the primary Internet connection fails are being documented. BEST describe these?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q26" value="A"> A. Platform diversity</label>
+            <label class="option"><input type="radio" name="q26" value="B" data-correct="true"> B. Continuity of operations</label>
+            <label class="option"><input type="radio" name="q26" value="C"> C. Cold site recovery</label>
+            <label class="option"><input type="radio" name="q26" value="D"> D. Tabletop exercise</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a26')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Continuity of Operations (COOP) plans describe how an organization will continue to function during a disruption to normal operations.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a27">
+        <span class="q-text"><span class="q-number">A27.</span>A company would like to examine the credentials of each individual entering the data center building. BEST facilitate this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q27" value="A" data-correct="true"> A. Access control vestibule</label>
+            <label class="option"><input type="radio" name="q27" value="B"> B. Video surveillance</label>
+            <label class="option"><input type="radio" name="q27" value="C"> C. Pressure sensors</label>
+            <label class="option"><input type="radio" name="q27" value="D"> D. Bollards</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a27')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">An access control vestibule (mantrap) allows for the verification of credentials while the individual is held between two sets of doors.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a28">
+        <span class="q-text"><span class="q-number">A28.</span>Employee info is encrypted but public details are plaintext. Which encryption strategy is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q28" value="A"> A. Full-disk</label>
+            <label class="option"><input type="radio" name="q28" value="B" data-correct="true"> B. Record</label>
+            <label class="option"><input type="radio" name="q28" value="C"> C. Asymmetric</label>
+            <label class="option"><input type="radio" name="q28" value="D"> D. Key escrow</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a28')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Record-level encryption (or database encryption) allows specific fields or rows to be encrypted while others remain accessible in plaintext.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a29">
+        <span class="q-text"><span class="q-number">A29.</span>A company would like to minimize database corruption if power is lost. BEST strategy?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q29" value="A"> A. Encryption</label>
+            <label class="option"><input type="radio" name="q29" value="B"> B. Off-site backups</label>
+            <label class="option"><input type="radio" name="q29" value="C" data-correct="true"> C. Journaling</label>
+            <label class="option"><input type="radio" name="q29" value="D"> D. Replication</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a29')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">Journaling file systems or databases keep a log of changes that haven't yet been committed to the main part of the file system, allowing for recovery after a crash.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a30">
+        <span class="q-text"><span class="q-number">A30.</span>Policy: Auto-lock, traceable location, and data separation. BEST way to establish these rules?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q30" value="A"> A. Segmentation</label>
+            <label class="option"><input type="radio" name="q30" value="B"> B. Biometrics</label>
+            <label class="option"><input type="radio" name="q30" value="C"> C. COPE</label>
+            <label class="option"><input type="radio" name="q30" value="D" data-correct="true"> D. MDM</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a30')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Mobile Device Management (MDM) solutions allow administrators to enforce security policies like screen locks, tracking, and containerization (data separation).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a31">
+        <span class="q-text"><span class="q-number">A31.</span>Monthly scan lists no vulnerabilities, but a significant unpatched one exists. Which of the following best describes this result?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q31" value="A"> A. Exploit</label>
+            <label class="option"><input type="radio" name="q31" value="B"> B. Compensating controls</label>
+            <label class="option"><input type="radio" name="q31" value="C"> C. Zero-day attack</label>
+            <label class="option"><input type="radio" name="q31" value="D" data-correct="true"> D. False negative</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a31')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">A false negative occurs when a security tool fails to report a vulnerability or threat that actually exists.</p>
+        </div>
+    </div>
+	<div class="question-card" id="card-a32">
+        <span class="q-text"><span class="q-number">A32.</span>An IT help desk is using automation to improve response time for security events. Which use case applies?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q32" value="A" data-correct="true"> A. Escalation</label>
+            <label class="option"><input type="radio" name="q32" value="B"> B. Guard rails</label>
+            <label class="option"><input type="radio" name="q32" value="C"> C. Continuous integration</label>
+            <label class="option"><input type="radio" name="q32" value="D"> D. Resource provisioning</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a32')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Automation can be used to automatically escalate security events to the appropriate personnel based on predefined severity levels or triggers.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a33">
+        <span class="q-text"><span class="q-number">A33.</span>An admin wants users to authenticate with corporate credentials for the wireless network. What should be configured?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q33" value="A"> A. WPA3</label>
+            <label class="option"><input type="radio" name="q33" value="B" data-correct="true"> B. 802.1X</label>
+            <label class="option"><input type="radio" name="q33" value="C"> C. PSK</label>
+            <label class="option"><input type="radio" name="q33" value="D"> D. MFA</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a33')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">802.1X (WPA-Enterprise) allows users to authenticate against a central database (like Active Directory) using their unique corporate credentials rather than a shared key (PSK).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a34">
+        <span class="q-text"><span class="q-number">A34.</span>A VPN performs a posture assessment during login. Which mitigation technique is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q34" value="A"> A. Encryption</label>
+            <label class="option"><input type="radio" name="q34" value="B"> B. Decommissioning</label>
+            <label class="option"><input type="radio" name="q34" value="C"> C. Least privilege</label>
+            <label class="option"><input type="radio" name="q34" value="D" data-correct="true"> D. Configuration enforcement</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a34')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Posture assessments enforce security configurations (like updated AV or OS patches) before allowing a device to connect to the network.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a35">
+        <span class="q-text"><span class="q-number">A35.</span>A user assigns specific read-only access to three individuals for a file on their drive. Which access control model is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q35" value="A" data-correct="true"> A. Discretionary (DAC)</label>
+            <label class="option"><input type="radio" name="q35" value="B"> B. Mandatory (MAC)</label>
+            <label class="option"><input type="radio" name="q35" value="C"> C. Attribute-based (ABAC)</label>
+            <label class="option"><input type="radio" name="q35" value="D"> D. Role-based (RBAC)</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a35')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">In Discretionary Access Control (DAC), the owner of the data has the "discretion" to assign permissions to other users.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a36">
+        <span class="q-text"><span class="q-number">A36.</span>A user receives a text message with a malicious login link. What BEST describes this attack?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q36" value="A"> A. Brute force</label>
+            <label class="option"><input type="radio" name="q36" value="B"> B. Watering hole</label>
+            <label class="option"><input type="radio" name="q36" value="C"> C. Typosquatting</label>
+            <label class="option"><input type="radio" name="q36" value="D" data-correct="true"> D. Smishing</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a36')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Smishing is a combination of "SMS" and "Phishing"—phishing attacks conducted specifically via text messages.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a37">
+        <span class="q-text"><span class="q-number">A37.</span>A company is formalizing the design and deployment process for application programmers. Which policy applies?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q37" value="A"> A. Business continuity</label>
+            <label class="option"><input type="radio" name="q37" value="B"> B. Acceptable use policy</label>
+            <label class="option"><input type="radio" name="q37" value="C"> C. Incident response</label>
+            <label class="option"><input type="radio" name="q37" value="D" data-correct="true"> D. Development lifecycle</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a37')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">The Software Development Lifecycle (SDLC) defines the steps and policies for creating, testing, and deploying applications securely.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a38">
+        <span class="q-text"><span class="q-number">A38.</span>An admin is running suspected malware in a sandbox. Which part of the incident response process is this?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q38" value="A"> A. Eradication</label>
+            <label class="option"><input type="radio" name="q38" value="B"> B. Preparation</label>
+            <label class="option"><input type="radio" name="q38" value="C"> C. Recovery</label>
+            <label class="option"><input type="radio" name="q38" value="D" data-correct="true"> D. Analysis / Containment</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a38')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Analyzing malware in a sandbox helps determine the scope of the incident (Analysis) and ensures it does not spread further (Containment).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a39">
+        <span class="q-text"><span class="q-number">A39.</span>Users are being directed to a different IP than the bank's actual web server. Which attack is most likely?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q39" value="A"> A. Deauthentication</label>
+            <label class="option"><input type="radio" name="q39" value="B"> B. DDoS</label>
+            <label class="option"><input type="radio" name="q39" value="C"> C. Buffer overflow</label>
+            <label class="option"><input type="radio" name="q39" value="D" data-correct="true"> D. DNS poisoning</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a39')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">DNS poisoning redirects traffic by corrupting DNS cache or records, leading users to malicious IP addresses instead of the intended site.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a40">
+        <span class="q-text"><span class="q-number">A40.</span>Which consideration is MOST commonly associated with a hybrid cloud model?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q40" value="A"> A. Microservice outages</label>
+            <label class="option"><input type="radio" name="q40" value="B"> B. IoT support</label>
+            <label class="option"><input type="radio" name="q40" value="C" data-correct="true"> C. Network protection mismatches</label>
+            <label class="option"><input type="radio" name="q40" value="D"> D. Containerization backups</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a40')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">In a hybrid cloud, differing security controls between the on-premises and public cloud environments can lead to protection mismatches.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a41">
+        <span class="q-text"><span class="q-number">A41.</span>An admin wants to verify that former employees cannot access systems. BEST way to provide this verification?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q41" value="A"> A. Confirm no unauthorized admin access</label>
+            <label class="option"><input type="radio" name="q41" value="B"> B. Validate account lockout policy</label>
+            <label class="option"><input type="radio" name="q41" value="C" data-correct="true"> C. Validate offboarding processes</label>
+            <label class="option"><input type="radio" name="q41" value="D"> D. Report all authentications for 24 hours</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a41')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">Reviewing and validating offboarding processes ensures that the steps to disable accounts for departing employees are actually being followed and are effective.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a42">
+        <span class="q-text"><span class="q-number">A42.</span>Which term describes how cautious an organization is regarding taking a specific risk?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q42" value="A" data-correct="true"> A. Risk appetite</label>
+            <label class="option"><input type="radio" name="q42" value="B"> B. Risk register</label>
+            <label class="option"><input type="radio" name="q42" value="C"> C. Risk transfer</label>
+            <label class="option"><input type="radio" name="q42" value="D"> D. Risk reporting</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a42')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Risk appetite is the level of risk an organization is willing to accept in pursuit of its objectives.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a43">
+        <span class="q-text"><span class="q-number">A43.</span>A tech patches a server and it fails with a critical error. What should the technician do NEXT?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q43" value="A"> A. Contact stakeholders</label>
+            <label class="option"><input type="radio" name="q43" value="B" data-correct="true"> B. Follow the backout plan</label>
+            <label class="option"><input type="radio" name="q43" value="C"> C. Test in the lab</label>
+            <label class="option"><input type="radio" name="q43" value="D"> D. Evaluate impact analysis</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a43')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">When a change fails during a maintenance window, the next immediate step is to follow the backout plan to restore the service to its previous stable state.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a44">
+        <span class="q-text"><span class="q-number">A44.</span>An attacker crashes a server using crafted packets from many remote devices. What describes this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q44" value="A"> A. Privilege escalation</label>
+            <label class="option"><input type="radio" name="q44" value="B"> B. SQL injection</label>
+            <label class="option"><input type="radio" name="q44" value="C"> C. Replay attack</label>
+            <label class="option"><input type="radio" name="q44" value="D" data-correct="true"> D. DDoS</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a44')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">A Distributed Denial of Service (DDoS) attack uses many devices to overwhelm or crash a target system.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a45">
+        <span class="q-text"><span class="q-number">A45.</span>An admin is building new servers and security systems to get financial systems back online after a breach. Which IR phase is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q45" value="A"> A. Lessons learned</label>
+            <label class="option"><input type="radio" name="q45" value="B"> B. Containment</label>
+            <label class="option"><input type="radio" name="q45" value="C" data-correct="true"> C. Recovery</label>
+            <label class="option"><input type="radio" name="q45" value="D"> D. Analysis</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a45')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">Recovery involves restoring systems to normal operation and confirming they are functioning as expected after an incident.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a46">
+        <span class="q-text"><span class="q-number">A46.</span>A wireless network was breached in less than 24 hours after new APs were installed. MOST likely reason?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q46" value="A"> A. Race condition</label>
+            <label class="option"><input type="radio" name="q46" value="B"> B. Jailbreaking</label>
+            <label class="option"><input type="radio" name="q46" value="C"> C. Impersonation</label>
+            <label class="option"><input type="radio" name="q46" value="D" data-correct="true"> D. Misconfiguration</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a46')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Misconfigurations (like leaving default passwords or keeping open access) are the most common cause of rapid breaches in new equipment.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a47">
+        <span class="q-text"><span class="q-number">A47.</span>A firewall has a major vulnerability but is no longer for sale and won't be patched. Which BEST describes this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q47" value="A" data-correct="true"> A. End-of-life (EOL)</label>
+            <label class="option"><input type="radio" name="q47" value="B"> B. Improper input handling</label>
+            <label class="option"><input type="radio" name="q47" value="C"> C. Improper key management</label>
+            <label class="option"><input type="radio" name="q47" value="D"> D. Incompatible OS</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a47')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">End-of-life systems are no longer supported or patched by the vendor, making them a significant security risk when new vulnerabilities are found.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a48">
+        <span class="q-text"><span class="q-number">A48.</span>IT directors discuss a simulated disaster and the steps needed to resolve it. What BEST describes this exercise?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q48" value="A"> A. Capacity planning</label>
+            <label class="option"><input type="radio" name="q48" value="B"> B. Business impact analysis</label>
+            <label class="option"><input type="radio" name="q48" value="C"> C. Continuity of operations</label>
+            <label class="option"><input type="radio" name="q48" value="D" data-correct="true"> D. Tabletop exercise</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a48')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">A tabletop exercise is a discussion-based simulation where team members walk through their roles and responses to a hypothetical disaster.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a49">
+        <span class="q-text"><span class="q-number">A49.</span>An admin needs to block users from malicious software websites. BEST way to control this access?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q49" value="A"> A. Honeynet</label>
+            <label class="option"><input type="radio" name="q49" value="B"> B. Data masking</label>
+            <label class="option"><input type="radio" name="q49" value="C" data-correct="true"> C. DNS filtering</label>
+            <label class="option"><input type="radio" name="q49" value="D"> D. Data loss prevention</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a49')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">DNS filtering blocks access to malicious domains at the name resolution level, preventing users from ever reaching the site.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a50">
+        <span class="q-text"><span class="q-number">A50.</span>An admin re-images an infected system with a known-good version. Which IR step is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q50" value="A"> A. Lessons learned</label>
+            <label class="option"><input type="radio" name="q50" value="B" data-correct="true"> B. Recovery</label>
+            <label class="option"><input type="radio" name="q50" value="C"> C. Detection</label>
+            <label class="option"><input type="radio" name="q50" value="D"> D. Containment</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a50')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Re-imaging a system to return it to a clean, working state is part of the Recovery phase of incident response.</p>
+        </div>
+    </div>
+	<div class="question-card" id="card-a51">
+        <span class="q-text"><span class="q-number">A51.</span>A company has placed a SCADA system on a segmented network with limited access. Which process describes this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q51" value="A"> A. Load balancing</label>
+            <label class="option"><input type="radio" name="q51" value="B"> B. Least privilege</label>
+            <label class="option"><input type="radio" name="q51" value="C"> C. Data retention</label>
+            <label class="option"><input type="radio" name="q51" value="D" data-correct="true"> D. Hardening</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a51')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Network segmentation is a common system hardening technique, especially for industrial control systems like SCADA, to reduce the attack surface and limit potential lateral movement.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a52">
+        <span class="q-text"><span class="q-number">A52.</span>An administrator sees a log with hundreds of "Failed password for root" from the same IP. Which attack is this?</span>
+        <div class="log-box">Dec 30 08:40:03 Failed password for root from 10.101.88.230
+Dec 30 08:40:05 Failed password for root from 10.101.88.230
+Dec 30 08:40:09 445 more authentication failures; rhost=10.101.88.230</div>
+        <div class="options">
+            <label class="option"><input type="radio" name="q52" value="A"> A. Spraying</label>
+            <label class="option"><input type="radio" name="q52" value="B"> B. Downgrade</label>
+            <label class="option"><input type="radio" name="q52" value="C" data-correct="true"> C. Brute force</label>
+            <label class="option"><input type="radio" name="q52" value="D"> D. DDoS</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a52')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">A brute force attack involves attempting many passwords against a single account (root) in rapid succession to gain access.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a53">
+        <span class="q-text"><span class="q-number">A53.</span>A laptop was moved to a private VLAN and updates were automatically installed during login. What describes this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q53" value="A"> A. Account lockout</label>
+            <label class="option"><input type="radio" name="q53" value="B" data-correct="true"> B. Configuration enforcement</label>
+            <label class="option"><input type="radio" name="q53" value="C"> C. Decommissioning</label>
+            <label class="option"><input type="radio" name="q53" value="D"> D. Sideloading</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a53')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">This is a form of Network Access Control (NAC) using configuration enforcement. The system checks for compliance (updates) and remediates the device before granting full access.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a54">
+        <span class="q-text"><span class="q-number">A54.</span>Which of the following describes two-factor authentication (2FA)?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q54" value="A"> A. A printer uses a password and a PIN</label>
+            <label class="option"><input type="radio" name="q54" value="B"> B. A door requires a fingerprint scan</label>
+            <label class="option"><input type="radio" name="q54" value="C"> C. An application requires a pseudo-random code</label>
+            <label class="option"><input type="radio" name="q54" value="D" data-correct="true"> D. A Windows Domain requires a password and smart card</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a54')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Two-factor authentication requires two different categories: Something you know (password) and Something you have (smart card). Options A and C use only "Something you know."</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a55">
+        <span class="q-text"><span class="q-number">A55.</span>Concerns: No device management, many different types of devices, used for corporate and private use. Which model addresses this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q55" value="A"> A. CYOD</label>
+            <label class="option"><input type="radio" name="q55" value="B"> B. SSO</label>
+            <label class="option"><input type="radio" name="q55" value="C"> C. COPE</label>
+            <label class="option"><input type="radio" name="q55" value="D" data-correct="true"> D. BYOD</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a55')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Bring Your Own Device (BYOD) allows employees to use their personal mobile devices for business purposes, supporting a wide variety of hardware.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a56">
+        <span class="q-text"><span class="q-number">A56.</span>An organization is installing a UPS for their new data center. BEST describe this control type?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q56" value="A" data-correct="true"> A. Compensating</label>
+            <label class="option"><input type="radio" name="q56" value="B"> B. Directive</label>
+            <label class="option"><input type="radio" name="q56" value="C"> C. Deterrent</label>
+            <label class="option"><input type="radio" name="q56" value="D"> D. Detective</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a56')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">A UPS is a compensating control that provides power when the primary power source (the main electrical grid) fails.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a57">
+        <span class="q-text"><span class="q-number">A57.</span>A company wants to track the progress of parts on an assembly line. BEST technology choice?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q57" value="A"> A. Secure enclave</label>
+            <label class="option"><input type="radio" name="q57" value="B" data-correct="true"> B. Blockchain</label>
+            <label class="option"><input type="radio" name="q57" value="C"> C. Hashing</label>
+            <label class="option"><input type="radio" name="q57" value="D"> D. Asymmetric encryption</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a57')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Blockchain provides an immutable, distributed ledger that is ideal for supply chain tracking and verifying the history of parts or products.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a58">
+        <span class="q-text"><span class="q-number">A58.</span>A website is replaced with a political message. MOST likely threat actor?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q58" value="A"> A. Insider</label>
+            <label class="option"><input type="radio" name="q58" value="B"> B. Organized crime</label>
+            <label class="option"><input type="radio" name="q58" value="C"> C. Shadow IT</label>
+            <label class="option"><input type="radio" name="q58" value="D" data-correct="true"> D. Hacktivist</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a58')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Hacktivists are threat actors motivated by political or social causes, often using website defacement to spread their message.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a59">
+        <span class="q-text"><span class="q-number">A59.</span>A download site shows an ISO and a SHA256 hash value. What is the use of this hash?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q59" value="A" data-correct="true"> A. Verifies the file was not corrupted during transfer</label>
+            <label class="option"><input type="radio" name="q59" value="B"> B. Provides a key for decryption</label>
+            <label class="option"><input type="radio" name="q59" value="C"> C. Authenticates the site as official</label>
+            <label class="option"><input type="radio" name="q59" value="D"> D. Confirms the file has no malware</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a59')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Hashing is used to ensure integrity. By comparing the calculated hash of the downloaded file with the one provided by the site, you can verify the file is an exact copy.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a60">
+        <span class="q-text"><span class="q-number">A60.</span>Policy requires login access only if physically within the building. BEST way to provide this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q60" value="A" data-correct="true"> A. USB security key</label>
+            <label class="option"><input type="radio" name="q60" value="B"> B. Biometric scanner</label>
+            <label class="option"><input type="radio" name="q60" value="C"> C. PIN</label>
+            <label class="option"><input type="radio" name="q60" value="D"> D. SMS</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a60')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">A physical USB security key requires the user to be physically present at the computer to plug in and tap the device to authenticate.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a61">
+        <span class="q-text"><span class="q-number">A61.</span>A cloud database is available for anyone to query without authentication. Which vulnerability is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q61" value="A"> A. Legacy software</label>
+            <label class="option"><input type="radio" name="q61" value="B" data-correct="true"> B. Open permissions</label>
+            <label class="option"><input type="radio" name="q61" value="C"> C. Race condition</label>
+            <label class="option"><input type="radio" name="q61" value="D"> D. Malicious update</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a61')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Open permissions occur when access controls are not properly configured, allowing unauthorized users to read or modify data.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a62">
+        <span class="q-text"><span class="q-number">A62.</span>Employees received an email with a link offering a cash bonus for completing training. BEST describe this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q62" value="A"> A. Watering hole attack</label>
+            <label class="option"><input type="radio" name="q62" value="B"> B. Cross-site scripting</label>
+            <label class="option"><input type="radio" name="q62" value="C"> C. Zero-day</label>
+            <label class="option"><input type="radio" name="q62" value="D" data-correct="true"> D. Phishing campaign</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a62')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">A phishing campaign uses deceptive emails to trick a large group of people into clicking a malicious link or providing sensitive info, often using "lures" like bonuses.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a63">
+        <span class="q-text"><span class="q-number">A63.</span>Which risk management strategy includes the purchase and installation of an NGFW?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q63" value="A"> A. Transfer</label>
+            <label class="option"><input type="radio" name="q63" value="B" data-correct="true"> B. Mitigate</label>
+            <label class="option"><input type="radio" name="q63" value="C"> C. Accept</label>
+            <label class="option"><input type="radio" name="q63" value="D"> D. Avoid</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a63')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Risk mitigation involves implementing security controls (like a Next-Generation Firewall) to reduce the likelihood or impact of a risk.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a64">
+        <span class="q-text"><span class="q-number">A64.</span>All application requests must be validated at a policy enforcement point. BEST describe this?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q64" value="A"> A. Public key infrastructure</label>
+            <label class="option"><input type="radio" name="q64" value="B" data-correct="true"> B. Zero trust</label>
+            <label class="option"><input type="radio" name="q64" value="C"> C. Discretionary access control</label>
+            <label class="option"><input type="radio" name="q64" value="D"> D. Federation</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a64')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">The Zero Trust model operates on the principle of "never trust, always verify," requiring every request to be authenticated and authorized at a PEP.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a65">
+        <span class="q-text"><span class="q-number">A65.</span>What determines the assignment of data security in a public cloud infrastructure?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q65" value="A"> A. Playbook</label>
+            <label class="option"><input type="radio" name="q65" value="B"> B. Audit committee</label>
+            <label class="option"><input type="radio" name="q65" value="C" data-correct="true"> C. Responsibility matrix</label>
+            <label class="option"><input type="radio" name="q65" value="D"> D. Right-to-audit clause</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a65')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">The Shared Responsibility Matrix defines which security tasks are handled by the cloud provider and which are the responsibility of the customer.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a66">
+        <span class="q-text"><span class="q-number">A66.</span>Decommissioning documents drive size, RAM, and adapter cards. Which process is this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q66" value="A"> A. Destruction</label>
+            <label class="option"><input type="radio" name="q66" value="B"> B. Sanitization</label>
+            <label class="option"><input type="radio" name="q66" value="C"> C. Certification</label>
+            <label class="option"><input type="radio" name="q66" value="D" data-correct="true"> D. Enumeration</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a66')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Inventorying and documenting the specific components of a device during decommissioning is a form of enumeration or asset management.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a67">
+        <span class="q-text"><span class="q-number">A67.</span>More info than expected in an API call allows arbitrary code execution. BEST describe this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q67" value="A" data-correct="true"> A. Buffer overflow</label>
+            <label class="option"><input type="radio" name="q67" value="B"> B. Replay attack</label>
+            <label class="option"><input type="radio" name="q67" value="C"> C. Cross-site scripting</label>
+            <label class="option"><input type="radio" name="q67" value="D"> D. DDoS</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a67')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">A buffer overflow occurs when a program writes data beyond the boundaries of fixed-length blocks of memory, which can be exploited to execute code.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a68">
+        <span class="q-text"><span class="q-number">A68.</span>Which of these keys should the organization place into escrow for backup?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q68" value="A" data-correct="true"> A. Private</label>
+            <label class="option"><input type="radio" name="q68" value="B"> B. CA</label>
+            <label class="option"><input type="radio" name="q68" value="C"> C. Session</label>
+            <label class="option"><input type="radio" name="q68" value="D"> D. Public</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a68')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Key escrow involves storing a copy of a user's private key so that data can be decrypted by the organization if the original key is lost or for legal reasons.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a69">
+        <span class="q-text"><span class="q-number">A69.</span>Host-based firewalls are enabled on all user devices. Which threat is addressed?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q69" value="A"> A. Default credentials</label>
+            <label class="option"><input type="radio" name="q69" value="B"> B. Vishing</label>
+            <label class="option"><input type="radio" name="q69" value="C"> C. Instant messaging</label>
+            <label class="option"><input type="radio" name="q69" value="D" data-correct="true"> D. On-path</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a69')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Host-based firewalls help prevent on-path (Man-in-the-Middle) attacks by blocking unauthorized network traffic directly at the endpoint.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a70">
+        <span class="q-text"><span class="q-number">A70.</span>Separate networks on the same physical switch without new hardware. BEST choice?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q70" value="A"> A. Connect with a VPN</label>
+            <label class="option"><input type="radio" name="q70" value="B"> B. Build an air gapped network</label>
+            <label class="option"><input type="radio" name="q70" value="C"> C. Use host-based firewalls</label>
+            <label class="option"><input type="radio" name="q70" value="D" data-correct="true"> D. Create separate VLANs</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a70')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Virtual Local Area Networks (VLANs) allow for logical segmentation of a network using the same physical hardware (switches and routers).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a71">
+        <span class="q-text"><span class="q-number">A71.</span>Remote access for mobile field technicians to a cloud application. BEST option?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q71" value="A"> A. RTOS</label>
+            <label class="option"><input type="radio" name="q71" value="B"> B. CRL</label>
+            <label class="option"><input type="radio" name="q71" value="C"> C. Zero-trust</label>
+            <label class="option"><input type="radio" name="q71" value="D" data-correct="true"> D. SASE</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a71')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Secure Access Service Edge (SASE) combines WAN capabilities with cloud-native security (like ZTNA and SWG) to provide secure remote access for mobile users.</p>
+        </div>
+    </div>
+	<div class="question-card" id="card-a72">
+        <span class="q-text"><span class="q-number">A72.</span>A company is implementing a quarterly security awareness campaign. Which of the following would MOST likely be part of this campaign?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q72" value="A"> A. Suspicious message reports from users</label>
+            <label class="option"><input type="radio" name="q72" value="B"> B. An itemized statement of work</label>
+            <label class="option"><input type="radio" name="q72" value="C"> C. An IaC configuration file</label>
+            <label class="option"><input type="radio" name="q72" value="D" data-correct="true"> D. An acceptable use policy document</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a72')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Awareness campaigns often involve reviewing and acknowledging the Acceptable Use Policy (AUP), which outlines the rules for using company assets.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a73">
+        <span class="q-text"><span class="q-number">A73.</span>A recent patch reintroduced a vulnerability that was patched four months ago. What should be implemented to prevent this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q73" value="A"> A. Containerization</label>
+            <label class="option"><input type="radio" name="q73" value="B"> B. Data masking</label>
+            <label class="option"><input type="radio" name="q73" value="C"> C. 802.1X</label>
+            <label class="option"><input type="radio" name="q73" value="D" data-correct="true"> D. Change management</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a73')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">Change management involves formal processes for testing and approving updates, which helps prevent "regression" where old vulnerabilities are accidentally reintroduced.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a74">
+        <span class="q-text"><span class="q-number">A74.</span>Which of the following is the BEST way to add random data when generating a set of stored password hashes?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q74" value="A" data-correct="true"> A. Salting</label>
+            <label class="option"><input type="radio" name="q74" value="B"> B. Obfuscation</label>
+            <label class="option"><input type="radio" name="q74" value="C"> C. Key stretching</label>
+            <label class="option"><input type="radio" name="q74" value="D"> D. Digital signature</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a74')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">Salting adds random data to a password before hashing, ensuring that identical passwords result in different hashes, which thwarts rainbow table attacks.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a75">
+        <span class="q-text"><span class="q-number">A75.</span>Which cryptographic method is used to add trust to a digital certificate?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q75" value="A"> A. Steganography</label>
+            <label class="option"><input type="radio" name="q75" value="B"> B. Hash</label>
+            <label class="option"><input type="radio" name="q75" value="C"> C. Symmetric encryption</label>
+            <label class="option"><input type="radio" name="q75" value="D" data-correct="true"> D. Digital signature</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a75')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">A certificate authority (CA) uses its digital signature to sign a certificate, which allows others to trust that the identity on the certificate is valid.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a76">
+        <span class="q-text"><span class="q-number">A76.</span>A company is using SCAP as part of their security monitoring. Which BEST describes this implementation?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q76" value="A"> A. Train users to identify phishing</label>
+            <label class="option"><input type="radio" name="q76" value="B"> B. Present audit results to the board</label>
+            <label class="option"><input type="radio" name="q76" value="C" data-correct="true"> C. Automate the validation and patching of security issues</label>
+            <label class="option"><input type="radio" name="q76" value="D"> D. Identify authorized data center visitors</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a76')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">The Security Content Automation Protocol (SCAP) is a suite of specifications that standardize how security software communicates information about software flaws and security configurations.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a77">
+        <span class="q-text"><span class="q-number">A77.</span>Who in an organization is responsible for managing the access rights to a large database of customer information?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q77" value="A"> A. Data processor</label>
+            <label class="option"><input type="radio" name="q77" value="B" data-correct="true"> B. Data owner</label>
+            <label class="option"><input type="radio" name="q77" value="C"> C. Data subject</label>
+            <label class="option"><input type="radio" name="q77" value="D"> D. Data custodian</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a77')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">The Data Owner (typically a senior executive) is ultimately responsible for the data and determines who is allowed to access it.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a78">
+        <span class="q-text"><span class="q-number">A78.</span>A CMS added a new classification type of “Private.” Which of the following would be the MOST likely reason for this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q78" value="A"> A. Minimized attack surface</label>
+            <label class="option"><input type="radio" name="q78" value="B"> B. Simplified categorization</label>
+            <label class="option"><input type="radio" name="q78" value="C" data-correct="true"> C. Expanded privacy compliance</label>
+            <label class="option"><input type="radio" name="q78" value="D"> D. Decreased search time</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a78')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">Adding specific classifications like "Private" helps organizations comply with privacy regulations (like GDPR or CCPA) by specifically marking Personal Identifiable Information (PII).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a79">
+        <span class="q-text"><span class="q-number">A79.</span>A team wants to consolidate and protect private keys across all web servers. BEST way to securely store these?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q79" value="A" data-correct="true"> A. Integrate an HSM</label>
+            <label class="option"><input type="radio" name="q79" value="B"> B. Implement full disk encryption</label>
+            <label class="option"><input type="radio" name="q79" value="C"> C. Use a TPM</label>
+            <label class="option"><input type="radio" name="q79" value="D"> D. Upgrade to UEFI BIOS</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a79')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">A Hardware Security Module (HSM) is a specialized physical device used for secure cryptoprocessing and centralized management of digital keys.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a80">
+        <span class="q-text"><span class="q-number">A80.</span>Review the IPS log. Which TWO can be determined?</span>
+        <div class="log-box">ALERT 2023-06-01 13:07:29 | Cross-Site Scripting in JSON Data
+222.43.112.74:3332 -> 64.235.145.35:80
+Detail: token="&lt;script&gt;" key="key7" value="&lt;script&gt;alert(2)&lt;/script&gt;"</div>
+        <div class="options">
+            <label class="option"><input type="checkbox" name="q80" value="A"> A. Alert from malformed User Agent</label>
+            <label class="option"><input type="checkbox" name="q80" value="B" data-correct="true"> B. Alert from an embedded script</label>
+            <label class="option"><input type="checkbox" name="q80" value="C" data-correct="true"> C. Attacker IP is 222.43.112.74</label>
+            <label class="option"><input type="checkbox" name="q80" value="D"> D. Attacker IP is 64.235.145.35</label>
+            <label class="option"><input type="checkbox" name="q80" value="E"> E. Alert from invalid client port</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkMultiAnswer('a80', 2)">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B, C</span>
+            <p class="explanation">The log shows an "alert(2)" script in the value field (B). The first IP address listed (222.43.112.74) is the source of the attack (C).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a81">
+        <span class="q-text"><span class="q-number">A81.</span>Which of the following describes a monetary loss if one event occurs?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q81" value="A"> A. ALE</label>
+            <label class="option"><input type="radio" name="q81" value="B" data-correct="true"> B. SLE</label>
+            <label class="option"><input type="radio" name="q81" value="C"> C. RTO</label>
+            <label class="option"><input type="radio" name="q81" value="D"> D. ARO</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a81')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Single Loss Expectancy (SLE) is the monetary value of any single loss. (ALE = SLE x ARO).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a82">
+        <span class="q-text"><span class="q-number">A82.</span>A user types <code>USER77' OR '1'='1</code> into a search field and all database records are displayed. BEST describe this?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q82" value="A"> A. Cross-site scripting</label>
+            <label class="option"><input type="radio" name="q82" value="B"> B. Buffer overflow</label>
+            <label class="option"><input type="radio" name="q82" value="C" data-correct="true"> C. SQL injection</label>
+            <label class="option"><input type="radio" name="q82" value="D"> D. SSL stripping</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a82')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">SQL Injection uses specifically formatted text to trick the database query into executing unauthorized commands (in this case, "OR '1'='1" evaluates as true for all rows).</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a83">
+        <span class="q-text"><span class="q-number">A83.</span>Issues began after opening a vendor spreadsheet. Symptoms: excessive popups, cursor moving independently. MOST likely cause?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q83" value="A"> A. On-path</label>
+            <label class="option"><input type="radio" name="q83" value="B"> B. Worm</label>
+            <label class="option"><input type="radio" name="q83" value="C" data-correct="true"> C. Trojan horse</label>
+            <label class="option"><input type="radio" name="q83" value="D"> D. Logic bomb</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a83')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">A Trojan horse is malware disguised as legitimate software (like the vendor spreadsheet) that contains hidden malicious functions like remote control access.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a84">
+        <span class="q-text"><span class="q-number">A84.</span>Monthly charges are processed via saved credit cards. All info is encrypted and protected. What is the justification?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q84" value="A"> A. Chain of custody</label>
+            <label class="option"><input type="radio" name="q84" value="B"> B. Password vaulting</label>
+            <label class="option"><input type="radio" name="q84" value="C" data-correct="true"> C. Compliance reporting</label>
+            <label class="option"><input type="radio" name="q84" value="D"> D. Sandboxing</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a84')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: C</span>
+            <p class="explanation">Regulations like PCI-DSS require specific security controls for handling credit card information, which are verified through compliance reporting.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a85">
+        <span class="q-text"><span class="q-number">A85.</span>Intermittent network communication occurs from workstations to one external IP at random times. MOST likely reason?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q85" value="A"> A. On-path attack</label>
+            <label class="option"><input type="radio" name="q85" value="B" data-correct="true"> B. Keylogger / Command and Control</label>
+            <label class="option"><input type="radio" name="q85" value="C"> C. Replay attack</label>
+            <label class="option"><input type="radio" name="q85" value="D"> D. Brute force</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a85')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Keyloggers or other malware often "beacon" data back to an external Command and Control (C2) server at varied intervals to avoid detection.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a86">
+        <span class="q-text"><span class="q-number">A86.</span>An alert was received because credit card numbers were transmitted in an email attachment. MOST likely source?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q86" value="A"> A. IPS</label>
+            <label class="option"><input type="radio" name="q86" value="B" data-correct="true"> B. DLP</label>
+            <label class="option"><input type="radio" name="q86" value="C"> C. RADIUS</label>
+            <label class="option"><input type="radio" name="q86" value="D"> D. IPsec</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a86')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation">Data Loss Prevention (DLP) systems scan outgoing traffic for sensitive patterns (like credit card numbers) to block unauthorized data exfiltration.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a87">
+        <span class="q-text"><span class="q-number">A87.</span>A VM in a screened subnet has a guest login and no password. MOST likely reason for this configuration?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q87" value="A" data-correct="true"> A. Honeypot</label>
+            <label class="option"><input type="radio" name="q87" value="B"> B. Cloud storage service</label>
+            <label class="option"><input type="radio" name="q87" value="C"> C. VPN concentrator</label>
+            <label class="option"><input type="radio" name="q87" value="D"> D. Development sandbox</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a87')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation">A honeypot is designed with intentional vulnerabilities to attract and monitor potential attackers to learn about their techniques.</p>
+        </div>
+    </div>
+	<div class="question-card" id="card-a88">
+        <span class="q-text"><span class="q-number">A88.</span>A security administrator is configuring a DNS server with an SPF record. What is the reason for this?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q88" value="A"> A. Transmit outgoing email over an encrypted tunnel</label>
+            <label class="option"><input type="radio" name="q88" value="B" data-correct="true"> B. List all servers authorized to send emails</label>
+            <label class="option"><input type="radio" name="q88" value="C"> C. Digitally sign all outgoing email messages</label>
+            <label class="option"><input type="radio" name="q88" value="D"> D. Obtain disposition instructions for spam</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a88')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: B</span>
+            <p class="explanation"><strong>SPF (Sender Policy Framework)</strong> is used to publish a list of all authorized email servers for a specific domain in its DNS records.</p>
+            <ul style="font-size: 0.9em; color: var(--text-dim); margin-top: 10px;">
+                <li><strong>A is incorrect:</strong> Encryption is handled by the email server (TLS/SSL), not DNS records.</li>
+                <li><strong>C is incorrect:</strong> DKIM is used for digital signatures.</li>
+                <li><strong>D is incorrect:</strong> DMARC provides disposition instructions (reject, quarantine, etc.).</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a89">
+        <span class="q-text"><span class="q-number">A89.</span>A company wants to securely deploy applications without the overhead of a VM for each system. BEST way to deploy?</span>
+        
+        <div class="options">
+            <label class="option"><input type="radio" name="q89" value="A" data-correct="true"> A. Containerization</label>
+            <label class="option"><input type="radio" name="q89" value="B"> B. IoT</label>
+            <label class="option"><input type="radio" name="q89" value="C"> C. Proxy</label>
+            <label class="option"><input type="radio" name="q89" value="D"> D. RTOS</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a89')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: A</span>
+            <p class="explanation"><strong>Containerization</strong> allows isolated application instances to run on a single host OS kernel, providing efficiency and isolation without the resource overhead of multiple Virtual Machines.</p>
+        </div>
+    </div>
+
+    <div class="question-card" id="card-a90">
+        <span class="q-text"><span class="q-number">A90.</span>An admin wants to determine if a new server in a test environment can be exploited before production. BEST way to determine this?</span>
+        <div class="options">
+            <label class="option"><input type="radio" name="q90" value="A"> A. Tabletop exercise</label>
+            <label class="option"><input type="radio" name="q90" value="B"> B. Vulnerability scanner</label>
+            <label class="option"><input type="radio" name="q90" value="C"> C. DDoS</label>
+            <label class="option"><input type="radio" name="q90" value="D" data-correct="true"> D. Penetration test</label>
+        </div>
+        <div class="result-msg"></div>
+        <button class="submit-btn" onclick="checkAnswer('a90')">Check Answer</button>
+        <div class="answer-key">
+            <span class="correct-label">Correct Answer: D</span>
+            <p class="explanation">A <strong>Penetration Test</strong> involves active exploitation of vulnerabilities to see if they are actually viable. Because it can cause downtime, it is best performed in a test environment or during maintenance windows.</p>
+            <ul style="font-size: 0.9em; color: var(--text-dim); margin-top: 10px;">
+                <li><strong>B is incorrect:</strong> Vulnerability scanners identify potential weaknesses but do not attempt to exploit them to confirm their impact.</li>
+            </ul>
+        </div>
+    </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Interactive Study Guide
+    </footer>
+</div>
+
+<script>
+    function checkAnswer(qId) {
+        const card = document.getElementById('card-' + qId);
+        const options = card.querySelectorAll('input');
+        const feedback = card.querySelector('.answer-key');
+        const msg = card.querySelector('.result-msg');
+        const btn = card.querySelector('.submit-btn');
+        
+        let selected = null;
+        let correctInput = null;
+
+        options.forEach(opt => {
+            if (opt.checked) selected = opt;
+            if (opt.dataset.correct === "true") correctInput = opt;
+            opt.disabled = true;
+        });
+
+        if (!selected) {
+            alert("Please select an answer first!");
+            options.forEach(opt => opt.disabled = false);
+            return;
+        }
+
+        msg.style.display = "block";
+        feedback.style.display = "block";
+        btn.style.display = "none";
+
+        if (selected.dataset.correct === "true") {
+            msg.textContent = "Correct!";
+            msg.className = "result-msg is-correct";
+            selected.parentElement.classList.add('correct-opt');
+        } else {
+            msg.textContent = "Incorrect.";
+            msg.className = "result-msg is-wrong";
+            selected.parentElement.classList.add('wrong-opt');
+            if(correctInput) correctInput.parentElement.classList.add('correct-opt');
+        }
+    }
+
+    function checkMultiAnswer(qId, requiredCount) {
+        const card = document.getElementById('card-' + qId);
+        const options = card.querySelectorAll('input');
+        const feedback = card.querySelector('.answer-key');
+        const msg = card.querySelector('.result-msg');
+        const btn = card.querySelector('.submit-btn');
+        
+        let selectedCount = 0;
+        let correctSelections = 0;
+
+        options.forEach(opt => {
+            if (opt.checked) {
+                selectedCount++;
+                if (opt.dataset.correct === "true") correctSelections++;
+            }
+        });
+
+        if (selectedCount !== requiredCount) {
+            alert(`Please select exactly ${requiredCount} answers.`);
+            return;
+        }
+
+        options.forEach(opt => {
+            opt.disabled = true;
+            if (opt.dataset.correct === "true") {
+                opt.parentElement.classList.add('correct-opt');
+            } else if (opt.checked) {
+                opt.parentElement.classList.add('wrong-opt');
+            }
+        });
+
+        msg.style.display = "block";
+        feedback.style.display = "block";
+        btn.style.display = "none";
+
+        if (correctSelections === requiredCount) {
+            msg.textContent = "Correct!";
+            msg.className = "result-msg is-correct";
+        } else {
+            msg.textContent = "Incorrect.";
+            msg.className = "result-msg is-wrong";
+        }
+    }
+</script>
+</body>
+</html>
