@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ Simulations | Interactive Scenarios</title>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0f1419;
+    --bg3: #151b26;
+    --terminal-bg: #000000;
+    --border: #1a2332;
+    --accent: #00ff9f;
+    --accent2: #00d4ff;
+    --warning: #ffaa00;
+    --danger: #ff3366;
+    --success: #00ff9f;
+    --text: #e0e6f0;
+    --muted: #6b7d9f;
+    --code-green: #00ff9f;
+    --code-cyan: #00d4ff;
+    --code-yellow: #ffaa00;
+    --font: 'Courier Prime', monospace;
+    --mono: 'Share Tech Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg);
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      linear-gradient(45deg, transparent 48%, rgba(0, 255, 159, 0.03) 50%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(0, 212, 255, 0.03) 50%, transparent 52%);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridMove 20s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 30px 30px, -30px -30px; }
+  }
+
+  header {
+    background: rgba(15, 20, 25, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--accent);
+    padding: 0 2rem;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.1);
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logo::before {
+    content: '▶';
+    color: var(--accent);
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .intro-section {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .scenario-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .scenario-card {
+    background: linear-gradient(135deg, var(--bg2), var(--bg3));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 159, 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .scenario-card:hover::before {
+    left: 100%;
+  }
+
+  .scenario-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 255, 159, 0.2);
+  }
+
+  .scenario-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: grayscale(0.5);
+  }
+
+  .scenario-card:hover .scenario-icon {
+    filter: grayscale(0);
+  }
+
+  .scenario-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+  }
+
+  .scenario-difficulty {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .difficulty-easy { background: rgba(0, 255, 159, 0.2); color: var(--success); }
+  .difficulty-medium { background: rgba(255, 170, 0, 0.2); color: var(--warning); }
+  .difficulty-hard { background: rgba(255, 51, 102, 0.2); color: var(--danger); }
+
+  .scenario-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Simulation Interface */
+  .simulation-container {
+    display: none;
+  }
+
+  .simulation-container.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .simulation-header {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .sim-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+  }
+
+  .sim-context {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .terminal-window {
+    background: var(--terminal-bg);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 255, 159, 0.3);
+  }
+
+  .terminal-header {
+    background: var(--bg3);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .dot-red { background: var(--danger); }
+  .dot-yellow { background: var(--warning); }
+  .dot-green { background: var(--success); }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .terminal-content {
+    padding: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--code-green);
+    min-height: 200px;
+  }
+
+  .terminal-line {
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: typeLine 0.3s ease-out forwards;
+  }
+
+  @keyframes typeLine {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .terminal-prompt {
+    color: var(--accent);
+  }
+
+  .terminal-command {
+    color: var(--code-cyan);
+  }
+
+  .terminal-output {
+    color: var(--text);
+  }
+
+  .terminal-error {
+    color: var(--danger);
+  }
+
+  .terminal-warning {
+    color: var(--warning);
+  }
+
+  .email-window {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+
+  .email-header {
+    background: var(--bg3);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .email-field {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .email-label {
+    color: var(--muted);
+    min-width: 80px;
+  }
+
+  .email-value {
+    color: var(--text);
+  }
+
+  .email-suspicious {
+    color: var(--danger);
+    font-weight: 700;
+  }
+
+  .email-body {
+    padding: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .question-section {
+    background: var(--bg2);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .question-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+
+  .choices-container {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .choice-btn {
+    background: var(--bg3);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .choice-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .choice-btn:hover {
+    border-color: var(--accent);
+    transform: translateX(5px);
+  }
+
+  .choice-btn:hover::before {
+    transform: scaleY(1);
+  }
+
+  .choice-letter {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 4px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    margin-right: 1rem;
+    font-family: var(--mono);
+  }
+
+  .choice-text {
+    color: var(--text);
+    font-size: 1rem;
+  }
+
+  .choice-btn.correct {
+    border-color: var(--success);
+    background: rgba(0, 255, 159, 0.1);
+  }
+
+  .choice-btn.incorrect {
+    border-color: var(--danger);
+    background: rgba(255, 51, 102, 0.1);
+  }
+
+  .choice-btn.correct .choice-letter {
+    background: var(--success);
+  }
+
+  .choice-btn.incorrect .choice-letter {
+    background: var(--danger);
+  }
+
+  .feedback-section {
+    background: var(--bg3);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    display: none;
+  }
+
+  .feedback-section.show {
+    display: block;
+    animation: slideIn 0.5s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .feedback-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .feedback-title.correct {
+    color: var(--success);
+  }
+
+  .feedback-title.incorrect {
+    color: var(--danger);
+  }
+
+  .feedback-text {
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .feedback-explanation {
+    background: var(--bg2);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .explanation-title {
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+  }
+
+  .explanation-text {
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+  }
+
+  .btn {
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--accent);
+    border: 2px solid var(--accent);
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .progress-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+  }
+
+  .progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.3s ease;
+  }
+
+  .progress-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(0, 255, 159, 0.5);
+  }
+
+  .progress-dot.completed {
+    background: var(--success);
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .scenario-selector {
+      grid-template-columns: 1fr;
+    }
+
+    header {
+      padding: 0 1rem;
+    }
+
+    main {
+      padding: 1rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">Cyber Simulations</div>
+    <a href="index.html" class="home-btn">
+      <span>←</span>
+      <span>Home</span>
+    </a>
+  </header>
+
+  <main>
+    <!-- Intro Section -->
+    <div class="intro-section" id="introSection">
+      <h1>Interactive Security Simulations</h1>
+      <p class="subtitle">Practice real-world cybersecurity scenarios with hands-on decision making</p>
+
+      <div class="scenario-selector">
+        <div class="scenario-card" data-scenario="phishing">
+          <div class="scenario-icon">🎣</div>
+          <div class="scenario-title">Phishing Detection</div>
+          <div class="scenario-difficulty difficulty-easy">Easy</div>
+          <div class="scenario-desc">
+            Analyze suspicious emails and identify phishing attempts before they compromise your organization.
+          </div>
+        </div>
+
+        <div class="scenario-card" data-scenario="incident">
+          <div class="scenario-icon">🚨</div>
+          <div class="scenario-title">Incident Response</div>
+          <div class="scenario-difficulty difficulty-medium">Medium</div>
+          <div class="scenario-desc">
+            Respond to a security breach in real-time. Make critical decisions to contain and mitigate the threat.
+          </div>
+        </div>
+
+        <div class="scenario-card" data-scenario="malware">
+          <div class="scenario-icon">🦠</div>
+          <div class="scenario-title">Malware Analysis</div>
+          <div class="scenario-difficulty difficulty-medium">Medium</div>
+          <div class="scenario-desc">
+            Investigate suspicious system behavior and determine the appropriate response to a potential malware infection.
+          </div>
+        </div>
+
+        <div class="scenario-card" data-scenario="network">
+          <div class="scenario-icon">🌐</div>
+          <div class="scenario-title">Network Security</div>
+          <div class="scenario-difficulty difficulty-hard">Hard</div>
+          <div class="scenario-desc">
+            Analyze network traffic and firewall logs to detect and prevent unauthorized access attempts.
+          </div>
+        </div>
+
+        <div class="scenario-card" data-scenario="social">
+          <div class="scenario-icon">👤</div>
+          <div class="scenario-title">Social Engineering</div>
+          <div class="scenario-difficulty difficulty-medium">Medium</div>
+          <div class="scenario-desc">
+            Identify and respond to social engineering attacks targeting your organization's employees.
+          </div>
+        </div>
+
+        <div class="scenario-card" data-scenario="compliance">
+          <div class="scenario-icon">📋</div>
+          <div class="scenario-title">Compliance Audit</div>
+          <div class="scenario-difficulty difficulty-hard">Hard</div>
+          <div class="scenario-desc">
+            Conduct a security audit and ensure systems meet regulatory compliance requirements.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simulation Container -->
+    <div class="simulation-container" id="simulationContainer">
+      <!-- Content dynamically loaded here -->
+    </div>
+  </main>
+
+  <script src="gamification-social.js"></script>
+  <script src="cyber-simulations.js"></script>
+</body>
+</html>
