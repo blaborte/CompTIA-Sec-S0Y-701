@@ -16,6 +16,7 @@
     --green: #00f5a0;
     --red: #ff4757;
     --yellow: #ffd32a;
+    --purple: #b47aff;
     --text: #d0d8f0;
     --muted: #5a6a8a;
     --font: 'IBM Plex Sans', sans-serif;
@@ -40,7 +41,7 @@
     padding: 0 2rem; 
     display: flex; 
     align-items: center; 
-    justify-content: center; 
+    justify-content: space-between; 
     height: 70px;
   }
   
@@ -55,6 +56,75 @@
     color: var(--accent); 
   }
 
+  .user-stats {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .level-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 245, 160, 0.1));
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+  }
+
+  .level-icon {
+    font-size: 1.2rem;
+  }
+
+  .level-text {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .xp-display {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .xp-bar {
+    width: 100px;
+    height: 4px;
+    background: var(--bg3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 0.25rem;
+  }
+
+  .xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    transition: width 0.5s ease;
+  }
+
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(255, 211, 42, 0.1), rgba(255, 107, 43, 0.1));
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+  }
+
+  .streak-icon {
+    font-size: 1.2rem;
+  }
+
+  .streak-text {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--yellow);
+    font-weight: 600;
+  }
+
   main {
     flex: 1;
     display: flex;
@@ -64,7 +134,7 @@
   }
 
   .container {
-    max-width: 900px;
+    max-width: 1200px;
     width: 100%;
   }
 
@@ -88,6 +158,135 @@
     text-align: center;
   }
 
+  /* Dashboard Stats */
+  .dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .stat-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-card:nth-child(1) .stat-value { color: var(--accent); }
+  .stat-card:nth-child(2) .stat-value { color: var(--green); }
+  .stat-card:nth-child(3) .stat-value { color: var(--yellow); }
+  .stat-card:nth-child(4) .stat-value { color: var(--purple); }
+
+  .stat-subtext {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* Achievements Section */
+  .achievements-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .achievements-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .achievements-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .achievements-count {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .achievement-badge {
+    background: var(--bg3);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .achievement-badge.unlocked {
+    border-color: var(--green);
+    background: linear-gradient(135deg, rgba(0, 245, 160, 0.1), rgba(0, 212, 255, 0.1));
+  }
+
+  .achievement-badge.locked {
+    opacity: 0.4;
+  }
+
+  .achievement-badge:hover:not(.locked) {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+  }
+
+  .achievement-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    filter: grayscale(100%);
+  }
+
+  .achievement-badge.unlocked .achievement-icon {
+    filter: grayscale(0%);
+  }
+
+  .achievement-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .achievement-desc {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
   .exam-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -104,12 +303,25 @@
     cursor: pointer;
     text-decoration: none;
     display: block;
+    position: relative;
   }
 
   .exam-card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+  }
+
+  .exam-progress {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--green);
+    background: rgba(0, 245, 160, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
   }
 
   .exam-label {
@@ -193,6 +405,57 @@
     border-top: 1px solid var(--border);
   }
 
+  /* Achievement Notification */
+  .achievement-notification {
+    position: fixed;
+    top: 100px;
+    right: 2rem;
+    background: linear-gradient(135deg, var(--bg2), var(--bg3));
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-width: 300px;
+    box-shadow: 0 8px 32px rgba(0, 245, 160, 0.3);
+    transform: translateX(400px);
+    transition: transform 0.5s ease;
+    z-index: 1000;
+  }
+
+  .achievement-notification.show {
+    transform: translateX(0);
+  }
+
+  .achievement-notification-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .achievement-notification-icon {
+    font-size: 2rem;
+  }
+
+  .achievement-notification-title {
+    font-size: 0.9rem;
+    color: var(--green);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .achievement-notification-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .achievement-notification-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
   @media (max-width: 768px) {
     h1 {
       font-size: 2rem;
@@ -201,13 +464,36 @@
     .exam-grid {
       grid-template-columns: 1fr;
     }
+
+    .dashboard {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .achievements-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
     
     header {
       padding: 0 1rem;
+      flex-direction: column;
+      height: auto;
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .user-stats {
+      gap: 1rem;
+      flex-wrap: wrap;
     }
     
     main {
       padding: 1rem;
+    }
+
+    .achievement-notification {
+      right: 1rem;
+      left: 1rem;
+      min-width: auto;
     }
   }
 </style>
@@ -215,6 +501,20 @@
 <body>
   <header>
     <div class="logo">SECURITY+ <span>SY0-701</span> PRACTICE EXAMS</div>
+    <div class="user-stats">
+      <div class="level-badge">
+        <span class="level-icon">⭐</span>
+        <div>
+          <div class="level-text" id="levelText">Level 1</div>
+          <div class="xp-display"><span id="xpCurrent">0</span> / <span id="xpNeeded">100</span> XP</div>
+          <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width: 0%"></div></div>
+        </div>
+      </div>
+      <div class="streak-badge">
+        <span class="streak-icon">🔥</span>
+        <span class="streak-text"><span id="streakCount">0</span> day streak</span>
+      </div>
+    </div>
   </header>
 
   <main>
@@ -222,8 +522,44 @@
       <h1>CompTIA Sec+ Study Materials</h1>
       <p class="subtitle">Choose an exam to begin your preparation</p>
 
+      <!-- Dashboard Stats -->
+      <div class="dashboard">
+        <div class="stat-card">
+          <div class="stat-label">Total XP Earned</div>
+          <div class="stat-value" id="totalXP">0</div>
+          <div class="stat-subtext">Keep studying!</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tests Completed</div>
+          <div class="stat-value" id="testsCompleted">0</div>
+          <div class="stat-subtext">Out of 3 total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Questions Answered</div>
+          <div class="stat-value" id="questionsAnswered">0</div>
+          <div class="stat-subtext">270 available</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Accuracy Rate</div>
+          <div class="stat-value" id="accuracyRate">0%</div>
+          <div class="stat-subtext">Keep improving!</div>
+        </div>
+      </div>
+
+      <!-- Achievements Section -->
+      <div class="achievements-section">
+        <div class="achievements-header">
+          <h2 class="achievements-title">Achievements</h2>
+          <span class="achievements-count"><span id="unlockedCount">0</span> / <span id="totalCount">12</span> Unlocked</span>
+        </div>
+        <div class="achievements-grid" id="achievementsGrid">
+          <!-- Achievements will be dynamically added here -->
+        </div>
+      </div>
+
       <div class="exam-grid">
         <a href="Practice-tests.html" class="exam-card">
+          <div class="exam-progress" id="practiceProgress">0/3 completed</div>
           <div class="exam-label">Practice Exams</div>
           <div class="exam-title">All Practice Tests</div>
           <div class="exam-desc">Access all three comprehensive Security+ SY0-701 practice exams</div>
@@ -231,6 +567,7 @@
         </a>
 
         <a href="Flashcards.html" class="exam-card">
+          <div class="exam-progress" id="flashcardsProgress">0% mastered</div>
           <div class="exam-label">Study Tool</div>
           <div class="exam-title">Flashcards</div>
           <div class="exam-desc">Interactive flashcards covering all Security+ domains</div>
@@ -238,6 +575,7 @@
         </a>
 
         <a href="Acronyms.html" class="exam-card">
+          <div class="exam-progress" id="acronymsProgress">Reference</div>
           <div class="exam-label">Reference</div>
           <div class="exam-title">Acronyms & Terms</div>
           <div class="exam-desc">Comprehensive glossary of Security+ acronyms and terminologies</div>
@@ -261,5 +599,231 @@
   <footer>
     CompTIA Security+ SY0-701 Professor Messer's Practice Exams
   </footer>
+
+  <!-- Achievement Notification -->
+  <div class="achievement-notification" id="achievementNotification">
+    <div class="achievement-notification-header">
+      <span class="achievement-notification-icon" id="notifIcon">🏆</span>
+      <span class="achievement-notification-title">Achievement Unlocked!</span>
+    </div>
+    <div class="achievement-notification-name" id="notifName">First Steps</div>
+    <div class="achievement-notification-desc" id="notifDesc">You've started your Security+ journey!</div>
+  </div>
+
+  <script>
+    // Gamification System
+    class GamificationSystem {
+      constructor() {
+        this.achievements = [
+          { id: 'first_visit', name: 'First Steps', desc: 'Visit the study portal', icon: '🎯', xp: 10, unlocked: false },
+          { id: 'first_test', name: 'Test Taker', desc: 'Complete your first practice test', icon: '📝', xp: 50, unlocked: false },
+          { id: 'all_tests', name: 'Dedicated Student', desc: 'Complete all 3 practice tests', icon: '🎓', xp: 200, unlocked: false },
+          { id: 'perfect_score', name: 'Perfect Score', desc: 'Score 100% on any test', icon: '💯', xp: 100, unlocked: false },
+          { id: 'streak_3', name: 'Consistent', desc: 'Study 3 days in a row', icon: '🔥', xp: 30, unlocked: false },
+          { id: 'streak_7', name: 'Dedicated', desc: 'Study 7 days in a row', icon: '⚡', xp: 70, unlocked: false },
+          { id: 'level_5', name: 'Rising Star', desc: 'Reach level 5', icon: '⭐', xp: 50, unlocked: false },
+          { id: 'level_10', name: 'Expert', desc: 'Reach level 10', icon: '🌟', xp: 100, unlocked: false },
+          { id: 'flashcard_master', name: 'Flashcard Master', desc: 'Master 50 flashcards', icon: '🎴', xp: 75, unlocked: false },
+          { id: 'speed_demon', name: 'Speed Demon', desc: 'Complete a test in under 60 minutes', icon: '⚡', xp: 80, unlocked: false },
+          { id: 'comeback', name: 'Comeback', desc: 'Improve your score by 20% or more', icon: '📈', xp: 60, unlocked: false },
+          { id: 'knowledge_seeker', name: 'Knowledge Seeker', desc: 'View the acronyms reference', icon: '📚', xp: 20, unlocked: false }
+        ];
+
+        this.loadData();
+        this.checkDailyStreak();
+        this.updateUI();
+        this.renderAchievements();
+        
+        // Unlock first visit achievement
+        this.unlockAchievement('first_visit');
+      }
+
+      loadData() {
+        const saved = localStorage.getItem('securityPlusGameData');
+        if (saved) {
+          const data = JSON.parse(saved);
+          this.xp = data.xp || 0;
+          this.level = data.level || 1;
+          this.testsCompleted = data.testsCompleted || 0;
+          this.questionsAnswered = data.questionsAnswered || 0;
+          this.correctAnswers = data.correctAnswers || 0;
+          this.lastVisit = data.lastVisit || null;
+          this.streak = data.streak || 0;
+          this.achievements = data.achievements || this.achievements;
+        } else {
+          this.xp = 0;
+          this.level = 1;
+          this.testsCompleted = 0;
+          this.questionsAnswered = 0;
+          this.correctAnswers = 0;
+          this.lastVisit = null;
+          this.streak = 0;
+        }
+      }
+
+      saveData() {
+        const data = {
+          xp: this.xp,
+          level: this.level,
+          testsCompleted: this.testsCompleted,
+          questionsAnswered: this.questionsAnswered,
+          correctAnswers: this.correctAnswers,
+          lastVisit: this.lastVisit,
+          streak: this.streak,
+          achievements: this.achievements
+        };
+        localStorage.setItem('securityPlusGameData', JSON.stringify(data));
+      }
+
+      checkDailyStreak() {
+        const today = new Date().toDateString();
+        if (this.lastVisit) {
+          const lastVisitDate = new Date(this.lastVisit).toDateString();
+          const yesterday = new Date(Date.now() - 86400000).toDateString();
+          
+          if (lastVisitDate === today) {
+            // Same day, do nothing
+            return;
+          } else if (lastVisitDate === yesterday) {
+            // Consecutive day
+            this.streak++;
+            this.addXP(10); // Bonus XP for maintaining streak
+          } else {
+            // Streak broken
+            this.streak = 1;
+          }
+        } else {
+          this.streak = 1;
+        }
+        
+        this.lastVisit = new Date().toISOString();
+        this.saveData();
+        
+        // Check streak achievements
+        if (this.streak >= 3) this.unlockAchievement('streak_3');
+        if (this.streak >= 7) this.unlockAchievement('streak_7');
+      }
+
+      addXP(amount) {
+        this.xp += amount;
+        this.checkLevelUp();
+        this.saveData();
+        this.updateUI();
+      }
+
+      checkLevelUp() {
+        const xpNeeded = this.getXPNeeded();
+        if (this.xp >= xpNeeded) {
+          this.level++;
+          this.xp -= xpNeeded;
+          this.showNotification('🎉', 'Level Up!', `You've reached level ${this.level}!`);
+          
+          if (this.level >= 5) this.unlockAchievement('level_5');
+          if (this.level >= 10) this.unlockAchievement('level_10');
+        }
+      }
+
+      getXPNeeded() {
+        return 100 + (this.level - 1) * 50;
+      }
+
+      unlockAchievement(achievementId) {
+        const achievement = this.achievements.find(a => a.id === achievementId);
+        if (achievement && !achievement.unlocked) {
+          achievement.unlocked = true;
+          this.addXP(achievement.xp);
+          this.showNotification(achievement.icon, achievement.name, achievement.desc);
+          this.renderAchievements();
+          this.saveData();
+        }
+      }
+
+      showNotification(icon, name, desc) {
+        const notif = document.getElementById('achievementNotification');
+        document.getElementById('notifIcon').textContent = icon;
+        document.getElementById('notifName').textContent = name;
+        document.getElementById('notifDesc').textContent = desc;
+        
+        notif.classList.add('show');
+        setTimeout(() => {
+          notif.classList.remove('show');
+        }, 4000);
+      }
+
+      updateUI() {
+        // Level and XP
+        document.getElementById('levelText').textContent = `Level ${this.level}`;
+        document.getElementById('xpCurrent').textContent = this.xp;
+        const xpNeeded = this.getXPNeeded();
+        document.getElementById('xpNeeded').textContent = xpNeeded;
+        const xpPercent = (this.xp / xpNeeded) * 100;
+        document.getElementById('xpFill').style.width = `${xpPercent}%`;
+
+        // Streak
+        document.getElementById('streakCount').textContent = this.streak;
+
+        // Dashboard stats
+        document.getElementById('totalXP').textContent = this.xp + (this.level - 1) * this.getXPNeeded();
+        document.getElementById('testsCompleted').textContent = this.testsCompleted;
+        document.getElementById('questionsAnswered').textContent = this.questionsAnswered;
+        
+        const accuracy = this.questionsAnswered > 0 
+          ? Math.round((this.correctAnswers / this.questionsAnswered) * 100) 
+          : 0;
+        document.getElementById('accuracyRate').textContent = `${accuracy}%`;
+
+        // Progress indicators
+        document.getElementById('practiceProgress').textContent = `${this.testsCompleted}/3 completed`;
+      }
+
+      renderAchievements() {
+        const grid = document.getElementById('achievementsGrid');
+        grid.innerHTML = '';
+        
+        const unlockedCount = this.achievements.filter(a => a.unlocked).length;
+        document.getElementById('unlockedCount').textContent = unlockedCount;
+        document.getElementById('totalCount').textContent = this.achievements.length;
+
+        this.achievements.forEach(achievement => {
+          const div = document.createElement('div');
+          div.className = `achievement-badge ${achievement.unlocked ? 'unlocked' : 'locked'}`;
+          div.innerHTML = `
+            <div class="achievement-icon">${achievement.icon}</div>
+            <div class="achievement-name">${achievement.name}</div>
+            <div class="achievement-desc">${achievement.desc}</div>
+          `;
+          grid.appendChild(div);
+        });
+      }
+    }
+
+    // Initialize gamification system
+    const gamification = new GamificationSystem();
+
+    // Expose functions for other pages to use
+    window.securityPlusGamification = {
+      addXP: (amount) => gamification.addXP(amount),
+      unlockAchievement: (id) => gamification.unlockAchievement(id),
+      completeTest: () => {
+        gamification.testsCompleted++;
+        gamification.addXP(50);
+        gamification.unlockAchievement('first_test');
+        if (gamification.testsCompleted >= 3) {
+          gamification.unlockAchievement('all_tests');
+        }
+        gamification.saveData();
+        gamification.updateUI();
+      },
+      answerQuestion: (correct) => {
+        gamification.questionsAnswered++;
+        if (correct) {
+          gamification.correctAnswers++;
+          gamification.addXP(5);
+        }
+        gamification.saveData();
+        gamification.updateUI();
+      }
+    };
+  </script>
 </body>
 </html>
