@@ -31,6 +31,28 @@
   }
   .logo { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
   .logo span { color: var(--accent); }
+  
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
   .timer-wrap { display: flex; align-items: center; gap: 1.5rem; }
   #timer { font-family: var(--mono); font-size: 1.1rem; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; }
   #timer.warn { color: var(--yellow); }
@@ -62,7 +84,7 @@
   .q-dot {
     aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;
     font-family: var(--mono); font-size: 0.55rem; display: flex; align-items: center;
-    justify-content: center; color: var(--muted); transition: all 0.15s; background: var(--bg3);
+    justify-content: space-between; color: var(--muted); transition: all 0.15s; background: var(--bg3);
   }
   .q-dot:hover { border-color: var(--accent); color: var(--accent); }
   .q-dot.answered { background: var(--accent); border-color: var(--accent); color: var(--bg); }
@@ -189,7 +211,11 @@
     <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
     <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
   </div>
-</header>
+    <a href="index.html" class="home-btn">
+      <span>←</span>
+      <span>Home</span>
+    </a>
+  </header>
 <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
 <div class="layout">
