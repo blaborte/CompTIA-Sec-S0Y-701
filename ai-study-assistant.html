@@ -21,637 +21,524 @@
     --font: 'IBM Plex Sans', sans-serif;
     --mono: 'IBM Plex Mono', monospace;
   }
-  
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  body { 
-    background: var(--bg); 
-    color: var(--text); 
-    font-family: var(--font); 
-    min-height: 100vh; 
-    line-height: 1.6;
-  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
 
   header {
-    background: var(--bg2); 
+    background: var(--bg2);
     border-bottom: 1px solid var(--border);
-    padding: 0 2rem; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 70px;
     position: sticky;
     top: 0;
     z-index: 100;
   }
-  
-  .logo { 
-    font-family: var(--mono); 
-    font-size: 0.85rem; 
-    color: var(--muted); 
-    letter-spacing: 0.1em; 
-  }
-  
-  .logo span { 
-    color: var(--accent); 
-  }
-
+  .logo { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); letter-spacing: 0.1em; }
+  .logo span { color: var(--accent); }
   .home-btn {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-family: var(--mono);
-    font-size: 0.8rem;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none;
+    font-family: var(--mono); font-size: 0.8rem; transition: all 0.3s ease;
+    display: flex; align-items: center; gap: 0.5rem;
   }
+  .home-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
 
-  .home-btn:hover {
-    border-color: var(--accent);
-    background: var(--bg2);
-    transform: translateY(-2px);
-  }
+  main { max-width: 900px; margin: 0 auto; padding: 2rem; }
 
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-
-  .intro-section {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
+  .intro { text-align: center; margin-bottom: 2rem; }
   h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 2.5rem; font-weight: 600; margin-bottom: 0.5rem;
     background: linear-gradient(135deg, var(--accent), var(--purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
+  .subtitle { color: var(--muted); margin-bottom: 1.5rem; }
 
-  .subtitle {
-    color: var(--muted);
-    font-size: 1.1rem;
+  .ai-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(180,122,255,0.2), rgba(0,212,255,0.2));
+    border: 1px solid var(--purple); padding: 0.5rem 1.25rem;
+    border-radius: 20px; font-family: var(--mono); font-size: 0.8rem;
+  }
+  .pulse { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+  /* API KEY SETUP BOX */
+  .setup-box {
+    background: var(--bg2);
+    border: 2px solid var(--yellow);
+    border-radius: 12px;
+    padding: 2rem;
     margin-bottom: 2rem;
   }
-
-  .ai-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: linear-gradient(135deg, rgba(180, 122, 255, 0.2), rgba(0, 212, 255, 0.2));
-    border: 1px solid var(--purple);
-    padding: 0.75rem 1.5rem;
-    border-radius: 20px;
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    margin-bottom: 3rem;
+  .setup-title {
+    font-size: 1.2rem; font-weight: 600; color: var(--yellow);
+    margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
   }
-
-  .ai-pulse {
-    width: 10px;
-    height: 10px;
-    background: var(--purple);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
+  .setup-desc { color: var(--text); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+  .setup-steps { list-style: none; margin-bottom: 1.5rem; }
+  .setup-steps li {
+    padding: 0.75rem 1rem; margin-bottom: 0.5rem;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+    font-size: 0.9rem; display: flex; align-items: flex-start; gap: 1rem;
   }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
+  .step-num {
+    background: var(--yellow); color: var(--bg); width: 24px; height: 24px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
   }
-
-  .chat-container {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    height: 600px;
+  .key-input-row { display: flex; gap: 1rem; }
+  .key-input {
+    flex: 1; background: var(--bg3); border: 2px solid var(--border);
+    border-radius: 8px; padding: 0.75rem 1rem; color: var(--text);
+    font-family: var(--mono); font-size: 0.9rem;
   }
-
-  .chat-header {
-    background: var(--bg3);
-    border-bottom: 1px solid var(--border);
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  .key-input:focus { outline: none; border-color: var(--accent); }
+  .key-btn {
+    background: linear-gradient(135deg, var(--accent), var(--green)); border: none;
+    color: var(--bg); padding: 0.75rem 1.5rem; border-radius: 8px;
+    font-weight: 600; cursor: pointer; font-family: var(--font); font-size: 0.9rem;
+    transition: all 0.3s;
   }
+  .key-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,212,255,0.3); }
+  .key-note { font-size: 0.8rem; color: var(--muted); margin-top: 0.75rem; }
+  .key-note a { color: var(--accent); }
+  .key-success {
+    background: rgba(0,245,160,0.1); border: 1px solid var(--green);
+    border-radius: 8px; padding: 1rem; color: var(--green);
+    font-family: var(--mono); font-size: 0.9rem; display: none;
+    align-items: center; gap: 0.5rem; margin-top: 1rem;
+  }
+  .key-success.show { display: flex; }
 
-  .ai-avatar {
-    width: 40px;
-    height: 40px;
+  /* CHAT */
+  .chat-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; height: 550px;
+  }
+  .chat-top {
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .avatar {
+    width: 42px; height: 42px;
     background: linear-gradient(135deg, var(--purple), var(--accent));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
   }
-
-  .chat-title {
-    flex: 1;
+  .chat-name { font-weight: 600; font-size: 1.05rem; }
+  .chat-online { font-family: var(--mono); font-size: 0.8rem; color: var(--green); }
+  .clear-btn {
+    margin-left: auto; background: var(--bg2); border: 1px solid var(--border);
+    color: var(--muted); padding: 0.4rem 0.8rem; border-radius: 4px;
+    font-family: var(--mono); font-size: 0.7rem; cursor: pointer; transition: all 0.2s;
   }
+  .clear-btn:hover { border-color: var(--red); color: var(--red); }
 
-  .chat-title-text {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
+  .messages {
+    flex: 1; overflow-y: auto; padding: 1.5rem;
+    display: flex; flex-direction: column; gap: 1.25rem;
   }
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  .chat-status {
-    font-size: 0.85rem;
-    color: var(--green);
-    font-family: var(--mono);
+  .msg { display: flex; gap: 0.75rem; animation: fadeUp 0.3s ease-out; }
+  .msg.user { flex-direction: row-reverse; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .msg-avatar {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
   }
+  .msg.ai .msg-avatar { background: linear-gradient(135deg, var(--purple), var(--accent)); }
+  .msg.user .msg-avatar { background: var(--bg3); border: 1px solid var(--border); }
 
-  .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  .msg-bubble {
+    max-width: 75%; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 1.25rem; line-height: 1.7; font-size: 0.95rem;
   }
-
-  .message {
-    display: flex;
-    gap: 1rem;
-    animation: fadeIn 0.3s ease-out;
+  .msg.user .msg-bubble {
+    background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(0,245,160,0.08));
+    border-color: rgba(0,212,255,0.3);
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  .msg-bubble strong { color: var(--accent); }
+  .msg-bubble code {
+    background: var(--bg); padding: 0.15rem 0.4rem;
+    border-radius: 3px; font-family: var(--mono); font-size: 0.85rem; color: var(--green);
   }
+  .msg-bubble ul, .msg-bubble ol { padding-left: 1.25rem; margin: 0.5rem 0; }
+  .msg-bubble li { margin-bottom: 0.3rem; }
 
-  .message.user {
-    flex-direction: row-reverse;
+  .typing { display: flex; gap: 5px; padding: 0.5rem 0; }
+  .typing span {
+    width: 7px; height: 7px; background: var(--muted); border-radius: 50%;
+    animation: bounce 1.2s infinite;
   }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
 
-  .message-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
+  .welcome {
+    text-align: center; padding: 2rem 1rem; color: var(--muted);
   }
+  .welcome-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .welcome h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 0.5rem; }
 
-  .message.ai .message-avatar {
-    background: linear-gradient(135deg, var(--purple), var(--accent));
+  .chat-bottom {
+    background: var(--bg3); border-top: 1px solid var(--border); padding: 1rem 1.5rem;
   }
-
-  .message.user .message-avatar {
-    background: var(--bg3);
-    border: 1px solid var(--border);
+  .input-row { display: flex; gap: 0.75rem; }
+  .msg-input {
+    flex: 1; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.75rem 1rem; color: var(--text);
+    font-family: var(--font); font-size: 0.95rem; resize: none; min-height: 44px; max-height: 120px;
   }
-
-  .message-content {
-    max-width: 70%;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    line-height: 1.7;
-  }
-
-  .message.user .message-content {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 245, 160, 0.1));
-    border-color: var(--accent);
-  }
-
-  .message-content p {
-    margin-bottom: 0.75rem;
-  }
-
-  .message-content p:last-child {
-    margin-bottom: 0;
-  }
-
-  .message-content code {
-    background: var(--bg);
-    padding: 0.2rem 0.4rem;
-    border-radius: 3px;
-    font-family: var(--mono);
-    font-size: 0.9rem;
-    color: var(--accent);
-  }
-
-  .typing-indicator {
-    display: flex;
-    gap: 0.5rem;
-    padding: 1rem;
-  }
-
-  .typing-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--muted);
-    border-radius: 50%;
-    animation: typing 1.4s infinite;
-  }
-
-  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes typing {
-    0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-    30% { opacity: 1; transform: translateY(-10px); }
-  }
-
-  .chat-input-container {
-    background: var(--bg3);
-    border-top: 1px solid var(--border);
-    padding: 1.5rem;
-  }
-
-  .chat-input-wrapper {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .chat-input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    color: var(--text);
-    font-family: var(--font);
-    font-size: 0.95rem;
-    resize: none;
-    min-height: 50px;
-    max-height: 150px;
-  }
-
-  .chat-input:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
-
+  .msg-input:focus { outline: none; border-color: var(--accent); }
   .send-btn {
-    background: linear-gradient(135deg, var(--purple), var(--accent));
-    border: none;
-    color: var(--bg);
-    padding: 0 2rem;
-    border-radius: 8px;
-    font-family: var(--font);
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+    background: linear-gradient(135deg, var(--purple), var(--accent)); border: none;
+    color: var(--bg); padding: 0 1.5rem; border-radius: 8px;
+    font-weight: 600; cursor: pointer; font-family: var(--font); font-size: 0.9rem;
+    transition: all 0.3s; white-space: nowrap;
   }
+  .send-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(180,122,255,0.3); }
+  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  .send-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(180, 122, 255, 0.3);
+  /* QUICK TOPICS */
+  .quick-topics { margin-top: 2rem; }
+  .quick-label {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;
   }
-
-  .send-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+  .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+  .topic {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem; cursor: pointer; transition: all 0.3s; text-align: center;
   }
-
-  .quick-topics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .topic-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-  }
-
-  .topic-card:hover {
-    border-color: var(--purple);
-    transform: translateY(-4px);
-  }
-
-  .topic-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .topic-title {
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  .topic-desc {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .welcome-message {
-    text-align: center;
-    padding: 3rem 2rem;
-    color: var(--muted);
-  }
-
-  .welcome-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-  }
-
-  .welcome-text {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .welcome-subtext {
-    font-size: 0.9rem;
-  }
+  .topic:hover { border-color: var(--purple); transform: translateY(-3px); }
+  .topic-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .topic-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
 
   @media (max-width: 768px) {
-    h1 {
-      font-size: 2rem;
-    }
-
-    .chat-container {
-      height: 500px;
-    }
-
-    .message-content {
-      max-width: 85%;
-    }
-
-    .quick-topics {
-      grid-template-columns: 1fr;
-    }
+    h1 { font-size: 2rem; }
+    .msg-bubble { max-width: 88%; }
+    .key-input-row { flex-direction: column; }
   }
 </style>
 </head>
 <body>
   <header>
-    <div class="logo">SECURITY+ <span>SY0-701</span> ZEROTRUST AI</div>
-    <a href="index.html" class="home-btn">
-      <span>←</span>
-      <span>Home</span>
-    </a>
+    <div class="logo">SECURITY+ <span>SY0-701</span> / ZEROTRUST AI</div>
+    <a href="index.html" class="home-btn">← Home</a>
   </header>
 
   <main>
-    <div class="intro-section">
-      <h1>ZeroTrust AI Assistant</h1>
-      <p class="subtitle">Get instant explanations, practice questions, and study help powered by ZeroTrust AI</p>
-      <div class="ai-indicator">
-        <div class="ai-pulse"></div>
+    <div class="intro">
+      <h1>ZeroTrust AI</h1>
+      <p class="subtitle">Your personal Security+ SY0-701 study assistant</p>
+      <div class="ai-badge">
+        <div class="pulse"></div>
         <span>Powered by ZeroTrust AI Engine</span>
       </div>
     </div>
 
-    <div class="chat-container">
-      <div class="chat-header">
-        <div class="ai-avatar">🤖</div>
-        <div class="chat-title">
-          <div class="chat-title-text">ZeroTrust - Your Security+ Tutor</div>
-          <div class="chat-status">● Online & Ready</div>
+    <!-- API KEY SETUP -->
+    <div class="setup-box" id="setupBox">
+      <div class="setup-title">🔑 One-Time Setup Required</div>
+      <p class="setup-desc">
+        ZeroTrust AI uses the Claude API to answer your Security+ questions. You need a free Anthropic API key to activate it. This is stored only in your browser — never shared with anyone.
+      </p>
+      <ul class="setup-steps">
+        <li>
+          <span class="step-num">1</span>
+          <span>Go to <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a> and sign up for a free account</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>Click <strong>"Get API Keys"</strong> → <strong>"Create Key"</strong> and copy your API key</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>Paste your API key below and click <strong>Activate</strong></span>
+        </li>
+      </ul>
+      <div class="key-input-row">
+        <input type="password" class="key-input" id="apiKeyInput" placeholder="sk-ant-api03-..." />
+        <button class="key-btn" onclick="activateKey()">Activate ZeroTrust</button>
+      </div>
+      <p class="key-note">🔒 Your key is saved locally in your browser and never sent to any server except Anthropic directly.</p>
+      <div class="key-success" id="keySuccess">✅ ZeroTrust AI activated! You can start chatting below.</div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="chat-box">
+      <div class="chat-top">
+        <div class="avatar">🛡️</div>
+        <div>
+          <div class="chat-name">ZeroTrust</div>
+          <div class="chat-online" id="chatStatus">● Waiting for activation...</div>
+        </div>
+        <button class="clear-btn" onclick="clearChat()">Clear Chat</button>
+      </div>
+
+      <div class="messages" id="messages">
+        <div class="welcome" id="welcomeMsg">
+          <div class="welcome-icon">🛡️</div>
+          <h3>Hi! I'm ZeroTrust</h3>
+          <p>Your AI tutor for Security+ SY0-701. Add your API key above to start chatting!</p>
         </div>
       </div>
 
-      <div class="chat-messages" id="chatMessages">
-        <div class="welcome-message">
-          <div class="welcome-icon">🎓</div>
-          <div class="welcome-text">Welcome to ZeroTrust AI!</div>
-          <div class="welcome-subtext">Ask me anything about Security+ topics, or try one of the quick topics below</div>
-        </div>
-      </div>
-
-      <div class="chat-input-container">
-        <div class="chat-input-wrapper">
-          <textarea 
-            class="chat-input" 
-            id="chatInput" 
-            placeholder="Ask me about Security+ concepts, request practice questions, or get help with topics..."
-            rows="1"
-          ></textarea>
-          <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+      <div class="chat-bottom">
+        <div class="input-row">
+          <textarea class="msg-input" id="msgInput" placeholder="Ask ZeroTrust anything about Security+..." rows="1" onkeydown="handleKey(event)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>Send</button>
         </div>
       </div>
     </div>
 
+    <!-- QUICK TOPICS -->
     <div class="quick-topics">
-      <div class="topic-card" onclick="askTopic('Explain the CIA Triad in simple terms')">
-        <div class="topic-icon">🔐</div>
-        <div class="topic-title">CIA Triad</div>
-        <div class="topic-desc">Core security principles</div>
-      </div>
-
-      <div class="topic-card" onclick="askTopic('What is Zero Trust and how does it work?')">
-        <div class="topic-icon">🛡️</div>
-        <div class="topic-title">Zero Trust</div>
-        <div class="topic-desc">Modern security model</div>
-      </div>
-
-      <div class="topic-card" onclick="askTopic('Explain different types of malware and how to defend against them')">
-        <div class="topic-icon">🦠</div>
-        <div class="topic-title">Malware</div>
-        <div class="topic-desc">Threats & defenses</div>
-      </div>
-
-      <div class="topic-card" onclick="askTopic('Generate 5 practice questions about encryption')">
-        <div class="topic-icon">📝</div>
-        <div class="topic-title">Practice Quiz</div>
-        <div class="topic-desc">Get custom questions</div>
-      </div>
-
-      <div class="topic-card" onclick="askTopic('What are the key differences between symmetric and asymmetric encryption?')">
-        <div class="topic-icon">🔑</div>
-        <div class="topic-title">Encryption</div>
-        <div class="topic-desc">Crypto concepts</div>
-      </div>
-
-      <div class="topic-card" onclick="askTopic('Explain the incident response lifecycle and each phase')">
-        <div class="topic-icon">🚨</div>
-        <div class="topic-title">Incident Response</div>
-        <div class="topic-desc">IR procedures</div>
+      <div class="quick-label">Quick Topics</div>
+      <div class="topics-grid">
+        <div class="topic" onclick="ask('Explain the CIA Triad with examples')">
+          <div class="topic-icon">🔐</div>
+          <div class="topic-name">CIA Triad</div>
+        </div>
+        <div class="topic" onclick="ask('How does Zero Trust work? Explain the key components')">
+          <div class="topic-icon">🛡️</div>
+          <div class="topic-name">Zero Trust</div>
+        </div>
+        <div class="topic" onclick="ask('Give me 5 practice questions on encryption for Security+')">
+          <div class="topic-icon">📝</div>
+          <div class="topic-name">Practice Quiz</div>
+        </div>
+        <div class="topic" onclick="ask('Explain types of malware: virus, worm, trojan, ransomware, spyware')">
+          <div class="topic-icon">🦠</div>
+          <div class="topic-name">Malware Types</div>
+        </div>
+        <div class="topic" onclick="ask('What is PKI and how do digital certificates work?')">
+          <div class="topic-icon">🔑</div>
+          <div class="topic-name">PKI & Certs</div>
+        </div>
+        <div class="topic" onclick="ask('Explain the NIST incident response lifecycle phases')">
+          <div class="topic-icon">🚨</div>
+          <div class="topic-name">Incident Response</div>
+        </div>
+        <div class="topic" onclick="ask('What are common network attacks and how to defend against them?')">
+          <div class="topic-icon">🌐</div>
+          <div class="topic-name">Network Attacks</div>
+        </div>
+        <div class="topic" onclick="ask('Explain social engineering attacks: phishing, vishing, smishing')">
+          <div class="topic-icon">👤</div>
+          <div class="topic-name">Social Engineering</div>
+        </div>
       </div>
     </div>
   </main>
 
   <script>
-    let conversationHistory = [];
+    let apiKey = localStorage.getItem('zerotrust_api_key') || '';
+    let history = [];
 
-    // Auto-resize textarea
-    const chatInput = document.getElementById('chatInput');
-    chatInput.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = this.scrollHeight + 'px';
-    });
+    // Auto-activate if key exists
+    if (apiKey) {
+      activateWithKey(apiKey);
+    }
 
-    // Send on Enter (Shift+Enter for new line)
-    chatInput.addEventListener('keydown', function(e) {
+    function activateKey() {
+      const input = document.getElementById('apiKeyInput');
+      const key = input.value.trim();
+      if (!key.startsWith('sk-ant-')) {
+        input.style.borderColor = 'var(--red)';
+        input.placeholder = 'Invalid key - must start with sk-ant-...';
+        return;
+      }
+      localStorage.setItem('zerotrust_api_key', key);
+      apiKey = key;
+      activateWithKey(key);
+    }
+
+    function activateWithKey(key) {
+      apiKey = key;
+      document.getElementById('keySuccess').classList.add('show');
+      document.getElementById('sendBtn').disabled = false;
+      document.getElementById('chatStatus').textContent = '● Online & Ready';
+      document.getElementById('chatStatus').style.color = 'var(--green)';
+
+      // Hide setup box
+      const setup = document.getElementById('setupBox');
+      setup.style.borderColor = 'var(--green)';
+
+      // Update welcome
+      const welcome = document.getElementById('welcomeMsg');
+      if (welcome) {
+        welcome.innerHTML = `
+          <div class="welcome-icon">🛡️</div>
+          <h3>ZeroTrust is Ready!</h3>
+          <p>Ask me anything about Security+ SY0-701 or click a quick topic below.</p>
+        `;
+      }
+    }
+
+    function ask(question) {
+      if (!apiKey) {
+        document.getElementById('apiKeyInput').focus();
+        document.getElementById('setupBox').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      document.getElementById('msgInput').value = question;
+      sendMessage();
+    }
+
+    function handleKey(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMessage();
       }
-    });
-
-    function askTopic(question) {
-      chatInput.value = question;
-      sendMessage();
+      // Auto-resize
+      const ta = e.target;
+      ta.style.height = 'auto';
+      ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
     }
 
     async function sendMessage() {
-      const input = document.getElementById('chatInput');
+      if (!apiKey) {
+        document.getElementById('setupBox').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      const input = document.getElementById('msgInput');
       const sendBtn = document.getElementById('sendBtn');
-      const message = input.value.trim();
+      const text = input.value.trim();
+      if (!text) return;
 
-      if (!message) return;
-
-      // Disable input
+      input.value = '';
+      input.style.height = 'auto';
       input.disabled = true;
       sendBtn.disabled = true;
 
-      // Clear input
-      input.value = '';
-      input.style.height = 'auto';
-
-      // Add user message
-      addMessage('user', message);
-
-      // Show typing indicator
+      appendMessage('user', text);
       showTyping();
 
+      history.push({ role: 'user', content: text });
+
       try {
-        // Call Claude API (this works in artifacts without needing your own API key!)
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
           },
           body: JSON.stringify({
-            model: "claude-sonnet-4-20250514",
-            max_tokens: 1000,
-            messages: [
-              ...conversationHistory,
-              { role: "user", content: message }
-            ],
-            system: "You are ZeroTrust, a helpful Security+ SY0-701 exam tutor AI. Provide clear, concise explanations of security concepts. When asked for practice questions, provide them in a clear format with the correct answer indicated. Be encouraging and supportive. Keep responses focused on Security+ exam topics. You can mention that you're ZeroTrust, the AI study assistant, when appropriate."
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 1024,
+            system: "You are ZeroTrust, a Security+ SY0-701 exam tutor AI. Give clear, concise, exam-focused answers. Use bullet points for lists. When generating practice questions, number them and clearly mark the correct answer with ✓. Keep responses helpful and encouraging.",
+            messages: history
           })
         });
 
-        const data = await response.json();
-        
-        // Remove typing indicator
         removeTyping();
 
-        if (data.content && data.content[0]) {
-          const aiResponse = data.content[0].text;
-          
-          // Add to conversation history
-          conversationHistory.push(
-            { role: "user", content: message },
-            { role: "assistant", content: aiResponse }
-          );
-
-          // Add AI message
-          addMessage('ai', aiResponse);
+        if (!res.ok) {
+          const err = await res.json();
+          if (res.status === 401) {
+            appendMessage('ai', '❌ **Invalid API key.** Please check your key and try again. Make sure it starts with `sk-ant-`');
+            localStorage.removeItem('zerotrust_api_key');
+            apiKey = '';
+          } else if (res.status === 429) {
+            appendMessage('ai', '⏳ **Rate limited.** You\'ve sent too many requests. Please wait a moment and try again.');
+          } else {
+            appendMessage('ai', `❌ **Error ${res.status}:** ${err.error?.message || 'Something went wrong. Please try again.'}`);
+          }
         } else {
-          addMessage('ai', 'Sorry, I encountered an error. Please try again.');
+          const data = await res.json();
+          const reply = data.content[0].text;
+          history.push({ role: 'assistant', content: reply });
+          appendMessage('ai', reply);
         }
 
-      } catch (error) {
+      } catch (err) {
         removeTyping();
-        addMessage('ai', 'Sorry, I\'m having trouble connecting right now. Please try again in a moment.');
-        console.error('AI Error:', error);
+        appendMessage('ai', '❌ **Connection error.** Please check your internet connection and try again.');
+        console.error(err);
       }
 
-      // Re-enable input
       input.disabled = false;
       sendBtn.disabled = false;
       input.focus();
     }
 
-    function addMessage(type, content) {
-      const messagesDiv = document.getElementById('chatMessages');
-      
-      // Remove welcome message if it exists
-      const welcome = messagesDiv.querySelector('.welcome-message');
+    function appendMessage(type, content) {
+      const messagesDiv = document.getElementById('messages');
+      const welcome = document.getElementById('welcomeMsg');
       if (welcome) welcome.remove();
 
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `message ${type}`;
+      const div = document.createElement('div');
+      div.className = `msg ${type}`;
 
-      const avatar = document.createElement('div');
-      avatar.className = 'message-avatar';
-      avatar.textContent = type === 'ai' ? '🤖' : '👤';
+      const av = document.createElement('div');
+      av.className = 'msg-avatar';
+      av.textContent = type === 'ai' ? '🛡️' : '👤';
 
-      const contentDiv = document.createElement('div');
-      contentDiv.className = 'message-content';
-      
-      // Format the content (simple markdown-like formatting)
-      const formattedContent = content
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/`(.*?)`/g, '<code>$1</code>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>');
-      
-      contentDiv.innerHTML = `<p>${formattedContent}</p>`;
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = formatMessage(content);
 
-      messageDiv.appendChild(avatar);
-      messageDiv.appendChild(contentDiv);
-      messagesDiv.appendChild(messageDiv);
-
-      // Scroll to bottom
+      div.appendChild(av);
+      div.appendChild(bubble);
+      messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
+    function formatMessage(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/^### (.*$)/gm, '<strong style="color:var(--accent)">$1</strong>')
+        .replace(/^## (.*$)/gm, '<strong style="color:var(--accent);font-size:1.05rem">$1</strong>')
+        .replace(/^• (.*$)/gm, '<li>$1</li>')
+        .replace(/^\d+\. (.*$)/gm, '<li>$1</li>')
+        .replace(/✓/g, '<span style="color:var(--green)">✓</span>')
+        .replace(/❌/g, '<span style="color:var(--red)">❌</span>')
+        .replace(/⏳/g, '⏳')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>');
+    }
+
     function showTyping() {
-      const messagesDiv = document.getElementById('chatMessages');
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'message ai';
-      typingDiv.id = 'typingIndicator';
-
-      const avatar = document.createElement('div');
-      avatar.className = 'message-avatar';
-      avatar.textContent = '🤖';
-
-      const typingContent = document.createElement('div');
-      typingContent.className = 'message-content';
-      typingContent.innerHTML = `
-        <div class="typing-indicator">
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        </div>
-      `;
-
-      typingDiv.appendChild(avatar);
-      typingDiv.appendChild(typingContent);
-      messagesDiv.appendChild(typingDiv);
-
+      const messagesDiv = document.getElementById('messages');
+      const div = document.createElement('div');
+      div.className = 'msg ai';
+      div.id = 'typing';
+      div.innerHTML = `
+        <div class="msg-avatar">🛡️</div>
+        <div class="msg-bubble">
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>`;
+      messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
     function removeTyping() {
-      const typing = document.getElementById('typingIndicator');
-      if (typing) typing.remove();
+      const t = document.getElementById('typing');
+      if (t) t.remove();
+    }
+
+    function clearChat() {
+      history = [];
+      const m = document.getElementById('messages');
+      m.innerHTML = `
+        <div class="welcome" id="welcomeMsg">
+          <div class="welcome-icon">🛡️</div>
+          <h3>Chat Cleared!</h3>
+          <p>Start a new conversation with ZeroTrust.</p>
+        </div>`;
     }
   </script>
 </body>
