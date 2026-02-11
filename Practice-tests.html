@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Practice Tests</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: 70px;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  main {
+    flex: 1;
+    padding: 2rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+
+  .info-section {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .info-section h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--accent);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .info-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+  }
+
+  .info-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-value {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .exam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .exam-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+
+  .exam-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+  }
+
+  .exam-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .exam-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .exam-card:nth-child(1) .exam-title { color: var(--accent); }
+  .exam-card:nth-child(2) .exam-title { color: var(--green); }
+  .exam-card:nth-child(3) .exam-title { color: var(--yellow); }
+
+  .exam-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .exam-arrow {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .exam-card:hover .exam-arrow {
+    opacity: 1;
+  }
+
+  footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    
+    header {
+      padding: 0 1rem;
+    }
+    
+    main {
+      padding: 1rem;
+    }
+
+    .exam-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">SECURITY+ <span>SY0-701</span> PRACTICE TESTS</div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Practice Tests</h1>
+      <p class="subtitle">Choose a test and begin your exam preparation</p>
+
+      <div class="info-section">
+        <h2>Test Information</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Questions</div>
+            <div class="info-value">90 each</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Time Limit</div>
+            <div class="info-value">90 minutes</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Question Types</div>
+            <div class="info-value">Multiple Choice & Multi-Select</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Passing Score</div>
+            <div class="info-value">750/900</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-grid">
+        <a href="PracticeTestA.html" class="exam-card">
+          <div class="exam-label">Exam</div>
+          <div class="exam-title">Practice Test A</div>
+          <div class="exam-desc">Comprehensive exam covering all Security+ SY0-701 domains</div>
+          <div class="exam-arrow">START EXAM →</div>
+        </a>
+
+        <a href="PracticeTestB.html" class="exam-card">
+          <div class="exam-label">Exam</div>
+          <div class="exam-title">Practice Test B</div>
+          <div class="exam-desc">Advanced scenarios and real-world security challenges</div>
+          <div class="exam-arrow">START EXAM →</div>
+        </a>
+
+        <a href="PracticeTestC.html" class="exam-card">
+          <div class="exam-label">Exam</div>
+          <div class="exam-title">Practice Test C</div>
+          <div class="exam-desc">Final preparation with exam-style questions</div>
+          <div class="exam-arrow">START EXAM →</div>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    CompTIA Security+ SY0-701 Professor Messer's Practice Exams
+  </footer>
+</body>
+</html>

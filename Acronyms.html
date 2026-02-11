@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Acronyms & Terminologies</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: 70px;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  main {
+    flex: 1;
+    padding: 2rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+
+  .search-bar {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    font-family: var(--font);
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-bar:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+  }
+
+  .search-bar::placeholder {
+    color: var(--muted);
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tab-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .alphabet-nav {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .letter-btn {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .letter-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .letter-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .letter-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .stats-bar {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+  }
+
+  .stat-label {
+    color: var(--muted);
+    margin-right: 0.5rem;
+  }
+
+  .stat-value {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .terms-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .term-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .term-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.1);
+  }
+
+  .term-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+  }
+
+  .term-acronym {
+    font-family: var(--mono);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .term-category {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    background: var(--bg3);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .term-full {
+    font-size: 1rem;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .term-definition {
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .no-results-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+  }
+
+  footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    header {
+      padding: 0 1rem;
+    }
+    
+    main {
+      padding: 1rem;
+    }
+
+    .alphabet-nav {
+      gap: 0.15rem;
+    }
+
+    .letter-btn {
+      width: 35px;
+      height: 35px;
+      font-size: 0.75rem;
+    }
+
+    .stats-bar {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .term-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">SECURITY+ <span>SY0-701</span> ACRONYMS & TERMS</div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Acronyms & Terminologies</h1>
+      <p class="subtitle">Quick reference guide for Security+ exam</p>
+
+      <input 
+        type="text" 
+        class="search-bar" 
+        id="searchInput" 
+        placeholder="Search acronyms or definitions..."
+      >
+
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-category="all">All</button>
+        <button class="tab-btn" data-category="network">Network</button>
+        <button class="tab-btn" data-category="crypto">Cryptography</button>
+        <button class="tab-btn" data-category="security">Security</button>
+        <button class="tab-btn" data-category="attack">Attacks</button>
+        <button class="tab-btn" data-category="protocol">Protocols</button>
+        <button class="tab-btn" data-category="compliance">Compliance</button>
+        <button class="tab-btn" data-category="cloud">Cloud</button>
+      </div>
+
+      <div class="alphabet-nav" id="alphabetNav"></div>
+
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-label">Total Terms:</span>
+          <span class="stat-value" id="totalTerms">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Showing:</span>
+          <span class="stat-value" id="showingTerms">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Filter:</span>
+          <span class="stat-value" id="currentFilter">All</span>
+        </div>
+      </div>
+
+      <div class="terms-grid" id="termsGrid"></div>
+
+      <div class="no-results" id="noResults" style="display: none;">
+        <div class="no-results-icon">🔍</div>
+        <div>No terms found matching your search</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    CompTIA Security+ SY0-701 Reference Guide
+  </footer>
+
+  <script>
+    const terms = [
+      { acronym: "AAA", full: "Authentication, Authorization, and Accounting", definition: "Framework for controlling access to resources, enforcing policies, and auditing usage.", category: "security" },
+      { acronym: "ACL", full: "Access Control List", definition: "Set of rules that controls access to network resources or files based on user permissions.", category: "security" },
+      { acronym: "AES", full: "Advanced Encryption Standard", definition: "Symmetric encryption algorithm widely used to secure data, with key sizes of 128, 192, or 256 bits.", category: "crypto" },
+      { acronym: "AH", full: "Authentication Header", definition: "IPsec protocol that provides authentication and integrity but not encryption.", category: "protocol" },
+      { acronym: "AI", full: "Artificial Intelligence", definition: "Computer systems able to perform tasks that typically require human intelligence.", category: "security" },
+      { acronym: "ALE", full: "Annual Loss Expectancy", definition: "Expected monetary loss for an asset due to a risk over a single year (SLE × ARO).", category: "compliance" },
+      { acronym: "AP", full: "Access Point", definition: "Network device that allows wireless devices to connect to a wired network.", category: "network" },
+      { acronym: "API", full: "Application Programming Interface", definition: "Set of protocols and tools for building software applications and enabling communication between systems.", category: "security" },
+      { acronym: "APT", full: "Advanced Persistent Threat", definition: "Prolonged and targeted cyberattack where an attacker gains unauthorized access and remains undetected.", category: "attack" },
+      { acronym: "ARO", full: "Annualized Rate of Occurrence", definition: "Estimated frequency with which a threat will occur within a single year.", category: "compliance" },
+      { acronym: "ARP", full: "Address Resolution Protocol", definition: "Protocol used to map IP addresses to MAC addresses on a local network.", category: "protocol" },
+      { acronym: "BCDR", full: "Business Continuity and Disaster Recovery", definition: "Strategies and plans to ensure business operations continue during and after a disaster.", category: "compliance" },
+      { acronym: "BGP", full: "Border Gateway Protocol", definition: "Protocol used to exchange routing information between autonomous systems on the Internet.", category: "protocol" },
+      { acronym: "BIA", full: "Business Impact Analysis", definition: "Process of evaluating the potential effects of disruption to business operations.", category: "compliance" },
+      { acronym: "BIOS", full: "Basic Input/Output System", definition: "Firmware that initializes hardware during the boot process before the OS loads.", category: "security" },
+      { acronym: "BPA", full: "Business Partnership Agreement", definition: "Legal agreement establishing the relationship between business partners.", category: "compliance" },
+      { acronym: "BYOD", full: "Bring Your Own Device", definition: "Policy allowing employees to use personal devices for work purposes.", category: "security" },
+      { acronym: "CA", full: "Certificate Authority", definition: "Trusted entity that issues and manages digital certificates for public key infrastructure.", category: "crypto" },
+      { acronym: "CAN", full: "Controller Area Network", definition: "Vehicle bus standard for microcontrollers and devices to communicate without a host computer.", category: "network" },
+      { acronym: "CAPTCHA", full: "Completely Automated Public Turing test to tell Computers and Humans Apart", definition: "Challenge-response test to determine whether the user is human or automated bot.", category: "security" },
+      { acronym: "CASB", full: "Cloud Access Security Broker", definition: "Security policy enforcement point between cloud service consumers and providers.", category: "cloud" },
+      { acronym: "CBC", full: "Cipher Block Chaining", definition: "Mode of operation for block ciphers where each block is XORed with the previous ciphertext block.", category: "crypto" },
+      { acronym: "CCMP", full: "Counter Mode with Cipher Block Chaining Message Authentication Code Protocol", definition: "Encryption protocol used in WPA2 for securing wireless networks.", category: "crypto" },
+      { acronym: "CCTV", full: "Closed-Circuit Television", definition: "Video surveillance system for monitoring and recording activities in specific areas.", category: "security" },
+      { acronym: "CERT", full: "Computer Emergency Response Team", definition: "Group of security experts who respond to computer security incidents.", category: "security" },
+      { acronym: "CFB", full: "Cipher Feedback", definition: "Mode of operation for block ciphers that turns a block cipher into a stream cipher.", category: "crypto" },
+      { acronym: "CHAP", full: "Challenge Handshake Authentication Protocol", definition: "Authentication protocol that uses a three-way handshake to verify identity.", category: "protocol" },
+      { acronym: "CIA", full: "Confidentiality, Integrity, and Availability", definition: "Core principles of information security; the CIA triad.", category: "security" },
+      { acronym: "CIS", full: "Center for Internet Security", definition: "Non-profit organization that provides cybersecurity best practices and benchmarks.", category: "compliance" },
+      { acronym: "COOP", full: "Continuity of Operations Plan", definition: "Plan to ensure critical functions continue during emergencies or disruptions.", category: "compliance" },
+      { acronym: "COPE", full: "Corporate Owned, Personally Enabled", definition: "Mobile device strategy where company-owned devices can be used for personal purposes.", category: "security" },
+      { acronym: "CRC", full: "Cyclic Redundancy Check", definition: "Error-detecting code commonly used in digital networks to detect changes to raw data.", category: "protocol" },
+      { acronym: "CRL", full: "Certificate Revocation List", definition: "List of digital certificates that have been revoked before their expiration date.", category: "crypto" },
+      { acronym: "CSP", full: "Cloud Service Provider", definition: "Company that offers cloud computing services such as IaaS, PaaS, or SaaS.", category: "cloud" },
+      { acronym: "CSR", full: "Certificate Signing Request", definition: "Message sent to a CA to apply for a digital certificate.", category: "crypto" },
+      { acronym: "CSRF", full: "Cross-Site Request Forgery", definition: "Attack that forces a user to execute unwanted actions on a web application where they're authenticated.", category: "attack" },
+      { acronym: "CTM", full: "Counter Mode", definition: "Mode of operation for block ciphers that turns it into a stream cipher.", category: "crypto" },
+      { acronym: "CTO", full: "Chief Technology Officer", definition: "Executive responsible for technological needs and research and development.", category: "compliance" },
+      { acronym: "CVE", full: "Common Vulnerabilities and Exposures", definition: "List of publicly disclosed security vulnerabilities and exposures.", category: "security" },
+      { acronym: "CVSS", full: "Common Vulnerability Scoring System", definition: "Standard for assessing the severity of security vulnerabilities.", category: "security" },
+      { acronym: "CYOD", full: "Choose Your Own Device", definition: "Policy where employees select devices from approved list for work use.", category: "security" },
+      { acronym: "DAC", full: "Discretionary Access Control", definition: "Access control model where resource owners decide who can access their resources.", category: "security" },
+      { acronym: "DBA", full: "Database Administrator", definition: "Person responsible for managing and maintaining database systems.", category: "security" },
+      { acronym: "DDoS", full: "Distributed Denial of Service", definition: "Attack that uses multiple systems to flood a target with traffic, making it unavailable.", category: "attack" },
+      { acronym: "DEP", full: "Data Execution Prevention", definition: "Security feature that prevents code execution from data memory regions.", category: "security" },
+      { acronym: "DES", full: "Data Encryption Standard", definition: "Older symmetric encryption algorithm with 56-bit key, now considered insecure.", category: "crypto" },
+      { acronym: "DFIR", full: "Digital Forensics and Incident Response", definition: "Process of investigating and responding to cybersecurity incidents.", category: "security" },
+      { acronym: "DHCP", full: "Dynamic Host Configuration Protocol", definition: "Protocol that automatically assigns IP addresses to devices on a network.", category: "protocol" },
+      { acronym: "DLL", full: "Dynamic Link Library", definition: "File containing code and data that can be used by multiple programs simultaneously.", category: "security" },
+      { acronym: "DLP", full: "Data Loss Prevention", definition: "Strategy and tools to ensure sensitive data is not lost, misused, or accessed by unauthorized users.", category: "security" },
+      { acronym: "DMZ", full: "Demilitarized Zone", definition: "Network segment that sits between internal and external networks, adding security layer.", category: "network" },
+      { acronym: "DNAT", full: "Destination Network Address Translation", definition: "NAT technique that changes the destination IP address in packet headers.", category: "network" },
+      { acronym: "DNS", full: "Domain Name System", definition: "System that translates domain names to IP addresses.", category: "protocol" },
+      { acronym: "DNSSEC", full: "Domain Name System Security Extensions", definition: "Suite of extensions that add security to DNS by enabling authentication of DNS data.", category: "protocol" },
+      { acronym: "DoS", full: "Denial of Service", definition: "Attack that makes a system or network unavailable to legitimate users.", category: "attack" },
+      { acronym: "DRP", full: "Disaster Recovery Plan", definition: "Documented process to recover IT infrastructure after a disaster.", category: "compliance" },
+      { acronym: "DSA", full: "Digital Signature Algorithm", definition: "Standard for digital signatures used for authentication and integrity.", category: "crypto" },
+      { acronym: "EAP", full: "Extensible Authentication Protocol", definition: "Authentication framework frequently used in wireless networks.", category: "protocol" },
+      { acronym: "ECB", full: "Electronic Code Book", definition: "Simplest encryption mode where identical plaintext blocks produce identical ciphertext.", category: "crypto" },
+      { acronym: "ECC", full: "Elliptic Curve Cryptography", definition: "Public key cryptography based on elliptic curves, offering strong security with smaller keys.", category: "crypto" },
+      { acronym: "EDR", full: "Endpoint Detection and Response", definition: "Security solution that monitors endpoints for threats and enables response.", category: "security" },
+      { acronym: "EFS", full: "Encrypting File System", definition: "Feature that provides filesystem-level encryption on Windows.", category: "crypto" },
+      { acronym: "ESP", full: "Encapsulating Security Payload", definition: "IPsec protocol that provides confidentiality, authentication, and integrity.", category: "protocol" },
+      { acronym: "FACL", full: "File System Access Control List", definition: "List defining permissions for filesystem objects.", category: "security" },
+      { acronym: "FDE", full: "Full Disk Encryption", definition: "Encryption of all data on a storage device.", category: "crypto" },
+      { acronym: "FIM", full: "File Integrity Monitoring", definition: "Security process that validates the integrity of operating system and application files.", category: "security" },
+      { acronym: "FISMA", full: "Federal Information Security Management Act", definition: "US legislation that defines framework for protecting government information and systems.", category: "compliance" },
+      { acronym: "FRR", full: "False Rejection Rate", definition: "Rate at which legitimate users are incorrectly denied access in biometric systems.", category: "security" },
+      { acronym: "FTP", full: "File Transfer Protocol", definition: "Standard protocol for transferring files between client and server.", category: "protocol" },
+      { acronym: "FTPS", full: "File Transfer Protocol Secure", definition: "Extension of FTP that adds support for TLS encryption.", category: "protocol" },
+      { acronym: "GCM", full: "Galois/Counter Mode", definition: "Mode of operation for block ciphers providing encryption and authentication.", category: "crypto" },
+      { acronym: "GDPR", full: "General Data Protection Regulation", definition: "EU regulation on data protection and privacy.", category: "compliance" },
+      { acronym: "GPG", full: "GNU Privacy Guard", definition: "Free implementation of OpenPGP standard for encrypting and signing data.", category: "crypto" },
+      { acronym: "GPO", full: "Group Policy Object", definition: "Feature in Windows for centralized management of users and computers.", category: "security" },
+      { acronym: "GPS", full: "Global Positioning System", definition: "Satellite-based navigation system providing location and time information.", category: "network" },
+      { acronym: "HA", full: "High Availability", definition: "System design approach to ensure continuous operation and minimal downtime.", category: "network" },
+      { acronym: "HDD", full: "Hard Disk Drive", definition: "Data storage device using magnetic storage to store and retrieve data.", category: "security" },
+      { acronym: "HIDS", full: "Host-based Intrusion Detection System", definition: "IDS that monitors a single host for suspicious activity.", category: "security" },
+      { acronym: "HIPS", full: "Host-based Intrusion Prevention System", definition: "IPS deployed on individual hosts to prevent intrusions.", category: "security" },
+      { acronym: "HMAC", full: "Hash-based Message Authentication Code", definition: "Mechanism for message authentication using cryptographic hash function and secret key.", category: "crypto" },
+      { acronym: "HSM", full: "Hardware Security Module", definition: "Physical device that safeguards and manages digital keys and performs cryptographic operations.", category: "crypto" },
+      { acronym: "HTTP", full: "Hypertext Transfer Protocol", definition: "Foundation of data communication for the World Wide Web.", category: "protocol" },
+      { acronym: "HTTPS", full: "Hypertext Transfer Protocol Secure", definition: "Encrypted version of HTTP using TLS/SSL.", category: "protocol" },
+      { acronym: "HVAC", full: "Heating, Ventilation, and Air Conditioning", definition: "Systems that control environmental conditions in buildings.", category: "security" },
+      { acronym: "IaaS", full: "Infrastructure as a Service", definition: "Cloud computing model providing virtualized computing resources over the internet.", category: "cloud" },
+      { acronym: "IAM", full: "Identity and Access Management", definition: "Framework for managing digital identities and controlling access to resources.", category: "security" },
+      { acronym: "ICMP", full: "Internet Control Message Protocol", definition: "Protocol used for sending error messages and operational information.", category: "protocol" },
+      { acronym: "ICS", full: "Industrial Control System", definition: "Systems used to monitor and control industrial processes.", category: "security" },
+      { acronym: "IDEA", full: "International Data Encryption Algorithm", definition: "Symmetric block cipher with 128-bit key.", category: "crypto" },
+      { acronym: "IDF", full: "Intermediate Distribution Frame", definition: "Cable rack for connecting cables between MDF and end users.", category: "network" },
+      { acronym: "IdP", full: "Identity Provider", definition: "System that creates, maintains, and manages identity information and authentication.", category: "security" },
+      { acronym: "IDS", full: "Intrusion Detection System", definition: "Device or software that monitors network traffic for suspicious activity and alerts.", category: "security" },
+      { acronym: "IEEE", full: "Institute of Electrical and Electronics Engineers", definition: "Professional association that develops technology standards.", category: "compliance" },
+      { acronym: "IKE", full: "Internet Key Exchange", definition: "Protocol used to set up secure communication sessions in IPsec.", category: "protocol" },
+      { acronym: "IM", full: "Instant Messaging", definition: "Real-time text communication between users.", category: "network" },
+      { acronym: "IMAP", full: "Internet Message Access Protocol", definition: "Protocol for accessing email on a remote server.", category: "protocol" },
+      { acronym: "IoC", full: "Indicator of Compromise", definition: "Evidence that a security breach has occurred or is occurring.", category: "security" },
+      { acronym: "IoT", full: "Internet of Things", definition: "Network of physical devices embedded with electronics, software, and connectivity.", category: "network" },
+      { acronym: "IP", full: "Internet Protocol", definition: "Protocol for routing and addressing packets across networks.", category: "protocol" },
+      { acronym: "IPS", full: "Intrusion Prevention System", definition: "Network security device that monitors traffic and can block threats.", category: "security" },
+      { acronym: "IPsec", full: "Internet Protocol Security", definition: "Protocol suite for securing IP communications through authentication and encryption.", category: "protocol" },
+      { acronym: "IR", full: "Incident Response", definition: "Organized approach to addressing and managing security incidents.", category: "security" },
+      { acronym: "IRC", full: "Internet Relay Chat", definition: "Protocol for real-time text messaging and conferencing.", category: "protocol" },
+      { acronym: "IRP", full: "Incident Response Plan", definition: "Documented procedures for detecting, responding to, and recovering from security incidents.", category: "compliance" },
+      { acronym: "ISP", full: "Internet Service Provider", definition: "Organization that provides internet access to customers.", category: "network" },
+      { acronym: "IV", full: "Initialization Vector", definition: "Random value used with encryption algorithm to produce distinct ciphertexts.", category: "crypto" },
+      { acronym: "KDC", full: "Key Distribution Center", definition: "Part of Kerberos protocol that issues tickets for authentication.", category: "crypto" },
+      { acronym: "KEK", full: "Key Encryption Key", definition: "Key used to encrypt other keys for secure distribution.", category: "crypto" },
+      { acronym: "L2TP", full: "Layer 2 Tunneling Protocol", definition: "Tunneling protocol used with IPsec for VPNs.", category: "protocol" },
+      { acronym: "LAN", full: "Local Area Network", definition: "Network that connects computers in a limited area.", category: "network" },
+      { acronym: "LDAP", full: "Lightweight Directory Access Protocol", definition: "Protocol for accessing and maintaining directory information services.", category: "protocol" },
+      { acronym: "LEAP", full: "Lightweight Extensible Authentication Protocol", definition: "Proprietary wireless authentication protocol developed by Cisco.", category: "protocol" },
+      { acronym: "MAC", full: "Media Access Control / Mandatory Access Control / Message Authentication Code", definition: "Hardware address / Access control model / Authentication code (context dependent).", category: "security" },
+      { acronym: "MAN", full: "Metropolitan Area Network", definition: "Network spanning a city or large campus.", category: "network" },
+      { acronym: "MBR", full: "Master Boot Record", definition: "Special boot sector at the beginning of a storage device.", category: "security" },
+      { acronym: "MD5", full: "Message Digest 5", definition: "Cryptographic hash function producing 128-bit hash, now considered broken.", category: "crypto" },
+      { acronym: "MDF", full: "Main Distribution Frame", definition: "Primary hub for telecommunications and network cabling.", category: "network" },
+      { acronym: "MDM", full: "Mobile Device Management", definition: "Software for administering mobile devices in enterprise environments.", category: "security" },
+      { acronym: "MFA", full: "Multi-Factor Authentication", definition: "Authentication requiring two or more verification factors.", category: "security" },
+      { acronym: "MFD", full: "Multi-Function Device", definition: "Office machine combining printer, scanner, copier, and sometimes fax.", category: "security" },
+      { acronym: "ML", full: "Machine Learning", definition: "AI application enabling systems to learn from data without explicit programming.", category: "security" },
+      { acronym: "MMS", full: "Multimedia Messaging Service", definition: "Standard for sending messages with multimedia content.", category: "protocol" },
+      { acronym: "MOU", full: "Memorandum of Understanding", definition: "Document outlining agreement between parties.", category: "compliance" },
+      { acronym: "MPLS", full: "Multiprotocol Label Switching", definition: "Routing technique directing data from one node to next based on labels.", category: "network" },
+      { acronym: "MSA", full: "Master Service Agreement", definition: "Contract defining terms between service provider and customer.", category: "compliance" },
+      { acronym: "MSCHAP", full: "Microsoft Challenge Handshake Authentication Protocol", definition: "Microsoft's version of CHAP authentication protocol.", category: "protocol" },
+      { acronym: "MSSP", full: "Managed Security Service Provider", definition: "Company providing outsourced security monitoring and management.", category: "security" },
+      { acronym: "MTBF", full: "Mean Time Between Failures", definition: "Average time between system failures.", category: "compliance" },
+      { acronym: "MTTF", full: "Mean Time to Failure", definition: "Average time until a component fails.", category: "compliance" },
+      { acronym: "MTTR", full: "Mean Time to Repair", definition: "Average time required to repair a failed component.", category: "compliance" },
+      { acronym: "MTU", full: "Maximum Transmission Unit", definition: "Largest packet size that can be transmitted over a network.", category: "network" },
+      { acronym: "NAC", full: "Network Access Control", definition: "Security solution controlling device access to networks.", category: "security" },
+      { acronym: "NAT", full: "Network Address Translation", definition: "Method of remapping IP addresses by modifying network address information.", category: "network" },
+      { acronym: "NDA", full: "Non-Disclosure Agreement", definition: "Contract establishing confidential relationship between parties.", category: "compliance" },
+      { acronym: "NFC", full: "Near Field Communication", definition: "Short-range wireless technology for data exchange.", category: "network" },
+      { acronym: "NGFW", full: "Next-Generation Firewall", definition: "Advanced firewall with additional features beyond traditional firewalls.", category: "security" },
+      { acronym: "NIC", full: "Network Interface Card", definition: "Hardware component connecting computer to network.", category: "network" },
+      { acronym: "NIDS", full: "Network Intrusion Detection System", definition: "IDS that monitors network traffic for suspicious activity.", category: "security" },
+      { acronym: "NIPS", full: "Network Intrusion Prevention System", definition: "IPS that monitors and can block network threats.", category: "security" },
+      { acronym: "NIST", full: "National Institute of Standards and Technology", definition: "US agency that develops technology standards and guidelines.", category: "compliance" },
+      { acronym: "NTFS", full: "New Technology File System", definition: "File system used by Windows operating systems.", category: "security" },
+      { acronym: "NTLM", full: "New Technology LAN Manager", definition: "Microsoft authentication protocol suite.", category: "protocol" },
+      { acronym: "NTP", full: "Network Time Protocol", definition: "Protocol for clock synchronization between systems.", category: "protocol" },
+      { acronym: "OAUTH", full: "Open Authorization", definition: "Open standard for token-based authentication and authorization.", category: "protocol" },
+      { acronym: "OCSP", full: "Online Certificate Status Protocol", definition: "Protocol for obtaining revocation status of digital certificates.", category: "crypto" },
+      { acronym: "OID", full: "Object Identifier", definition: "Unique identifier for objects in hierarchical namespace.", category: "security" },
+      { acronym: "OS", full: "Operating System", definition: "Software managing computer hardware and software resources.", category: "security" },
+      { acronym: "OSPF", full: "Open Shortest Path First", definition: "Routing protocol for IP networks using link-state algorithm.", category: "protocol" },
+      { acronym: "OT", full: "Operational Technology", definition: "Hardware and software for monitoring and controlling physical devices.", category: "security" },
+      { acronym: "OTA", full: "Over-the-Air", definition: "Wireless delivery of data to mobile devices.", category: "network" },
+      { acronym: "OVAL", full: "Open Vulnerability and Assessment Language", definition: "Standard for describing system security states and vulnerabilities.", category: "security" },
+      { acronym: "P12", full: "PKCS #12", definition: "Archive file format for storing certificates and private keys.", category: "crypto" },
+      { acronym: "PaaS", full: "Platform as a Service", definition: "Cloud computing model providing platform for developing and running applications.", category: "cloud" },
+      { acronym: "PAC", full: "Proxy Auto-Configuration", definition: "File defining how browsers select proxy server for URLs.", category: "network" },
+      { acronym: "PAM", full: "Pluggable Authentication Modules", definition: "Framework for authentication on Unix-like systems.", category: "security" },
+      { acronym: "PAP", full: "Password Authentication Protocol", definition: "Simple authentication protocol sending passwords in plaintext.", category: "protocol" },
+      { acronym: "PAT", full: "Port Address Translation", definition: "Type of NAT that maps multiple private addresses to single public IP.", category: "network" },
+      { acronym: "PBKDF2", full: "Password-Based Key Derivation Function 2", definition: "Key derivation function using pseudorandom function applied multiple times.", category: "crypto" },
+      { acronym: "PBX", full: "Private Branch Exchange", definition: "Private telephone network used within an organization.", category: "network" },
+      { acronym: "PCAP", full: "Packet Capture", definition: "API for capturing network traffic.", category: "security" },
+      { acronym: "PCI DSS", full: "Payment Card Industry Data Security Standard", definition: "Information security standard for organizations handling credit cards.", category: "compliance" },
+      { acronym: "PDU", full: "Power Distribution Unit", definition: "Device distributing electric power to equipment.", category: "security" },
+      { acronym: "PEAP", full: "Protected Extensible Authentication Protocol", definition: "Protocol encapsulating EAP within encrypted TLS tunnel.", category: "protocol" },
+      { acronym: "PEM", full: "Privacy Enhanced Mail", definition: "File format for storing certificates and keys.", category: "crypto" },
+      { acronym: "PFS", full: "Perfect Forward Secrecy", definition: "Property ensuring session keys won't be compromised if long-term key is.", category: "crypto" },
+      { acronym: "PGP", full: "Pretty Good Privacy", definition: "Encryption program for data communication and storage.", category: "crypto" },
+      { acronym: "PHI", full: "Protected Health Information", definition: "Health information that can identify an individual.", category: "compliance" },
+      { acronym: "PII", full: "Personally Identifiable Information", definition: "Information that can identify a specific individual.", category: "compliance" },
+      { acronym: "PIV", full: "Personal Identity Verification", definition: "US government standard for secure identification.", category: "security" },
+      { acronym: "PKCS", full: "Public Key Cryptography Standards", definition: "Group of public-key cryptography standards.", category: "crypto" },
+      { acronym: "PKI", full: "Public Key Infrastructure", definition: "Framework for managing digital certificates and public-key encryption.", category: "crypto" },
+      { acronym: "POP", full: "Post Office Protocol", definition: "Protocol for retrieving email from a server.", category: "protocol" },
+      { acronym: "POTS", full: "Plain Old Telephone Service", definition: "Traditional analog telephone system.", category: "network" },
+      { acronym: "PPP", full: "Point-to-Point Protocol", definition: "Data link protocol for direct connections.", category: "protocol" },
+      { acronym: "PPTP", full: "Point-to-Point Tunneling Protocol", definition: "Protocol for implementing VPNs.", category: "protocol" },
+      { acronym: "PSK", full: "Pre-Shared Key", definition: "Shared secret used for authentication.", category: "crypto" },
+      { acronym: "PTZ", full: "Pan-Tilt-Zoom", definition: "Camera capable of remote directional and zoom control.", category: "security" },
+      { acronym: "RA", full: "Registration Authority", definition: "Authority that verifies certificate requests before CA issues certificates.", category: "crypto" },
+      { acronym: "RAD", full: "Rapid Application Development", definition: "Software development methodology emphasizing rapid prototyping.", category: "security" },
+      { acronym: "RADIUS", full: "Remote Authentication Dial-In User Service", definition: "Networking protocol providing centralized AAA management.", category: "protocol" },
+      { acronym: "RAID", full: "Redundant Array of Independent Disks", definition: "Data storage virtualization technology combining drives for redundancy.", category: "security" },
+      { acronym: "RAS", full: "Remote Access Service", definition: "Service enabling remote connection to networks.", category: "network" },
+      { acronym: "RAT", full: "Remote Access Trojan", definition: "Malware providing backdoor for administrative control.", category: "attack" },
+      { acronym: "RBAC", full: "Role-Based Access Control", definition: "Access control based on user roles within organization.", category: "security" },
+      { acronym: "RC4", full: "Rivest Cipher 4", definition: "Stream cipher, now considered insecure.", category: "crypto" },
+      { acronym: "RDP", full: "Remote Desktop Protocol", definition: "Protocol for remote connection to Windows systems.", category: "protocol" },
+      { acronym: "RFC", full: "Request for Comments", definition: "Document series containing technical specifications and policy documents.", category: "compliance" },
+      { acronym: "RFID", full: "Radio-Frequency Identification", definition: "Technology using electromagnetic fields to identify and track tags.", category: "security" },
+      { acronym: "RIPEMD", full: "RACE Integrity Primitives Evaluation Message Digest", definition: "Family of cryptographic hash functions.", category: "crypto" },
+      { acronym: "ROI", full: "Return on Investment", definition: "Measure of profitability of an investment.", category: "compliance" },
+      { acronym: "RMF", full: "Risk Management Framework", definition: "Framework for integrating security and risk management into system development.", category: "compliance" },
+      { acronym: "RPO", full: "Recovery Point Objective", definition: "Maximum acceptable data loss measured in time.", category: "compliance" },
+      { acronym: "RSA", full: "Rivest, Shamir, Adleman", definition: "Public-key cryptosystem for secure data transmission.", category: "crypto" },
+      { acronym: "RTBH", full: "Remotely Triggered Black Hole", definition: "Technique for dropping unwanted traffic before it enters network.", category: "network" },
+      { acronym: "RTO", full: "Recovery Time Objective", definition: "Maximum acceptable time for system recovery after disruption.", category: "compliance" },
+      { acronym: "RTOS", full: "Real-Time Operating System", definition: "OS designed to process data as it comes in.", category: "security" },
+      { acronym: "RTP", full: "Real-time Transport Protocol", definition: "Protocol for delivering audio and video over networks.", category: "protocol" },
+      { acronym: "S/MIME", full: "Secure/Multipurpose Internet Mail Extensions", definition: "Standard for public key encryption and signing of email.", category: "crypto" },
+      { acronym: "SaaS", full: "Software as a Service", definition: "Cloud computing model providing software applications over internet.", category: "cloud" },
+      { acronym: "SAML", full: "Security Assertion Markup Language", definition: "Open standard for exchanging authentication and authorization data.", category: "protocol" },
+      { acronym: "SAN", full: "Storage Area Network / Subject Alternative Name", definition: "Network providing block-level storage / Extension in certificates.", category: "network" },
+      { acronym: "SCADA", full: "Supervisory Control and Data Acquisition", definition: "Control system architecture for industrial processes.", category: "security" },
+      { acronym: "SCAP", full: "Security Content Automation Protocol", definition: "Suite of specifications for expressing and manipulating security data.", category: "security" },
+      { acronym: "SCEP", full: "Simple Certificate Enrollment Protocol", definition: "Protocol for certificate enrollment.", category: "crypto" },
+      { acronym: "SCP", full: "Secure Copy Protocol", definition: "Protocol for securely transferring files using SSH.", category: "protocol" },
+      { acronym: "SCSI", full: "Small Computer System Interface", definition: "Interface standard for connecting peripherals.", category: "network" },
+      { acronym: "SDK", full: "Software Development Kit", definition: "Collection of tools for software development.", category: "security" },
+      { acronym: "SDLC", full: "Software Development Life Cycle", definition: "Process for planning, creating, testing, and deploying software.", category: "security" },
+      { acronym: "SDN", full: "Software-Defined Networking", definition: "Network architecture with centralized control through software.", category: "network" },
+      { acronym: "SDV", full: "Software-Defined Visibility", definition: "Technology providing visibility into network traffic.", category: "network" },
+      { acronym: "SEH", full: "Structured Exception Handler", definition: "Windows mechanism for handling exceptions.", category: "security" },
+      { acronym: "SEIM", full: "Security Event and Information Management", definition: "Combined Security Information and Event Management.", category: "security" },
+      { acronym: "SELinux", full: "Security-Enhanced Linux", definition: "Linux kernel security module providing access control.", category: "security" },
+      { acronym: "SFTP", full: "SSH File Transfer Protocol", definition: "Secure protocol for file transfer over SSH.", category: "protocol" },
+      { acronym: "SHA", full: "Secure Hash Algorithm", definition: "Family of cryptographic hash functions.", category: "crypto" },
+      { acronym: "SHTTP", full: "Secure Hypertext Transfer Protocol", definition: "Obsolete secure version of HTTP.", category: "protocol" },
+      { acronym: "SIEM", full: "Security Information and Event Management", definition: "Solution providing real-time analysis of security alerts.", category: "security" },
+      { acronym: "SIM", full: "Subscriber Identity Module", definition: "Card storing subscriber information for mobile devices.", category: "security" },
+      { acronym: "SLA", full: "Service Level Agreement", definition: "Contract defining expected service level between provider and customer.", category: "compliance" },
+      { acronym: "SLE", full: "Single Loss Expectancy", definition: "Expected monetary loss from single occurrence of risk.", category: "compliance" },
+      { acronym: "SMB", full: "Server Message Block", definition: "Network file sharing protocol.", category: "protocol" },
+      { acronym: "SMS", full: "Short Message Service", definition: "Text messaging service for mobile devices.", category: "protocol" },
+      { acronym: "SMTP", full: "Simple Mail Transfer Protocol", definition: "Protocol for sending email.", category: "protocol" },
+      { acronym: "SMTPS", full: "Simple Mail Transfer Protocol Secure", definition: "SMTP with TLS/SSL encryption.", category: "protocol" },
+      { acronym: "SNMP", full: "Simple Network Management Protocol", definition: "Protocol for monitoring and managing network devices.", category: "protocol" },
+      { acronym: "SOAP", full: "Simple Object Access Protocol", definition: "Messaging protocol for exchanging structured information.", category: "protocol" },
+      { acronym: "SOAR", full: "Security Orchestration, Automation, and Response", definition: "Technologies for threat and vulnerability management.", category: "security" },
+      { acronym: "SOC", full: "Security Operations Center", definition: "Centralized unit dealing with security issues.", category: "security" },
+      { acronym: "SOP", full: "Standard Operating Procedure", definition: "Documented routine procedure.", category: "compliance" },
+      { acronym: "SPIM", full: "Spam over Instant Messaging", definition: "Unsolicited messages sent via instant messaging.", category: "attack" },
+      { acronym: "SPF", full: "Sender Policy Framework", definition: "Email authentication method preventing spoofing.", category: "protocol" },
+      { acronym: "SQL", full: "Structured Query Language", definition: "Language for managing and querying databases.", category: "security" },
+      { acronym: "SRTP", full: "Secure Real-time Transport Protocol", definition: "Extension of RTP providing encryption and authentication.", category: "protocol" },
+      { acronym: "SSD", full: "Solid State Drive", definition: "Storage device using flash memory.", category: "security" },
+      { acronym: "SSH", full: "Secure Shell", definition: "Protocol for secure remote login and command execution.", category: "protocol" },
+      { acronym: "SSID", full: "Service Set Identifier", definition: "Name identifying wireless network.", category: "network" },
+      { acronym: "SSL", full: "Secure Sockets Layer", definition: "Predecessor to TLS for encrypting communications.", category: "crypto" },
+      { acronym: "SSO", full: "Single Sign-On", definition: "Authentication allowing access to multiple systems with one login.", category: "security" },
+      { acronym: "STIX", full: "Structured Threat Information Expression", definition: "Language for cyber threat intelligence.", category: "security" },
+      { acronym: "STP", full: "Spanning Tree Protocol", definition: "Protocol preventing network loops.", category: "protocol" },
+      { acronym: "TACACS+", full: "Terminal Access Controller Access-Control System Plus", definition: "Protocol for AAA in network devices.", category: "protocol" },
+      { acronym: "TCP", full: "Transmission Control Protocol", definition: "Connection-oriented protocol for reliable data transmission.", category: "protocol" },
+      { acronym: "TCP/IP", full: "Transmission Control Protocol/Internet Protocol", definition: "Suite of communication protocols for internet.", category: "protocol" },
+      { acronym: "TGT", full: "Ticket Granting Ticket", definition: "Ticket issued by Kerberos for obtaining service tickets.", category: "crypto" },
+      { acronym: "TKIP", full: "Temporal Key Integrity Protocol", definition: "Security protocol used in WPA for wireless networks.", category: "crypto" },
+      { acronym: "TLS", full: "Transport Layer Security", definition: "Cryptographic protocol for secure communications.", category: "crypto" },
+      { acronym: "TOTP", full: "Time-based One-Time Password", definition: "Algorithm generating one-time password from shared secret and current time.", category: "security" },
+      { acronym: "TPM", full: "Trusted Platform Module", definition: "Hardware chip providing cryptographic functions.", category: "crypto" },
+      { acronym: "TSIG", full: "Transaction Signature", definition: "Protocol for securing DNS messages.", category: "protocol" },
+      { acronym: "UDP", full: "User Datagram Protocol", definition: "Connectionless protocol for fast data transmission.", category: "protocol" },
+      { acronym: "UEFI", full: "Unified Extensible Firmware Interface", definition: "Replacement for BIOS with enhanced capabilities.", category: "security" },
+      { acronym: "UPS", full: "Uninterruptible Power Supply", definition: "Device providing emergency power when main power fails.", category: "security" },
+      { acronym: "URI", full: "Uniform Resource Identifier", definition: "String identifying a resource.", category: "protocol" },
+      { acronym: "URL", full: "Uniform Resource Locator", definition: "Reference specifying location of resource on internet.", category: "protocol" },
+      { acronym: "USB", full: "Universal Serial Bus", definition: "Industry standard for cables and connectors.", category: "network" },
+      { acronym: "UTM", full: "Unified Threat Management", definition: "Security appliance combining multiple functions.", category: "security" },
+      { acronym: "UTP", full: "Unshielded Twisted Pair", definition: "Type of network cabling.", category: "network" },
+      { acronym: "VDE", full: "Virtual Desktop Environment", definition: "Desktop operating system running in virtualized environment.", category: "cloud" },
+      { acronym: "VDI", full: "Virtual Desktop Infrastructure", definition: "Technology hosting desktop environments on central server.", category: "cloud" },
+      { acronym: "VLAN", full: "Virtual Local Area Network", definition: "Logical network segment created within physical network.", category: "network" },
+      { acronym: "VLSM", full: "Variable Length Subnet Masking", definition: "Technique allowing different subnet masks in same network.", category: "network" },
+      { acronym: "VM", full: "Virtual Machine", definition: "Software emulation of physical computer.", category: "cloud" },
+      { acronym: "VoIP", full: "Voice over Internet Protocol", definition: "Technology for voice communications over IP networks.", category: "protocol" },
+      { acronym: "VPC", full: "Virtual Private Cloud", definition: "Private cloud within public cloud infrastructure.", category: "cloud" },
+      { acronym: "VPN", full: "Virtual Private Network", definition: "Encrypted connection over public network.", category: "network" },
+      { acronym: "VTC", full: "Video Teleconferencing", definition: "Live visual connection between people in different locations.", category: "network" },
+      { acronym: "WAF", full: "Web Application Firewall", definition: "Firewall protecting web applications from attacks.", category: "security" },
+      { acronym: "WAN", full: "Wide Area Network", definition: "Network spanning large geographical area.", category: "network" },
+      { acronym: "WAP", full: "Wireless Access Point", definition: "Device allowing wireless devices to connect to network.", category: "network" },
+      { acronym: "WEP", full: "Wired Equivalent Privacy", definition: "Obsolete wireless security protocol.", category: "crypto" },
+      { acronym: "WIDS", full: "Wireless Intrusion Detection System", definition: "System detecting unauthorized wireless access.", category: "security" },
+      { acronym: "WIPS", full: "Wireless Intrusion Prevention System", definition: "System preventing unauthorized wireless access.", category: "security" },
+      { acronym: "WORM", full: "Write Once Read Many", definition: "Data storage device written to once but read multiple times.", category: "security" },
+      { acronym: "WPA", full: "Wi-Fi Protected Access", definition: "Wireless security protocol replacing WEP.", category: "crypto" },
+      { acronym: "WPA2", full: "Wi-Fi Protected Access 2", definition: "Enhanced wireless security protocol using AES.", category: "crypto" },
+      { acronym: "WPA3", full: "Wi-Fi Protected Access 3", definition: "Latest wireless security protocol with improved encryption.", category: "crypto" },
+      { acronym: "WPS", full: "Wi-Fi Protected Setup", definition: "Standard for easy wireless network setup.", category: "network" },
+      { acronym: "WTLS", full: "Wireless Transport Layer Security", definition: "Security protocol for wireless devices.", category: "crypto" },
+      { acronym: "XML", full: "Extensible Markup Language", definition: "Markup language for encoding documents.", category: "protocol" },
+      { acronym: "XOR", full: "Exclusive Or", definition: "Logical operation used in cryptography.", category: "crypto" },
+      { acronym: "XSRF", full: "Cross-Site Request Forgery", definition: "Same as CSRF attack.", category: "attack" },
+      { acronym: "XSS", full: "Cross-Site Scripting", definition: "Vulnerability allowing injection of malicious scripts.", category: "attack" },
+      { acronym: "XTACACS", full: "Extended Terminal Access Controller Access-Control System", definition: "Proprietary Cisco protocol for AAA.", category: "protocol" }
+    ];
+
+    let filteredTerms = [...terms];
+    let currentCategory = 'all';
+    let currentLetter = null;
+    const searchInput = document.getElementById('searchInput');
+    const termsGrid = document.getElementById('termsGrid');
+    const noResults = document.getElementById('noResults');
+    const totalTermsEl = document.getElementById('totalTerms');
+    const showingTermsEl = document.getElementById('showingTerms');
+    const currentFilterEl = document.getElementById('currentFilter');
+    const alphabetNav = document.getElementById('alphabetNav');
+
+    // Generate alphabet navigation
+    function generateAlphabetNav() {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      const availableLetters = new Set(terms.map(t => t.acronym[0]));
+      
+      alphabet.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.className = 'letter-btn';
+        btn.textContent = letter;
+        btn.disabled = !availableLetters.has(letter);
+        btn.addEventListener('click', () => filterByLetter(letter));
+        alphabetNav.appendChild(btn);
+      });
+    }
+
+    // Render terms
+    function renderTerms() {
+      termsGrid.innerHTML = '';
+      
+      if (filteredTerms.length === 0) {
+        noResults.style.display = 'block';
+        termsGrid.style.display = 'none';
+      } else {
+        noResults.style.display = 'none';
+        termsGrid.style.display = 'grid';
+        
+        filteredTerms.forEach(term => {
+          const card = document.createElement('div');
+          card.className = 'term-card';
+          card.innerHTML = `
+            <div class="term-header">
+              <div class="term-acronym">${term.acronym}</div>
+              <div class="term-category">${term.category}</div>
+            </div>
+            <div class="term-full">${term.full}</div>
+            <div class="term-definition">${term.definition}</div>
+          `;
+          termsGrid.appendChild(card);
+        });
+      }
+      
+      showingTermsEl.textContent = filteredTerms.length;
+    }
+
+    // Filter by category
+    function filterByCategory(category) {
+      currentCategory = category;
+      currentLetter = null;
+      updateLetterButtons();
+      applyFilters();
+      currentFilterEl.textContent = category.toUpperCase();
+    }
+
+    // Filter by letter
+    function filterByLetter(letter) {
+      if (currentLetter === letter) {
+        currentLetter = null;
+      } else {
+        currentLetter = letter;
+      }
+      updateLetterButtons();
+      applyFilters();
+    }
+
+    // Update letter button states
+    function updateLetterButtons() {
+      document.querySelectorAll('.letter-btn').forEach(btn => {
+        if (btn.textContent === currentLetter) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Apply all filters
+    function applyFilters() {
+      const searchTerm = searchInput.value.toLowerCase();
+      
+      filteredTerms = terms.filter(term => {
+        const matchesCategory = currentCategory === 'all' || term.category === currentCategory;
+        const matchesLetter = !currentLetter || term.acronym[0] === currentLetter;
+        const matchesSearch = !searchTerm || 
+          term.acronym.toLowerCase().includes(searchTerm) ||
+          term.full.toLowerCase().includes(searchTerm) ||
+          term.definition.toLowerCase().includes(searchTerm);
+        
+        return matchesCategory && matchesLetter && matchesSearch;
+      });
+      
+      renderTerms();
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', applyFilters);
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterByCategory(btn.dataset.category);
+      });
+    });
+
+    // Initialize
+    totalTermsEl.textContent = terms.length;
+    generateAlphabetNav();
+    renderTerms();
+  </script>
+</body>
+</html>

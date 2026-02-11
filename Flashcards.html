@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: 70px;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .container {
+    max-width: 900px;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+
+  .controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg3);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .card-wrapper {
+    perspective: 1000px;
+    margin-bottom: 2rem;
+  }
+
+  .flashcard {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3rem;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .flashcard:hover {
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+  }
+
+  .card-label {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .card-content {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    max-width: 700px;
+  }
+
+  .card-content.question {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .card-content.answer {
+    color: var(--green);
+  }
+
+  .card-hint {
+    position: absolute;
+    bottom: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .card-navigation {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-btn {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--bg3);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .card-counter {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--muted);
+    padding: 0.75rem 1.5rem;
+  }
+
+  .shuffle-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+  }
+
+  .shuffle-btn:hover {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .info-section {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-top: 3rem;
+  }
+
+  .info-section h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--accent);
+  }
+
+  .domain-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .stat-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 0.5rem;
+  }
+
+  footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    
+    .flashcard {
+      padding: 2rem 1.5rem;
+      min-height: 350px;
+    }
+
+    .card-content {
+      font-size: 1.1rem;
+    }
+    
+    header {
+      padding: 0 1rem;
+    }
+    
+    main {
+      padding: 1rem;
+    }
+
+    .controls {
+      flex-direction: column;
+    }
+
+    .filter-btn {
+      width: 100%;
+    }
+
+    .card-navigation {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .nav-btn {
+      width: 100%;
+    }
+  }
+
+  .flipped .card-content.question {
+    display: none;
+  }
+
+  .card-content.answer {
+    display: none;
+  }
+
+  .flipped .card-content.answer {
+    display: block;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">SECURITY+ <span>SY0-701</span> FLASHCARDS</div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Flashcards</h1>
+      <p class="subtitle">Test your Security+ knowledge</p>
+
+      <div class="controls">
+        <button class="filter-btn active" data-domain="all">All Domains</button>
+        <button class="filter-btn" data-domain="1.0">1.0 General Security</button>
+        <button class="filter-btn" data-domain="2.0">2.0 Threats & Vulnerabilities</button>
+        <button class="filter-btn" data-domain="3.0">3.0 Architecture</button>
+        <button class="filter-btn" data-domain="4.0">4.0 Operations</button>
+        <button class="filter-btn" data-domain="5.0">5.0 Governance</button>
+      </div>
+
+      <div class="card-wrapper">
+        <div class="flashcard" id="flashcard">
+          <div class="card-label" id="cardDomain">Domain 1.0</div>
+          <div class="card-content question" id="question">
+            What is the CIA triad in information security?
+          </div>
+          <div class="card-content answer" id="answer">
+            The CIA triad stands for Confidentiality, Integrity, and Availability. These are the three core principles of information security that help protect data and systems.
+          </div>
+          <div class="card-hint">Click card to flip</div>
+        </div>
+      </div>
+
+      <div class="card-navigation">
+        <button class="nav-btn" id="prevBtn">← Previous</button>
+        <div class="card-counter">
+          <span id="currentCard">1</span> / <span id="totalCards">50</span>
+        </div>
+        <button class="nav-btn" id="nextBtn">Next →</button>
+        <button class="nav-btn shuffle-btn" id="shuffleBtn">Shuffle</button>
+      </div>
+
+      <div class="info-section">
+        <h2>Study Progress</h2>
+        <div class="domain-stats">
+          <div class="stat-item">
+            <div class="stat-label">Total Cards</div>
+            <div class="stat-value">50</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Cards Reviewed</div>
+            <div class="stat-value" id="reviewedCount">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Current Domain</div>
+            <div class="stat-value" id="currentDomain">ALL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    CompTIA Security+ SY0-701 Flashcard Study Tool
+  </footer>
+
+  <script>
+    const flashcards = [
+      { domain: "1.0", question: "What is the CIA triad in information security?", answer: "The CIA triad stands for Confidentiality, Integrity, and Availability. These are the three core principles of information security that help protect data and systems." },
+      { domain: "1.0", question: "What is the difference between symmetric and asymmetric encryption?", answer: "Symmetric encryption uses the same key for encryption and decryption, while asymmetric encryption uses a public key for encryption and a private key for decryption." },
+      { domain: "2.0", question: "What is a zero-day vulnerability?", answer: "A zero-day vulnerability is a security flaw that is unknown to the software vendor and has no patch available, making it particularly dangerous as attackers can exploit it before defenses are developed." },
+      { domain: "2.0", question: "What is the difference between a virus and a worm?", answer: "A virus requires user interaction or a host file to spread, while a worm can self-replicate and spread automatically across networks without user intervention." },
+      { domain: "2.0", question: "What is social engineering?", answer: "Social engineering is the manipulation of people to divulge confidential information or perform actions that compromise security, exploiting human psychology rather than technical vulnerabilities." },
+      { domain: "3.0", question: "What is the purpose of a DMZ in network architecture?", answer: "A DMZ (Demilitarized Zone) is a network segment that sits between an internal network and external network, providing an additional layer of security by isolating public-facing services from the internal network." },
+      { domain: "3.0", question: "What is the principle of least privilege?", answer: "The principle of least privilege states that users should only have the minimum access rights necessary to perform their job functions, reducing the potential damage from accidents or malicious actions." },
+      { domain: "4.0", question: "What is the purpose of patch management?", answer: "Patch management is the process of identifying, acquiring, testing, and installing updates to software and systems to fix vulnerabilities and improve security and functionality." },
+      { domain: "4.0", question: "What is the difference between IDS and IPS?", answer: "An IDS (Intrusion Detection System) monitors and alerts on suspicious activity, while an IPS (Intrusion Prevention System) can actively block or prevent detected threats." },
+      { domain: "5.0", question: "What is a security policy?", answer: "A security policy is a formal document that defines an organization's security objectives, rules, and practices to protect information assets and ensure compliance with regulations." },
+      { domain: "5.0", question: "What is the purpose of security awareness training?", answer: "Security awareness training educates employees about security threats, best practices, and organizational policies to create a human firewall and reduce security risks from user behavior." },
+      { domain: "1.0", question: "What is multi-factor authentication (MFA)?", answer: "MFA is a security method that requires users to provide two or more verification factors to gain access, combining something you know (password), something you have (token), or something you are (biometric)." },
+      { domain: "2.0", question: "What is a DDoS attack?", answer: "A Distributed Denial of Service attack overwhelms a target system with traffic from multiple sources, making it unavailable to legitimate users." },
+      { domain: "3.0", question: "What is network segmentation?", answer: "Network segmentation divides a network into smaller, isolated segments to improve security, performance, and contain potential breaches." },
+      { domain: "4.0", question: "What is incident response?", answer: "Incident response is a structured approach to handling security incidents, including preparation, detection, containment, eradication, recovery, and lessons learned." },
+      { domain: "1.0", question: "What is hashing?", answer: "Hashing is a one-way cryptographic function that converts data into a fixed-size string of characters, commonly used for password storage and data integrity verification." },
+      { domain: "2.0", question: "What is phishing?", answer: "Phishing is a social engineering attack where attackers impersonate legitimate entities via email or other communication to trick victims into revealing sensitive information or installing malware." },
+      { domain: "3.0", question: "What is a VPN?", answer: "A Virtual Private Network creates an encrypted tunnel over a public network, allowing secure remote access and protecting data in transit." },
+      { domain: "4.0", question: "What is vulnerability scanning?", answer: "Vulnerability scanning is the automated process of identifying security weaknesses in systems, applications, and networks." },
+      { domain: "5.0", question: "What is data classification?", answer: "Data classification is the process of categorizing data based on sensitivity and criticality to determine appropriate security controls and handling procedures." },
+      { domain: "1.0", question: "What is non-repudiation?", answer: "Non-repudiation ensures that a party cannot deny the authenticity of their signature or the sending of a message, typically achieved through digital signatures." },
+      { domain: "2.0", question: "What is malware?", answer: "Malware is malicious software designed to damage, disrupt, or gain unauthorized access to computer systems, including viruses, worms, trojans, ransomware, and spyware." },
+      { domain: "3.0", question: "What is a firewall?", answer: "A firewall is a network security device that monitors and controls incoming and outgoing traffic based on predetermined security rules." },
+      { domain: "4.0", question: "What is penetration testing?", answer: "Penetration testing is an authorized simulated cyber attack to evaluate system security by identifying exploitable vulnerabilities." },
+      { domain: "5.0", question: "What is compliance?", answer: "Compliance refers to adherence to laws, regulations, standards, and internal policies that govern an organization's security and privacy practices." },
+      { domain: "1.0", question: "What is encryption at rest?", answer: "Encryption at rest protects stored data by converting it into an unreadable format, requiring a decryption key to access." },
+      { domain: "2.0", question: "What is ransomware?", answer: "Ransomware is malware that encrypts victim files and demands payment for the decryption key, often threatening data deletion or publication." },
+      { domain: "3.0", question: "What is the purpose of access control lists (ACLs)?", answer: "ACLs define permissions for network resources, specifying which users or systems can access specific resources and what actions they can perform." },
+      { domain: "4.0", question: "What is security orchestration?", answer: "Security orchestration automates and coordinates security tools and processes to improve incident response efficiency and consistency." },
+      { domain: "5.0", question: "What is a risk assessment?", answer: "Risk assessment is the process of identifying, analyzing, and evaluating security risks to determine their potential impact and likelihood." },
+      { domain: "1.0", question: "What is a digital certificate?", answer: "A digital certificate is an electronic document that uses a digital signature to bind a public key with an identity, verifying the authenticity of the certificate holder." },
+      { domain: "2.0", question: "What is SQL injection?", answer: "SQL injection is an attack technique that exploits vulnerabilities in database queries by inserting malicious SQL code to access or manipulate data." },
+      { domain: "3.0", question: "What is defense in depth?", answer: "Defense in depth is a security strategy that uses multiple layers of security controls throughout an IT system to provide redundancy if one layer fails." },
+      { domain: "4.0", question: "What is a security baseline?", answer: "A security baseline is a minimum set of security controls and configurations that must be applied to systems to ensure adequate protection." },
+      { domain: "5.0", question: "What is a privacy policy?", answer: "A privacy policy is a legal document that explains how an organization collects, uses, stores, and protects personal information." },
+      { domain: "1.0", question: "What is steganography?", answer: "Steganography is the practice of hiding information within other non-secret data, such as embedding messages in images or audio files." },
+      { domain: "2.0", question: "What is cross-site scripting (XSS)?", answer: "XSS is a vulnerability that allows attackers to inject malicious scripts into web pages viewed by other users, potentially stealing data or hijacking sessions." },
+      { domain: "3.0", question: "What is network address translation (NAT)?", answer: "NAT translates private IP addresses to public IP addresses, conserving public IP space and adding a layer of security by hiding internal network structure." },
+      { domain: "4.0", question: "What is log monitoring?", answer: "Log monitoring is the continuous review and analysis of system, application, and security logs to detect anomalies, incidents, and compliance violations." },
+      { domain: "5.0", question: "What is change management?", answer: "Change management is a formal process for controlling modifications to IT systems and infrastructure to minimize risk and ensure stability." },
+      { domain: "1.0", question: "What is a rainbow table attack?", answer: "A rainbow table attack uses precomputed hashes of common passwords to quickly crack password hashes, which can be mitigated by using salt." },
+      { domain: "2.0", question: "What is privilege escalation?", answer: "Privilege escalation occurs when an attacker gains higher-level permissions than initially authorized, either vertically (higher privileges) or horizontally (access to other accounts)." },
+      { domain: "3.0", question: "What is microsegmentation?", answer: "Microsegmentation creates fine-grained security zones within data centers and cloud environments, allowing granular security policies for individual workloads." },
+      { domain: "4.0", question: "What is disaster recovery?", answer: "Disaster recovery is the process and procedures for restoring IT systems and operations after a catastrophic event or major disruption." },
+      { domain: "5.0", question: "What is acceptable use policy (AUP)?", answer: "An AUP defines the permitted uses of an organization's IT resources and the consequences of violations, outlining user responsibilities and prohibited activities." },
+      { domain: "2.0", question: "What is a man-in-the-middle attack?", answer: "A man-in-the-middle attack occurs when an attacker intercepts communication between two parties, potentially eavesdropping or altering the data exchanged." },
+      { domain: "3.0", question: "What is port security?", answer: "Port security restricts network switch ports to specific MAC addresses, preventing unauthorized devices from connecting to the network." },
+      { domain: "4.0", question: "What is backup rotation?", answer: "Backup rotation is a strategy for managing backup media, such as the grandfather-father-son scheme, to ensure data availability and efficient storage use." },
+      { domain: "5.0", question: "What is separation of duties?", answer: "Separation of duties is a security principle that divides critical functions among multiple people to prevent fraud and errors, ensuring no single person has complete control." },
+      { domain: "1.0", question: "What is perfect forward secrecy?", answer: "Perfect forward secrecy ensures that session keys are not compromised even if the server's private key is compromised in the future, protecting past communications." },
+      { domain: "4.0", question: "What is continuous monitoring?", answer: "Continuous monitoring is the ongoing observation and assessment of security controls, vulnerabilities, and threats to maintain security posture awareness." }
+    ];
+
+    let currentIndex = 0;
+    let currentDomain = 'all';
+    let isFlipped = false;
+    let reviewedCards = new Set();
+    let filteredCards = [...flashcards];
+
+    const flashcardEl = document.getElementById('flashcard');
+    const questionEl = document.getElementById('question');
+    const answerEl = document.getElementById('answer');
+    const cardDomainEl = document.getElementById('cardDomain');
+    const currentCardEl = document.getElementById('currentCard');
+    const totalCardsEl = document.getElementById('totalCards');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const reviewedCountEl = document.getElementById('reviewedCount');
+    const currentDomainEl = document.getElementById('currentDomain');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    function updateCard() {
+      const card = filteredCards[currentIndex];
+      questionEl.textContent = card.question;
+      answerEl.textContent = card.answer;
+      cardDomainEl.textContent = `Domain ${card.domain}`;
+      currentCardEl.textContent = currentIndex + 1;
+      totalCardsEl.textContent = filteredCards.length;
+      flashcardEl.classList.remove('flipped');
+      isFlipped = false;
+
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === filteredCards.length - 1;
+
+      reviewedCards.add(currentIndex);
+      reviewedCountEl.textContent = reviewedCards.size;
+    }
+
+    function flipCard() {
+      isFlipped = !isFlipped;
+      flashcardEl.classList.toggle('flipped');
+    }
+
+    function nextCard() {
+      if (currentIndex < filteredCards.length - 1) {
+        currentIndex++;
+        updateCard();
+      }
+    }
+
+    function prevCard() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCard();
+      }
+    }
+
+    function shuffleCards() {
+      for (let i = filteredCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+      }
+      currentIndex = 0;
+      reviewedCards.clear();
+      updateCard();
+    }
+
+    function filterByDomain(domain) {
+      currentDomain = domain;
+      if (domain === 'all') {
+        filteredCards = [...flashcards];
+        currentDomainEl.textContent = 'ALL';
+      } else {
+        filteredCards = flashcards.filter(card => card.domain === domain);
+        currentDomainEl.textContent = domain;
+      }
+      currentIndex = 0;
+      reviewedCards.clear();
+      updateCard();
+    }
+
+    flashcardEl.addEventListener('click', flipCard);
+    nextBtn.addEventListener('click', nextCard);
+    prevBtn.addEventListener('click', prevCard);
+    shuffleBtn.addEventListener('click', shuffleCards);
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterByDomain(btn.dataset.domain);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextCard();
+      if (e.key === 'ArrowLeft') prevCard();
+      if (e.key === ' ') {
+        e.preventDefault();
+        flipCard();
+      }
+    });
+
+    updateCard();
+  </script>
+</body>
+</html>
