@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disclaimer | Security+ SY0-701 Study Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --green: #00f5a0;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 70px;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
+  main {
+    flex: 1;
+    padding: 2rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .update-date {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 3rem;
+  }
+
+  .disclaimer-box {
+    background: var(--bg2);
+    border: 2px solid var(--yellow);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .disclaimer-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .disclaimer-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--yellow);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .disclaimer-text {
+    color: var(--text);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  .section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  h2::before {
+    content: '▸';
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--green);
+    margin: 2rem 0 1rem 0;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  ul {
+    margin: 1rem 0 1.5rem 2rem;
+  }
+
+  li {
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .highlight {
+    background: var(--bg3);
+    border-left: 4px solid var(--accent);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-radius: 6px;
+  }
+
+  .highlight-title {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .attribution-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .attribution-title {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .attribution-text {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+    transition: all 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
+  .contact-box {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 245, 160, 0.1));
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .contact-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-text {
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    
+    header {
+      padding: 0 1rem;
+    }
+    
+    main {
+      padding: 1rem;
+    }
+
+    .section {
+      padding: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">SECURITY+ <span>SY0-701</span> DISCLAIMER</div>
+    <a href="index.html" class="home-btn">
+      <span>←</span>
+      <span>Home</span>
+    </a>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Disclaimer & Legal Notice</h1>
+      <p class="update-date">Last Updated: February 11, 2026</p>
+
+      <!-- Important Notice -->
+      <div class="disclaimer-box">
+        <div class="disclaimer-icon">⚠️</div>
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">
+          This website is provided for educational purposes only. Some practice exam content does not belong to the site owner and no claim of ownership is made over third-party materials.
+        </div>
+      </div>
+
+      <!-- Content Ownership -->
+      <div class="section">
+        <h2>Content Ownership & Attribution</h2>
+        
+        <h3>Third-Party Content</h3>
+        <p>This study portal contains practice exam questions and materials from various sources. The site owner does not claim ownership of content obtained from third-party providers, including but not limited to:</p>
+        
+        <div class="attribution-box">
+          <div class="attribution-title">📝 Professor Messer Practice Exams</div>
+          <div class="attribution-text">Practice Tests A, B, and C are based on content from Professor Messer's Security+ SY0-701 practice exams. All credit goes to Professor Messer for these materials.</div>
+        </div>
+
+        <div class="attribution-box">
+          <div class="attribution-title">📝 ExamCompass Practice Tests</div>
+          <div class="attribution-text">ExamCompass practice test questions are sourced from ExamCompass.com. All rights and ownership belong to ExamCompass.</div>
+        </div>
+
+        <p>All third-party content is used for educational purposes only. If you are the owner of any content displayed on this site and wish to have it removed, please contact us immediately.</p>
+      </div>
+
+      <!-- Fair Use -->
+      <div class="section">
+        <h2>Fair Use & Educational Purpose</h2>
+        
+        <p>This website is a non-commercial educational resource created to help students prepare for the CompTIA Security+ SY0-701 certification exam. Content from third parties is used under the principles of fair use for educational purposes.</p>
+
+        <div class="highlight">
+          <div class="highlight-title">Educational Use Only</div>
+          <p style="margin-bottom: 0;">This site is intended solely for study and exam preparation. Users are encouraged to purchase official CompTIA study materials and practice exams to support content creators and ensure comprehensive preparation.</p>
+        </div>
+      </div>
+
+      <!-- No Warranties -->
+      <div class="section">
+        <h2>No Warranties or Guarantees</h2>
+        
+        <p>The information provided on this website is for general educational purposes only. The site owner makes no representations or warranties of any kind regarding:</p>
+
+        <ul>
+          <li><strong>Accuracy:</strong> While efforts are made to ensure accuracy, we cannot guarantee that all content is current, complete, or error-free</li>
+          <li><strong>Exam Success:</strong> Using this study portal does not guarantee passing the CompTIA Security+ exam</li>
+          <li><strong>Official Material:</strong> This is not official CompTIA material and should be used as a supplement to official study resources</li>
+          <li><strong>Availability:</strong> The website and its content may be modified, updated, or removed at any time without notice</li>
+        </ul>
+      </div>
+
+      <!-- Trademark Notice -->
+      <div class="section">
+        <h2>Trademark Notice</h2>
+        
+        <p>CompTIA Security+, SY0-701, and related trademarks are the property of CompTIA, Inc. This website is not affiliated with, endorsed by, or sponsored by CompTIA.</p>
+
+        <p>The use of CompTIA trademarks on this site is solely for descriptive purposes to indicate the subject matter of the study materials and does not imply any official relationship with CompTIA.</p>
+      </div>
+
+      <!-- Copyright Information -->
+      <div class="section">
+        <h2>Copyright & Intellectual Property</h2>
+        
+        <h3>Respect for Copyright</h3>
+        <p>We respect the intellectual property rights of others. All copyrighted materials remain the property of their respective owners. This includes:</p>
+
+        <ul>
+          <li>Practice exam questions from Professor Messer and ExamCompass</li>
+          <li>CompTIA certification exam objectives and materials</li>
+          <li>Any other third-party content displayed on this site</li>
+        </ul>
+
+        <h3>Original Content</h3>
+        <p>The following elements of this website are original creations:</p>
+
+        <ul>
+          <li>Website design, layout, and user interface</li>
+          <li>Gamification system (levels, achievements, leaderboard)</li>
+          <li>Interactive cybersecurity simulations</li>
+          <li>Custom study tools and features</li>
+        </ul>
+      </div>
+
+      <!-- DMCA & Removal Requests -->
+      <div class="section">
+        <h2>Content Removal Requests</h2>
+        
+        <p>If you believe that any content on this website infringes your copyright or intellectual property rights, please contact us immediately. We will promptly investigate and remove any infringing content upon receipt of a valid notice.</p>
+
+        <div class="highlight">
+          <div class="highlight-title">Removal Request Requirements</div>
+          <p>To submit a removal request, please provide:</p>
+          <ul style="margin-bottom: 0;">
+            <li>Identification of the copyrighted work claimed to be infringed</li>
+            <li>Specific location of the content on this website (URL)</li>
+            <li>Your contact information (name, email, phone number)</li>
+            <li>A statement that you have a good faith belief that the use is not authorized</li>
+            <li>A statement of accuracy and authority to act on behalf of the copyright owner</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Limitation of Liability -->
+      <div class="section">
+        <h2>Limitation of Liability</h2>
+        
+        <p>The site owner shall not be liable for any damages arising from the use or inability to use this website, including but not limited to:</p>
+
+        <ul>
+          <li>Direct, indirect, incidental, or consequential damages</li>
+          <li>Loss of data, income, or profit</li>
+          <li>Failure to pass certification exams</li>
+          <li>Reliance on information provided on this site</li>
+        </ul>
+
+        <p>Users access and use this website at their own risk and discretion.</p>
+      </div>
+
+      <!-- User Responsibilities -->
+      <div class="section">
+        <h2>User Responsibilities</h2>
+        
+        <p>By using this website, you agree to:</p>
+
+        <ul>
+          <li>Use the content for personal, non-commercial educational purposes only</li>
+          <li>Not redistribute, reproduce, or republish content without permission</li>
+          <li>Respect the intellectual property rights of content creators</li>
+          <li>Support official content creators by purchasing their materials when possible</li>
+          <li>Use the site ethically and in accordance with applicable laws</li>
+        </ul>
+      </div>
+
+      <!-- Recommended Resources -->
+      <div class="section">
+        <h2>Recommended Official Resources</h2>
+        
+        <p>For the most comprehensive and up-to-date study materials, we recommend:</p>
+
+        <div class="attribution-box">
+          <div class="attribution-title">🎓 Official CompTIA Resources</div>
+          <div class="attribution-text">CompTIA Security+ official study guides, practice exams, and training materials available at <a href="https://www.comptia.org" target="_blank">comptia.org</a></div>
+        </div>
+
+        <div class="attribution-box">
+          <div class="attribution-title">🎥 Professor Messer</div>
+          <div class="attribution-text">Free video training and premium practice exams at <a href="https://www.professormesser.com" target="_blank">professormesser.com</a></div>
+        </div>
+
+        <div class="attribution-box">
+          <div class="attribution-title">📝 ExamCompass</div>
+          <div class="attribution-text">Additional free practice tests at <a href="https://www.examcompass.com" target="_blank">examcompass.com</a></div>
+        </div>
+      </div>
+
+      <!-- Changes to Disclaimer -->
+      <div class="section">
+        <h2>Changes to This Disclaimer</h2>
+        
+        <p>This disclaimer may be updated from time to time to reflect changes in content, legal requirements, or site policies. Continued use of the website after changes constitutes acceptance of the updated disclaimer.</p>
+
+        <p>The "Last Updated" date at the top of this page indicates when this disclaimer was last modified.</p>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="contact-box">
+        <div class="contact-title">📧 Questions or Concerns?</div>
+        <div class="contact-text">
+          If you have questions about this disclaimer, content attribution, or wish to submit a removal request, please contact the site administrator.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>This website is an independent educational resource and is not affiliated with CompTIA, Inc.</p>
+    <p style="margin-top: 0.5rem;">CompTIA Security+ and SY0-701 are trademarks of CompTIA, Inc.</p>
+    <p style="margin-top: 1rem;"><a href="index.html">Return to Home</a></p>
+  </footer>
+</body>
+</html>
