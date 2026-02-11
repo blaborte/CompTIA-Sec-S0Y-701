@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | ExamCompass Practice Test 2</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
+  .timer-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  #timer {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .header-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+
+  .header-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .header-btn.primary {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  main {
+    display: flex;
+    min-height: calc(100vh - 70px);
+  }
+
+  .sidebar {
+    width: 280px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem;
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+  }
+
+  .sidebar-title {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .q-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+
+  .q-dot {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+
+  .q-dot:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .q-dot.answered {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .q-dot.active {
+    outline: 2px solid var(--yellow);
+    outline-offset: 1px;
+  }
+
+  .q-dot.correct {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--bg);
+  }
+
+  .q-dot.incorrect {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--bg);
+  }
+
+  .score-panel {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    display: none;
+  }
+
+  .score-panel.visible {
+    display: block;
+  }
+
+  .score-big {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  .content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .question-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .question-number {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .question-text {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  .multi-select-note {
+    color: var(--yellow);
+    font-size: 0.9rem;
+    font-family: var(--mono);
+    margin-top: 0.5rem;
+  }
+
+  .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .answer {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .answer:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .answer.selected {
+    border-color: var(--accent);
+    background: rgba(0, 212, 255, 0.1);
+  }
+
+  .answer.correct {
+    border-color: var(--green);
+    background: rgba(0, 245, 160, 0.1);
+  }
+
+  .answer.incorrect {
+    border-color: var(--red);
+    background: rgba(255, 71, 87, 0.1);
+  }
+
+  .answer input[type="checkbox"],
+  .answer input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .answer-text {
+    flex: 1;
+    font-size: 1rem;
+  }
+
+  .answer-indicator {
+    font-size: 1.2rem;
+    display: none;
+  }
+
+  .answer.correct .answer-indicator.check {
+    display: block;
+    color: var(--green);
+  }
+
+  .answer.incorrect .answer-indicator.cross {
+    display: block;
+    color: var(--red);
+  }
+
+  .explanation {
+    background: var(--bg3);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: none;
+  }
+
+  .explanation.show {
+    display: block;
+  }
+
+  .explanation-title {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .explanation-text {
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .nav-btn {
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    border: none;
+    color: var(--bg);
+    font-weight: 600;
+  }
+
+  .results {
+    text-align: center;
+    display: none;
+  }
+
+  .results.show {
+    display: block;
+  }
+
+  .results-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+  }
+
+  .results-score {
+    font-size: 4rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+
+  .result-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .result-value {
+    font-size: 2.5rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-card:nth-child(1) .result-value { color: var(--green); }
+  .result-card:nth-child(2) .result-value { color: var(--red); }
+  .result-card:nth-child(3) .result-value { color: var(--yellow); }
+
+  .result-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  @media (max-width: 968px) {
+    .sidebar {
+      display: none;
+    }
+
+    main {
+      flex-direction: column;
+    }
+
+    .content {
+      padding: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">SECURITY+ <span>SY0-701</span> / EXAMCOMPASS TEST 2</div>
+    <div class="timer-wrap">
+      <span id="timer">90:00</span>
+      <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+      <button class="header-btn primary" onclick="showResults()" id="finishBtn">FINISH</button>
+    </div>
+    <a href="index.html" class="home-btn">
+      <span>←</span>
+      <span>Home</span>
+    </a>
+  </header>
+
+  <main>
+    <div class="sidebar">
+      <div class="sidebar-title">Questions</div>
+      <div class="q-grid" id="questionGrid"></div>
+      <div class="score-panel" id="scorePanel">
+        <div class="score-big" id="scoreBig">0%</div>
+        <div class="score-label">YOUR SCORE</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="question-container" id="questionContainer"></div>
+      <div class="results" id="results">
+        <h1 class="results-title">Test Complete!</h1>
+        <div class="results-score" id="resultsScore">0%</div>
+        <div class="results-grid">
+          <div class="result-card">
+            <div class="result-value" id="correctCount">0</div>
+            <div class="result-label">Correct</div>
+          </div>
+          <div class="result-card">
+            <div class="result-value" id="incorrectCount">0</div>
+            <div class="result-label">Incorrect</div>
+          </div>
+          <div class="result-card">
+            <div class="result-value" id="percentageScore">0%</div>
+            <div class="result-label">Score</div>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="nav-btn" onclick="reviewAnswers()">Review Answers</button>
+          <button class="nav-btn primary" onclick="location.reload()">Retake Test</button>
+          <button class="nav-btn" onclick="location.href='index.html'">Back to Home</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="gamification-social.js"></script>
+  <script>
+    const questions = [
+      {
+        id: 1,
+        text: "Which of the following terms describes the process of identifying differences between an organization's current security posture and its desired security posture?",
+        type: "single",
+        answers: [
+          "Tabletop exercise",
+          "Gap analysis",
+          "Security awareness training",
+          "Risk assessment"
+        ],
+        correct: [1],
+        explanation: "Gap analysis is the process of comparing an organization's current security state with its desired or required security state. It identifies 'gaps' that need to be addressed through security improvements, policy updates, or technology implementations."
+      },
+      {
+        id: 2,
+        text: "The term 'Zero Trust security' refers to a cybersecurity model that eliminates implicit trust from networks and requires all users and devices to be continuously verified before being granted access to resources. The implementation of the Zero Trust security involves two distinct components: a Data Plane, responsible for defining and managing security policies, and a Control Plane, responsible for enforcing the security policies established by the Data Plane.",
+        type: "single",
+        answers: [
+          "True",
+          "False"
+        ],
+        correct: [1],
+        explanation: "False. The roles are reversed: The Control Plane defines and manages security policies (Policy Decision Point), while the Data Plane enforces those policies (Policy Enforcement Point). The Control Plane makes decisions, and the Data Plane executes them."
+      },
+      {
+        id: 3,
+        text: "Which of the answers listed below refers to a Zero Trust Control Plane security approach that takes into account user identity, device security, network conditions, and other contextual information to enable dynamic access decisions?",
+        type: "single",
+        answers: [
+          "Implicit trust",
+          "Monitoring and logging",
+          "Adaptive identity",
+          "Microsegmentation"
+        ],
+        correct: [2],
+        explanation: "Adaptive identity (also called context-aware or risk-based authentication) uses multiple factors including user identity, device posture, location, time, and other contextual data to make dynamic access decisions. It adapts authentication requirements based on risk level."
+      },
+      {
+        id: 4,
+        text: "What are the key components of the Zero Trust Control Plane's Policy Decision Point (PDP)? (Select 2 answers)",
+        type: "multiple",
+        answers: [
+          "Policy Engine (PE)",
+          "Monitoring and logging",
+          "Policy Enforcement Point (PEP)",
+          "Microsegmentation",
+          "Policy Administrator (PA)"
+        ],
+        correct: [0, 4],
+        explanation: "The Policy Decision Point (PDP) in Zero Trust consists of the Policy Engine (PE), which evaluates access requests against policies, and the Policy Administrator (PA), which establishes and manages the connection between users and resources. The PEP is part of the Data Plane, not the Control Plane."
+      },
+      {
+        id: 5,
+        text: "In the Zero Trust security architecture, the Policy Enforcement Point (PEP) is a Data Plane component that enforces the security policies defined at the Control Plane by the Policy Decision Point (PDP).",
+        type: "single",
+        answers: [
+          "True",
+          "False"
+        ],
+        correct: [0],
+        explanation: "True. The Policy Enforcement Point (PEP) is indeed a Data Plane component that enforces decisions made by the Control Plane's Policy Decision Point (PDP). The PEP sits in the data path and controls actual access to resources."
+      },
+      {
+        id: 6,
+        text: "An access control vestibule (a.k.a. mantrap) is a physical security access control system used to prevent unauthorized users from gaining access to restricted areas. An example mantrap could be a two-door entrance point connected to a guard station wherein a person entering from the outside remains locked inside until he/she provides authentication token required to unlock the inner door.",
+        type: "single",
+        answers: [
+          "True",
+          "False"
+        ],
+        correct: [0],
+        explanation: "True. An access control vestibule (mantrap) is a physical security control with two interlocking doors. Only one door can be open at a time, preventing tailgating and unauthorized entry. The person must authenticate before the inner door unlocks."
+      },
+      {
+        id: 7,
+        text: "Which of the following statements about honeypots are true? (Select 2 answers)",
+        type: "multiple",
+        answers: [
+          "Honeypots are always part of a honeynet",
+          "Honeypots mimic real systems to attract cyber attackers",
+          "Honeypots are a type of anti-malware solution",
+          "Honeypots contain apparent vulnerabilities that are closely monitored by a security team",
+          "Honeypots are used to launch attacks on cyber attackers"
+        ],
+        correct: [1, 3],
+        explanation: "Honeypots mimic real systems with apparent vulnerabilities to attract and study attackers. They're monitored to gather intelligence about attack methods. Honeypots can exist independently (not always part of a honeynet), and they're for detection/research, not anti-malware or offensive operations."
+      },
+      {
+        id: 8,
+        text: "What is a honeynet in the context of cybersecurity?",
+        type: "single",
+        answers: [
+          "A network of IDSs",
+          "A network of honeypots",
+          "A network of infected hosts",
+          "A network of IPSs"
+        ],
+        correct: [1],
+        explanation: "A honeynet is a network of multiple honeypots working together to create a more realistic and complex decoy environment. It simulates an entire network infrastructure to study sophisticated attacks and attacker behavior."
+      },
+      {
+        id: 9,
+        text: "Which of the answers listed below refers to a honeynet example?",
+        type: "single",
+        answers: [
+          "A network of fake websites",
+          "A network of fake servers",
+          "A network of fake databases",
+          "A network of fake file shares",
+          "All of the above"
+        ],
+        correct: [4],
+        explanation: "All of the above. A honeynet can include any combination of fake systems including websites, servers, databases, and file shares. The goal is to create a realistic but decoy environment that attracts and traps attackers for study."
+      },
+      {
+        id: 10,
+        text: "A honeyfile can be any type of file (e.g., a document, email message, image, or video file) containing real user data intentionally placed within a network or system to attract potential attackers or unauthorized users.",
+        type: "single",
+        answers: [
+          "True",
+          "False"
+        ],
+        correct: [1],
+        explanation: "False. A honeyfile should NOT contain real user data. It contains fake but enticing-looking data designed to attract attackers. Using real user data would be a security and privacy violation. Honeyfiles use decoy data that appears valuable."
+      },
+      {
+        id: 11,
+        text: "A honeyfile can be used for:",
+        type: "single",
+        answers: [
+          "Attracting cyber attackers",
+          "Triggering alerts when accessed",
+          "Monitoring network activity",
+          "All of the above"
+        ],
+        correct: [3],
+        explanation: "All of the above. Honeyfiles serve multiple purposes: they attract attackers with seemingly valuable data, trigger alerts when accessed (indicating unauthorized activity), and help monitor network behavior by tracking who accesses them and how."
+      },
+      {
+        id: 12,
+        text: "What is a honeytoken?",
+        type: "single",
+        answers: [
+          "A decoy file that is designed to attract attackers",
+          "A unique identifier assigned to a honeyfile",
+          "A decoy system that is designed to lure potential attackers",
+          "A unique identifier that is designed to track attackers"
+        ],
+        correct: [3],
+        explanation: "A honeytoken is a unique piece of trackable data (like a fake credential, API key, or database record) designed to detect unauthorized access. When the honeytoken is used, it triggers an alert because there's no legitimate reason for it to be accessed."
+      },
+      {
+        id: 13,
+        text: "Which of the following should not be used as honeytokens? (Select all that apply)",
+        type: "multiple",
+        answers: [
+          "Active user account credentials",
+          "Database entries mimicking real data",
+          "Actual URLs to live websites or resources",
+          "Dummy server logs with enticing information",
+          "Fake identifiers, including usernames, passwords, email addresses, and IP addresses"
+        ],
+        correct: [0, 2],
+        explanation: "Never use active user credentials or actual URLs to live resources as honeytokens, as this could compromise real systems or legitimate user accounts. Honeytokens should be fake/decoy data that has no legitimate use but appears valuable. Fake identifiers and dummy data are appropriate."
+      },
+      {
+        id: 14,
+        text: "A process used by organizations to assess and evaluate the potential impact of disruptive incidents or disasters on their critical business functions and operations is referred to as:",
+        type: "single",
+        answers: [
+          "BPA",
+          "BIA",
+          "SLE",
+          "BCP"
+        ],
+        correct: [1],
+        explanation: "BIA (Business Impact Analysis) assesses the potential impact of disruptions on business operations. It identifies critical functions, their recovery priorities, and acceptable downtime. BCP is the plan itself, not the assessment. SLE is a risk calculation metric. BPA is Business Process Automation."
+      },
+      {
+        id: 15,
+        text: "A hierarchical system for the creation, management, storage, distribution, and revocation of digital certificates is known as:",
+        type: "single",
+        answers: [
+          "PKI",
+          "RA",
+          "PKCS",
+          "CA"
+        ],
+        correct: [0],
+        explanation: "PKI (Public Key Infrastructure) is the complete hierarchical system for managing digital certificates. It includes Certificate Authorities (CA), Registration Authorities (RA), certificate directories, and revocation systems. CA is a component of PKI, not the entire system."
+      },
+      {
+        id: 16,
+        text: "Which of the answers listed below best describes the characteristics of a public-private key pair?",
+        type: "single",
+        answers: [
+          "Both keys are examples of a symmetrical key",
+          "Two keys that are identical",
+          "A pair of keys where one is used for encryption and the other for decryption",
+          "Both keys are examples of a shared key"
+        ],
+        correct: [2],
+        explanation: "In asymmetric cryptography, a public-private key pair consists of two mathematically related but different keys. What one key encrypts, only the other can decrypt. This is the opposite of symmetric encryption where the same key is used for both operations."
+      },
+      {
+        id: 17,
+        text: "What is the typical use of a public key?",
+        type: "single",
+        answers: [
+          "Data encryption",
+          "Data decryption",
+          "User/device authentication",
+          "All of the above"
+        ],
+        correct: [0],
+        explanation: "The public key is primarily used for encryption. Anyone can use your public key to encrypt data that only you (with the corresponding private key) can decrypt. While public keys can be involved in authentication (via digital signatures), their primary function is encryption."
+      },
+      {
+        id: 18,
+        text: "Key escrow is a cryptographic technique that enables storing copies of encryption keys with a trusted third party. A Recovery Agent (RA) is a trusted third party (an individual, entity, or system) who is authorized to assist in the retrieval of encryption keys and data on behalf of the data owner. Key escrow and RA are both used to ensure that encrypted data can be decrypted even if the data owner loses access to their encryption key. Since key escrow and RAs are both components of a single security solution, the only way to implement key escrow systems is with the use of RAs.",
+        type: "single",
+        answers: [
+          "True",
+          "False"
+        ],
+        correct: [1],
+        explanation: "False. While both key escrow and Recovery Agents serve similar purposes (key recovery), they are not dependent on each other. Key escrow can be implemented without Recovery Agents through other methods like split-key storage, time-lock encryption, or automated recovery systems."
+      },
+      {
+        id: 19,
+        text: "Which of the following answers refers to a data storage device equipped with hardware-level encryption functionality?",
+        type: "single",
+        answers: [
+          "HSM",
+          "TPM",
+          "EFS",
+          "SED"
+        ],
+        correct: [3],
+        explanation: "SED (Self-Encrypting Drive) is a storage device with built-in hardware encryption. The encryption is transparent to the user and happens automatically. HSM is for key management, TPM is a security chip on a motherboard, and EFS is software-based file encryption."
+      },
+      {
+        id: 20,
+        text: "Which of the answers listed below refers to software technology designed to provide confidentiality for an entire data storage device?",
+        type: "single",
+        answers: [
+          "TPM",
+          "FDE",
+          "EFS",
+          "HSM"
+        ],
+        correct: [1],
+        explanation: "FDE (Full Disk Encryption) is software that encrypts an entire storage device. Examples include BitLocker, FileVault, and VeraCrypt. TPM stores encryption keys, EFS encrypts individual files, and HSM is hardware for key management."
+      },
+      {
+        id: 21,
+        text: "An MS Windows component that enables encryption of individual files is called:",
+        type: "single",
+        answers: [
+          "SED",
+          "EFS",
+          "BitLocker",
+          "FDE"
+        ],
+        correct: [1],
+        explanation: "EFS (Encrypting File System) is a Windows feature that encrypts individual files and folders. BitLocker encrypts entire volumes/drives (FDE). SED is hardware-based disk encryption. EFS allows granular, per-file encryption within Windows."
+      },
+      {
+        id: 22,
+        text: "Which of the following software application tools are specifically designed for implementing encryption algorithms to secure data communication and storage? (Select 2 answers)",
+        type: "multiple",
+        answers: [
+          "VPN",
+          "GPG",
+          "SSH",
+          "IPsec",
+          "PGP"
+        ],
+        correct: [1, 4],
+        explanation: "GPG (GNU Privacy Guard) and PGP (Pretty Good Privacy) are encryption tools specifically designed for encrypting data communication (emails) and file storage. While VPN, SSH, and IPsec use encryption, they are protocols/technologies, not standalone encryption tools."
+      },
+      {
+        id: 23,
+        text: "What is the name of a network protocol that secures web traffic via SSL/TLS encryption?",
+        type: "single",
+        answers: [
+          "SFTP",
+          "HTTPS",
+          "FTPS",
+          "SNMP"
+        ],
+        correct: [1],
+        explanation: "HTTPS (HTTP Secure) uses SSL/TLS to encrypt web traffic between browsers and web servers. SFTP and FTPS secure file transfers, and SNMP is for network management (not specifically web traffic)."
+      },
+      {
+        id: 24,
+        text: "Which of the answers listed below refers to a deprecated TLS-based method for secure transmission of email messages?",
+        type: "single",
+        answers: [
+          "S/MIME",
+          "STARTTLS",
+          "DKIM",
+          "SMTPS"
+        ],
+        correct: [3],
+        explanation: "SMTPS (SMTP Secure) used implicit TLS on port 465 and is now deprecated. The modern approach is STARTTLS which upgrades an insecure connection to TLS. S/MIME encrypts email content (not transmission), and DKIM is for email authentication."
+      },
+      {
+        id: 25,
+        text: "Which of the following answers refers to an obsolete protocol used for secure data transfer over the web?",
+        type: "single",
+        answers: [
+          "SMTPS",
+          "SRTP",
+          "SHTTP",
+          "S/MIME"
+        ],
+        correct: [2],
+        explanation: "S-HTTP (Secure HTTP) was an obsolete protocol for encrypting individual web messages. It was replaced by HTTPS (which encrypts the entire connection using SSL/TLS). SMTPS is for email, SRTP is for voice/video, and S/MIME is for email content encryption."
+      }
+    ];
+
+    let currentQuestion = 0;
+    let userAnswers = Array(questions.length).fill(null);
+    let timerInterval;
+    let timeRemaining = 90 * 60;
+    let isPaused = false;
+
+    function initTest() {
+      renderQuestionGrid();
+      showQuestion(currentQuestion);
+      startTimer();
+    }
+
+    function renderQuestionGrid() {
+      const grid = document.getElementById('questionGrid');
+      grid.innerHTML = '';
+      questions.forEach((q, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'q-dot';
+        dot.textContent = index + 1;
+        dot.onclick = () => showQuestion(index);
+        if (userAnswers[index] !== null) dot.classList.add('answered');
+        if (index === currentQuestion) dot.classList.add('active');
+        grid.appendChild(dot);
+      });
+    }
+
+    function showQuestion(index) {
+      currentQuestion = index;
+      const q = questions[index];
+      const container = document.getElementById('questionContainer');
+      
+      const isMultiple = q.type === 'multiple';
+      const inputType = isMultiple ? 'checkbox' : 'radio';
+      
+      let html = `
+        <div class="question-header">
+          <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+        </div>
+        <div class="question-text">
+          ${q.text}
+          ${isMultiple ? '<div class="multi-select-note">⚠ Select multiple answers</div>' : ''}
+        </div>
+        <div class="answers">
+      `;
+      
+      q.answers.forEach((answer, i) => {
+        const isChecked = userAnswers[index] && userAnswers[index].includes(i);
+        html += `
+          <div class="answer" onclick="selectAnswer(${i})">
+            <input type="${inputType}" name="q${index}" ${isChecked ? 'checked' : ''} onchange="updateAnswer(${i})">
+            <div class="answer-text">${answer}</div>
+            <span class="answer-indicator check">✓</span>
+            <span class="answer-indicator cross">✗</span>
+          </div>
+        `;
+      });
+      
+      html += `
+        </div>
+        <div class="explanation" id="explanation">
+          <div class="explanation-title">Explanation</div>
+          <div class="explanation-text">${q.explanation}</div>
+        </div>
+        <div class="navigation">
+          <button class="nav-btn" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
+          <button class="nav-btn primary" onclick="nextQuestion()">${index === questions.length - 1 ? 'Finish Test' : 'Next →'}</button>
+        </div>
+      `;
+      
+      container.innerHTML = html;
+      renderQuestionGrid();
+    }
+
+    function selectAnswer(index) {
+      const q = questions[currentQuestion];
+      const answers = document.querySelectorAll('.answer');
+      const answer = answers[index];
+      const input = answer.querySelector('input');
+      
+      if (q.type === 'single') {
+        userAnswers[currentQuestion] = [index];
+        answers.forEach(a => a.classList.remove('selected'));
+        answer.classList.add('selected');
+      } else {
+        if (!userAnswers[currentQuestion]) userAnswers[currentQuestion] = [];
+        const idx = userAnswers[currentQuestion].indexOf(index);
+        if (idx > -1) {
+          userAnswers[currentQuestion].splice(idx, 1);
+          answer.classList.remove('selected');
+        } else {
+          userAnswers[currentQuestion].push(index);
+          answer.classList.add('selected');
+        }
+      }
+      
+      input.checked = !input.checked;
+      renderQuestionGrid();
+    }
+
+    function updateAnswer(index) {
+      selectAnswer(index);
+    }
+
+    function previousQuestion() {
+      if (currentQuestion > 0) {
+        showQuestion(currentQuestion - 1);
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        showQuestion(currentQuestion + 1);
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      clearInterval(timerInterval);
+      
+      let correct = 0;
+      let incorrect = 0;
+      
+      questions.forEach((q, i) => {
+        const userAns = userAnswers[i] || [];
+        const correctAns = q.correct;
+        
+        const isCorrect = userAns.length === correctAns.length && 
+                         userAns.every(a => correctAns.includes(a));
+        
+        if (isCorrect) correct++;
+        else if (userAns.length > 0) incorrect++;
+        
+        const dots = document.querySelectorAll('.q-dot');
+        if (isCorrect) dots[i].classList.add('correct');
+        else if (userAns.length > 0) dots[i].classList.add('incorrect');
+      });
+      
+      const percentage = Math.round((correct / questions.length) * 100);
+      
+      document.getElementById('resultsScore').textContent = percentage + '%';
+      document.getElementById('correctCount').textContent = correct;
+      document.getElementById('incorrectCount').textContent = incorrect;
+      document.getElementById('percentageScore').textContent = percentage + '%';
+      
+      document.getElementById('questionContainer').style.display = 'none';
+      document.getElementById('results').classList.add('show');
+      document.getElementById('scorePanel').classList.add('visible');
+      document.getElementById('scoreBig').textContent = percentage + '%';
+      
+      if (window.securityPlusGamification) {
+        const timeSpent = Math.floor((90 * 60 - timeRemaining) / 60);
+        window.securityPlusGamification.completeTest(correct, questions.length, timeSpent);
+      }
+    }
+
+    function reviewAnswers() {
+      document.getElementById('results').classList.remove('show');
+      document.getElementById('questionContainer').style.display = 'block';
+      showQuestion(0);
+      
+      questions.forEach((q, i) => {
+        const userAns = userAnswers[i] || [];
+        const correctAns = q.correct;
+        
+        setTimeout(() => {
+          showQuestion(i);
+          const answers = document.querySelectorAll('.answer');
+          answers.forEach((ans, j) => {
+            if (correctAns.includes(j)) {
+              ans.classList.add('correct');
+            } else if (userAns.includes(j)) {
+              ans.classList.add('incorrect');
+            }
+          });
+          document.getElementById('explanation').classList.add('show');
+        }, 100);
+      });
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          timeRemaining--;
+          const minutes = Math.floor(timeRemaining / 60);
+          const seconds = timeRemaining % 60;
+          document.getElementById('timer').textContent = 
+            `${minutes}:${seconds.toString().padStart(2, '0')}`;
+          
+          if (timeRemaining <= 0) {
+            showResults();
+          }
+        }
+      }, 1000);
+    }
+
+    function toggleTimer() {
+      isPaused = !isPaused;
+      document.getElementById('timerBtn').textContent = isPaused ? 'RESUME' : 'PAUSE';
+    }
+
+    initTest();
+  </script>
+</body>
+</html>
