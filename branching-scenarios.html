@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ Scenarios | Branching Simulations</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #080b12;
+    --bg2:     #0d1017;
+    --bg3:     #121620;
+    --bg4:     #171c28;
+    --border:  #1a2135;
+    --accent:  #00d4ff;
+    --green:   #00f5a0;
+    --red:     #ff4757;
+    --yellow:  #ffd32a;
+    --orange:  #ff6b35;
+    --text:    #cdd5e8;
+    --muted:   #4a5878;
+    --font:    'IBM Plex Sans', sans-serif;
+    --mono:    'IBM Plex Mono', monospace;
+    --display: 'Rajdhani', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--muted); font-weight: 400; }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.45rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    transition: all 0.2s;
+  }
+
+  .home-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* MAIN LAYOUT */
+  #scenarioSelect { display: block; }
+  #gameArea       { display: none; }
+  #debriefArea    { display: none; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+  /* ── SCENARIO SELECT ── */
+  .select-header { text-align: center; margin-bottom: 3rem; }
+
+  .select-header h1 {
+    font-family: var(--display);
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .select-header h1 span { color: var(--accent); }
+
+  .select-header p { color: var(--muted); font-size: 1rem; font-family: var(--mono); }
+
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .scenario-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom;
+  }
+
+  .scenario-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,212,255,0.12); }
+  .scenario-card:hover::before { transform: scaleY(1); }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; }
+  .card-icon { font-size: 2.5rem; }
+  .card-diff {
+    font-family: var(--mono); font-size: 0.7rem; padding: 0.25rem 0.6rem;
+    border-radius: 3px; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .diff-hard { background: rgba(255,71,87,0.15); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
+  .diff-medium { background: rgba(255,211,42,0.15); color: var(--yellow); border: 1px solid rgba(255,211,42,0.3); }
+
+  .card-title { font-family: var(--display); font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; letter-spacing: 0.05em; }
+  .card-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); margin-bottom: 1rem; }
+  .card-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.5rem; }
+
+  .card-meta { display: flex; gap: 1.5rem; }
+  .meta-item { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+  .meta-item span { color: var(--text); }
+
+  .card-cta {
+    margin-top: 1.5rem; font-family: var(--mono); font-size: 0.8rem;
+    color: var(--accent); opacity: 0; transition: opacity 0.3s;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .scenario-card:hover .card-cta { opacity: 1; }
+
+  .coming-soon {
+    opacity: 0.4; cursor: not-allowed;
+  }
+  .coming-soon:hover { transform: none; border-color: var(--border); box-shadow: none; }
+  .coming-soon::before { display: none; }
+
+  /* ── GAME AREA ── */
+  .game-layout { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; position: sticky; top: 80px;
+  }
+
+  .sidebar-header {
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  .scenario-info { padding: 1.25rem; border-bottom: 1px solid var(--border); }
+  .info-scenario-title { font-family: var(--display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+  .info-scenario-sub { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); }
+
+  .threat-section { padding: 1.25rem; border-bottom: 1px solid var(--border); }
+  .threat-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+
+  .threat-bar-wrap { background: var(--bg3); border-radius: 3px; height: 8px; overflow: hidden; margin-bottom: 0.5rem; }
+  .threat-bar { height: 100%; border-radius: 3px; transition: all 0.8s ease; background: var(--green); }
+
+  .threat-text { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; }
+
+  .score-section { padding: 1.25rem; border-bottom: 1px solid var(--border); }
+  .score-num { font-family: var(--display); font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .score-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.25rem; }
+
+  .step-tracker { padding: 1.25rem; }
+  .step-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+  .steps-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .step-dot {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+  }
+  .step-dot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: all 0.3s; }
+  .step-dot.done .dot { background: var(--green); }
+  .step-dot.active .dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .step-dot.done { color: var(--text); }
+  .step-dot.active { color: var(--accent); }
+
+  /* Main game panel */
+  .game-panel { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  /* Timestamp bar */
+  .timestamp-bar {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.75rem 1.25rem;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono); font-size: 0.8rem;
+  }
+  .ts-time { color: var(--accent); font-weight: 600; }
+  .ts-role { color: var(--muted); }
+  .ts-location { color: var(--muted); }
+
+  /* Situation box */
+  .situation-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .sit-header {
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+  }
+  .sit-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .sit-divider { flex: 1; height: 1px; background: var(--border); }
+
+  .sit-body { padding: 1.5rem; font-size: 1rem; line-height: 1.85; color: var(--text); }
+
+  /* Consequence banner */
+  .consequence-banner {
+    border-radius: 6px; padding: 1rem 1.25rem;
+    font-size: 0.95rem; line-height: 1.6; display: none;
+    border-left: 4px solid;
+    animation: slideDown 0.4s ease-out;
+  }
+  .consequence-banner.show { display: block; }
+  .consequence-banner.optimal { border-color: var(--green); background: rgba(0,245,160,0.08); }
+  .consequence-banner.partial  { border-color: var(--yellow); background: rgba(255,211,42,0.08); }
+  .consequence-banner.bad      { border-color: var(--red); background: rgba(255,71,87,0.08); }
+
+  .banner-tag {
+    font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;
+  }
+  .optimal .banner-tag { color: var(--green); }
+  .partial  .banner-tag { color: var(--yellow); }
+  .bad      .banner-tag { color: var(--red); }
+
+  @keyframes slideDown { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform: translateY(0); } }
+
+  /* Question */
+  .question-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.75rem;
+  }
+  .q-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .q-text { font-family: var(--display); font-size: 1.45rem; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 1.75rem; letter-spacing: 0.02em; }
+
+  .choices { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .choice {
+    background: var(--bg3); border: 2px solid var(--border);
+    border-radius: 8px; padding: 1.1rem 1.25rem;
+    cursor: pointer; transition: all 0.25s;
+    display: flex; align-items: flex-start; gap: 1rem;
+    text-align: left; width: 100%;
+  }
+
+  .choice:hover:not(:disabled) { border-color: var(--accent); transform: translateX(4px); background: rgba(0,212,255,0.05); }
+
+  .choice-letter {
+    width: 28px; height: 28px; border-radius: 4px;
+    background: var(--border); color: var(--muted);
+    font-family: var(--mono); font-size: 0.8rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.25s;
+  }
+  .choice:hover:not(:disabled) .choice-letter { background: var(--accent); color: var(--bg); }
+
+  .choice-body { flex: 1; }
+  .choice-text { color: var(--text); font-size: 0.97rem; line-height: 1.5; }
+  .choice-tag { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.3rem; }
+
+  /* After answer states */
+  .choice.selected-optimal { border-color: var(--green); background: rgba(0,245,160,0.08); pointer-events: none; }
+  .choice.selected-partial  { border-color: var(--yellow); background: rgba(255,211,42,0.08); pointer-events: none; }
+  .choice.selected-bad      { border-color: var(--red); background: rgba(255,71,87,0.08); pointer-events: none; }
+  .choice.unselected         { opacity: 0.35; pointer-events: none; }
+
+  .choice.selected-optimal .choice-letter { background: var(--green); color: var(--bg); }
+  .choice.selected-partial  .choice-letter { background: var(--yellow); color: var(--bg); }
+  .choice.selected-bad      .choice-letter { background: var(--red); color: var(--bg); }
+
+  .selected-optimal .choice-tag { color: var(--green); }
+  .selected-partial  .choice-tag { color: var(--yellow); }
+  .selected-bad      .choice-tag { color: var(--red); }
+
+  .next-btn {
+    margin-top: 1.25rem; background: linear-gradient(135deg, var(--accent), var(--green));
+    border: none; color: var(--bg); padding: 0.85rem 2.5rem;
+    border-radius: 6px; font-family: var(--display); font-size: 1rem;
+    font-weight: 700; letter-spacing: 0.08em; cursor: pointer;
+    transition: all 0.3s; display: none; text-transform: uppercase;
+  }
+  .next-btn.show { display: inline-block; animation: fadeIn 0.4s ease-out; }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+
+  @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+
+  /* ── DEBRIEF ── */
+  .debrief-wrap { max-width: 800px; margin: 0 auto; }
+
+  .debrief-hero {
+    text-align: center; padding: 3rem 2rem;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 2rem;
+    position: relative; overflow: hidden;
+  }
+
+  .debrief-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 70%);
+  }
+
+  .debrief-result-icon { font-size: 4rem; margin-bottom: 1rem; }
+
+  .debrief-title {
+    font-family: var(--display); font-size: 2.5rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+
+  .debrief-rank {
+    font-family: var(--mono); font-size: 0.9rem; margin-bottom: 1.5rem; letter-spacing: 0.1em;
+  }
+
+  .debrief-score-big {
+    font-family: var(--display); font-size: 5rem; font-weight: 700; line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .debrief-score-label { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.15em; }
+
+  .debrief-message {
+    margin-top: 1.5rem; font-size: 1rem; color: var(--text);
+    line-height: 1.7; max-width: 500px; margin-left: auto; margin-right: auto;
+  }
+
+  .outcome-banner {
+    border-radius: 8px; padding: 1rem 1.5rem; margin-top: 1.5rem;
+    font-family: var(--mono); font-size: 0.85rem; line-height: 1.6;
+  }
+
+  .outcome-good    { background: rgba(0,245,160,0.1); border: 1px solid rgba(0,245,160,0.3); color: var(--green); }
+  .outcome-partial { background: rgba(255,211,42,0.1); border: 1px solid rgba(255,211,42,0.3); color: var(--yellow); }
+  .outcome-bad     { background: rgba(255,71,87,0.1);  border: 1px solid rgba(255,71,87,0.3);  color: var(--red); }
+
+  .debrief-sections { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+
+  .debrief-section {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+
+  .ds-header {
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    padding: 0.9rem 1.5rem; font-family: var(--mono);
+    font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  .ds-body { padding: 1.5rem; }
+
+  .decision-row {
+    padding: 1rem; border-radius: 6px; margin-bottom: 0.75rem;
+    border: 1px solid var(--border); background: var(--bg3);
+  }
+  .decision-row:last-child { margin-bottom: 0; }
+
+  .dr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+  .dr-q { font-size: 0.85rem; color: var(--muted); font-family: var(--mono); }
+  .dr-points { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; }
+  .dr-answer { font-size: 0.95rem; color: var(--text); }
+
+  .pts-high { color: var(--green); }
+  .pts-mid  { color: var(--yellow); }
+  .pts-low  { color: var(--red); }
+
+  .key-concepts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .concept-tag {
+    background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2);
+    color: var(--accent); padding: 0.3rem 0.75rem;
+    border-radius: 20px; font-family: var(--mono); font-size: 0.75rem;
+  }
+
+  .debrief-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .action-btn {
+    padding: 0.85rem 2rem; border-radius: 6px; font-family: var(--display);
+    font-size: 1rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer; transition: all 0.3s; border: none;
+  }
+
+  .action-primary { background: linear-gradient(135deg, var(--accent), var(--green)); color: var(--bg); }
+  .action-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+
+  .action-secondary { background: var(--bg3); border: 1px solid var(--border); color: var(--text); }
+  .action-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .game-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+  }
+
+  @media (max-width: 600px) {
+    .select-header h1 { font-size: 2rem; }
+    .debrief-score-big { font-size: 3.5rem; }
+    .debrief-actions { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">Security+ <span>/ Branching Scenarios</span></div>
+    <a href="index.html" class="home-btn">← Home</a>
+  </header>
+
+  <!-- SCENARIO SELECT -->
+  <div id="scenarioSelect">
+    <main>
+      <div class="select-header">
+        <h1>Choose Your <span>Scenario</span></h1>
+        <p>// branching simulations — your decisions shape the outcome</p>
+      </div>
+
+      <div class="scenarios-grid">
+        <!-- Active scenario -->
+        <div class="scenario-card" onclick="startScenario('midnight_breach')">
+          <div class="card-top">
+            <div class="card-icon">🌙</div>
+            <div class="card-diff diff-hard">Hard</div>
+          </div>
+          <div class="card-title">The Midnight Breach</div>
+          <div class="card-subtitle">Ransomware Incident Response</div>
+          <div class="card-desc">It's 2:47 AM. Three hospital servers are encrypting simultaneously. Your manager is calling. Every decision you make in the next 5 hours determines whether the breach is contained — or catastrophic.</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>IR & Operations</span></div>
+            <div class="meta-item">Time: <span>10-15 min</span></div>
+          </div>
+          <div class="card-cta">▶ Start Scenario →</div>
+        </div>
+
+        <!-- Coming soon cards -->
+        <div class="scenario-card coming-soon">
+          <div class="card-top">
+            <div class="card-icon">🎣</div>
+            <div class="card-diff diff-medium">Medium</div>
+          </div>
+          <div class="card-title">The Phishing Campaign</div>
+          <div class="card-subtitle">Social Engineering Response</div>
+          <div class="card-desc">A targeted spearphishing campaign is hitting your executives. Credential harvesting, BEC attempts, and a potential wire transfer fraud — can you stop it in time?</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>Threats & Attacks</span></div>
+            <div class="meta-item">Time: <span>Coming Soon</span></div>
+          </div>
+        </div>
+
+        <div class="scenario-card coming-soon">
+          <div class="card-top">
+            <div class="card-icon">👤</div>
+            <div class="card-diff diff-medium">Medium</div>
+          </div>
+          <div class="card-title">The Insider Threat</div>
+          <div class="card-subtitle">Access Controls & Monitoring</div>
+          <div class="card-desc">A disgruntled employee with elevated privileges is exfiltrating sensitive data. Monitoring logs suggest it's been happening for weeks. How do you handle it without tipping them off?</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>Identity & Access</span></div>
+            <div class="meta-item">Time: <span>Coming Soon</span></div>
+          </div>
+        </div>
+
+        <div class="scenario-card coming-soon">
+          <div class="card-top">
+            <div class="card-icon">☁️</div>
+            <div class="card-diff diff-medium">Medium</div>
+          </div>
+          <div class="card-title">Cloud Misconfiguration</div>
+          <div class="card-subtitle">Cloud Security & Data Exposure</div>
+          <div class="card-desc">A misconfigured S3 bucket has exposed 50,000 customer records. The data is indexed by search engines. You have hours before it goes viral on social media.</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>Architecture & Design</span></div>
+            <div class="meta-item">Time: <span>Coming Soon</span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- GAME AREA -->
+  <div id="gameArea">
+    <main>
+      <div class="game-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-header">// Active Scenario</div>
+          <div class="scenario-info">
+            <div class="info-scenario-title" id="sideTitle">—</div>
+            <div class="info-scenario-sub" id="sideRole">—</div>
+          </div>
+          <div class="threat-section">
+            <div class="threat-label">Threat Level</div>
+            <div class="threat-bar-wrap">
+              <div class="threat-bar" id="threatBar" style="width:20%"></div>
+            </div>
+            <div class="threat-text" id="threatText" style="color:var(--green)">LOW</div>
+          </div>
+          <div class="score-section">
+            <div class="score-num" id="sideScore">0</div>
+            <div class="score-label">Points Earned</div>
+          </div>
+          <div class="step-tracker">
+            <div class="step-label">Decision Path</div>
+            <div class="steps-list" id="stepsList"></div>
+          </div>
+        </div>
+
+        <!-- Game Panel -->
+        <div class="game-panel">
+          <div class="timestamp-bar">
+            <div class="ts-time" id="tsTime">—</div>
+            <div class="ts-role" id="tsRole">—</div>
+            <div class="ts-location">MedCorp Regional Hospital</div>
+          </div>
+
+          <div class="situation-box">
+            <div class="sit-header">
+              <div class="sit-label">Situation Update</div>
+              <div class="sit-divider"></div>
+            </div>
+            <div class="sit-body" id="situationText">Loading...</div>
+          </div>
+
+          <div class="consequence-banner" id="consequenceBanner">
+            <div class="banner-tag" id="bannerTag"></div>
+            <div id="bannerText"></div>
+          </div>
+
+          <div class="question-box">
+            <div class="q-label">// Decision Required</div>
+            <div class="q-text" id="questionText">—</div>
+            <div class="choices" id="choicesContainer"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextNode()">Continue →</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- DEBRIEF -->
+  <div id="debriefArea">
+    <main>
+      <div class="debrief-wrap">
+        <div class="debrief-hero">
+          <div class="debrief-result-icon" id="debriefIcon">🎖️</div>
+          <div class="debrief-title" id="debriefTitle">—</div>
+          <div class="debrief-rank" id="debriefRank">—</div>
+          <div class="debrief-score-big" id="debriefScoreBig">0</div>
+          <div class="debrief-score-label">Points Scored</div>
+          <div class="debrief-message" id="debriefMessage">—</div>
+          <div class="outcome-banner" id="outcomeBanner"></div>
+        </div>
+
+        <div class="debrief-sections">
+          <div class="debrief-section">
+            <div class="ds-header">// Your Decision History</div>
+            <div class="ds-body" id="decisionHistory"></div>
+          </div>
+
+          <div class="debrief-section">
+            <div class="ds-header">// Key Security+ Concepts Tested</div>
+            <div class="ds-body">
+              <div class="key-concepts">
+                <span class="concept-tag">Incident Response Lifecycle</span>
+                <span class="concept-tag">Network Segmentation</span>
+                <span class="concept-tag">Ransomware Defense</span>
+                <span class="concept-tag">HIPAA Compliance</span>
+                <span class="concept-tag">Chain of Command</span>
+                <span class="concept-tag">Tor / Port 9050</span>
+                <span class="concept-tag">Containment vs Eradication</span>
+                <span class="concept-tag">Backup & Recovery</span>
+                <span class="concept-tag">Forensic Preservation</span>
+                <span class="concept-tag">OFAC Sanctions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="debrief-actions">
+          <button class="action-btn action-primary" onclick="retryScenario()">↺ Retry Scenario</button>
+          <button class="action-btn action-secondary" onclick="backToSelect()">← All Scenarios</button>
+          <button class="action-btn action-secondary" onclick="location.href='index.html'">⌂ Home</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="scenario-data.js"></script>
+  <script>
+    let currentScenario = null;
+    let currentNodeId = null;
+    let totalPoints = 0;
+    let maxPoints = 0;
+    let decisionLog = [];
+    let stepCount = 0;
+
+    const THREAT_LEVELS = {
+      1: { label: 'LOW',      color: '#00f5a0', pct: '20%' },
+      2: { label: 'MODERATE', color: '#ffd32a', pct: '45%' },
+      3: { label: 'HIGH',     color: '#ff6b35', pct: '70%' },
+      4: { label: 'CRITICAL', color: '#ff4757', pct: '95%' }
+    };
+
+    function startScenario(id) {
+      currentScenario = SCENARIOS[id];
+      currentNodeId = 'start';
+      totalPoints = 0;
+      maxPoints = 0;
+      decisionLog = [];
+      stepCount = 0;
+
+      // Show intro
+      const intro = currentScenario.intro;
+      document.getElementById('situationText').textContent = intro;
+      document.getElementById('sideTitle').textContent = currentScenario.title;
+      document.getElementById('sideRole').textContent = currentScenario.roles;
+      document.getElementById('tsRole').textContent = currentScenario.roles;
+
+      document.getElementById('scenarioSelect').style.display = 'none';
+      document.getElementById('gameArea').style.display = 'block';
+
+      // Show first node after brief delay
+      setTimeout(() => renderNode('start'), 400);
+    }
+
+    function renderNode(nodeId) {
+      currentNodeId = nodeId;
+      const node = currentScenario.nodes[nodeId];
+      if (!node) return;
+
+      // Handle terminal nodes
+      if (node.isTerminal) {
+        showDebrief(node);
+        return;
+      }
+
+      stepCount++;
+
+      // Update timestamp
+      document.getElementById('tsTime').textContent = node.timeStamp || '—';
+
+      // Update threat
+      const threat = THREAT_LEVELS[node.threatLevel] || THREAT_LEVELS[1];
+      document.getElementById('threatBar').style.width = threat.pct;
+      document.getElementById('threatBar').style.background = threat.color;
+      document.getElementById('threatText').textContent = threat.label;
+      document.getElementById('threatText').style.color = threat.color;
+
+      // Update situation
+      if (node.situation) {
+        document.getElementById('situationText').textContent = node.situation;
+      }
+
+      // Update question
+      document.getElementById('questionText').textContent = node.question;
+
+      // Hide consequence from previous step
+      document.getElementById('consequenceBanner').classList.remove('show');
+
+      // Render choices
+      const container = document.getElementById('choicesContainer');
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      node.choices.forEach((choice, i) => {
+        // Track max points
+        const choiceMax = Math.max(...node.choices.map(c => c.points));
+        if (i === 0) maxPoints += choiceMax;
+
+        const btn = document.createElement('button');
+        btn.className = 'choice';
+        btn.innerHTML = `
+          <div class="choice-letter">${letters[i]}</div>
+          <div class="choice-body">
+            <div class="choice-text">${choice.text}</div>
+            ${choice.tag ? `<div class="choice-tag">${choice.tag}</div>` : ''}
+          </div>
+        `;
+        btn.onclick = () => selectChoice(choice, i, node.choices);
+        container.appendChild(btn);
+      });
+
+      // Add step to tracker
+      addStepDot(stepCount, node.question.slice(0, 35) + '…', 'active');
+
+      // Hide next btn
+      document.getElementById('nextBtn').classList.remove('show');
+
+      // Scroll to top of game panel
+      window.scrollTo({ top: 80, behavior: 'smooth' });
+    }
+
+    function selectChoice(choice, choiceIndex, allChoices) {
+      // Update score
+      totalPoints += choice.points;
+      document.getElementById('sideScore').textContent = totalPoints;
+
+      // Determine quality
+      const maxPts = Math.max(...allChoices.map(c => c.points));
+      const quality = choice.points >= maxPts ? 'optimal'
+                    : choice.points >= maxPts * 0.5 ? 'partial' : 'bad';
+
+      // Style all choices
+      const btns = document.querySelectorAll('.choice');
+      btns.forEach((btn, i) => {
+        if (i === choiceIndex) {
+          btn.classList.add(`selected-${quality}`);
+        } else {
+          btn.classList.add('unselected');
+        }
+        btn.disabled = true;
+      });
+
+      // Show consequence banner
+      const banner = document.getElementById('consequenceBanner');
+      const bannerTag = document.getElementById('bannerTag');
+      const bannerText = document.getElementById('bannerText');
+
+      banner.className = 'consequence-banner show ' + quality;
+      bannerTag.textContent = choice.tag || (quality === 'optimal' ? '✓ Good Decision' : quality === 'partial' ? '⚠ Suboptimal' : '❌ Poor Decision');
+      bannerText.textContent = choice.outcome;
+
+      // Update step dot
+      updateStepDot(stepCount, quality);
+
+      // Log decision
+      decisionLog.push({
+        step: stepCount,
+        question: document.getElementById('questionText').textContent,
+        answer: choice.text,
+        points: choice.points,
+        maxPoints: maxPts,
+        quality
+      });
+
+      // Show next button
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.classList.add('show');
+      nextBtn.dataset.next = choice.next;
+
+      // Scroll to banner
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function nextNode() {
+      const nextId = document.getElementById('nextBtn').dataset.next;
+      renderNode(nextId);
+    }
+
+    function addStepDot(num, label, state) {
+      const list = document.getElementById('stepsList');
+      // Mark previous active as done
+      list.querySelectorAll('.step-dot.active').forEach(d => {
+        d.classList.remove('active');
+        d.classList.add('done');
+      });
+      const dot = document.createElement('div');
+      dot.className = `step-dot ${state}`;
+      dot.id = `step-${num}`;
+      dot.innerHTML = `<div class="dot"></div><span>Step ${num}</span>`;
+      list.appendChild(dot);
+    }
+
+    function updateStepDot(num, quality) {
+      const dot = document.getElementById(`step-${num}`);
+      if (dot) {
+        dot.classList.remove('active');
+        dot.classList.add('done');
+        const d = dot.querySelector('.dot');
+        if (quality === 'optimal') d.style.background = '#00f5a0';
+        else if (quality === 'partial') d.style.background = '#ffd32a';
+        else d.style.background = '#ff4757';
+      }
+    }
+
+    function showDebrief(terminalNode) {
+      document.getElementById('gameArea').style.display = 'none';
+      document.getElementById('debriefArea').style.display = 'block';
+
+      // Calculate score percentage
+      const pct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+
+      // Determine band
+      let band;
+      if (pct >= 85)      band = SCORE_BANDS.optimal;
+      else if (pct >= 65) band = SCORE_BANDS.good;
+      else if (pct >= 40) band = SCORE_BANDS.partial;
+      else                band = SCORE_BANDS.poor;
+
+      // Result icons
+      const icons = { good: '🎖️', partial: '⚡', bad: '💀' };
+      const termType = terminalNode.terminalType || 'partial';
+
+      document.getElementById('debriefIcon').textContent = icons[termType] || '🎖️';
+      document.getElementById('debriefTitle').textContent = band.label;
+      document.getElementById('debriefTitle').style.color = band.color;
+      document.getElementById('debriefRank').textContent = `// ${currentScenario.title} — Complete`;
+      document.getElementById('debriefRank').style.color = band.color;
+      document.getElementById('debriefScoreBig').textContent = totalPoints;
+      document.getElementById('debriefScoreBig').style.color = band.color;
+      document.getElementById('debriefMessage').textContent = band.desc;
+
+      // Outcome banner
+      const ob = document.getElementById('outcomeBanner');
+      ob.className = `outcome-banner outcome-${termType}`;
+      ob.textContent = '📋 ' + terminalNode.message;
+
+      // Decision history
+      const history = document.getElementById('decisionHistory');
+      history.innerHTML = '';
+      decisionLog.forEach((d, i) => {
+        const ptsClass = d.quality === 'optimal' ? 'pts-high' : d.quality === 'partial' ? 'pts-mid' : 'pts-low';
+        const row = document.createElement('div');
+        row.className = 'decision-row';
+        row.innerHTML = `
+          <div class="dr-top">
+            <div class="dr-q">Step ${d.step}</div>
+            <div class="dr-points ${ptsClass}">+${d.points} / ${d.maxPoints} pts</div>
+          </div>
+          <div class="dr-answer">${d.answer}</div>
+        `;
+        history.appendChild(row);
+      });
+
+      // XP award
+      if (window.securityPlusGamification) {
+        window.securityPlusGamification.addXP(Math.round(totalPoints / 2));
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function retryScenario() {
+      const id = currentScenario.id;
+      document.getElementById('debriefArea').style.display = 'none';
+      document.getElementById('stepsList').innerHTML = '';
+      startScenario(id);
+    }
+
+    function backToSelect() {
+      document.getElementById('debriefArea').style.display = 'none';
+      document.getElementById('gameArea').style.display = 'none';
+      document.getElementById('scenarioSelect').style.display = 'block';
+      document.getElementById('stepsList').innerHTML = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
