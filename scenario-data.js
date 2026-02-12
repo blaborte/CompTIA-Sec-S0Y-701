@@ -568,6 +568,284 @@ const SCENARIOS = {
   }
 };
 
+  ,
+
+  phishing_campaign: {
+    id: "phishing_campaign",
+    title: "The Phishing Campaign",
+    subtitle: "Social Engineering Response",
+    difficulty: "Medium",
+    domain: "Threats, Attacks & Mitigations",
+    estimatedTime: "8-12 min",
+    intro: `It's Monday morning at FinVault, a financial services company. Your email security gateway just flagged a surge of inbound messages — 47 emails in 20 minutes, all targeting senior executives. The subject lines are convincing: "Q4 Board Report — Action Required" and "Wire Transfer Confirmation Needed." Your CEO's assistant just called asking if she should open an attachment that "looks totally legit."`,
+    roles: "Security Analyst — FinVault Financial Services",
+    stakes: "Executive credentials, wire transfer fraud, regulatory fines",
+
+    nodes: {
+      start: {
+        id: "start",
+        timeStamp: "08:14:32",
+        threatLevel: 1,
+        situation: "47 suspicious emails hit executive inboxes in 20 minutes. Your CEO's assistant is on the phone asking about an attachment. Your email gateway dashboard shows the emails originated from 'board-reports-finvault.com' — a domain registered yesterday.",
+        question: "The CEO's assistant is waiting on the phone. What do you tell her?",
+        choices: [
+          { text: "Tell her to open it — it looks legitimate enough", next: "opened_attachment", outcome: "The attachment contained a macro-enabled document that installed a keylogger. The CEO's credentials are now compromised.", points: 0, isOptimal: false, tag: "❌ Critical Error" },
+          { text: "Tell her to NOT open it and quarantine the email immediately", next: "quarantined_email", outcome: "Correct. You've protected the CEO's machine. Now you need to handle the broader campaign targeting all executives.", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Tell her to forward it to IT for review first", next: "forwarded_it", outcome: "Better than opening it, but forwarding a potentially malicious attachment spreads the risk to IT's inbox.", points: 10, isOptimal: false, tag: "⚠️ Risky" },
+          { text: "Ignore the call — focus on analyzing the gateway logs first", next: "ignored_call", outcome: "While you analyzed logs, the assistant opened the attachment herself. Credential compromise confirmed.", points: 5, isOptimal: false, tag: "❌ Too Slow" }
+        ]
+      },
+
+      opened_attachment: {
+        id: "opened_attachment",
+        timeStamp: "08:18:00",
+        threatLevel: 3,
+        situation: "Keylogger installed on CEO's machine. Credentials captured and sent to attacker C&C. You need to act fast before the attacker uses the stolen credentials.",
+        question: "CEO credentials are compromised. What is your IMMEDIATE action?",
+        choices: [
+          { text: "Disable the CEO's account and force password reset across all exec accounts", next: "accounts_disabled", outcome: "Fast and correct. Disabling the account before the attacker uses it may have limited damage.", points: 25, isOptimal: true, tag: "✓ Correct" },
+          { text: "Wait and monitor to see if the attacker tries to log in", next: "waited_to_monitor", outcome: "While you watched, the attacker logged into the CEO's email and sent a fraudulent $250,000 wire transfer request to Finance.", points: 0, isOptimal: false, tag: "❌ Too Late" },
+          { text: "Notify the CEO and let them change their own password", next: "ceo_self_reset", outcome: "The CEO is in a meeting. 20 minutes pass. The attacker used the credentials to access the VPN before the reset completed.", points: 10, isOptimal: false, tag: "⚠️ Too Slow" }
+        ]
+      },
+
+      accounts_disabled: {
+        id: "accounts_disabled",
+        timeStamp: "08:22:00",
+        threatLevel: 2,
+        situation: "CEO account disabled. Now you need to handle the broader campaign. 47 executives received the email. Your gateway shows the domain 'board-reports-finvault.com' is still sending. You need to stop further emails from reaching inboxes.",
+        question: "How do you stop the ongoing phishing campaign from reaching more users?",
+        choices: [
+          { text: "Block the sending domain at the email gateway and add it to the blocklist", next: "domain_blocked", outcome: "Correct. Blocking the domain stops new emails. But you should also check if any executives already clicked links.", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Send a company-wide email warning everyone about the phishing attack", next: "broadcast_warning", outcome: "Good intent, but a broadcast email about a phishing attack can itself be mistaken for phishing. Use official communication channels instead.", points: 15, isOptimal: false, tag: "⚠️ Risky Method" },
+          { text: "Delete all 47 emails from executive inboxes manually", next: "manual_delete", outcome: "Manual deletion takes too long and doesn't stop new emails from arriving. Use gateway-level blocking.", points: 10, isOptimal: false, tag: "⚠️ Inefficient" }
+        ]
+      },
+
+      quarantined_email: {
+        id: "quarantined_email",
+        timeStamp: "08:16:45",
+        threatLevel: 1,
+        situation: "CEO's machine is safe. Now you analyze the phishing email headers. You find: the sending domain 'board-reports-finvault.com' was registered yesterday, the email fails DMARC validation, and the 'Reply-To' address is 'cfo@finvault-secure.net' — another fake domain.",
+        question: "Which email authentication failure is MOST significant here?",
+        choices: [
+          { text: "DMARC failure — the domain is not authorized to send on behalf of finvault.com", next: "identified_dmarc", outcome: "Correct. DMARC (Domain-based Message Authentication) failure means the sending domain isn't authorized. This should have been caught and rejected automatically — time to review your DMARC policy.", points: 30, isOptimal: true, tag: "✓ Correct" },
+          { text: "The reply-to address is suspicious", next: "reply_to_focus", outcome: "The reply-to is suspicious, but DMARC failure is the technical authentication indicator. The reply-to is a social engineering tactic.", points: 15, isOptimal: false, tag: "⚠️ Partial" },
+          { text: "The domain was registered yesterday", next: "domain_age_focus", outcome: "New domains are suspicious but not an email authentication failure. DMARC is the definitive technical indicator here.", points: 15, isOptimal: false, tag: "⚠️ Partial" },
+          { text: "All of the above equally", next: "identified_dmarc", outcome: "While all are red flags, DMARC failure is the primary authentication indicator. The others are supporting evidence.", points: 20, isOptimal: false, tag: "⚠️ Partially Correct" }
+        ]
+      },
+
+      identified_dmarc: {
+        id: "identified_dmarc",
+        timeStamp: "08:20:10",
+        threatLevel: 1,
+        situation: "DMARC failure confirmed. You block the sending domain at the gateway. Finance just called — they received a follow-up email from 'ceo@finvault.com' (the real domain this time) asking for an urgent $180,000 wire transfer. The CFO is wondering if they should process it.",
+        question: "An urgent wire transfer request came from what looks like the real CEO email. What is this?",
+        choices: [
+          { text: "Process it — it came from the legitimate CEO domain", next: "wire_processed", outcome: "The attacker compromised the CEO's actual email account through a previously successful phishing attempt. This is Business Email Compromise (BEC). $180,000 is gone.", points: 0, isOptimal: false, tag: "❌ BEC Successful" },
+          { text: "This is Business Email Compromise (BEC) — verify via phone call to CEO directly", next: "bec_caught", outcome: "Excellent. BEC attacks use legitimate or compromised email accounts. Always verify large financial requests via a separate communication channel (phone call, in person).", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Delay the transfer and escalate to your manager", next: "escalated_transfer", outcome: "Escalating is good, but calling the CEO directly to verify is faster and more definitive.", points: 15, isOptimal: false, tag: "⚠️ Slow but Safe" }
+        ]
+      },
+
+      bec_caught: {
+        id: "bec_caught",
+        timeStamp: "08:28:00",
+        threatLevel: 1,
+        situation: "Wire transfer stopped. CEO confirms they never sent that request. The phishing campaign has been fully contained. Now you need to determine what your DMARC policy should have been set to in order to automatically reject these emails.",
+        question: "What DMARC policy would have automatically REJECTED emails failing authentication?",
+        choices: [
+          { text: "p=none — monitor only", next: "dmarc_wrong", outcome: "p=none only monitors and reports — it doesn't reject or quarantine. This is what you had, which is why the emails got through.", points: 5, isOptimal: false, tag: "❌ Monitoring Only" },
+          { text: "p=quarantine — send to spam folder", next: "dmarc_wrong", outcome: "p=quarantine sends failing emails to spam — better, but still delivered. p=reject is the strongest protection.", points: 15, isOptimal: false, tag: "⚠️ Better but Not Best" },
+          { text: "p=reject — block failing emails entirely", next: "dmarc_final", outcome: "Correct. DMARC p=reject instructs receiving mail servers to reject emails that fail authentication. This would have stopped the phishing campaign entirely.", points: 30, isOptimal: true, tag: "✓ Correct" },
+          { text: "DMARC cannot block emails, only SPF can", next: "dmarc_wrong", outcome: "Incorrect. DMARC works alongside SPF and DKIM and can enforce rejection of failing emails with p=reject policy.", points: 0, isOptimal: false, tag: "❌ Incorrect" }
+        ]
+      },
+
+      dmarc_final: { id: "dmarc_final", isTerminal: true, terminalType: "good", timeStamp: "09:00:00", situation: "Campaign stopped. Wire transfer blocked. DMARC policy updated to p=reject. Security awareness training scheduled for all executives. Incident report filed.", outcome: "good", message: "Phishing campaign neutralized. BEC attempt blocked. DMARC hardened to p=reject." },
+      dmarc_wrong: { id: "dmarc_wrong", isTerminal: true, terminalType: "partial", timeStamp: "09:00:00", situation: "Campaign contained but DMARC knowledge gap identified. Policy review scheduled.", outcome: "partial", message: "Campaign contained but email authentication concepts need review." },
+      wire_processed: { id: "wire_processed", isTerminal: true, terminalType: "bad", timeStamp: "08:35:00", situation: "$180,000 wired to attacker account. Wire transfers are nearly impossible to reverse. FBI financial crimes unit notified. Regulatory disclosure required.", outcome: "bad", message: "BEC successful. $180,000 lost. Always verify wire transfers via phone." },
+      domain_blocked: { id: "domain_blocked", isTerminal: true, terminalType: "good", timeStamp: "08:45:00", situation: "Domain blocked. No further phishing emails delivered. All exec accounts audited. Security awareness training scheduled.", outcome: "good", message: "Campaign blocked. Domain quarantined. No credential compromise." },
+      forwarded_it: { id: "forwarded_it", isTerminal: true, terminalType: "partial", timeStamp: "08:30:00", situation: "IT opened the forwarded attachment and got infected. Two machines now compromised instead of zero.", outcome: "partial", message: "Never forward suspicious attachments. Quarantine them instead." },
+      ignored_call: { id: "ignored_call", isTerminal: true, terminalType: "bad", timeStamp: "08:25:00", situation: "Assistant opened the attachment. CEO credentials compromised while you were analyzing logs.", outcome: "bad", message: "Active human risk always takes priority over passive log analysis." },
+      waited_to_monitor: { id: "waited_to_monitor", isTerminal: true, terminalType: "bad", timeStamp: "08:40:00", situation: "$250,000 wire transfer fraudulently initiated from CEO's compromised email before you acted.", outcome: "bad", message: "Monitoring confirmed credentials were stolen. Disable compromised accounts immediately." },
+      ceo_self_reset: { id: "ceo_self_reset", isTerminal: true, terminalType: "partial", timeStamp: "08:38:00", situation: "CEO was in a meeting. VPN accessed by attacker before reset completed. Limited damage but avoidable.", outcome: "partial", message: "IT should disable accounts directly — don't rely on users to self-remediate." },
+      broadcast_warning: { id: "broadcast_warning", isTerminal: true, terminalType: "partial", timeStamp: "08:30:00", situation: "Warning sent. Three employees thought the warning itself was phishing and reported it, causing confusion. Gateway blocking would have been cleaner.", outcome: "partial", message: "Use official IT communication channels for security alerts, not ad-hoc broadcasts." },
+      manual_delete: { id: "manual_delete", isTerminal: true, terminalType: "partial", timeStamp: "08:35:00", situation: "Manual deletion took 18 minutes. 6 more phishing emails arrived during that time. Gateway-level blocking is always faster.", outcome: "partial", message: "Always use automated gateway controls. Manual remediation doesn't scale." },
+      reply_to_focus: { id: "reply_to_focus", isTerminal: true, terminalType: "partial", timeStamp: "08:30:00", situation: "Reply-to flagged and blocked. DMARC gap remains unaddressed for future attacks.", outcome: "partial", message: "DMARC failure is the key technical indicator — it's the authentication system designed for this." },
+      domain_age_focus: { id: "domain_age_focus", isTerminal: true, terminalType: "partial", timeStamp: "08:30:00", situation: "New domain flagged. Useful signal but not a definitive authentication control like DMARC.", outcome: "partial", message: "Domain age is a heuristic. DMARC is the authoritative email authentication control." },
+      escalated_transfer: { id: "escalated_transfer", isTerminal: true, terminalType: "good", timeStamp: "08:35:00", situation: "Transfer delayed, escalated, CEO called. Wire transfer blocked. Slower path but correct outcome.", outcome: "good", message: "Transfer blocked. Next time call CEO directly — faster and more definitive." }
+    }
+  },
+
+  insider_threat: {
+    id: "insider_threat",
+    title: "The Insider Threat",
+    subtitle: "Access Controls & Monitoring",
+    difficulty: "Medium",
+    domain: "Identity, Access & Architecture",
+    estimatedTime: "8-12 min",
+    intro: `You're the Security Engineer at DataVault Corp, a cloud storage company. Your SIEM flagged unusual behavior from Marcus Chen, a Senior Database Administrator who gave notice 3 weeks ago and leaves in 4 days. Over the past week, SIEM shows he's accessed 3x his normal data volume, run unusual bulk export queries, and connected to the VPN at 2AM twice. HR has flagged him as "hostile to management" after a compensation dispute.`,
+    roles: "Security Engineer — DataVault Corp",
+    stakes: "Intellectual property, customer data, trade secrets",
+
+    nodes: {
+      start: {
+        id: "start",
+        timeStamp: "14:05:17",
+        threatLevel: 2,
+        situation: "SIEM alert: Marcus Chen, DBA with 4 days remaining, has accessed 3x normal data volume this week, run bulk export queries on the customer database, and connected to VPN at 2AM on two occasions. He still has full DBA privileges.",
+        question: "What is your FIRST step when investigating a potential insider threat?",
+        choices: [
+          { text: "Immediately revoke all of Marcus's access rights", next: "revoked_immediately", outcome: "Revoking access tipped Marcus off. He noticed within minutes and called HR claiming discrimination. Without documented evidence, your company is now exposed to a wrongful termination lawsuit.", points: 5, isOptimal: false, tag: "⚠️ Premature" },
+          { text: "Confront Marcus directly and ask what he's been doing", next: "confronted_marcus", outcome: "Confronting Marcus without evidence or HR present was a mistake. He denied everything, deleted several files before IT could stop him, and lawyered up.", points: 0, isOptimal: false, tag: "❌ Critical Error" },
+          { text: "Escalate to HR and Legal, collect evidence quietly before acting", next: "escalated_hr_legal", outcome: "Correct. Insider threat investigations require HR and Legal involvement before any action. Collecting evidence first prevents tipping off the subject and protects the company legally.", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Ignore it — he's leaving in 4 days anyway", next: "ignored_threat", outcome: "Marcus exfiltrated the entire customer database and source code repository in his final 4 days. The data appeared on a competitor's systems 2 weeks later.", points: 0, isOptimal: false, tag: "❌ Critical Error" }
+        ]
+      },
+
+      escalated_hr_legal: {
+        id: "escalated_hr_legal",
+        timeStamp: "14:22:00",
+        threatLevel: 2,
+        situation: "HR and Legal are now involved. Legal counsel advises covert monitoring is permitted. You review Marcus's activity logs for the past 30 days. You find he's exported 47GB of data — 40x his historical baseline. The exports went to an external USB device connected to his workstation.",
+        question: "You've confirmed 47GB was copied to a USB drive. What monitoring should you have had in place to PREVENT this?",
+        choices: [
+          { text: "DLP (Data Loss Prevention) with USB write blocking for sensitive data", next: "dlp_identified", outcome: "Correct. DLP policies can block or alert on unauthorized USB transfers of sensitive data. This is a key preventive control that should have flagged or blocked this exfiltration.", points: 30, isOptimal: true, tag: "✓ Correct" },
+          { text: "Antivirus software on all workstations", next: "av_wrong", outcome: "AV detects malware, not authorized users copying files. DLP is the right control for data exfiltration prevention.", points: 5, isOptimal: false, tag: "❌ Wrong Control" },
+          { text: "Firewalls blocking outbound traffic", next: "firewall_wrong", outcome: "Firewalls wouldn't stop a USB transfer — the data never went over the network. DLP with endpoint controls is the right answer.", points: 5, isOptimal: false, tag: "❌ Wrong Control" },
+          { text: "Background checks during hiring", next: "bg_check_wrong", outcome: "Background checks are a hiring control, not a preventive control for exfiltration. DLP addresses the technical gap.", points: 0, isOptimal: false, tag: "❌ Wrong Phase" }
+        ]
+      },
+
+      dlp_identified: {
+        id: "dlp_identified",
+        timeStamp: "14:45:00",
+        threatLevel: 2,
+        situation: "DLP gap documented. Legal has enough evidence to act. Now HR wants to know how to handle Marcus's remaining access for his last 4 days. You need to balance operational needs (he's transitioning projects) with security risk.",
+        question: "How should Marcus's access be managed for his final 4 days?",
+        choices: [
+          { text: "Keep full access — he needs it to complete handover documentation", next: "kept_full_access", outcome: "Marcus copied three more project repositories on day 3. Full access during notice period for a hostile employee with confirmed exfiltration history was a serious mistake.", points: 0, isOptimal: false, tag: "❌ Critical Error" },
+          { text: "Apply least privilege — limit to only what's needed for handover, remove DBA rights", next: "least_privilege", outcome: "Correct. Least privilege applied during the offboarding period. Marcus can complete handover documentation without DBA-level database access.", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Terminate immediately with security escort", next: "immediate_termination", outcome: "Legal advises this is possible given the evidence, but immediate termination without completing handover may disrupt critical systems Marcus maintains.", points: 15, isOptimal: false, tag: "⚠️ Legally Risky" },
+          { text: "Revoke VPN access only — keep local access", next: "vpn_only", outcome: "VPN access revoked but Marcus still had full local DBA rights. He ran another bulk export from his desk.", points: 5, isOptimal: false, tag: "❌ Insufficient" }
+        ]
+      },
+
+      least_privilege: {
+        id: "least_privilege",
+        timeStamp: "15:10:00",
+        threatLevel: 1,
+        situation: "Access reduced to least privilege. Handover proceeding under monitoring. On Marcus's last day, the access revocation checklist is being completed. What is the MOST critical account to disable FIRST on his last day?",
+        question: "Marcus's last day. Which account type is most critical to revoke FIRST?",
+        choices: [
+          { text: "His email account", next: "wrong_first_revoke", outcome: "Email is important but not the most dangerous. His privileged DBA/admin accounts have direct access to sensitive data and systems.", points: 10, isOptimal: false, tag: "⚠️ Not First Priority" },
+          { text: "His privileged admin/DBA accounts", next: "correct_first_revoke", outcome: "Correct. Privileged accounts have the highest blast radius. Always revoke elevated privileges before standard accounts during offboarding.", points: 30, isOptimal: true, tag: "✓ Correct" },
+          { text: "His VPN access", next: "wrong_first_revoke", outcome: "VPN is external access but his internal privileged accounts pose greater immediate risk. Revoke highest privilege first.", points: 10, isOptimal: false, tag: "⚠️ Not First Priority" },
+          { text: "All simultaneously using an automated offboarding script", next: "automated_offboard", outcome: "Automated simultaneous revocation is actually best practice for offboarding. Minimizes the window between last day and full deprovisioning.", points: 25, isOptimal: false, tag: "✓ Also Good" }
+        ]
+      },
+
+      correct_first_revoke: { id: "correct_first_revoke", isTerminal: true, terminalType: "good", timeStamp: "17:00:00", situation: "Privileged accounts revoked first. Full offboarding completed. Forensic evidence preserved. Legal case documented. DLP controls implemented to prevent recurrence.", outcome: "good", message: "Insider threat contained. Evidence collected. DLP gap closed. Offboarding process hardened." },
+      automated_offboard: { id: "automated_offboard", isTerminal: true, terminalType: "good", timeStamp: "17:00:00", situation: "Automated offboarding executed simultaneously. All accounts revoked in seconds. Best practice implemented.", outcome: "good", message: "Automated offboarding is best practice. Zero window for last-minute exfiltration." },
+      wrong_first_revoke: { id: "wrong_first_revoke", isTerminal: true, terminalType: "partial", timeStamp: "17:00:00", situation: "Offboarding completed but order of revocation left a brief window. No additional exfiltration occurred this time, but privileged accounts should always be first.", outcome: "partial", message: "Correct outcome but wrong priority order. Privileged accounts always first in offboarding." },
+      revoked_immediately: { id: "revoked_immediately", isTerminal: true, terminalType: "partial", timeStamp: "14:30:00", situation: "Access revoked but without evidence documentation first. HR lawsuit risk is significant. Always collect evidence and involve Legal before acting on insider threat suspicions.", outcome: "partial", message: "Right instinct, wrong order. Collect evidence with Legal first, then act." },
+      confronted_marcus: { id: "confronted_marcus", isTerminal: true, terminalType: "bad", timeStamp: "14:20:00", situation: "Marcus deleted evidence and lawyered up. The case is now legally complicated and much of the exfiltrated data is unrecoverable.", outcome: "bad", message: "Never confront an insider threat suspect directly. Evidence collection and HR/Legal must come first." },
+      ignored_threat: { id: "ignored_threat", isTerminal: true, terminalType: "bad", timeStamp: "18:00:00", situation: "Full database and source code exfiltrated. Appeared on competitor systems 2 weeks later. Estimated $2M in damages.", outcome: "bad", message: "Departing employees with privileged access and behavioral red flags must be investigated immediately." },
+      kept_full_access: { id: "kept_full_access", isTerminal: true, terminalType: "bad", timeStamp: "16:00:00", situation: "Three more repositories exfiltrated in final days. Full access to a confirmed hostile exfiltrator is never justified.", outcome: "bad", message: "Never retain full access for a hostile employee with confirmed exfiltration history." },
+      immediate_termination: { id: "immediate_termination", isTerminal: true, terminalType: "partial", timeStamp: "15:00:00", situation: "Terminated immediately. Handover incomplete. Two critical database systems experienced issues because transition documentation was never completed.", outcome: "partial", message: "Immediate termination is sometimes right but must be balanced against operational continuity risk." },
+      vpn_only: { id: "vpn_only", isTerminal: true, terminalType: "bad", timeStamp: "15:30:00", situation: "VPN revoked but local DBA rights remained. Another bulk export occurred from inside the office.", outcome: "bad", message: "Partial access revocation is dangerous. Remove all privileged access, not just remote access." },
+      av_wrong: { id: "av_wrong", isTerminal: true, terminalType: "partial", timeStamp: "15:00:00", situation: "AV won't stop authorized users copying data. DLP is the correct preventive control.", outcome: "partial", message: "AV detects malware. DLP prevents data exfiltration by authorized users." },
+      firewall_wrong: { id: "firewall_wrong", isTerminal: true, terminalType: "partial", timeStamp: "15:00:00", situation: "Firewalls don't stop USB transfers. Endpoint DLP is needed.", outcome: "partial", message: "Firewalls protect network boundaries. DLP protects against endpoint data exfiltration." },
+      bg_check_wrong: { id: "bg_check_wrong", isTerminal: true, terminalType: "partial", timeStamp: "15:00:00", situation: "Background checks are pre-employment. DLP is the technical preventive control for exfiltration.", outcome: "partial", message: "Match controls to the phase: DLP for technical exfiltration prevention, background checks for hiring." }
+    }
+  },
+
+  cloud_misconfiguration: {
+    id: "cloud_misconfiguration",
+    title: "Cloud Misconfiguration",
+    subtitle: "Cloud Security & Data Exposure",
+    difficulty: "Medium",
+    domain: "Architecture & Implementation",
+    estimatedTime: "8-12 min",
+    intro: `It's Thursday afternoon at RetailNow, an e-commerce company. A security researcher just emailed your team — they've discovered a publicly accessible AWS S3 bucket named 'retailnow-customer-backup-2024' containing what appears to be customer order data including names, addresses, and partial payment info. They've given you 48 hours before they publish their findings. Your social media team just spotted the bucket URL appearing in a Reddit thread titled "Found something interesting..."`,
+    roles: "Cloud Security Engineer — RetailNow E-Commerce",
+    stakes: "Customer PII, payment data, regulatory fines, brand reputation",
+
+    nodes: {
+      start: {
+        id: "start",
+        timeStamp: "15:44:09",
+        threatLevel: 2,
+        situation: "A public S3 bucket with customer data has been discovered by a security researcher AND is spreading on Reddit. You have 48 hours before the researcher publishes. The Reddit thread has 47 upvotes and growing.",
+        question: "What is your FIRST action?",
+        choices: [
+          { text: "Make the S3 bucket private immediately", next: "bucket_private", outcome: "Correct first move. Closing the exposure stops new access. Now you need to assess what was already accessed.", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Post on Reddit asking people not to share the link", next: "posted_reddit", outcome: "Engaging on Reddit drew more attention. The thread now has 300 upvotes. The Streisand Effect made it worse.", points: 0, isOptimal: false, tag: "❌ Streisand Effect" },
+          { text: "Contact the security researcher to understand the full scope first", next: "contacted_researcher", outcome: "Reasonable but the bucket is still public while you wait for a response. Close the exposure first, then scope.", points: 15, isOptimal: false, tag: "⚠️ Bucket Still Open" },
+          { text: "Notify customers immediately before doing anything else", next: "notified_customers_first", outcome: "Customer notification before you understand the scope means you may send incorrect information. Remediate first, then notify accurately.", points: 10, isOptimal: false, tag: "⚠️ Wrong Order" }
+        ]
+      },
+
+      bucket_private: {
+        id: "bucket_private",
+        timeStamp: "15:47:00",
+        threatLevel: 2,
+        situation: "Bucket is now private. You check S3 access logs. The bucket was publicly accessible for 23 days. During that time: 14,847 unique IPs accessed it, 2.3GB of data was downloaded, and the data includes names, addresses, emails, and last-4 of payment cards for 52,000 customers.",
+        question: "52,000 customers' data was exposed for 23 days. Under most US state breach notification laws, when must customers be notified?",
+        choices: [
+          { text: "Within 30-90 days depending on state law", next: "notification_correct", outcome: "Correct. Most US state breach notification laws require notification within 30-90 days of discovering a breach. Some states like California (30 days) are stricter than others.", points: 30, isOptimal: true, tag: "✓ Correct" },
+          { text: "Within 24 hours", next: "notification_wrong", outcome: "24 hours is not a standard US state requirement (that's closer to GDPR's 72-hour supervisory authority notification). US state laws typically allow 30-90 days.", points: 5, isOptimal: false, tag: "❌ Incorrect" },
+          { text: "Notification is optional if data wasn't encrypted", next: "notification_wrong2", outcome: "Lack of encryption doesn't make notification optional — it often makes it mandatory. Many state laws require notification specifically when unencrypted data is exposed.", points: 0, isOptimal: false, tag: "❌ Incorrect" },
+          { text: "Only if customers ask about it", next: "notification_wrong", outcome: "Breach notification is a legal requirement, not optional customer service. Proactive notification is required by law.", points: 0, isOptimal: false, tag: "❌ Incorrect" }
+        ]
+      },
+
+      notification_correct: {
+        id: "notification_correct",
+        timeStamp: "16:10:00",
+        threatLevel: 2,
+        situation: "Legal team engaged. Now you need to investigate the ROOT CAUSE. How did this bucket become public? You check AWS CloudTrail logs and find: 23 days ago, a junior developer ran 'aws s3api put-bucket-acl --bucket retailnow-customer-backup-2024 --acl public-read' while setting up a demo environment. They copied the command from a StackOverflow post without understanding it.",
+        question: "What technical control would have PREVENTED this misconfiguration?",
+        choices: [
+          { text: "AWS S3 Block Public Access setting at the account level", next: "correct_control", outcome: "Correct. AWS S3 Block Public Access is an account-level setting that prevents any bucket from being made public, overriding individual bucket ACLs. This is a critical preventive control.", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Better developer training", next: "training_only", outcome: "Training is important but not a technical control. Human error is inevitable — you need technical guardrails that make misconfigurations impossible or trigger alerts.", points: 10, isOptimal: false, tag: "⚠️ Not Technical" },
+          { text: "Antivirus on the developer's workstation", next: "av_irrelevant", outcome: "AV detects malware — it has no relevance to S3 bucket ACL misconfigurations.", points: 0, isOptimal: false, tag: "❌ Irrelevant" },
+          { text: "A stronger password policy for AWS accounts", next: "password_irrelevant", outcome: "Password strength doesn't prevent authorized users from making configuration mistakes.", points: 0, isOptimal: false, tag: "❌ Irrelevant" }
+        ]
+      },
+
+      correct_control: {
+        id: "correct_control",
+        timeStamp: "16:30:00",
+        threatLevel: 1,
+        situation: "Root cause identified. S3 Block Public Access now enabled at account level. Security researcher replied positively and agreed not to publish given your fast response. Now your CISO asks: going forward, what process should catch misconfigurations BEFORE they reach production?",
+        question: "What ongoing process best catches cloud misconfigurations before they cause incidents?",
+        choices: [
+          { text: "CSPM — Cloud Security Posture Management tools that continuously scan for misconfigurations", next: "cspm_final", outcome: "Correct. CSPM tools continuously monitor cloud environments for misconfigurations, policy violations, and compliance gaps — catching issues before they become incidents.", points: 30, isOptimal: true, tag: "✓ Optimal" },
+          { text: "Manual monthly security audits", next: "manual_audit", outcome: "Monthly audits catch issues too slowly. Cloud environments change constantly — automated continuous monitoring is essential.", points: 10, isOptimal: false, tag: "⚠️ Too Slow" },
+          { text: "Penetration testing quarterly", next: "pentest_slow", outcome: "Pentests are valuable but quarterly cadence is too slow for cloud misconfiguration detection. CSPM provides continuous coverage.", points: 15, isOptimal: false, tag: "⚠️ Too Infrequent" },
+          { text: "Restrict all developers from cloud console access", next: "too_restrictive", outcome: "Overly restrictive — developers need console access. Preventive controls (Block Public Access) and detective controls (CSPM) are the right balance.", points: 5, isOptimal: false, tag: "⚠️ Too Restrictive" }
+        ]
+      },
+
+      cspm_final: { id: "cspm_final", isTerminal: true, terminalType: "good", timeStamp: "17:30:00", situation: "CSPM deployed. S3 Block Public Access enabled. Customers notified within legal timelines. Security researcher credited. Incident turned into a security improvement opportunity.", outcome: "good", message: "Excellent response. Exposure closed fast, root cause fixed, CSPM implemented for ongoing protection." },
+      manual_audit: { id: "manual_audit", isTerminal: true, terminalType: "partial", timeStamp: "17:30:00", situation: "Monthly audits scheduled but CSPM would catch misconfigurations in real time. Next misconfiguration may not be caught for 30 days.", outcome: "partial", message: "Manual audits are better than nothing but CSPM provides continuous automated protection." },
+      pentest_slow: { id: "pentest_slow", isTerminal: true, terminalType: "partial", timeStamp: "17:30:00", situation: "Quarterly pentests valuable but insufficient for cloud monitoring frequency.", outcome: "partial", message: "Pentests and CSPM serve different purposes. CSPM for continuous misconfiguration detection." },
+      too_restrictive: { id: "too_restrictive", isTerminal: true, terminalType: "partial", timeStamp: "17:30:00", situation: "Restricting console access slowed development velocity significantly with minimal security gain.", outcome: "partial", message: "Balance security with usability. Preventive and detective controls beat blanket restrictions." },
+      posted_reddit: { id: "posted_reddit", isTerminal: true, terminalType: "bad", timeStamp: "16:00:00", situation: "Streisand Effect. Thread went viral. 15,000 views. National tech press picked it up. Bucket still public for another 2 hours during the chaos.", outcome: "bad", message: "Never engage with public exposure threads — it amplifies attention. Close the bucket first, always." },
+      contacted_researcher: { id: "contacted_researcher", isTerminal: true, terminalType: "partial", timeStamp: "16:00:00", situation: "Bucket remained public for 45 more minutes while awaiting researcher response. Additional 800 IPs accessed the data.", outcome: "partial", message: "Close the exposure FIRST. Scoping and investigation come after the immediate risk is mitigated." },
+      notified_customers_first: { id: "notified_customers_first", isTerminal: true, terminalType: "partial", timeStamp: "16:00:00", situation: "Notifications sent with incomplete information. Had to send a correction email, causing confusion and additional reputational damage.", outcome: "partial", message: "Remediate and scope first, then notify accurately. Inaccurate notifications can be worse than delayed ones." },
+      notification_wrong: { id: "notification_wrong", isTerminal: true, terminalType: "partial", timeStamp: "16:30:00", situation: "Notification timeline misunderstood. Legal team corrected the plan. 30-90 days is the US standard — not 24 hours (that's GDPR).", outcome: "partial", message: "Know your jurisdiction. GDPR = 72hrs to authorities. US state laws = 30-90 days to individuals." },
+      notification_wrong2: { id: "notification_wrong2", isTerminal: true, terminalType: "bad", timeStamp: "16:30:00", situation: "Failure to notify resulted in regulatory action. Most US state laws mandate notification for unencrypted PII breaches regardless of other factors.", outcome: "bad", message: "Breach notification is a legal requirement. Unencrypted data exposure typically triggers mandatory notification." },
+      training_only: { id: "training_only", isTerminal: true, terminalType: "partial", timeStamp: "16:45:00", situation: "Training improved but another misconfiguration occurred 3 months later. Technical controls prevent what training cannot.", outcome: "partial", message: "Training + technical controls. S3 Block Public Access makes public buckets impossible — training alone doesn't." },
+      av_irrelevant: { id: "av_irrelevant", isTerminal: true, terminalType: "bad", timeStamp: "16:45:00", situation: "AV has no relevance to cloud configuration management.", outcome: "bad", message: "Match controls to threats. AV ≠ cloud misconfiguration prevention." },
+      password_irrelevant: { id: "password_irrelevant", isTerminal: true, terminalType: "bad", timeStamp: "16:45:00", situation: "Password policy doesn't prevent authorized users from misconfiguring resources.", outcome: "bad", message: "Password policies prevent unauthorized access. CSPM and Block Public Access prevent misconfigurations." }
+    }
+  }
+};
+
 // Scoring bands
 const SCORE_BANDS = {
   optimal: { min: 85, label: "Elite Analyst", color: "#00f5a0", desc: "Outstanding. You followed best practices at every critical decision point." },

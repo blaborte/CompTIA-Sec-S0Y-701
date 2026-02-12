@@ -470,7 +470,7 @@
         </div>
 
         <!-- Coming soon cards -->
-        <div class="scenario-card coming-soon">
+        <div class="scenario-card" onclick="startScenario('phishing_campaign')">
           <div class="card-top">
             <div class="card-icon">🎣</div>
             <div class="card-diff diff-medium">Medium</div>
@@ -480,11 +480,12 @@
           <div class="card-desc">A targeted spearphishing campaign is hitting your executives. Credential harvesting, BEC attempts, and a potential wire transfer fraud — can you stop it in time?</div>
           <div class="card-meta">
             <div class="meta-item">Domain: <span>Threats & Attacks</span></div>
-            <div class="meta-item">Time: <span>Coming Soon</span></div>
+            <div class="meta-item">Time: <span>8-12 min</span></div>
           </div>
+          <div class="card-cta">▶ Start Scenario →</div>
         </div>
 
-        <div class="scenario-card coming-soon">
+        <div class="scenario-card" onclick="startScenario('insider_threat')">
           <div class="card-top">
             <div class="card-icon">👤</div>
             <div class="card-diff diff-medium">Medium</div>
@@ -494,22 +495,24 @@
           <div class="card-desc">A disgruntled employee with elevated privileges is exfiltrating sensitive data. Monitoring logs suggest it's been happening for weeks. How do you handle it without tipping them off?</div>
           <div class="card-meta">
             <div class="meta-item">Domain: <span>Identity & Access</span></div>
-            <div class="meta-item">Time: <span>Coming Soon</span></div>
+            <div class="meta-item">Time: <span>8-12 min</span></div>
           </div>
+          <div class="card-cta">▶ Start Scenario →</div>
         </div>
 
-        <div class="scenario-card coming-soon">
+        <div class="scenario-card" onclick="startScenario('cloud_misconfiguration')">
           <div class="card-top">
             <div class="card-icon">☁️</div>
             <div class="card-diff diff-medium">Medium</div>
           </div>
           <div class="card-title">Cloud Misconfiguration</div>
           <div class="card-subtitle">Cloud Security & Data Exposure</div>
-          <div class="card-desc">A misconfigured S3 bucket has exposed 50,000 customer records. The data is indexed by search engines. You have hours before it goes viral on social media.</div>
+          <div class="card-desc">A misconfigured S3 bucket has exposed 52,000 customer records. A security researcher found it and Reddit is sharing the link. You have 48 hours before it goes public.</div>
           <div class="card-meta">
             <div class="meta-item">Domain: <span>Architecture & Design</span></div>
-            <div class="meta-item">Time: <span>Coming Soon</span></div>
+            <div class="meta-item">Time: <span>8-12 min</span></div>
           </div>
+          <div class="card-cta">▶ Start Scenario →</div>
         </div>
       </div>
     </main>
@@ -598,18 +601,7 @@
           <div class="debrief-section">
             <div class="ds-header">// Key Security+ Concepts Tested</div>
             <div class="ds-body">
-              <div class="key-concepts">
-                <span class="concept-tag">Incident Response Lifecycle</span>
-                <span class="concept-tag">Network Segmentation</span>
-                <span class="concept-tag">Ransomware Defense</span>
-                <span class="concept-tag">HIPAA Compliance</span>
-                <span class="concept-tag">Chain of Command</span>
-                <span class="concept-tag">Tor / Port 9050</span>
-                <span class="concept-tag">Containment vs Eradication</span>
-                <span class="concept-tag">Backup & Recovery</span>
-                <span class="concept-tag">Forensic Preservation</span>
-                <span class="concept-tag">OFAC Sanctions</span>
-              </div>
+              <div class="key-concepts" id="keyConcepts"></div>
             </div>
           </div>
         </div>
@@ -631,6 +623,13 @@
     let maxPoints = 0;
     let decisionLog = [];
     let stepCount = 0;
+
+    const SCENARIO_CONCEPTS = {
+      midnight_breach:        ['Incident Response Lifecycle','Network Segmentation','Ransomware Defense','HIPAA Compliance','Chain of Command','Tor / Port 9050','Containment vs Eradication','Backup & Recovery','Forensic Preservation','OFAC Sanctions'],
+      phishing_campaign:      ['Phishing / Spearphishing','DMARC / SPF / DKIM','Business Email Compromise (BEC)','Email Header Analysis','Social Engineering','Domain Spoofing','Incident Containment','Wire Transfer Fraud','Security Awareness'],
+      insider_threat:         ['Insider Threat Detection','Least Privilege','DLP — Data Loss Prevention','Evidence Preservation','HR & Legal Escalation','Offboarding Procedures','SIEM Alerting','Privileged Account Management','Access Revocation'],
+      cloud_misconfiguration: ['S3 Bucket ACLs','Cloud Security Posture Management (CSPM)','Breach Notification Laws','GDPR vs US State Laws','Data Exposure Response','Root Cause Analysis','AWS Block Public Access','Responsible Disclosure','PII Protection']
+    };
 
     const THREAT_LEVELS = {
       1: { label: 'LOW',      color: '#00f5a0', pct: '20%' },
@@ -859,6 +858,10 @@
         `;
         history.appendChild(row);
       });
+
+      // Key concepts
+      const concepts = SCENARIO_CONCEPTS[currentScenario.id] || [];
+      document.getElementById('keyConcepts').innerHTML = concepts.map(c => `<span class="concept-tag">${c}</span>`).join('');
 
       // XP award
       if (window.securityPlusGamification) {
