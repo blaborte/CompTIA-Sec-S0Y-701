@@ -193,6 +193,37 @@
   .exam-card:nth-child(3) .exam-title { color: var(--yellow); }
   .exam-card:nth-child(4) .exam-title { color: var(--accent2); }
   .exam-card:nth-child(5) .exam-title { color: var(--accent); }
+  .exam-card:nth-child(6) .exam-title { color: var(--green); }
+
+  .exam-card.random-card {
+    border-style: dashed;
+    border-color: var(--green);
+    background: linear-gradient(135deg, rgba(0, 245, 160, 0.03), var(--bg2));
+  }
+
+  .exam-card.random-card:hover {
+    border-color: var(--green);
+    border-style: solid;
+    box-shadow: 0 8px 24px rgba(0, 245, 160, 0.15);
+  }
+
+  .exam-card.random-card .exam-arrow {
+    color: var(--green);
+  }
+
+  .random-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(0, 245, 160, 0.1);
+    border: 1px solid var(--green);
+    color: var(--green);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 
   .exam-desc {
     color: var(--muted);
@@ -312,6 +343,14 @@
           <div class="exam-title">Practice Test 2</div>
           <div class="exam-desc">25 questions covering Zero Trust, encryption, PKI, honeypots, and secure protocols</div>
           <div class="exam-arrow">START EXAM →</div>
+        </a>
+
+        <a href="RandomTest.html" class="exam-card random-card">
+          <div class="random-badge">⚡ New</div>
+          <div class="exam-label">Mixed Sources</div>
+          <div class="exam-title">Random Test Generator</div>
+          <div class="exam-desc">Customize your session — pick 10, 20, or 30 questions from Messer or ExamCompass, with optional timed mode</div>
+          <div class="exam-arrow">GENERATE TEST →</div>
         </a>
       </div>
     </div>
