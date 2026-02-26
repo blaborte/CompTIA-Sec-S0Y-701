@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | ExamCompass Practice Test 3</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
+  .timer-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  #timer {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .header-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+
+  .header-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .header-btn.primary {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  main {
+    display: flex;
+    min-height: calc(100vh - 70px);
+  }
+
+  .sidebar {
+    width: 280px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem;
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+  }
+
+  .sidebar-title {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .q-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+
+  .q-dot {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+
+  .q-dot:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .q-dot.answered {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .q-dot.active {
+    outline: 2px solid var(--yellow);
+    outline-offset: 1px;
+  }
+
+  .q-dot.correct {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--bg);
+  }
+
+  .q-dot.incorrect {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--bg);
+  }
+
+  .score-panel {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    display: none;
+  }
+
+  .score-panel.visible {
+    display: block;
+  }
+
+  .score-big {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  .content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .question-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .question-number {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .question-text {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  .multi-select-note {
+    color: var(--yellow);
+    font-size: 0.9rem;
+    font-family: var(--mono);
+    margin-top: 0.5rem;
+  }
+
+  .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .answer {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .answer:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .answer.selected {
+    border-color: var(--accent);
+    background: rgba(0, 212, 255, 0.1);
+  }
+
+  .answer.correct {
+    border-color: var(--green);
+    background: rgba(0, 245, 160, 0.1);
+  }
+
+  .answer.incorrect {
+    border-color: var(--red);
+    background: rgba(255, 71, 87, 0.1);
+  }
+
+  .answer input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .answer-text {
+    flex: 1;
+    font-size: 1rem;
+  }
+
+  .answer-indicator {
+    font-size: 1.1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .answer.correct .check { opacity: 1; color: var(--green); }
+  .answer.incorrect .cross { opacity: 1; color: var(--red); }
+
+  .explanation {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: none;
+  }
+
+  .explanation.show {
+    display: block;
+  }
+
+  .explanation-title {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .explanation-text {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .navigation {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .nav-btn.primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .check-btn {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    margin-right: auto;
+  }
+
+  .check-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  /* Results Screen */
+  .results-screen {
+    display: none;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .results-screen.show {
+    display: block;
+  }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .results-title {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .results-score {
+    font-family: var(--mono);
+    font-size: 5rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .result-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .result-card-value {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-card-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .results-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .result-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.9rem 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .result-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .result-btn.primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Legend */
+  .legend {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .results-grid { grid-template-columns: 1fr; }
+    .results-score { font-size: 3.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span>BL</span> // SECURITY+ SY0-701 — PRACTICE TEST 3
+  </div>
+  <div class="timer-wrap">
+    <span id="timer">90:00</span>
+    <button class="header-btn primary" id="timerBtn" onclick="toggleTimer()">PAUSE</button>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <div class="sidebar-title">// Question Navigator</div>
+    <div class="q-grid" id="questionGrid"></div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Answered</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Correct</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Incorrect</div>
+      <div class="legend-item"><div class="legend-dot" style="outline:2px solid var(--yellow);outline-offset:1px;background:var(--bg3)"></div> Current</div>
+    </div>
+
+    <div class="score-panel" id="scorePanel">
+      <div class="score-big" id="scoreBig">--</div>
+      <div class="score-label">FINAL SCORE</div>
+    </div>
+  </aside>
+
+  <div class="content">
+    <div class="question-container" id="questionContainer"></div>
+    <div class="results-screen" id="results">
+      <div class="results-header">
+        <div class="results-title">// Test Complete — Practice Test 3</div>
+        <div class="results-score" id="resultsScore">--</div>
+      </div>
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-card-value" style="color:var(--green)" id="correctCount">0</div>
+          <div class="result-card-label">Correct</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-value" style="color:var(--red)" id="incorrectCount">0</div>
+          <div class="result-card-label">Incorrect</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-value" style="color:var(--accent)" id="percentageScore">0%</div>
+          <div class="result-card-label">Percentage</div>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="result-btn primary" onclick="reviewAnswers()">Review Answers</button>
+        <button class="result-btn" onclick="restartTest()">Restart Test</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const questions = [
+    {
+      id: 1,
+      text: "The MIME specification extends the email message format beyond plain text, enabling the transfer of graphics, audio, and video files over the Internet mail system. S/MIME is an enhanced version of the MIME protocol that enables email security features by providing encryption, authentication, message integrity, and other related services.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "S/MIME (Secure/Multipurpose Internet Mail Extensions) is indeed an enhanced version of MIME that adds security features including encryption, digital signatures, authentication, and message integrity to email communications."
+    },
+    {
+      id: 2,
+      text: "What is the name of a network protocol that enables secure file transfer over SSH?",
+      type: "single",
+      answers: ["TFTP", "SFTP", "Telnet", "FTPS"],
+      correct: [1],
+      explanation: "SFTP (SSH File Transfer Protocol) is a network protocol that provides secure file transfer capabilities over an SSH (Secure Shell) connection. TFTP is Trivial File Transfer Protocol (no encryption), Telnet is an unsecured remote access protocol, and FTPS is FTP over SSL/TLS — not SSH."
+    },
+    {
+      id: 3,
+      text: "SFTP is an extension of the FTP protocol that adds support for SSL/TLS encryption.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [1],
+      explanation: "FALSE. SFTP (SSH File Transfer Protocol) operates over SSH, not SSL/TLS. It is a completely different protocol from FTP and is not an extension of FTP. FTPS is the protocol that adds SSL/TLS encryption to traditional FTP."
+    },
+    {
+      id: 4,
+      text: "A type of cryptographic network protocol for secure data communication, remote command-line login, remote command execution, and other secure network services between two networked computers is known as:",
+      type: "single",
+      answers: ["RDP", "SSH", "Telnet", "SCP"],
+      correct: [1],
+      explanation: "SSH (Secure Shell) is a cryptographic network protocol used for secure remote login, command execution, and data communication between networked computers. RDP is for remote desktop access, Telnet is unsecured, and SCP (Secure Copy Protocol) uses SSH but is specifically for file transfers."
+    },
+    {
+      id: 5,
+      text: "Which of the answers listed below refers to a suite of protocols and technologies providing encryption, authentication, and data integrity for network traffic?",
+      type: "single",
+      answers: ["TLS", "SSH", "IPsec", "VPN"],
+      correct: [2],
+      explanation: "IPsec (Internet Protocol Security) is a suite of protocols that provides encryption, authentication, and data integrity for IP network traffic. TLS secures application-layer connections, SSH secures remote sessions, and VPN is a broader concept using various tunneling protocols."
+    },
+    {
+      id: 6,
+      text: "Which part of IPsec provides authentication, integrity, and confidentiality?",
+      type: "single",
+      answers: ["SPD", "PFS", "AH", "ESP"],
+      correct: [3],
+      explanation: "ESP (Encapsulating Security Payload) provides all three: authentication, integrity, AND confidentiality (encryption) for IPsec traffic. AH (Authentication Header) provides only authentication and integrity — not confidentiality. SPD is the Security Policy Database, and PFS is Perfect Forward Secrecy."
+    },
+    {
+      id: 7,
+      text: "A system that uses a public network (such as the Internet) as a means for creating private encrypted connections between remote locations is referred to as:",
+      type: "single",
+      answers: ["WWAN", "VPN", "PAN", "VLAN"],
+      correct: [1],
+      explanation: "A VPN (Virtual Private Network) creates secure, encrypted tunnels over public networks like the Internet to establish private connections between remote locations. WWAN is Wireless Wide Area Network, PAN is Personal Area Network, and VLAN is a Virtual Local Area Network."
+    },
+    {
+      id: 8,
+      text: "Which protocol enables secure, real-time delivery of audio and video over an IP network?",
+      type: "single",
+      answers: ["S/MIME", "RTP", "SIP", "SRTP"],
+      correct: [3],
+      explanation: "SRTP (Secure Real-time Transport Protocol) is the secure version of RTP designed for encrypted, authenticated real-time delivery of audio and video over IP networks. RTP is its unsecured counterpart, and SIP is a signaling protocol for initiating sessions — not for media transport."
+    },
+    {
+      id: 9,
+      text: "An encryption protocol primarily used in Wi-Fi networks implementing the WPA2 security standard is called:",
+      type: "single",
+      answers: ["TKIP", "CCMP", "SSL", "IPsec"],
+      correct: [1],
+      explanation: "CCMP (Counter Mode CBC-MAC Protocol) is the encryption protocol used in WPA2 Wi-Fi security. It is based on AES and provides strong data confidentiality and integrity. TKIP was used in the original WPA standard and is now deprecated."
+    },
+    {
+      id: 10,
+      text: "A security protocol designed to improve the security of existing WEP implementations is known as:",
+      type: "single",
+      answers: ["WPA2", "RC4", "CCMP", "TKIP"],
+      correct: [3],
+      explanation: "TKIP (Temporal Key Integrity Protocol) was designed as a stopgap to improve WEP security by adding per-packet key mixing, a message integrity check, and a re-keying mechanism. It was used in WPA. TKIP is now also deprecated and replaced by CCMP/AES in WPA2."
+    },
+    {
+      id: 11,
+      text: "Which of the following answers refer(s) to deprecated/insecure encryption protocols and cryptographic hash functions? (Select all that apply)",
+      type: "multiple",
+      answers: ["DES", "AES-256", "MD5", "ECC", "SHA-1", "SSL", "RC4"],
+      correct: [0, 2, 4, 5, 6],
+      explanation: "Deprecated/insecure: DES (short key length, broken), MD5 (collision vulnerabilities), SHA-1 (collision vulnerabilities), SSL (superseded by TLS), and RC4 (statistical biases, broken). AES-256 and ECC are current, secure algorithms."
+    },
+    {
+      id: 12,
+      text: "Which cryptographic protocol is designed to provide secure communications over a computer network and is the successor to SSL?",
+      type: "single",
+      answers: ["IPsec", "TLS", "AES", "CCMP"],
+      correct: [1],
+      explanation: "TLS (Transport Layer Security) is the direct successor to SSL (Secure Sockets Layer) and is designed to provide secure communications over a network. AES is an encryption algorithm, CCMP is a Wi-Fi encryption protocol, and IPsec is a network-layer security suite — none are successors to SSL."
+    },
+    {
+      id: 13,
+      text: "Examples of techniques used for encrypting information include symmetric encryption (also called public-key encryption) and asymmetric encryption (also called secret-key encryption, or session-key encryption).",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [1],
+      explanation: "FALSE. The labels are reversed. Symmetric encryption uses a single shared secret key (also called secret-key or session-key encryption). Asymmetric encryption uses a key pair (public and private keys) and is called public-key encryption."
+    },
+    {
+      id: 14,
+      text: "In asymmetric encryption, any message encrypted with the use of a public key can only be decrypted by applying the same algorithm and a matching private key (and vice versa).",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. In asymmetric (public-key) cryptography, data encrypted with a public key can only be decrypted with the corresponding private key, and data encrypted/signed with the private key can be verified with the public key. The keys work as matched pairs."
+    },
+    {
+      id: 15,
+      text: "Which of the algorithms listed below are not symmetric ciphers? (Select 3 answers)",
+      type: "multiple",
+      answers: ["AES", "DES", "DHE", "ECC", "IDEA", "RC4", "RSA"],
+      correct: [2, 3, 6],
+      explanation: "DHE (Diffie-Hellman Ephemeral), ECC (Elliptic Curve Cryptography), and RSA are NOT symmetric ciphers — they are asymmetric/public-key algorithms. AES, DES, IDEA, and RC4 are all symmetric (secret-key) encryption algorithms."
+    },
+    {
+      id: 16,
+      text: "Which of the following algorithms do(es) not fall into the category of asymmetric encryption? (Select all that apply)",
+      type: "multiple",
+      answers: ["AES", "DES", "DHE", "ECC", "IDEA", "RC4", "RSA"],
+      correct: [0, 1, 4, 5],
+      explanation: "AES, DES, IDEA, and RC4 are symmetric encryption algorithms — they do NOT fall into the asymmetric category. DHE, ECC, and RSA are asymmetric (public-key) cryptographic algorithms."
+    },
+    {
+      id: 17,
+      text: "The term 'KEK' refers to a type of cryptographic key often used in key management systems to add an additional layer of security when encrypting and decrypting other cryptographic keys.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. A KEK (Key Encryption Key) is a cryptographic key specifically used to encrypt other cryptographic keys, adding an extra layer of protection in key management systems. This prevents keys from being stored or transmitted in plaintext."
+    },
+    {
+      id: 18,
+      text: "Which of the answers listed below refers to a shared secret authentication method used in WPA, WPA2, and EAP?",
+      type: "single",
+      answers: ["PSK", "802.1X", "SAE", "TKIP"],
+      correct: [0],
+      explanation: "PSK (Pre-Shared Key) is a shared secret authentication method used in WPA-Personal and WPA2-Personal configurations, as well as within EAP (Extensible Authentication Protocol). 802.1X is for enterprise authentication, SAE (Simultaneous Authentication of Equals) is used in WPA3, and TKIP is an encryption protocol."
+    },
+    {
+      id: 19,
+      text: "Which of the following answers refers to a protocol used to set up secure connections and exchange of cryptographic keys in IPsec VPNs?",
+      type: "single",
+      answers: ["SSL", "IKE", "ESP", "DHE"],
+      correct: [1],
+      explanation: "IKE (Internet Key Exchange) is the protocol used to establish Security Associations (SAs) and exchange cryptographic keys in IPsec VPNs. ESP handles encryption within IPsec, DHE is a key exchange algorithm, and SSL is unrelated to IPsec VPN setup."
+    },
+    {
+      id: 20,
+      text: "Which of the answers listed below refers to a key exchange protocol that generates temporary keys for each session, providing forward secrecy to protect past and future communications?",
+      type: "single",
+      answers: ["PFS", "SHA", "PGP", "DHE"],
+      correct: [3],
+      explanation: "DHE (Diffie-Hellman Ephemeral) generates a new, temporary (ephemeral) key pair for each session, providing perfect forward secrecy. PFS is the property/concept of forward secrecy — not the protocol itself. SHA is a hashing algorithm, and PGP is an email encryption standard."
+    },
+    {
+      id: 21,
+      text: "Which of the following answers refers to a cryptographic key exchange protocol that leverages ECC for enhanced security and efficiency?",
+      type: "single",
+      answers: ["IKE", "ECDHE", "DHE", "ECDSA"],
+      correct: [1],
+      explanation: "ECDHE (Elliptic Curve Diffie-Hellman Ephemeral) is a key exchange protocol that combines the Diffie-Hellman method with Elliptic Curve Cryptography (ECC) for enhanced security and computational efficiency. ECDSA is an ECC-based digital signature algorithm — not a key exchange protocol."
+    },
+    {
+      id: 22,
+      text: "Which of the answers listed below refers to a solution designed to strengthen the security of session keys?",
+      type: "single",
+      answers: ["ECB", "PFS", "EFS", "PFX"],
+      correct: [1],
+      explanation: "PFS (Perfect Forward Secrecy) is a security property that ensures session keys cannot be compromised even if the long-term private key is later exposed. ECB (Electronic Codebook) is an insecure cipher mode, EFS (Encrypting File System) encrypts files on Windows, and PFX is a certificate file format."
+    },
+    {
+      id: 23,
+      text: "Which of the following answers refers to a public-key cryptosystem used for digital signatures, secure key exchange, and encryption?",
+      type: "single",
+      answers: ["ECC", "RSA", "PKI", "DSA"],
+      correct: [1],
+      explanation: "RSA (Rivest-Shamir-Adleman) is a widely-used public-key cryptosystem that supports digital signatures, secure key exchange, and encryption. ECC is a broader category of cryptography, PKI is an infrastructure framework (not an algorithm), and DSA is only for digital signatures — not encryption."
+    },
+    {
+      id: 24,
+      text: "Which cryptographic solution would be best suited for low-power devices, such as IoT devices, embedded systems, and mobile devices?",
+      type: "single",
+      answers: ["ECC", "DES", "RSA", "AES"],
+      correct: [0],
+      explanation: "ECC (Elliptic Curve Cryptography) provides equivalent security to RSA with much smaller key sizes, requiring significantly less computational power and memory. This makes ECC ideal for resource-constrained environments like IoT devices, embedded systems, and mobile devices."
+    },
+    {
+      id: 25,
+      text: "Which of the cryptographic algorithms listed below is the least vulnerable to attacks?",
+      type: "single",
+      answers: ["AES", "DES", "RC4", "3DES"],
+      correct: [0],
+      explanation: "AES (Advanced Encryption Standard) is considered the most secure of these options. DES has a short 56-bit key and is broken, RC4 has statistical weaknesses and is deprecated, and 3DES (while stronger than DES) is much slower than AES and has been deprecated due to vulnerability to birthday attacks."
+    }
+  ];
+
+  let currentQuestion = 0;
+  let userAnswers = Array(questions.length).fill(null);
+  let timerInterval;
+  let timeRemaining = 90 * 60;
+  let isPaused = false;
+  let testFinished = false;
+
+  function initTest() {
+    renderQuestionGrid();
+    showQuestion(currentQuestion);
+    startTimer();
+  }
+
+  function renderQuestionGrid() {
+    const grid = document.getElementById('questionGrid');
+    grid.innerHTML = '';
+    questions.forEach((q, index) => {
+      const dot = document.createElement('div');
+      dot.className = 'q-dot';
+      dot.textContent = index + 1;
+      dot.onclick = () => showQuestion(index);
+      if (userAnswers[index] !== null) dot.classList.add('answered');
+      if (index === currentQuestion) dot.classList.add('active');
+      if (testFinished) {
+        const userAns = userAnswers[index] || [];
+        const isCorrect = userAns.length === q.correct.length && userAns.every(a => q.correct.includes(a));
+        dot.classList.remove('answered');
+        if (isCorrect) dot.classList.add('correct');
+        else if (userAns.length > 0) dot.classList.add('incorrect');
+      }
+      grid.appendChild(dot);
+    });
+  }
+
+  function showQuestion(index) {
+    currentQuestion = index;
+    const q = questions[index];
+    const container = document.getElementById('questionContainer');
+    
+    const isMultiple = q.type === 'multiple';
+    const inputType = isMultiple ? 'checkbox' : 'radio';
+    
+    let html = `
+      <div class="question-header">
+        <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+      </div>
+      <div class="question-text">
+        ${q.text}
+        ${isMultiple ? '<div class="multi-select-note">⚠ Select multiple answers</div>' : ''}
+      </div>
+      <div class="answers">
+    `;
+    
+    q.answers.forEach((answer, i) => {
+      const isSelected = userAnswers[index] && userAnswers[index].includes(i);
+      let classes = 'answer';
+      if (isSelected) classes += ' selected';
+      html += `
+        <div class="${classes}" onclick="selectAnswer(${i})" id="answer-${i}">
+          <input type="${inputType}" name="q${index}" ${isSelected ? 'checked' : ''}>
+          <div class="answer-text">${answer}</div>
+          <span class="answer-indicator check">✓</span>
+          <span class="answer-indicator cross">✗</span>
+        </div>
+      `;
+    });
+    
+    html += `
+      </div>
+      <div class="explanation" id="explanation">
+        <div class="explanation-title">// Explanation</div>
+        <div class="explanation-text">${q.explanation}</div>
+      </div>
+      <div class="navigation">
+        <button class="check-btn" onclick="checkAnswer()">Check Answer</button>
+        <button class="nav-btn" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
+        <button class="nav-btn primary" onclick="nextQuestion()">${index === questions.length - 1 ? 'Finish Test' : 'Next →'}</button>
+      </div>
+    `;
+    
+    container.innerHTML = html;
+    renderQuestionGrid();
+  }
+
+  function selectAnswer(index) {
+    if (testFinished) return;
+    const q = questions[currentQuestion];
+    const answers = document.querySelectorAll('.answer');
+    const answer = answers[index];
+    const input = answer.querySelector('input');
+    
+    if (q.type === 'single') {
+      userAnswers[currentQuestion] = [index];
+      answers.forEach(a => { a.classList.remove('selected'); a.querySelector('input').checked = false; });
+      answer.classList.add('selected');
+      input.checked = true;
+    } else {
+      if (!userAnswers[currentQuestion]) userAnswers[currentQuestion] = [];
+      const idx = userAnswers[currentQuestion].indexOf(index);
+      if (idx > -1) {
+        userAnswers[currentQuestion].splice(idx, 1);
+        answer.classList.remove('selected');
+        input.checked = false;
+      } else {
+        userAnswers[currentQuestion].push(index);
+        answer.classList.add('selected');
+        input.checked = true;
+      }
+    }
+    renderQuestionGrid();
+  }
+
+  function checkAnswer() {
+    const q = questions[currentQuestion];
+    const answers = document.querySelectorAll('.answer');
+    answers.forEach((ans, j) => {
+      if (q.correct.includes(j)) {
+        ans.classList.add('correct');
+      } else if (userAnswers[currentQuestion] && userAnswers[currentQuestion].includes(j)) {
+        ans.classList.add('incorrect');
+      }
+    });
+    document.getElementById('explanation').classList.add('show');
+  }
+
+  function previousQuestion() {
+    if (currentQuestion > 0) showQuestion(currentQuestion - 1);
+  }
+
+  function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+      showQuestion(currentQuestion + 1);
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    clearInterval(timerInterval);
+    testFinished = true;
+
+    let correct = 0;
+    let incorrect = 0;
+
+    questions.forEach((q, i) => {
+      const userAns = userAnswers[i] || [];
+      const isCorrect = userAns.length === q.correct.length && userAns.every(a => q.correct.includes(a));
+      if (isCorrect) correct++;
+      else if (userAns.length > 0) incorrect++;
+    });
+
+    const percentage = Math.round((correct / questions.length) * 100);
+
+    document.getElementById('resultsScore').textContent = percentage + '%';
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('incorrectCount').textContent = incorrect;
+    document.getElementById('percentageScore').textContent = percentage + '%';
+
+    document.getElementById('questionContainer').style.display = 'none';
+    document.getElementById('results').classList.add('show');
+    document.getElementById('scorePanel').classList.add('visible');
+    document.getElementById('scoreBig').textContent = percentage + '%';
+
+    renderQuestionGrid();
+  }
+
+  function reviewAnswers() {
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('questionContainer').style.display = 'block';
+    showQuestion(0);
+  }
+
+  function restartTest() {
+    userAnswers = Array(questions.length).fill(null);
+    currentQuestion = 0;
+    testFinished = false;
+    timeRemaining = 90 * 60;
+    isPaused = false;
+    document.getElementById('timerBtn').textContent = 'PAUSE';
+    document.getElementById('scorePanel').classList.remove('visible');
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('questionContainer').style.display = 'block';
+    initTest();
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      if (!isPaused) {
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById('timer').textContent =
+          `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        if (timeRemaining <= 300) {
+          document.getElementById('timer').style.color = 'var(--red)';
+        }
+        if (timeRemaining <= 0) showResults();
+      }
+    }, 1000);
+  }
+
+  function toggleTimer() {
+    isPaused = !isPaused;
+    document.getElementById('timerBtn').textContent = isPaused ? 'RESUME' : 'PAUSE';
+  }
+
+  initTest();
+</script>
+</body>
+</html>

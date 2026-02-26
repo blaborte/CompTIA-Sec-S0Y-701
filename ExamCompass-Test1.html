@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | ExamCompass Practice Test 1</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
+  .timer-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  #timer {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .header-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+
+  .header-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .header-btn.primary {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  main {
+    display: flex;
+    min-height: calc(100vh - 70px);
+  }
+
+  .sidebar {
+    width: 280px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem;
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+  }
+
+  .sidebar-title {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .q-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+
+  .q-dot {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+
+  .q-dot:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .q-dot.answered {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .q-dot.active {
+    outline: 2px solid var(--yellow);
+    outline-offset: 1px;
+  }
+
+  .q-dot.correct {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--bg);
+  }
+
+  .q-dot.incorrect {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--bg);
+  }
+
+  .score-panel {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    display: none;
+  }
+
+  .score-panel.visible {
+    display: block;
+  }
+
+  .score-big {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  .content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .question-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .question-number {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .question-text {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  .multi-select-note {
+    color: var(--yellow);
+    font-size: 0.9rem;
+    font-family: var(--mono);
+    margin-top: 0.5rem;
+  }
+
+  .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .answer {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .answer:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .answer.selected {
+    border-color: var(--accent);
+    background: rgba(0, 212, 255, 0.1);
+  }
+
+  .answer.correct {
+    border-color: var(--green);
+    background: rgba(0, 245, 160, 0.1);
+  }
+
+  .answer.incorrect {
+    border-color: var(--red);
+    background: rgba(255, 71, 87, 0.1);
+  }
+
+  .answer input[type="checkbox"],
+  .answer input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .answer-text {
+    flex: 1;
+    font-size: 1rem;
+  }
+
+  .answer-indicator {
+    font-size: 1.2rem;
+    display: none;
+  }
+
+  .answer.correct .answer-indicator.check {
+    display: block;
+    color: var(--green);
+  }
+
+  .answer.incorrect .answer-indicator.cross {
+    display: block;
+    color: var(--red);
+  }
+
+  .explanation {
+    background: var(--bg3);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: none;
+  }
+
+  .explanation.show {
+    display: block;
+  }
+
+  .explanation-title {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .explanation-text {
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .nav-btn {
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    border: none;
+    color: var(--bg);
+    font-weight: 600;
+  }
+
+  .results {
+    text-align: center;
+    display: none;
+  }
+
+  .results.show {
+    display: block;
+  }
+
+  .results-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+  }
+
+  .results-score {
+    font-size: 4rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+
+  .result-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .result-value {
+    font-size: 2.5rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-card:nth-child(1) .result-value { color: var(--green); }
+  .result-card:nth-child(2) .result-value { color: var(--red); }
+  .result-card:nth-child(3) .result-value { color: var(--yellow); }
+
+  .result-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  @media (max-width: 968px) {
+    .sidebar {
+      display: none;
+    }
+
+    main {
+      flex-direction: column;
+    }
+
+    .content {
+      padding: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">SECURITY+ <span>SY0-701</span> / EXAMCOMPASS TEST 1</div>
+    <div class="timer-wrap">
+      <span id="timer">90:00</span>
+      <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+      <button class="header-btn primary" onclick="showResults()" id="finishBtn">FINISH</button>
+    </div>
+    <a href="index.html" class="home-btn">
+      <span>←</span>
+      <span>Home</span>
+    </a>
+  </header>
+
+  <main>
+    <div class="sidebar">
+      <div class="sidebar-title">Questions</div>
+      <div class="q-grid" id="questionGrid"></div>
+      <div class="score-panel" id="scorePanel">
+        <div class="score-big" id="scoreBig">0%</div>
+        <div class="score-label">YOUR SCORE</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="question-container" id="questionContainer"></div>
+      <div class="results" id="results">
+        <h1 class="results-title">Test Complete!</h1>
+        <div class="results-score" id="resultsScore">0%</div>
+        <div class="results-grid">
+          <div class="result-card">
+            <div class="result-value" id="correctCount">0</div>
+            <div class="result-label">Correct</div>
+          </div>
+          <div class="result-card">
+            <div class="result-value" id="incorrectCount">0</div>
+            <div class="result-label">Incorrect</div>
+          </div>
+          <div class="result-card">
+            <div class="result-value" id="percentageScore">0%</div>
+            <div class="result-label">Score</div>
+          </div>
+        </div>
+        <div class="navigation">
+          <button class="nav-btn" onclick="reviewAnswers()">Review Answers</button>
+          <button class="nav-btn primary" onclick="location.reload()">Retake Test</button>
+          <button class="nav-btn" onclick="location.href='index.html'">Back to Home</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="gamification-social.js"></script>
+  <script>
+    const questions = [
+      {
+        id: 1,
+        text: "Which of the following answers can be used to describe technical security controls? (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Focused on protecting material assets",
+          "Sometimes called logical security controls",
+          "Executed by computer systems (instead of people)",
+          "Also known as administrative controls",
+          "Implemented with technology",
+          "Primarily implemented and executed by people (as opposed to computer systems)"
+        ],
+        correct: [1, 2, 4],
+        explanation: "Technical security controls are sometimes called logical security controls, are executed by computer systems (not people), and are implemented with technology. They include firewalls, encryption, and access controls."
+      },
+      {
+        id: 2,
+        text: "Which of the answers listed below refer to examples of technical security controls? (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Security audits",
+          "Encryption",
+          "Organizational security policy",
+          "IDSs",
+          "Configuration management",
+          "Firewalls"
+        ],
+        correct: [1, 3, 5],
+        explanation: "Technical security controls include encryption (protecting data), IDSs (intrusion detection systems for monitoring), and firewalls (network protection). Security audits, policies, and configuration management are managerial/operational controls."
+      },
+      {
+        id: 3,
+        text: "Which of the following answers refer to the characteristic features of managerial security controls? (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Also known as administrative controls",
+          "Sometimes referred to as logical security controls",
+          "Focused on reducing the risk of security incidents",
+          "Executed by computer systems (instead of people)",
+          "Documented in written policies",
+          "Focused on protecting material assets"
+        ],
+        correct: [0, 2, 4],
+        explanation: "Managerial (administrative) security controls are focused on reducing risk through documented policies and procedures. They include security policies, risk assessments, and training programs."
+      },
+      {
+        id: 4,
+        text: "Examples of managerial security controls include: (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Configuration management",
+          "Data backups",
+          "Organizational security policy",
+          "Risk assessments",
+          "Security awareness training"
+        ],
+        correct: [2, 3, 4],
+        explanation: "Managerial controls include organizational security policy, risk assessments, and security awareness training. These are administrative measures that guide how security is implemented in an organization."
+      },
+      {
+        id: 5,
+        text: "Which of the answers listed below can be used to describe operational security controls (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Also known as administrative controls",
+          "Focused on the day-to-day procedures of an organization",
+          "Executed by computer systems (instead of people)",
+          "Used to ensure that the equipment continues to work as specified",
+          "Focused on managing risk",
+          "Primarily implemented and executed by people (as opposed to computer systems)"
+        ],
+        correct: [1, 3, 5],
+        explanation: "Operational security controls focus on day-to-day procedures, ensure equipment works as specified, and are primarily implemented by people (not automated systems). Examples include backups, patch management, and configuration management."
+      },
+      {
+        id: 6,
+        text: "Which of the following examples fall into the category of operational security controls? (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Risk assessments",
+          "Configuration management",
+          "System backups",
+          "Authentication protocols",
+          "Patch management"
+        ],
+        correct: [1, 2, 4],
+        explanation: "Operational controls include configuration management (maintaining secure settings), system backups (ensuring data availability), and patch management (keeping systems updated). These are day-to-day operational tasks."
+      },
+      {
+        id: 7,
+        text: "Which of the answers listed below refers to security controls designed to deter, detect, and prevent unauthorized access, theft, damage, or destruction of material assets?",
+        type: "single",
+        answers: [
+          "Managerial security controls",
+          "Physical security controls",
+          "Technical security controls",
+          "Operational security controls"
+        ],
+        correct: [1],
+        explanation: "Physical security controls are designed to protect material/physical assets from unauthorized access, theft, damage, or destruction. Examples include locks, fencing, guards, and surveillance cameras."
+      },
+      {
+        id: 8,
+        text: "Which of the following examples do not fall into the category of physical security controls? (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Lighting",
+          "Access control vestibules",
+          "Data backups",
+          "Fencing/Bollards/Barricades",
+          "Firewalls",
+          "Security guards",
+          "Asset management"
+        ],
+        correct: [2, 4, 6],
+        explanation: "Data backups, firewalls, and asset management are not physical controls. Data backups and firewalls are technical controls, while asset management is an operational/managerial control. Physical controls protect tangible assets."
+      },
+      {
+        id: 9,
+        text: "What are the examples of preventive security controls? (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Encryption",
+          "IDS",
+          "Sensors",
+          "Firewalls",
+          "Warning signs",
+          "AV software"
+        ],
+        correct: [0, 3, 5],
+        explanation: "Preventive controls stop security incidents before they occur. Encryption prevents unauthorized data access, firewalls prevent unauthorized network access, and AV software prevents malware infections. IDS is detective, not preventive."
+      },
+      {
+        id: 10,
+        text: "Examples of deterrent security controls include: (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Warning signs",
+          "Sensors",
+          "Lighting",
+          "Video surveillance",
+          "Security audits",
+          "Fencing/Bollards"
+        ],
+        correct: [0, 2, 5],
+        explanation: "Deterrent controls discourage attackers from attempting security violations. Warning signs, lighting, and fencing/bollards make an area less attractive to attackers. Video surveillance is detective, sensors are detective."
+      },
+      {
+        id: 11,
+        text: "Which of the answers listed below refer(s) to detective security control(s)? (Select all that apply)",
+        type: "multiple",
+        answers: [
+          "Lighting",
+          "Log monitoring",
+          "Sandboxing",
+          "Security audits",
+          "CCTV",
+          "IDS",
+          "Vulnerability scanning"
+        ],
+        correct: [1, 3, 4, 5, 6],
+        explanation: "Detective controls identify and detect security incidents. Log monitoring, security audits, CCTV, IDS, and vulnerability scanning all detect security issues. Lighting is deterrent, sandboxing is preventive."
+      },
+      {
+        id: 12,
+        text: "Which of the following answers refer(s) to corrective security control(s)? (Select all that apply)",
+        type: "multiple",
+        answers: [
+          "Recovering data from backup copies",
+          "Applying software updates and patches to fix vulnerabilities",
+          "Developing and implementing IRPs to respond to and recover from security incidents",
+          "Regularly reviewing logs for anomalies or patterns indicative of attacks",
+          "Activating and executing DRPs to restore operations after a major incident"
+        ],
+        correct: [0, 1, 2, 4],
+        explanation: "Corrective controls fix problems after they occur. This includes data recovery, patching vulnerabilities, implementing incident response plans (IRPs), and executing disaster recovery plans (DRPs). Log review is detective, not corrective."
+      },
+      {
+        id: 13,
+        text: "Which of the answers listed below refer(s) to compensating security control(s)? (Select all that apply)",
+        type: "multiple",
+        answers: [
+          "Backup power systems",
+          "Video surveillance",
+          "MFA",
+          "Application sandboxing",
+          "Network segmentation"
+        ],
+        correct: [0, 2, 4],
+        explanation: "Compensating controls provide alternative security when primary controls can't be implemented. Backup power compensates for power failure, MFA compensates for weak passwords, and network segmentation limits blast radius. Video surveillance is detective, sandboxing is preventive."
+      },
+      {
+        id: 14,
+        text: "The term 'Directive security controls' refers to the category of security controls that are implemented through policies and procedures.",
+        type: "single",
+        answers: [
+          "True",
+          "False"
+        ],
+        correct: [0],
+        explanation: "True. Directive controls are implemented through policies and procedures that direct, confine, or control the actions of subjects to force or encourage compliance with security policies."
+      },
+      {
+        id: 15,
+        text: "Which of the following terms fall into the category of directive security controls? (Select 2 answers)",
+        type: "multiple",
+        answers: [
+          "IRP",
+          "AUP",
+          "IDS",
+          "MFA",
+          "IPS"
+        ],
+        correct: [0, 1],
+        explanation: "Directive controls include IRP (Incident Response Plan) and AUP (Acceptable Use Policy) as they direct how people should behave and respond. IDS, MFA, and IPS are technical controls."
+      },
+      {
+        id: 16,
+        text: "Which of the terms listed below can be used to describe the basic principles of information security?",
+        type: "single",
+        answers: [
+          "PKI",
+          "AAA",
+          "GDPR",
+          "CIA"
+        ],
+        correct: [3],
+        explanation: "CIA (Confidentiality, Integrity, Availability) represents the three fundamental principles of information security. All security controls aim to protect one or more of these principles."
+      },
+      {
+        id: 17,
+        text: "The term 'Non-repudiation' describes the inability to deny responsibility for performing a specific action. In the context of data security, non-repudiation ensures data confidentiality, provides proof of data integrity, and proof of data origin.",
+        type: "single",
+        answers: [
+          "True",
+          "False"
+        ],
+        correct: [0],
+        explanation: "True. Non-repudiation prevents denial of actions and provides proof of integrity and origin through mechanisms like digital signatures. However, it doesn't ensure confidentiality - that's a separate security principle."
+      },
+      {
+        id: 18,
+        text: "Which of the following best applies to the concept of non-repudiation?",
+        type: "single",
+        answers: [
+          "Digital certificate",
+          "MFA",
+          "Hashing",
+          "Encryption"
+        ],
+        correct: [0],
+        explanation: "Digital certificates (with digital signatures) provide non-repudiation by proving who performed an action and that the action cannot be denied. They bind an identity to a public key and prove authenticity."
+      },
+      {
+        id: 19,
+        text: "Which type of user account violates the concept of non-repudiation?",
+        type: "single",
+        answers: [
+          "Standard user account",
+          "Shared account",
+          "Guest user account",
+          "Service account"
+        ],
+        correct: [1],
+        explanation: "Shared accounts violate non-repudiation because multiple people use the same credentials, making it impossible to determine who performed a specific action. Each user should have unique credentials for accountability."
+      },
+      {
+        id: 20,
+        text: "Which part of the AAA security architecture deals with the verification of the identity of a person or process?",
+        type: "single",
+        answers: [
+          "Authentication",
+          "Authorization",
+          "Accounting"
+        ],
+        correct: [0],
+        explanation: "Authentication is the process of verifying identity - proving 'you are who you say you are' through credentials like passwords, biometrics, or certificates."
+      },
+      {
+        id: 21,
+        text: "In the AAA security architecture, the process of granting or denying access to resources is known as:",
+        type: "single",
+        answers: [
+          "Authentication",
+          "Authorization",
+          "Accounting"
+        ],
+        correct: [1],
+        explanation: "Authorization determines what an authenticated user is allowed to do - granting or denying access to resources based on permissions and privileges."
+      },
+      {
+        id: 22,
+        text: "In the AAA security architecture, the process of tracking accessed services and logging resource consumption is called:",
+        type: "single",
+        answers: [
+          "Authentication",
+          "Authorization",
+          "Accounting"
+        ],
+        correct: [2],
+        explanation: "Accounting (also called auditing) tracks what users do - logging access, actions, and resource usage for security monitoring, billing, and compliance purposes."
+      },
+      {
+        id: 23,
+        text: "Which of the following solutions provide(s) the AAA functionality? (Select all that apply)",
+        type: "multiple",
+        answers: [
+          "CHAP",
+          "TACACS+",
+          "PAP",
+          "RADIUS",
+          "MS-CHAP"
+        ],
+        correct: [1, 3],
+        explanation: "TACACS+ and RADIUS are AAA protocols/servers that provide authentication, authorization, and accounting services. CHAP, PAP, and MS-CHAP are authentication protocols only, not full AAA solutions."
+      },
+      {
+        id: 24,
+        text: "In the context of the AAA framework, common methods for authenticating people include: (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "IP addresses",
+          "Usernames and passwords",
+          "MAC addresses",
+          "Biometrics",
+          "MFA"
+        ],
+        correct: [1, 3, 4],
+        explanation: "People authenticate using usernames/passwords (something you know), biometrics (something you are), and MFA (multiple factors combined). IP and MAC addresses are used for device authentication, not people."
+      },
+      {
+        id: 25,
+        text: "Which of the answers listed below refer to common methods of device authentication used within the AAA framework? (Select 3 answers)",
+        type: "multiple",
+        answers: [
+          "Usernames and passwords",
+          "Digital certificates",
+          "IP addresses",
+          "MFA",
+          "Biometric authentication",
+          "MAC addresses"
+        ],
+        correct: [1, 2, 5],
+        explanation: "Devices authenticate using digital certificates (PKI), IP addresses (network location), and MAC addresses (hardware identifiers). Biometrics and MFA are for people, not devices."
+      }
+    ];
+
+    let currentQuestion = 0;
+    let userAnswers = Array(questions.length).fill(null);
+    let timerInterval;
+    let timeRemaining = 90 * 60; // 90 minutes
+    let isPaused = false;
+
+    function initTest() {
+      renderQuestionGrid();
+      showQuestion(currentQuestion);
+      startTimer();
+    }
+
+    function renderQuestionGrid() {
+      const grid = document.getElementById('questionGrid');
+      grid.innerHTML = '';
+      questions.forEach((q, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'q-dot';
+        dot.textContent = index + 1;
+        dot.onclick = () => showQuestion(index);
+        if (userAnswers[index] !== null) dot.classList.add('answered');
+        if (index === currentQuestion) dot.classList.add('active');
+        grid.appendChild(dot);
+      });
+    }
+
+    function showQuestion(index) {
+      currentQuestion = index;
+      const q = questions[index];
+      const container = document.getElementById('questionContainer');
+      
+      const isMultiple = q.type === 'multiple';
+      const inputType = isMultiple ? 'checkbox' : 'radio';
+      
+      let html = `
+        <div class="question-header">
+          <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+        </div>
+        <div class="question-text">
+          ${q.text}
+          ${isMultiple ? '<div class="multi-select-note">⚠ Select multiple answers</div>' : ''}
+        </div>
+        <div class="answers">
+      `;
+      
+      q.answers.forEach((answer, i) => {
+        const isChecked = userAnswers[index] && userAnswers[index].includes(i);
+        html += `
+          <div class="answer" onclick="selectAnswer(${i})">
+            <input type="${inputType}" name="q${index}" ${isChecked ? 'checked' : ''} onchange="updateAnswer(${i})">
+            <div class="answer-text">${answer}</div>
+            <span class="answer-indicator check">✓</span>
+            <span class="answer-indicator cross">✗</span>
+          </div>
+        `;
+      });
+      
+      html += `
+        </div>
+        <div class="explanation" id="explanation">
+          <div class="explanation-title">Explanation</div>
+          <div class="explanation-text">${q.explanation}</div>
+        </div>
+        <div class="navigation">
+          <button class="nav-btn" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
+          <button class="nav-btn primary" onclick="nextQuestion()">${index === questions.length - 1 ? 'Finish Test' : 'Next →'}</button>
+        </div>
+      `;
+      
+      container.innerHTML = html;
+      renderQuestionGrid();
+    }
+
+    function selectAnswer(index) {
+      const q = questions[currentQuestion];
+      const answers = document.querySelectorAll('.answer');
+      const answer = answers[index];
+      const input = answer.querySelector('input');
+      
+      if (q.type === 'single') {
+        userAnswers[currentQuestion] = [index];
+        answers.forEach(a => a.classList.remove('selected'));
+        answer.classList.add('selected');
+      } else {
+        if (!userAnswers[currentQuestion]) userAnswers[currentQuestion] = [];
+        const idx = userAnswers[currentQuestion].indexOf(index);
+        if (idx > -1) {
+          userAnswers[currentQuestion].splice(idx, 1);
+          answer.classList.remove('selected');
+        } else {
+          userAnswers[currentQuestion].push(index);
+          answer.classList.add('selected');
+        }
+      }
+      
+      input.checked = !input.checked;
+      renderQuestionGrid();
+    }
+
+    function updateAnswer(index) {
+      selectAnswer(index);
+    }
+
+    function previousQuestion() {
+      if (currentQuestion > 0) {
+        showQuestion(currentQuestion - 1);
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        showQuestion(currentQuestion + 1);
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      clearInterval(timerInterval);
+      
+      let correct = 0;
+      let incorrect = 0;
+      
+      questions.forEach((q, i) => {
+        const userAns = userAnswers[i] || [];
+        const correctAns = q.correct;
+        
+        const isCorrect = userAns.length === correctAns.length && 
+                         userAns.every(a => correctAns.includes(a));
+        
+        if (isCorrect) correct++;
+        else if (userAns.length > 0) incorrect++;
+        
+        // Update grid
+        const dots = document.querySelectorAll('.q-dot');
+        if (isCorrect) dots[i].classList.add('correct');
+        else if (userAns.length > 0) dots[i].classList.add('incorrect');
+      });
+      
+      const percentage = Math.round((correct / questions.length) * 100);
+      
+      document.getElementById('resultsScore').textContent = percentage + '%';
+      document.getElementById('correctCount').textContent = correct;
+      document.getElementById('incorrectCount').textContent = incorrect;
+      document.getElementById('percentageScore').textContent = percentage + '%';
+      
+      document.getElementById('questionContainer').style.display = 'none';
+      document.getElementById('results').classList.add('show');
+      document.getElementById('scorePanel').classList.add('visible');
+      document.getElementById('scoreBig').textContent = percentage + '%';
+      
+      // Gamification
+      if (window.securityPlusGamification) {
+        const timeSpent = Math.floor((90 * 60 - timeRemaining) / 60);
+        window.securityPlusGamification.completeTest(correct, questions.length, timeSpent);
+      }
+    }
+
+    function reviewAnswers() {
+      document.getElementById('results').classList.remove('show');
+      document.getElementById('questionContainer').style.display = 'block';
+      showQuestion(0);
+      
+      // Show all explanations
+      questions.forEach((q, i) => {
+        const userAns = userAnswers[i] || [];
+        const correctAns = q.correct;
+        
+        setTimeout(() => {
+          showQuestion(i);
+          const answers = document.querySelectorAll('.answer');
+          answers.forEach((ans, j) => {
+            if (correctAns.includes(j)) {
+              ans.classList.add('correct');
+            } else if (userAns.includes(j)) {
+              ans.classList.add('incorrect');
+            }
+          });
+          document.getElementById('explanation').classList.add('show');
+        }, 100);
+      });
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          timeRemaining--;
+          const minutes = Math.floor(timeRemaining / 60);
+          const seconds = timeRemaining % 60;
+          document.getElementById('timer').textContent = 
+            `${minutes}:${seconds.toString().padStart(2, '0')}`;
+          
+          if (timeRemaining <= 0) {
+            showResults();
+          }
+        }
+      }, 1000);
+    }
+
+    function toggleTimer() {
+      isPaused = !isPaused;
+      document.getElementById('timerBtn').textContent = isPaused ? 'RESUME' : 'PAUSE';
+    }
+
+    // Initialize
+    initTest();
+  </script>
+</body>
+</html>
