@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | ExamCompass Practice Test 4</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--bg2); 
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo { 
+    font-family: var(--mono); 
+    font-size: 0.85rem; 
+    color: var(--muted); 
+    letter-spacing: 0.1em; 
+  }
+  
+  .logo span { 
+    color: var(--accent); 
+  }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
+  .timer-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  #timer {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .header-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+
+  .header-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .header-btn.primary {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  main {
+    display: flex;
+    min-height: calc(100vh - 70px);
+  }
+
+  .sidebar {
+    width: 280px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem;
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    height: calc(100vh - 70px);
+  }
+
+  .sidebar-title {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .q-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+
+  .q-dot {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+
+  .q-dot:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .q-dot.answered {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .q-dot.active {
+    outline: 2px solid var(--yellow);
+    outline-offset: 1px;
+  }
+
+  .q-dot.correct {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--bg);
+  }
+
+  .q-dot.incorrect {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--bg);
+  }
+
+  .score-panel {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    display: none;
+  }
+
+  .score-panel.visible {
+    display: block;
+  }
+
+  .score-big {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  .content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .question-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .question-number {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .question-text {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+  }
+
+  .multi-select-note {
+    color: var(--yellow);
+    font-size: 0.9rem;
+    font-family: var(--mono);
+    margin-top: 0.5rem;
+  }
+
+  .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .answer {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .answer:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .answer.selected {
+    border-color: var(--accent);
+    background: rgba(0, 212, 255, 0.1);
+  }
+
+  .answer.correct {
+    border-color: var(--green);
+    background: rgba(0, 245, 160, 0.1);
+  }
+
+  .answer.incorrect {
+    border-color: var(--red);
+    background: rgba(255, 71, 87, 0.1);
+  }
+
+  .answer input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .answer-text {
+    flex: 1;
+    font-size: 1rem;
+  }
+
+  .answer-indicator {
+    font-size: 1.1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .answer.correct .check { opacity: 1; color: var(--green); }
+  .answer.incorrect .cross { opacity: 1; color: var(--red); }
+
+  .explanation {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: none;
+  }
+
+  .explanation.show {
+    display: block;
+  }
+
+  .explanation-title {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .explanation-text {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .navigation {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .nav-btn.primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .check-btn {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    margin-right: auto;
+  }
+
+  .check-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  /* Results Screen */
+  .results-screen {
+    display: none;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .results-screen.show {
+    display: block;
+  }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .results-title {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .results-score {
+    font-family: var(--mono);
+    font-size: 5rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .result-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .result-card-value {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-card-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .results-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .result-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.9rem 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .result-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .result-btn.primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Legend */
+  .legend {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .results-grid { grid-template-columns: 1fr; }
+    .results-score { font-size: 3.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span>BL</span> // SECURITY+ SY0-701 — PRACTICE TEST 4
+  </div>
+  <div class="timer-wrap">
+    <span id="timer">90:00</span>
+    <button class="header-btn primary" id="timerBtn" onclick="toggleTimer()">PAUSE</button>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <div class="sidebar-title">// Question Navigator</div>
+    <div class="q-grid" id="questionGrid"></div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Answered</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Correct</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Incorrect</div>
+      <div class="legend-item"><div class="legend-dot" style="outline:2px solid var(--yellow);outline-offset:1px;background:var(--bg3)"></div> Current</div>
+    </div>
+
+    <div class="score-panel" id="scorePanel">
+      <div class="score-big" id="scoreBig">--</div>
+      <div class="score-label">FINAL SCORE</div>
+    </div>
+  </aside>
+
+  <div class="content">
+    <div class="question-container" id="questionContainer"></div>
+    <div class="results-screen" id="results">
+      <div class="results-header">
+        <div class="results-title">// Test Complete — Practice Test 4</div>
+        <div class="results-score" id="resultsScore">--</div>
+      </div>
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-card-value" style="color:var(--green)" id="correctCount">0</div>
+          <div class="result-card-label">Correct</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-value" style="color:var(--red)" id="incorrectCount">0</div>
+          <div class="result-card-label">Incorrect</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-value" style="color:var(--accent)" id="percentageScore">0%</div>
+          <div class="result-card-label">Percentage</div>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="result-btn primary" onclick="reviewAnswers()">Review Answers</button>
+        <button class="result-btn" onclick="restartTest()">Restart Test</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const questions = [
+    {
+      id: 1,
+      text: "Which of the following answers refers to a legacy symmetric-key block cipher encryption algorithm?",
+      type: "single",
+      answers: ["RC4", "DES", "RSA", "DSA"],
+      correct: [1],
+      explanation: "DES (Data Encryption Standard) is a legacy symmetric-key block cipher that encrypts data in 64-bit blocks using a 56-bit key. It is considered insecure by modern standards due to its short key length. RC4 is a stream cipher (not a block cipher), while RSA and DSA are asymmetric algorithms used for encryption and digital signatures respectively."
+    },
+    {
+      id: 2,
+      text: "Which of the answers listed below refers to a deprecated stream cipher used in some legacy applications, such as WEP?",
+      type: "single",
+      answers: ["RSA", "DES", "SSL", "RC4"],
+      correct: [3],
+      explanation: "RC4 (Rivest Cipher 4) is a deprecated stream cipher that was widely used in legacy protocols such as WEP (Wired Equivalent Privacy) and early versions of SSL/TLS. It has known statistical biases and weaknesses that make it insecure. RSA and DES are not stream ciphers, and SSL is a protocol rather than a cipher."
+    },
+    {
+      id: 3,
+      text: "Which of the following answers refers to a deprecated (largely replaced by AES) symmetric-key block cipher encryption algorithm?",
+      type: "single",
+      answers: ["ECDSA", "RSA", "IDEA", "DSA"],
+      correct: [2],
+      explanation: "IDEA (International Data Encryption Algorithm) is a deprecated symmetric-key block cipher that was once used in PGP encryption. It operates on 64-bit blocks with a 128-bit key. While more secure than DES, IDEA has largely been replaced by AES. ECDSA, RSA, and DSA are asymmetric algorithms used for digital signatures."
+    },
+    {
+      id: 4,
+      text: "What is the recommended replacement for DES?",
+      type: "single",
+      answers: ["DSA", "RSA", "RC4", "AES"],
+      correct: [3],
+      explanation: "AES (Advanced Encryption Standard) is the NIST-recommended replacement for DES. AES supports key lengths of 128, 192, and 256 bits, making it significantly more secure than DES's 56-bit key. AES is a symmetric block cipher that is used worldwide for data encryption. DSA and RSA are asymmetric algorithms, and RC4 is a deprecated stream cipher."
+    },
+    {
+      id: 5,
+      text: "An IV is a random or pseudorandom value used in cryptography to ensure that the same plaintext input does not produce the same ciphertext output, even when the same encryption key is used. The IV is typically used with encryption algorithms in block cipher modes to enhance security by introducing randomness to the encryption process.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. An Initialization Vector (IV) is a random or pseudorandom value that is combined with the encryption key before the encryption process begins. Its purpose is to ensure that identical plaintexts encrypted with the same key produce different ciphertexts, preventing pattern analysis and replay attacks."
+    },
+    {
+      id: 6,
+      text: "Which of the answers listed below refers to a logical operation commonly used in the context of cybersecurity, particularly in encryption and obfuscation techniques?",
+      type: "single",
+      answers: ["AND", "OR", "NOT", "XOR"],
+      correct: [3],
+      explanation: "XOR (Exclusive OR) is the logical operation most commonly used in cryptography and obfuscation. It produces a true output only when the inputs differ, and critically, it is reversible — applying XOR twice with the same key returns the original value. This property makes XOR the foundation of many stream ciphers and one-time pad encryption schemes."
+    },
+    {
+      id: 7,
+      text: "Which of the following answers refers to a block cipher mode that works by chaining the ciphertext blocks together, such that each ciphertext block depends on the previous block?",
+      type: "single",
+      answers: ["CBC", "GCM", "ECB", "CFB"],
+      correct: [0],
+      explanation: "CBC (Cipher Block Chaining) mode XORs each plaintext block with the previous ciphertext block before encryption, creating a chain where each output depends on all previously processed blocks. This means identical plaintext blocks produce different ciphertext blocks, unlike ECB. An IV is used for the first block since there is no preceding ciphertext."
+    },
+    {
+      id: 8,
+      text: "Which block mode transforms a block cipher into a stream cipher enabling the encryption of individual bits or bytes of data?",
+      type: "single",
+      answers: ["CFB", "CBC", "GCM", "ECB"],
+      correct: [0],
+      explanation: "CFB (Cipher Feedback) mode converts a block cipher into a self-synchronizing stream cipher, enabling the encryption of data smaller than the block size (individual bits or bytes). It uses a shift register that is fed by the previous ciphertext block, making it suitable for encrypting streaming data without padding requirements."
+    },
+    {
+      id: 9,
+      text: "A block cipher mode that combines a unique counter with encryption key to generate a stream of pseudorandom data blocks which are then used for encrypting data is called:",
+      type: "single",
+      answers: ["CBC", "GCM", "CFB", "CTM"],
+      correct: [3],
+      explanation: "CTM (Counter Mode, also written as CTR) works by encrypting a successive counter value with the key to generate a keystream, which is then XORed with the plaintext. Each block uses a unique counter value, making the mode parallelizable and efficient. It effectively turns a block cipher into a stream cipher without the feedback dependency of CFB."
+    },
+    {
+      id: 10,
+      text: "Which of the block cipher modes listed below is the simplest/weakest and therefore not recommended for use?",
+      type: "single",
+      answers: ["CBC", "GCM", "ECB", "CTM"],
+      correct: [2],
+      explanation: "ECB (Electronic Codebook) is the simplest and weakest block cipher mode. It encrypts each block independently with the same key, meaning identical plaintext blocks always produce identical ciphertext blocks. This reveals patterns in the data — famously illustrated by the 'ECB penguin' example where an encrypted bitmap image still shows the original shape. ECB is not recommended for any secure application."
+    },
+    {
+      id: 11,
+      text: "Which block cipher mode combines CTM for encryption with an authentication mechanism to ensure both data confidentiality and integrity?",
+      type: "single",
+      answers: ["CBC", "GCM", "ECB", "CFB"],
+      correct: [1],
+      explanation: "GCM (Galois/Counter Mode) combines CTR mode encryption with a Galois mode authentication tag (GHASH). This provides both confidentiality (via counter-mode encryption) and data integrity/authenticity (via the authentication tag), making it an Authenticated Encryption with Associated Data (AEAD) mode. GCM is widely used in TLS 1.2/1.3 and is the recommended mode for AES."
+    },
+    {
+      id: 12,
+      text: "In cryptography, the number of bits in a key used by a cryptographic algorithm is referred to as key size or key length. The key length determines the maximum number of combinations required to break the encryption algorithm, therefore typically a longer key means stronger cryptographic security.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. Key length directly determines the size of the keyspace — the total number of possible keys. A 128-bit key has 2^128 possible combinations, while a 256-bit key has 2^256. Longer keys exponentially increase the effort required for brute-force attacks, making them more resistant to cryptanalysis."
+    },
+    {
+      id: 13,
+      text: "Which AES key length provides the highest level of security?",
+      type: "single",
+      answers: ["128-bit key", "192-bit key", "256-bit key", "320-bit key"],
+      correct: [2],
+      explanation: "AES-256 uses a 256-bit key, providing the highest security level among the valid AES key sizes (128, 192, and 256 bits). AES does not support a 320-bit key. AES-256 is recommended for protecting top-secret classified information and is the standard for high-security environments. AES-128 is still considered secure for most commercial applications."
+    },
+    {
+      id: 14,
+      text: "Which of the following answers refers to an embedded microcontroller used for secure boot, disk encryption, and system integrity verification?",
+      type: "single",
+      answers: ["TPM", "SoC", "UEFI", "HSM"],
+      correct: [0],
+      explanation: "A TPM (Trusted Platform Module) is a dedicated embedded microcontroller chip that provides hardware-based security functions including secure boot validation, disk encryption key storage (used by BitLocker), and system integrity verification via Platform Configuration Registers (PCRs). UEFI is firmware, HSM is a standalone hardware device for cryptographic operations, and SoC is a general system-on-chip."
+    },
+    {
+      id: 15,
+      text: "Which of the answers listed below refers to a piece of hardware and associated software/firmware designed to provide cryptographic and key management functions?",
+      type: "single",
+      answers: ["EFS", "HSM", "SFC", "TPM"],
+      correct: [1],
+      explanation: "An HSM (Hardware Security Module) is a dedicated hardware device that performs cryptographic operations and securely stores cryptographic keys. HSMs are used in high-security environments such as banking, PKI certificate authorities, and payment processing. They are designed to be tamper-resistant and tamper-evident. EFS is Windows Encrypting File System, SFC is System File Checker, and TPM is an embedded chip rather than a standalone HSM appliance."
+    },
+    {
+      id: 16,
+      text: "Which of the following answers refers to a centralized server that is used to distribute cryptographic keys and authenticate users and services within a computer network?",
+      type: "single",
+      answers: ["PKI", "RAS", "KDC", "NAS"],
+      correct: [2],
+      explanation: "A KDC (Key Distribution Center) is a centralized server that authenticates users and distributes cryptographic session keys in network environments. It is a core component of Kerberos authentication. The KDC contains both the Authentication Server (AS) and the Ticket Granting Server (TGS). PKI manages digital certificates, RAS is Remote Access Service, and NAS is Network Attached Storage."
+    },
+    {
+      id: 17,
+      text: "In a Kerberos-protected network, this type of secure token is granted to users during their initial login to enable them access to multiple network services without the need to re-enter their login credentials.",
+      type: "single",
+      answers: ["OTP", "TGT", "AS", "TGS"],
+      correct: [1],
+      explanation: "A TGT (Ticket Granting Ticket) is issued by the Kerberos Authentication Server (AS) after successful initial login. It serves as proof of identity and is presented to the Ticket Granting Server (TGS) to obtain service tickets for individual network resources — enabling SSO (Single Sign-On) without repeated credential prompts. OTP is a one-time password, AS is the Authentication Server component, and TGS is the Ticket Granting Service."
+    },
+    {
+      id: 18,
+      text: "In cryptography and security, the term \"Secure enclave\" typically refers to a protected and isolated hardware or software environment within a computing device, such as a smartphone, tablet, or computer, where sensitive data and cryptographic operations can be stored and processed securely.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. A Secure Enclave is an isolated coprocessor or protected region within a device's main processor that handles sensitive cryptographic operations separately from the main CPU. Apple's Secure Enclave Processor (SEP) is a prominent example, used for Touch ID/Face ID data, encryption key storage, and secure payment processing. It ensures that even if the main OS is compromised, the sensitive data remains protected."
+    },
+    {
+      id: 19,
+      text: "The term \"Obfuscation\" is used to describe techniques employed to obscure or hide the true meaning or nature of data, making it challenging for unauthorized parties to decipher or reverse-engineer the information.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. Obfuscation refers to the deliberate act of making data, code, or communications difficult to understand or reverse-engineer. In cybersecurity, it is used to protect source code from analysis, hide malware behavior from detection tools, and obscure sensitive information. Unlike encryption, obfuscation does not rely on keys — it relies on complexity and confusion."
+    },
+    {
+      id: 20,
+      text: "What is the purpose of steganography?",
+      type: "single",
+      answers: ["Checking data integrity", "Verifying hash values", "Hiding data within another piece of data", "Encrypting data"],
+      correct: [2],
+      explanation: "Steganography is the practice of hiding secret data within an ordinary, non-secret file or message to avoid detection. Unlike encryption, which scrambles data to make it unreadable, steganography conceals the very existence of the data. Common examples include embedding text within image pixels, audio files, or documents. The hidden data remains invisible to casual observers."
+    },
+    {
+      id: 21,
+      text: "In the field of data security, the term \"Tokenization\" refers to the process of replacing sensitive data with nonsensitive information which holds a reference to the original data and enables its processing but has no value when breached.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. Tokenization replaces sensitive data (such as credit card numbers or SSNs) with a randomly generated non-sensitive placeholder called a token. The token maps back to the original data in a secure token vault. Even if an attacker captures a token, it has no exploitable value without access to the vault. Tokenization is widely used in payment processing (EMV chip cards, Apple Pay) and PCI DSS compliance."
+    },
+    {
+      id: 22,
+      text: "Replacing password characters in a password field with a series of asterisks is an example of:",
+      type: "single",
+      answers: ["Data masking", "Tokenization", "Anonymization", "Pseudo-anonymization"],
+      correct: [0],
+      explanation: "Data masking hides sensitive data by replacing it with visually similar but non-sensitive characters. Displaying asterisks (***) in place of password characters is a classic example of real-time data masking — also called dynamic masking. The underlying data remains intact in the system; only the visible representation is obscured. Tokenization replaces data with a token, anonymization permanently removes identifying information, and pseudo-anonymization replaces it with reversible pseudonyms."
+    },
+    {
+      id: 23,
+      text: "A hash function is a mathematical algorithm that maps data of arbitrary size to a fixed-size hash value, typically represented as a short string of characters. The hash function result, also known as a digest or checksum, provides a unique representation of the original data input. The functionality of hash functions relies on the fact that if there is any change to the data after the original hash was generated, the new hash value calculated after content modification will be different from the original result because hash functions are designed to be sensitive to changes in the input data.",
+      type: "single",
+      answers: ["True", "False"],
+      correct: [0],
+      explanation: "TRUE. Hash functions are one-way mathematical functions that convert input data of any size into a fixed-length output (digest). They are deterministic (same input always produces same output), fast to compute, and exhibit the avalanche effect — a tiny change in input produces a completely different hash output. This makes them ideal for integrity verification, as any tampering with data produces a detectably different hash."
+    },
+    {
+      id: 24,
+      text: "Hash functions find use in a variety of applications, including:",
+      type: "single",
+      answers: ["Cryptography", "Data integrity verification", "Password verification and storage", "Digital signatures", "Blockchain technology", "All of the above"],
+      correct: [5],
+      explanation: "Hash functions are fundamental to virtually all areas of cybersecurity and cryptography. They are used in: symmetric/asymmetric cryptography to create message digests; data integrity checks (file download verification, HMAC); password storage (salted hashes in databases); digital signatures (hashing the message before signing with a private key); and blockchain technology (each block contains the hash of the previous block to ensure chain integrity)."
+    },
+    {
+      id: 25,
+      text: "Which of the answers listed below refers to a cryptographic hash function that has been widely used in the past but is now considered deprecated for security-sensitive applications due to known vulnerabilities?",
+      type: "single",
+      answers: ["MD5", "SHA", "CRC", "HMAC"],
+      correct: [0],
+      explanation: "MD5 (Message Digest Algorithm 5) produces a 128-bit hash value and was widely used for data integrity and password hashing. However, MD5 is now considered cryptographically broken — researchers have demonstrated practical collision attacks (two different inputs producing the same hash). It should not be used for security-sensitive applications. SHA-256/SHA-3 are the current recommended replacements. CRC is a checksum for error detection (not cryptographic), and HMAC is a message authentication code construction, not a standalone hash function."
+    }
+  ];
+
+  let currentQuestion = 0;
+  let userAnswers = Array(questions.length).fill(null);
+  let timerInterval;
+  let timeRemaining = 90 * 60;
+  let isPaused = false;
+  let testFinished = false;
+
+  function initTest() {
+    renderQuestionGrid();
+    showQuestion(currentQuestion);
+    startTimer();
+  }
+
+  function renderQuestionGrid() {
+    const grid = document.getElementById('questionGrid');
+    grid.innerHTML = '';
+    questions.forEach((q, index) => {
+      const dot = document.createElement('div');
+      dot.className = 'q-dot';
+      dot.textContent = index + 1;
+      dot.onclick = () => showQuestion(index);
+      if (userAnswers[index] !== null) dot.classList.add('answered');
+      if (index === currentQuestion) dot.classList.add('active');
+      if (testFinished) {
+        const userAns = userAnswers[index] || [];
+        const isCorrect = userAns.length === q.correct.length && userAns.every(a => q.correct.includes(a));
+        dot.classList.remove('answered');
+        if (isCorrect) dot.classList.add('correct');
+        else if (userAns.length > 0) dot.classList.add('incorrect');
+      }
+      grid.appendChild(dot);
+    });
+  }
+
+  function showQuestion(index) {
+    currentQuestion = index;
+    const q = questions[index];
+    const container = document.getElementById('questionContainer');
+    
+    const isMultiple = q.type === 'multiple';
+    const inputType = isMultiple ? 'checkbox' : 'radio';
+    
+    let html = `
+      <div class="question-header">
+        <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+      </div>
+      <div class="question-text">
+        ${q.text}
+        ${isMultiple ? '<div class="multi-select-note">⚠ Select multiple answers</div>' : ''}
+      </div>
+      <div class="answers">
+    `;
+    
+    q.answers.forEach((answer, i) => {
+      const isSelected = userAnswers[index] && userAnswers[index].includes(i);
+      let classes = 'answer';
+      if (isSelected) classes += ' selected';
+      html += `
+        <div class="${classes}" onclick="selectAnswer(${i})" id="answer-${i}">
+          <input type="${inputType}" name="q${index}" ${isSelected ? 'checked' : ''}>
+          <div class="answer-text">${answer}</div>
+          <span class="answer-indicator check">✓</span>
+          <span class="answer-indicator cross">✗</span>
+        </div>
+      `;
+    });
+    
+    html += `
+      </div>
+      <div class="explanation" id="explanation">
+        <div class="explanation-title">// Explanation</div>
+        <div class="explanation-text">${q.explanation}</div>
+      </div>
+      <div class="navigation">
+        <button class="check-btn" onclick="checkAnswer()">Check Answer</button>
+        <button class="nav-btn" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
+        <button class="nav-btn primary" onclick="nextQuestion()">${index === questions.length - 1 ? 'Finish Test' : 'Next →'}</button>
+      </div>
+    `;
+    
+    container.innerHTML = html;
+    renderQuestionGrid();
+  }
+
+  function selectAnswer(index) {
+    if (testFinished) return;
+    const q = questions[currentQuestion];
+    const answers = document.querySelectorAll('.answer');
+    const answer = answers[index];
+    const input = answer.querySelector('input');
+    
+    if (q.type === 'single') {
+      userAnswers[currentQuestion] = [index];
+      answers.forEach(a => { a.classList.remove('selected'); a.querySelector('input').checked = false; });
+      answer.classList.add('selected');
+      input.checked = true;
+    } else {
+      if (!userAnswers[currentQuestion]) userAnswers[currentQuestion] = [];
+      const idx = userAnswers[currentQuestion].indexOf(index);
+      if (idx > -1) {
+        userAnswers[currentQuestion].splice(idx, 1);
+        answer.classList.remove('selected');
+        input.checked = false;
+      } else {
+        userAnswers[currentQuestion].push(index);
+        answer.classList.add('selected');
+        input.checked = true;
+      }
+    }
+    renderQuestionGrid();
+  }
+
+  function checkAnswer() {
+    const q = questions[currentQuestion];
+    const answers = document.querySelectorAll('.answer');
+    answers.forEach((ans, j) => {
+      if (q.correct.includes(j)) {
+        ans.classList.add('correct');
+      } else if (userAnswers[currentQuestion] && userAnswers[currentQuestion].includes(j)) {
+        ans.classList.add('incorrect');
+      }
+    });
+    document.getElementById('explanation').classList.add('show');
+  }
+
+  function previousQuestion() {
+    if (currentQuestion > 0) showQuestion(currentQuestion - 1);
+  }
+
+  function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+      showQuestion(currentQuestion + 1);
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    clearInterval(timerInterval);
+    testFinished = true;
+
+    let correct = 0;
+    let incorrect = 0;
+
+    questions.forEach((q, i) => {
+      const userAns = userAnswers[i] || [];
+      const isCorrect = userAns.length === q.correct.length && userAns.every(a => q.correct.includes(a));
+      if (isCorrect) correct++;
+      else if (userAns.length > 0) incorrect++;
+    });
+
+    const percentage = Math.round((correct / questions.length) * 100);
+
+    document.getElementById('resultsScore').textContent = percentage + '%';
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('incorrectCount').textContent = incorrect;
+    document.getElementById('percentageScore').textContent = percentage + '%';
+
+    document.getElementById('questionContainer').style.display = 'none';
+    document.getElementById('results').classList.add('show');
+    document.getElementById('scorePanel').classList.add('visible');
+    document.getElementById('scoreBig').textContent = percentage + '%';
+
+    renderQuestionGrid();
+  }
+
+  function reviewAnswers() {
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('questionContainer').style.display = 'block';
+    showQuestion(0);
+  }
+
+  function restartTest() {
+    userAnswers = Array(questions.length).fill(null);
+    currentQuestion = 0;
+    testFinished = false;
+    timeRemaining = 90 * 60;
+    isPaused = false;
+    document.getElementById('timerBtn').textContent = 'PAUSE';
+    document.getElementById('scorePanel').classList.remove('visible');
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('questionContainer').style.display = 'block';
+    initTest();
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      if (!isPaused) {
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById('timer').textContent =
+          `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        if (timeRemaining <= 300) {
+          document.getElementById('timer').style.color = 'var(--red)';
+        }
+        if (timeRemaining <= 0) showResults();
+      }
+    }, 1000);
+  }
+
+  function toggleTimer() {
+    isPaused = !isPaused;
+    document.getElementById('timerBtn').textContent = isPaused ? 'RESUME' : 'PAUSE';
+  }
+
+  initTest();
+</script>
+</body>
+</html>
