@@ -584,6 +584,117 @@
     .score-pills { gap: 0.4rem; }
     .score-pill .lbl { display: none; }
   }
+
+  /* ── PORT BUCKETS ── */
+  .port-bucket {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    min-height: 42px;
+    transition: all 0.2s;
+  }
+  .port-bucket.dragover { border-color: var(--accent); background: rgba(0,212,255,0.05); }
+  .port-num {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 44px;
+    flex-shrink: 0;
+  }
+  .port-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+  .port-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; flex: 1; }
+
+  /* ── CRYPTO BUCKETS ── */
+  .crypto-bucket {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    min-height: 70px;
+    transition: all 0.2s;
+  }
+  .crypto-bucket.dragover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .crypto-bucket-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── VULN CARDS ── */
+  .vuln-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    cursor: grab;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .vuln-card:hover { border-color: var(--accent); transform: translateX(2px); }
+  .vuln-card.dragging { opacity: 0.35; }
+  .vuln-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
+  .vuln-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .vuln-detail { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+  .cvss-badge {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .cvss-badge.critical { background: rgba(255,71,87,0.2); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
+  .cvss-badge.high { background: rgba(255,107,43,0.2); color: var(--accent2); border: 1px solid rgba(255,107,43,0.3); }
+  .cvss-badge.medium { background: rgba(255,211,42,0.2); color: var(--yellow); border: 1px solid rgba(255,211,42,0.3); }
+  .cvss-badge.low { background: rgba(0,245,160,0.1); color: var(--green); border: 1px solid rgba(0,245,160,0.2); }
+
+  /* Vuln queue numbering (reuse IR timeline style) */
+  #vuln-queue .vuln-card { margin-left: 38px; position: relative; }
+  #vuln-queue .vuln-card::before {
+    content: attr(data-num);
+    position: absolute;
+    left: -30px;
+    width: 18px; height: 18px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 600;
+    font-family: var(--mono);
+  }
+
+  /* ── IAM ROLE BOXES ── */
+  .iam-role-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    min-height: 90px;
+    transition: all 0.2s;
+  }
+  .iam-role-box.dragover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .iam-role-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
 </style>
 </head>
 <body>
@@ -608,8 +719,8 @@
   <!-- Progress -->
   <div class="pbq-progress">
     <span class="pbq-progress-label">PBQ PROGRESS</span>
-    <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:25%"></div></div>
-    <span class="pbq-progress-score" id="prog-label">1 / 4</span>
+    <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:12.5%"></div></div>
+    <span class="pbq-progress-score" id="prog-label">1 / 8</span>
   </div>
 
   <!-- NAV TABS -->
@@ -618,6 +729,10 @@
     <button class="nav-tab" onclick="switchTab('net',this,2)">🌐 Network Diagram</button>
     <button class="nav-tab" onclick="switchTab('log',this,3)">📋 Log Analysis</button>
     <button class="nav-tab" onclick="switchTab('ir',this,4)">🚨 Incident Response</button>
+    <button class="nav-tab" onclick="switchTab('ports',this,5)">🔌 Port Matching</button>
+    <button class="nav-tab" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button>
+    <button class="nav-tab" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button>
+    <button class="nav-tab" onclick="switchTab('iam',this,8)">👤 Access Control</button>
   </div>
 
   <!-- ============ TAB 1: FIREWALL ACL ============ -->
@@ -840,6 +955,211 @@
     </div>
   </div>
 
+
+  <!-- ============ TAB 5: PORT & PROTOCOL MATCHING ============ -->
+  <div class="tab-content" id="tab-ports">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-05 · Port &amp; Protocol Matching</div>
+      <div class="scenario-title">Match Services to Their Correct Default Ports</div>
+      <div class="scenario-desc">
+        Drag each network service chip into the correct port number bucket. Knowing default ports is essential for firewall configuration, log analysis, and identifying anomalous traffic — all heavily tested on SY0-701. Note: <strong>SSH and SFTP both use port 22</strong>.
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+        <div>
+          <div class="col-label purple">Services — Drag to Port Bucket</div>
+          <div class="drop-zone" id="ports-pool" style="min-height:140px; flex-wrap:wrap; flex-direction:row; gap:0.4rem;"
+            ondragover="dov(event)" ondrop="portDrop(event,'ports-pool')" ondragleave="dlv(event)">
+            <div class="device-chip" draggable="true" data-service="HTTPS" data-port="443" ondragstart="ds(event,'port')" ondragend="de(event)">HTTPS</div>
+            <div class="device-chip" draggable="true" data-service="SSH" data-port="22" ondragstart="ds(event,'port')" ondragend="de(event)">SSH</div>
+            <div class="device-chip" draggable="true" data-service="DNS" data-port="53" ondragstart="ds(event,'port')" ondragend="de(event)">DNS</div>
+            <div class="device-chip" draggable="true" data-service="RDP" data-port="3389" ondragstart="ds(event,'port')" ondragend="de(event)">RDP</div>
+            <div class="device-chip" draggable="true" data-service="SMTP" data-port="25" ondragstart="ds(event,'port')" ondragend="de(event)">SMTP</div>
+            <div class="device-chip" draggable="true" data-service="LDAP" data-port="389" ondragstart="ds(event,'port')" ondragend="de(event)">LDAP</div>
+            <div class="device-chip" draggable="true" data-service="SNMP" data-port="161" ondragstart="ds(event,'port')" ondragend="de(event)">SNMP</div>
+            <div class="device-chip" draggable="true" data-service="Kerberos" data-port="88" ondragstart="ds(event,'port')" ondragend="de(event)">Kerberos</div>
+            <div class="device-chip" draggable="true" data-service="FTPS" data-port="990" ondragstart="ds(event,'port')" ondragend="de(event)">FTPS</div>
+            <div class="device-chip" draggable="true" data-service="SFTP" data-port="22" ondragstart="ds(event,'port')" ondragend="de(event)">SFTP</div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Port Buckets</div>
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-22')" ondragleave="dlv(event)"><span class="port-num">:22</span><span class="port-label">TCP 22</span><div class="port-chips" id="bucket-22-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-25')" ondragleave="dlv(event)"><span class="port-num">:25</span><span class="port-label">TCP 25</span><div class="port-chips" id="bucket-25-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-53')" ondragleave="dlv(event)"><span class="port-num">:53</span><span class="port-label">UDP/TCP 53</span><div class="port-chips" id="bucket-53-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-88')" ondragleave="dlv(event)"><span class="port-num">:88</span><span class="port-label">TCP 88</span><div class="port-chips" id="bucket-88-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-161')" ondragleave="dlv(event)"><span class="port-num">:161</span><span class="port-label">UDP 161</span><div class="port-chips" id="bucket-161-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-389')" ondragleave="dlv(event)"><span class="port-num">:389</span><span class="port-label">TCP 389</span><div class="port-chips" id="bucket-389-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-443')" ondragleave="dlv(event)"><span class="port-num">:443</span><span class="port-label">TCP 443</span><div class="port-chips" id="bucket-443-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-990')" ondragleave="dlv(event)"><span class="port-num">:990</span><span class="port-label">TCP 990</span><div class="port-chips" id="bucket-990-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-3389')" ondragleave="dlv(event)"><span class="port-num">:3389</span><span class="port-label">TCP 3389</span><div class="port-chips" id="bucket-3389-chips"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkPorts()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetPorts()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-ports"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 6: CRYPTOGRAPHY ============ -->
+  <div class="tab-content" id="tab-crypto">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-06 · Cryptography Algorithm Matching</div>
+      <div class="scenario-title">Match Algorithms to Their Cryptographic Category</div>
+      <div class="scenario-desc">
+        Drag each algorithm into its correct category: <strong>Symmetric Encryption</strong>, <strong>Asymmetric Encryption</strong>, <strong>Hashing / Integrity</strong>, or <strong>Key Exchange</strong>. These distinctions are critical for PKI, TLS, and data-at-rest questions on SY0-701.
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+        <div>
+          <div class="col-label purple">Algorithms — Drag to Category</div>
+          <div class="drop-zone" id="crypto-pool" style="min-height:180px; flex-wrap:wrap; flex-direction:row; gap:0.4rem;"
+            ondragover="dov(event)" ondrop="cryptoDrop(event,'crypto-pool')" ondragleave="dlv(event)">
+            <div class="device-chip" draggable="true" data-algo="AES" data-cat="symmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">AES</div>
+            <div class="device-chip" draggable="true" data-algo="RSA" data-cat="asymmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">RSA</div>
+            <div class="device-chip" draggable="true" data-algo="SHA-256" data-cat="hashing" ondragstart="ds(event,'crypto')" ondragend="de(event)">SHA-256</div>
+            <div class="device-chip" draggable="true" data-algo="Diffie-Hellman" data-cat="keyexchange" ondragstart="ds(event,'crypto')" ondragend="de(event)">Diffie-Hellman</div>
+            <div class="device-chip" draggable="true" data-algo="3DES" data-cat="symmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">3DES</div>
+            <div class="device-chip" draggable="true" data-algo="ECC" data-cat="asymmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">ECC</div>
+            <div class="device-chip" draggable="true" data-algo="MD5" data-cat="hashing" ondragstart="ds(event,'crypto')" ondragend="de(event)">MD5</div>
+            <div class="device-chip" draggable="true" data-algo="ECDH" data-cat="keyexchange" ondragstart="ds(event,'crypto')" ondragend="de(event)">ECDH</div>
+            <div class="device-chip" draggable="true" data-algo="ChaCha20" data-cat="symmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">ChaCha20</div>
+            <div class="device-chip" draggable="true" data-algo="BCRYPT" data-cat="hashing" ondragstart="ds(event,'crypto')" ondragend="de(event)">BCRYPT</div>
+            <div class="device-chip" draggable="true" data-algo="DSA" data-cat="asymmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">DSA</div>
+            <div class="device-chip" draggable="true" data-algo="ECDHE" data-cat="keyexchange" ondragstart="ds(event,'crypto')" ondragend="de(event)">ECDHE</div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Categories</div>
+          <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-symmetric')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--accent)">Symmetric Encryption</div>
+              <div class="port-chips" id="cat-symmetric-chips"></div>
+            </div>
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-asymmetric')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--purple)">Asymmetric Encryption</div>
+              <div class="port-chips" id="cat-asymmetric-chips"></div>
+            </div>
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-hashing')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--yellow)">Hashing / Integrity</div>
+              <div class="port-chips" id="cat-hashing-chips"></div>
+            </div>
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-keyexchange')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--green)">Key Exchange</div>
+              <div class="port-chips" id="cat-keyexchange-chips"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkCrypto()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetCrypto()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-crypto"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 7: VULNERABILITY PRIORITIZATION ============ -->
+  <div class="tab-content" id="tab-vuln">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-07 · Vulnerability Prioritization</div>
+      <div class="scenario-title">Rank Vulnerabilities by Remediation Priority</div>
+      <div class="scenario-desc">
+        A vulnerability scan returned findings for a production, internet-facing e-commerce platform. Drag them into the remediation queue — <strong>highest priority first</strong>. Consider CVSS score, exploitability, public exploit availability, and business context.
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+        <div>
+          <div class="col-label purple">Scan Findings</div>
+          <div class="drop-zone" id="vuln-pool" ondragover="dov(event)" ondrop="vulnDrop(event,'vuln-pool')" ondragleave="dlv(event)" style="gap:0.6rem;">
+            <div class="vuln-card" draggable="true" data-vuln="SQLi" data-priority="1" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge critical">CVSS 9.8</span><span class="vuln-name">SQL Injection — Login Form</span></div>
+              <div class="vuln-detail">Unauthenticated attacker can dump the entire user database via unsanitized input</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="TLS" data-priority="4" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge medium">CVSS 5.3</span><span class="vuln-name">TLS 1.0 Still Supported</span></div>
+              <div class="vuln-detail">Server accepts TLS 1.0, enabling POODLE-style downgrade attacks on older clients</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="RCE" data-priority="2" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge critical">CVSS 9.0</span><span class="vuln-name">RCE — Unpatched Apache</span></div>
+              <div class="vuln-detail">Known CVE with public exploit — RCE on web server, patch available for 30 days</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="NoMFA" data-priority="3" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge high">CVSS 7.5</span><span class="vuln-name">Admin Panel — No MFA</span></div>
+              <div class="vuln-detail">Internet-accessible admin UI with password-only auth and no rate limiting</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="Banner" data-priority="5" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge low">CVSS 3.1</span><span class="vuln-name">Server Version Disclosure</span></div>
+              <div class="vuln-detail">HTTP headers expose Apache version and OS — aids attacker reconnaissance</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Remediation Queue — Highest Priority First</div>
+          <div class="drop-zone ir-timeline-wrap" id="vuln-queue" ondragover="dov(event)" ondrop="vulnDrop(event,'vuln-queue')" ondragleave="dlv(event)" style="min-height:280px; gap:0.6rem;">
+            <div class="drop-hint">Drop vulnerabilities here in priority order</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkVuln()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetVuln()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-vuln"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 8: ACCESS CONTROL / IAM ============ -->
+  <div class="tab-content" id="tab-iam">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-08 · Access Control / IAM</div>
+      <div class="scenario-title">Assign Least-Privilege Permissions to Roles</div>
+      <div class="scenario-desc">
+        Apply the <strong>principle of least privilege</strong>. Drag each permission chip into every role that should have it. A permission may belong to multiple roles — drag it into each applicable role box. <strong>Double-click</strong> a chip inside a role box to remove it.
+      </div>
+      <div class="info-box" style="margin-bottom:1.25rem;">
+        <div class="info-label">// System: HR Management Platform</div>
+        <p>Roles: <span>Employee</span> &nbsp;|&nbsp; <span>HR Manager</span> &nbsp;|&nbsp; <span>IT Admin</span> &nbsp;|&nbsp; <span>Auditor</span></p>
+      </div>
+      <div class="col-label purple" style="margin-bottom:0.75rem;">Permissions Pool — Drag to Role(s)</div>
+      <div class="drop-zone" id="iam-pool" style="min-height:72px; flex-wrap:wrap; flex-direction:row; gap:0.4rem; margin-bottom:1.25rem;"
+        ondragover="dov(event)" ondrop="iamDrop(event,'iam-pool')" ondragleave="dlv(event)">
+        <div class="device-chip" draggable="true" data-perm="View own payslip" data-roles="employee,hr_manager" ondragstart="ds(event,'iam')" ondragend="de(event)">View own payslip</div>
+        <div class="device-chip" draggable="true" data-perm="View all employee records" data-roles="hr_manager,auditor" ondragstart="ds(event,'iam')" ondragend="de(event)">View all employee records</div>
+        <div class="device-chip" draggable="true" data-perm="Modify employee salary" data-roles="hr_manager" ondragstart="ds(event,'iam')" ondragend="de(event)">Modify employee salary</div>
+        <div class="device-chip" draggable="true" data-perm="Reset user passwords" data-roles="it_admin" ondragstart="ds(event,'iam')" ondragend="de(event)">Reset user passwords</div>
+        <div class="device-chip" draggable="true" data-perm="Create/delete accounts" data-roles="it_admin" ondragstart="ds(event,'iam')" ondragend="de(event)">Create/delete accounts</div>
+        <div class="device-chip" draggable="true" data-perm="View audit logs" data-roles="it_admin,auditor" ondragstart="ds(event,'iam')" ondragend="de(event)">View audit logs</div>
+        <div class="device-chip" draggable="true" data-perm="Export payroll data" data-roles="hr_manager" ondragstart="ds(event,'iam')" ondragend="de(event)">Export payroll data</div>
+        <div class="device-chip" draggable="true" data-perm="Modify system config" data-roles="it_admin" ondragstart="ds(event,'iam')" ondragend="de(event)">Modify system config</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem;">
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-employee')" ondragleave="dlv(event)">
+          <div class="iam-role-label">Employee</div>
+          <div class="port-chips" id="iam-employee-chips"></div>
+        </div>
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-hr_manager')" ondragleave="dlv(event)">
+          <div class="iam-role-label" style="color:var(--yellow)">HR Manager</div>
+          <div class="port-chips" id="iam-hr_manager-chips"></div>
+        </div>
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-it_admin')" ondragleave="dlv(event)">
+          <div class="iam-role-label" style="color:var(--red)">IT Admin</div>
+          <div class="port-chips" id="iam-it_admin-chips"></div>
+        </div>
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-auditor')" ondragleave="dlv(event)">
+          <div class="iam-role-label" style="color:var(--purple)">Auditor</div>
+          <div class="port-chips" id="iam-auditor-chips"></div>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkIAM()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetIAM()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-iam"></div>
+    </div>
+  </div>
+
 </div>
 </main>
 
@@ -866,8 +1186,8 @@ function switchTab(id, btn, n) {
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
-  document.getElementById('prog-fill').style.width = (n / 4 * 100) + '%';
-  document.getElementById('prog-label').textContent = n + ' / 4';
+  document.getElementById('prog-fill').style.width = (n / 8 * 100) + '%';
+  document.getElementById('prog-label').textContent = n + ' / 8';
 }
 
 // ── GENERIC DRAG HELPERS ──
@@ -1048,6 +1368,216 @@ function resetIR() {
   tl.innerHTML = '<div class="drop-hint">Drop steps here in the correct order ↓</div>';
   document.getElementById('fb-ir').className = 'feedback';
 }
+
+// ── PORT MATCHING ──
+function portDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'port') return;
+  if (targetId === 'ports-pool') {
+    document.getElementById('ports-pool').appendChild(dragSrc);
+  } else {
+    const chipsId = targetId + '-chips';
+    document.getElementById(chipsId).appendChild(dragSrc);
+  }
+}
+function checkPorts() {
+  attempts++; updScore();
+  const portMap = { '22': ['SSH','SFTP'], '25': ['SMTP'], '53': ['DNS'], '88': ['Kerberos'], '161': ['SNMP'], '389': ['LDAP'], '443': ['HTTPS'], '990': ['FTPS'], '3389': ['RDP'] };
+  let wrong = [];
+  const poolLeft = document.getElementById('ports-pool').querySelectorAll('.device-chip').length;
+  if (poolLeft > 0) {
+    const fb = document.getElementById('fb-ports');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all service chips into port buckets before checking.';
+    return;
+  }
+  ['22','25','53','88','161','389','443','990','3389'].forEach(port => {
+    const chips = document.getElementById('bucket-' + port + '-chips').querySelectorAll('.device-chip');
+    chips.forEach(chip => {
+      if (!portMap[port].includes(chip.dataset.service)) {
+        wrong.push(chip.dataset.service + ' (not port ' + port + ')');
+      }
+    });
+    // check nothing is missing from correct bucket
+  });
+  const fb = document.getElementById('fb-ports');
+  fb.classList.add('show');
+  if (wrong.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Key takeaways: SSH and SFTP both use port 22 (SFTP is SSH-based file transfer, not FTP). FTPS uses port 990 (FTP over SSL — different from SFTP). DNS uses both UDP and TCP 53. Kerberos :88 is essential for AD authentication. LDAP :389 vs LDAPS :636 (secure). SNMP :161 is UDP — important for network monitoring.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join(', ') + '.<br><br>Remember: SFTP ≠ FTPS. SFTP runs over SSH (port 22). FTPS is FTP over SSL/TLS (port 990). RDP is always 3389. SNMP is UDP 161.';
+  }
+}
+function resetPorts() {
+  const pool = document.getElementById('ports-pool');
+  ['22','25','53','88','161','389','443','990','3389'].forEach(port => {
+    document.getElementById('bucket-' + port + '-chips').querySelectorAll('.device-chip').forEach(c => pool.appendChild(c));
+  });
+  document.getElementById('fb-ports').className = 'feedback';
+}
+
+// ── CRYPTOGRAPHY ──
+function cryptoDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'crypto') return;
+  if (targetId === 'crypto-pool') {
+    document.getElementById('crypto-pool').appendChild(dragSrc);
+  } else {
+    const chipsId = targetId + '-chips';
+    document.getElementById(chipsId).appendChild(dragSrc);
+  }
+}
+function checkCrypto() {
+  const poolLeft = document.getElementById('crypto-pool').querySelectorAll('.device-chip').length;
+  if (poolLeft > 0) {
+    const fb = document.getElementById('fb-crypto');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all algorithm chips into categories.';
+    return;
+  }
+  attempts++; updScore();
+  let wrong = [];
+  ['symmetric','asymmetric','hashing','keyexchange'].forEach(cat => {
+    document.getElementById('cat-' + cat + '-chips').querySelectorAll('.device-chip').forEach(chip => {
+      if (chip.dataset.cat !== cat) wrong.push(chip.dataset.algo + ' (not ' + cat + ')');
+    });
+  });
+  const fb = document.getElementById('fb-crypto');
+  fb.classList.add('show');
+  if (wrong.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong><br>🔑 <strong>Symmetric</strong> (same key): AES, 3DES, ChaCha20 — fast, used for bulk encryption<br>🗝️ <strong>Asymmetric</strong> (key pair): RSA, ECC, DSA — slower, used for key exchange and digital signatures<br>🔍 <strong>Hashing</strong> (one-way): SHA-256, MD5, BCRYPT — integrity verification, password storage<br>🤝 <strong>Key Exchange</strong>: Diffie-Hellman, ECDH, ECDHE — establish shared secrets without transmitting them. ECDHE adds ephemeral keys for perfect forward secrecy.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join(', ') + '.<br><br>Tip: Symmetric = same key both sides (fast). Asymmetric = public/private key pair (slow). Hashing = one-way, no decryption. Key Exchange = securely agree on a shared secret (DH, ECDH).';
+  }
+}
+function resetCrypto() {
+  const pool = document.getElementById('crypto-pool');
+  ['symmetric','asymmetric','hashing','keyexchange'].forEach(cat => {
+    document.getElementById('cat-' + cat + '-chips').querySelectorAll('.device-chip').forEach(c => pool.appendChild(c));
+  });
+  document.getElementById('fb-crypto').className = 'feedback';
+}
+
+// ── VULNERABILITY PRIORITIZATION ──
+function vulnDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'vuln') return;
+  const target = document.getElementById(targetId);
+  const hint = target.querySelector('.drop-hint'); if (hint) hint.remove();
+  target.appendChild(dragSrc);
+  if (targetId === 'vuln-queue') vulnRenumber();
+}
+function vulnRenumber() {
+  document.getElementById('vuln-queue').querySelectorAll('.vuln-card').forEach((c,i) => c.dataset.num = i+1);
+}
+function checkVuln() {
+  const cards = Array.from(document.getElementById('vuln-queue').querySelectorAll('.vuln-card'));
+  if (cards.length !== 5) {
+    const fb = document.getElementById('fb-vuln');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ Place all 5 vulnerabilities in the remediation queue first. (' + cards.length + '/5 placed)';
+    return;
+  }
+  attempts++; updScore();
+  const order = cards.map(c => parseInt(c.dataset.priority));
+  const fb = document.getElementById('fb-vuln');
+  fb.classList.add('show');
+  if (JSON.stringify(order) === JSON.stringify([1,2,3,4,5])) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct prioritization!</strong><br>1️⃣ <strong>SQL Injection (9.8)</strong> — highest CVSS, unauthenticated, full data breach risk<br>2️⃣ <strong>RCE Apache (9.0)</strong> — nearly as critical, public exploit available, 30 days unpatched<br>3️⃣ <strong>Admin No MFA (7.5)</strong> — internet-exposed admin = serious risk, easy attacker target<br>4️⃣ <strong>TLS 1.0 (5.3)</strong> — real risk but requires active MITM and specific conditions<br>5️⃣ <strong>Version Disclosure (3.1)</strong> — informational, aids recon but not directly exploitable<br><br><em>Note: CVSS score alone doesn't determine priority — exploitability, exposure, and available patches all factor in.</em>';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Not the optimal order.</strong> Key principle: Prioritize by <em>exploitability × impact × exposure</em>, not just CVSS score alone. An unauthenticated SQLi that leaks your whole database beats a 9.0 that requires a specific condition. Public exploits dramatically increase urgency. Info disclosures are lowest — they aid attackers but aren't directly exploitable.';
+  }
+}
+function resetVuln() {
+  const pool = document.getElementById('vuln-pool'), queue = document.getElementById('vuln-queue');
+  Array.from(queue.querySelectorAll('.vuln-card')).forEach(c => { c.removeAttribute('data-num'); pool.appendChild(c); });
+  queue.innerHTML = '<div class="drop-hint">Drop vulnerabilities here in priority order ↓</div>';
+  document.getElementById('fb-vuln').className = 'feedback';
+}
+
+// ── IAM ACCESS CONTROL ──
+// IAM uses clone-on-drop since permissions can apply to multiple roles
+function iamDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'iam') return;
+  if (targetId === 'iam-pool') {
+    // return to pool — move original back
+    document.getElementById('iam-pool').appendChild(dragSrc);
+  } else {
+    // clone into role box so original stays in pool
+    const chipsId = targetId + '-chips';
+    const container = document.getElementById(chipsId);
+    // prevent duplicates in same role
+    const existing = Array.from(container.querySelectorAll('.device-chip')).map(c => c.dataset.perm);
+    if (existing.includes(dragSrc.dataset.perm)) return;
+    const clone = dragSrc.cloneNode(true);
+    clone.addEventListener('dragstart', (ev) => ds(ev, 'iam'));
+    clone.addEventListener('dragend', de);
+    // add remove-on-click for role chips
+    clone.setAttribute('ondblclick', 'this.remove()');
+    clone.title = 'Double-click to remove';
+    container.appendChild(clone);
+  }
+}
+function checkIAM() {
+  attempts++; updScore();
+  // Expected: perm -> array of roles that should have it
+  const expected = {
+    'View own payslip':         ['employee','hr_manager'],
+    'View all employee records':['hr_manager','auditor'],
+    'Modify employee salary':   ['hr_manager'],
+    'Reset user passwords':     ['it_admin'],
+    'Create/delete accounts':   ['it_admin'],
+    'View audit logs':          ['it_admin','auditor'],
+    'Export payroll data':      ['hr_manager'],
+    'Modify system config':     ['it_admin']
+  };
+  const roles = ['employee','hr_manager','it_admin','auditor'];
+  let issues = [];
+  roles.forEach(role => {
+    const chips = document.getElementById('iam-' + role + '-chips').querySelectorAll('.device-chip');
+    const assigned = Array.from(chips).map(c => c.dataset.perm);
+    // check for over-privilege
+    assigned.forEach(perm => {
+      if (!expected[perm] || !expected[perm].includes(role)) {
+        issues.push(role.replace('_',' ') + ' should NOT have "' + perm + '"');
+      }
+    });
+    // check for missing permissions
+    Object.entries(expected).forEach(([perm, allowedRoles]) => {
+      if (allowedRoles.includes(role) && !assigned.includes(perm)) {
+        issues.push(role.replace('_',' ') + ' is missing "' + perm + '"');
+      }
+    });
+  });
+  const fb = document.getElementById('fb-iam');
+  fb.classList.add('show');
+  if (issues.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Least privilege applied properly.<br><br>Key principles tested: <em>Employees</em> only see their own data. <em>HR Managers</em> can view/modify HR data but cannot touch system config. <em>IT Admins</em> manage infrastructure but should NOT access payroll or HR records. <em>Auditors</em> have read-only access to records and logs for compliance — never write access. Separation of duties prevents any one role from having too much power.';
+  } else {
+    const shown = issues.slice(0,4);
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong> ' + shown.join('; ') + (issues.length>4?'...':'') + '.<br><br>Remember: Least privilege = minimum access needed. IT Admin ≠ HR access. Auditors = read-only. Employees = own data only. Double-click a chip in a role box to remove it.';
+  }
+}
+function resetIAM() {
+  ['employee','hr_manager','it_admin','auditor'].forEach(role => {
+    document.getElementById('iam-' + role + '-chips').innerHTML = '';
+  });
+  document.getElementById('fb-iam').className = 'feedback';
+}
+
 </script>
 </body>
 </html>
