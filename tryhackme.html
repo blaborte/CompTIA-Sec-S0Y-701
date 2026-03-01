@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TryHackMe Resources | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --purple: #b47aff;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --thm: #88cc14;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px; flex-shrink: 0;
+  }
+  .logo { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); letter-spacing: 0.1em; text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 1rem; }
+  .back-link {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    text-decoration: none; border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem; border-radius: 6px; transition: all 0.2s;
+  }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); }
+  .thm-link {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--thm);
+    text-decoration: none; border: 1px solid rgba(136,204,20,0.3);
+    background: rgba(136,204,20,0.06);
+    padding: 0.4rem 0.9rem; border-radius: 6px; transition: all 0.2s;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .thm-link:hover { background: rgba(136,204,20,0.12); border-color: var(--thm); }
+
+  main { flex: 1; padding: 2rem; }
+  .container { max-width: 1150px; margin: 0 auto; }
+
+  h1 {
+    font-size: 2rem; font-weight: 600; margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, var(--thm), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; text-align: center;
+  }
+  .subtitle {
+    color: var(--muted); font-size: 0.9rem; margin-bottom: 2.5rem;
+    font-family: var(--mono); letter-spacing: 0.05em; text-align: center;
+  }
+
+  /* ── OVERALL STATS BAR ── */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1rem; margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem 1.5rem;
+    transition: all 0.25s; position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--thm), transparent); }
+  .stat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent), transparent); }
+  .stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--yellow), transparent); }
+  .stat-card:nth-child(4)::before { background: linear-gradient(90deg, var(--purple), transparent); }
+  .stat-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; }
+  .stat-value { font-size: 1.8rem; font-weight: 600; }
+  .stat-card:nth-child(1) .stat-value { color: var(--thm); }
+  .stat-card:nth-child(2) .stat-value { color: var(--accent); }
+  .stat-card:nth-child(3) .stat-value { color: var(--yellow); }
+  .stat-card:nth-child(4) .stat-value { color: var(--purple); }
+  .stat-sub { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* Overall progress bar */
+  .overall-progress {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.5rem;
+    margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .op-label { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); white-space: nowrap; min-width: 130px; }
+  .op-bar { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+  .op-fill { height: 100%; background: linear-gradient(90deg, var(--thm), var(--accent)); border-radius: 4px; transition: width 0.5s ease; }
+  .op-pct { font-family: var(--mono); font-size: 0.75rem; color: var(--thm); white-space: nowrap; min-width: 40px; text-align: right; }
+
+  /* ── TABS ── */
+  .nav-tabs {
+    display: flex; gap: 0; margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border); overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 0.9rem 1.25rem; background: none; border: none;
+    color: var(--muted); font-family: var(--mono); font-size: 0.8rem;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all 0.25s; white-space: nowrap; letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--thm); border-bottom-color: var(--thm); }
+  .tab-count {
+    font-size: 0.65rem; background: var(--bg3); border: 1px solid var(--border);
+    padding: 0.1rem 0.45rem; border-radius: 10px; color: var(--muted);
+  }
+  .nav-tab.active .tab-count { border-color: rgba(136,204,20,0.3); color: var(--thm); background: rgba(136,204,20,0.08); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;
+  }
+  .section-title { font-size: 1.1rem; font-weight: 600; color: var(--text); }
+  .section-desc { font-size: 0.83rem; color: var(--muted); margin-top: 0.2rem; }
+  .section-pairing {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 6px; padding: 0.35rem 0.75rem;
+    font-family: var(--mono); font-size: 0.7rem; color: var(--accent);
+  }
+
+  /* ── ROOM CARD ── */
+  .rooms-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem; margin-bottom: 2.5rem;
+  }
+  .room-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.1rem 1.25rem;
+    transition: all 0.2s; position: relative;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .room-card:hover { border-color: var(--thm); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(136,204,20,0.07); }
+  .room-card.completed { border-color: rgba(136,204,20,0.3); background: linear-gradient(135deg, rgba(136,204,20,0.04), var(--bg2)); }
+  .room-card.completed::before {
+    content: '✓'; position: absolute; top: 0.75rem; right: 0.9rem;
+    color: var(--thm); font-size: 0.9rem; font-weight: 700; font-family: var(--mono);
+  }
+
+  .room-top { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .room-icon { font-size: 1.4rem; flex-shrink: 0; line-height: 1; margin-top: 0.1rem; }
+  .room-name { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; line-height: 1.3; }
+  .room-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+  .diff-badge {
+    font-family: var(--mono); font-size: 0.62rem; font-weight: 600;
+    padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid;
+  }
+  .diff-easy { color: var(--green); border-color: rgba(0,245,160,0.3); background: rgba(0,245,160,0.06); }
+  .diff-medium { color: var(--yellow); border-color: rgba(255,211,42,0.3); background: rgba(255,211,42,0.06); }
+  .diff-hard { color: var(--red); border-color: rgba(255,71,87,0.3); background: rgba(255,71,87,0.06); }
+
+  .free-badge {
+    font-family: var(--mono); font-size: 0.62rem;
+    padding: 0.15rem 0.5rem; border-radius: 4px;
+    color: var(--thm); border: 1px solid rgba(136,204,20,0.3); background: rgba(136,204,20,0.06);
+  }
+  .sub-badge {
+    font-family: var(--mono); font-size: 0.62rem;
+    padding: 0.15rem 0.5rem; border-radius: 4px;
+    color: var(--muted); border: 1px solid var(--border); background: var(--bg3);
+  }
+
+  .room-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  .room-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .room-tag {
+    font-family: var(--mono); font-size: 0.65rem;
+    padding: 0.15rem 0.5rem; border-radius: 4px;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+  }
+
+  .room-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.2rem; }
+  .room-link {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--thm);
+    text-decoration: none; display: flex; align-items: center; gap: 0.3rem;
+    transition: all 0.2s;
+  }
+  .room-link:hover { color: #a8e050; }
+
+  .complete-btn {
+    font-family: var(--mono); font-size: 0.68rem;
+    padding: 0.3rem 0.75rem; border-radius: 5px; cursor: pointer;
+    transition: all 0.2s; border: 1px solid var(--border);
+    background: var(--bg3); color: var(--muted);
+  }
+  .complete-btn:hover { border-color: var(--thm); color: var(--thm); }
+  .room-card.completed .complete-btn {
+    border-color: rgba(136,204,20,0.4); color: var(--thm);
+    background: rgba(136,204,20,0.08);
+  }
+
+  /* ── PAIRINGS TAB ── */
+  .pairing-row {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center;
+    transition: all 0.2s;
+  }
+  .pairing-row:hover { border-color: rgba(136,204,20,0.2); }
+
+  .pair-page {
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .pair-page-icon { font-size: 1.3rem; }
+  .pair-page-name { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.1rem; }
+  .pair-page-desc { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+  .pair-page-link {
+    font-family: var(--mono); font-size: 0.7rem; color: var(--accent);
+    text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;
+    margin-top: 0.3rem;
+  }
+  .pair-page-link:hover { text-decoration: underline; }
+
+  .pair-arrow {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+    text-align: center; white-space: nowrap;
+  }
+  .pair-arrow .arrow-icon { font-size: 1.2rem; display: block; color: var(--thm); margin-bottom: 0.2rem; }
+
+  .pair-rooms { display: flex; flex-direction: column; gap: 0.4rem; }
+  .pair-room-chip {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.45rem 0.75rem;
+    font-size: 0.8rem; text-decoration: none; color: var(--text);
+    transition: all 0.2s;
+  }
+  .pair-room-chip:hover { border-color: var(--thm); color: var(--thm); }
+  .pair-room-chip .chip-diff { font-family: var(--mono); font-size: 0.62rem; margin-left: auto; }
+
+  /* ── LEARNING PATH TAB ── */
+  .path-section { margin-bottom: 2rem; }
+  .path-title {
+    font-size: 1rem; font-weight: 600; color: var(--text);
+    margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.6rem;
+  }
+  .path-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; font-family: var(--mono); }
+
+  .path-steps { display: flex; flex-direction: column; gap: 0; }
+  .path-step {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 0.9rem 1rem; background: var(--bg2);
+    border: 1px solid var(--border); border-radius: 0;
+    margin-top: -1px; transition: all 0.2s;
+    position: relative;
+  }
+  .path-step:first-child { border-radius: 10px 10px 0 0; }
+  .path-step:last-child { border-radius: 0 0 10px 10px; }
+  .path-step:only-child { border-radius: 10px; }
+  .path-step:hover { z-index: 1; border-color: var(--thm); }
+  .path-step.completed { background: linear-gradient(135deg, rgba(136,204,20,0.04), var(--bg2)); border-color: rgba(136,204,20,0.25); }
+
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--muted);
+    margin-top: 0.1rem;
+  }
+  .path-step.completed .step-num { background: rgba(136,204,20,0.15); border-color: rgba(136,204,20,0.4); color: var(--thm); }
+
+  .step-body { flex: 1; }
+  .step-name { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+  .step-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+  .step-meta { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.35rem; }
+
+  .step-actions { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+  .step-link {
+    font-family: var(--mono); font-size: 0.7rem; color: var(--thm);
+    text-decoration: none; display: flex; align-items: center; gap: 0.25rem;
+    padding: 0.3rem 0.6rem; border: 1px solid rgba(136,204,20,0.2);
+    border-radius: 5px; background: rgba(136,204,20,0.05);
+    transition: all 0.2s;
+  }
+  .step-link:hover { background: rgba(136,204,20,0.12); border-color: var(--thm); }
+  .step-check {
+    font-family: var(--mono); font-size: 0.68rem;
+    padding: 0.3rem 0.6rem; border-radius: 5px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--bg3); color: var(--muted);
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .step-check:hover { border-color: var(--thm); color: var(--thm); }
+  .path-step.completed .step-check { border-color: rgba(136,204,20,0.4); color: var(--thm); background: rgba(136,204,20,0.08); }
+
+  /* ── THM TIP BOX ── */
+  .thm-tip {
+    background: rgba(136,204,20,0.05); border: 1px solid rgba(136,204,20,0.2);
+    border-radius: 8px; padding: 0.85rem 1.1rem; margin-bottom: 1.5rem;
+    font-size: 0.82rem; color: var(--text); line-height: 1.6;
+    display: flex; gap: 0.75rem; align-items: flex-start;
+  }
+  .thm-tip .tip-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .thm-tip strong { color: var(--thm); }
+
+  footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem; text-align: center;
+    font-size: 0.85rem; color: var(--muted); font-family: var(--mono);
+  }
+
+  @media(max-width:700px) {
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .rooms-grid { grid-template-columns: 1fr; }
+    .pairing-row { grid-template-columns: 1fr; }
+    .pair-arrow { display: none; }
+    header { padding: 0 1rem; }
+    main { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">SECURITY+ <span>SY0-701</span> PRACTICE EXAMS</a>
+  <div class="header-right">
+    <a href="https://tryhackme.com" target="_blank" rel="noopener" class="thm-link">🟢 TryHackMe ↗</a>
+    <a href="index.html" class="back-link">← BACK</a>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+  <h1>TryHackMe Resources</h1>
+  <p class="subtitle">// curated rooms · paired with your study materials · track your progress</p>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Rooms Completed</div>
+      <div class="stat-value" id="stat-completed">0</div>
+      <div class="stat-sub" id="stat-completed-sub">of 30 total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Free Rooms Done</div>
+      <div class="stat-value" id="stat-free">0</div>
+      <div class="stat-sub">no subscription needed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Domains Covered</div>
+      <div class="stat-value" id="stat-domains">0</div>
+      <div class="stat-sub">of 5 categories</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Path Progress</div>
+      <div class="stat-value" id="stat-path">0%</div>
+      <div class="stat-sub">SOC Analyst path</div>
+    </div>
+  </div>
+
+  <!-- Overall Progress -->
+  <div class="overall-progress">
+    <span class="op-label">OVERALL PROGRESS</span>
+    <div class="op-bar"><div class="op-fill" id="op-fill" style="width:0%"></div></div>
+    <span class="op-pct" id="op-pct">0%</span>
+  </div>
+
+  <!-- Nav Tabs -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('soc',this)">🔵 SOC / Blue Team <span class="tab-count" id="tc-soc">0/7</span></button>
+    <button class="nav-tab" onclick="switchTab('network',this)">🌐 Network &amp; Firewall <span class="tab-count" id="tc-network">0/6</span></button>
+    <button class="nav-tab" onclick="switchTab('crypto',this)">🔐 Cryptography <span class="tab-count" id="tc-crypto">0/5</span></button>
+    <button class="nav-tab" onclick="switchTab('threat',this)">🎭 Threat Intel <span class="tab-count" id="tc-threat">0/6</span></button>
+    <button class="nav-tab" onclick="switchTab('ir',this)">🚨 Incident Response <span class="tab-count" id="tc-ir">0/6</span></button>
+    <button class="nav-tab" onclick="switchTab('pairings',this)">🔗 Page Pairings</button>
+    <button class="nav-tab" onclick="switchTab('path',this)">🗺️ Learning Path</button>
+  </div>
+
+  <!-- ════════ SOC / BLUE TEAM ════════ -->
+  <div class="tab-content active" id="tab-soc">
+    <div class="thm-tip">
+      <span class="tip-icon">💡</span>
+      <span>These rooms map directly to your <strong>Log Analysis PBQ</strong> and the <strong>Incident Response</strong> scenarios on this site. Complete SOC Level 1 on THM before sitting for Security+.</span>
+    </div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">SOC &amp; Blue Team Operations</div>
+        <div class="section-desc">SIEM, log analysis, threat hunting, and defensive monitoring</div>
+      </div>
+      <span class="section-pairing">📋 Pairs with: Log Analysis PBQ</span>
+    </div>
+    <div class="rooms-grid" id="grid-soc"></div>
+  </div>
+
+  <!-- ════════ NETWORK & FIREWALL ════════ -->
+  <div class="tab-content" id="tab-network">
+    <div class="thm-tip">
+      <span class="tip-icon">💡</span>
+      <span>These rooms reinforce your <strong>Firewall ACL</strong> and <strong>Network Diagram PBQs</strong>. Packet Tracer + Wireshark skills here translate directly to exam scenarios.</span>
+    </div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">Networking &amp; Firewall Security</div>
+        <div class="section-desc">Packet analysis, firewall rules, network defense, and protocol security</div>
+      </div>
+      <span class="section-pairing">🛡️ Pairs with: Firewall ACL + Network Diagram PBQs</span>
+    </div>
+    <div class="rooms-grid" id="grid-network"></div>
+  </div>
+
+  <!-- ════════ CRYPTOGRAPHY ════════ -->
+  <div class="tab-content" id="tab-crypto">
+    <div class="thm-tip">
+      <span class="tip-icon">💡</span>
+      <span>These rooms complement your <strong>Cryptography PBQ</strong> and <strong>Concept Comparison Cards</strong> (symmetric vs asymmetric, hashing vs encryption). Hands-on practice cements the theory.</span>
+    </div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">Cryptography &amp; PKI</div>
+        <div class="section-desc">Encryption, hashing, certificates, and key management</div>
+      </div>
+      <span class="section-pairing">🔐 Pairs with: Cryptography PBQ + Concept Comparisons</span>
+    </div>
+    <div class="rooms-grid" id="grid-crypto"></div>
+  </div>
+
+  <!-- ════════ THREAT INTEL ════════ -->
+  <div class="tab-content" id="tab-threat">
+    <div class="thm-tip">
+      <span class="tip-icon">💡</span>
+      <span>These rooms directly extend your <strong>Threat Actor Profiles</strong> page. Learn MITRE ATT&amp;CK, OSINT, and threat intel frameworks used by real SOC analysts.</span>
+    </div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">Threat Intelligence &amp; OSINT</div>
+        <div class="section-desc">Threat actors, TTPs, MITRE ATT&amp;CK, and intelligence frameworks</div>
+      </div>
+      <span class="section-pairing">🎭 Pairs with: Threat Actor Profiles</span>
+    </div>
+    <div class="rooms-grid" id="grid-threat"></div>
+  </div>
+
+  <!-- ════════ INCIDENT RESPONSE ════════ -->
+  <div class="tab-content" id="tab-ir">
+    <div class="thm-tip">
+      <span class="tip-icon">💡</span>
+      <span>These rooms reinforce your <strong>Incident Response PBQ</strong> sequencing. Practice real IR workflows, forensics, and triage in live environments.</span>
+    </div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">Incident Response &amp; Forensics</div>
+        <div class="section-desc">IR lifecycle, digital forensics, malware analysis, and triage</div>
+      </div>
+      <span class="section-pairing">🚨 Pairs with: Incident Response PBQ</span>
+    </div>
+    <div class="rooms-grid" id="grid-ir"></div>
+  </div>
+
+  <!-- ════════ PAGE PAIRINGS ════════ -->
+  <div class="tab-content" id="tab-pairings">
+    <div class="thm-tip">
+      <span class="tip-icon">🔗</span>
+      <span>Use this as your <strong>study flow</strong> — read the concept on this site, then immediately go practice it hands-on in the paired THM room. Theory + practice = exam ready.</span>
+    </div>
+    <div id="pairings-list"></div>
+  </div>
+
+  <!-- ════════ LEARNING PATH ════════ -->
+  <div class="tab-content" id="tab-path">
+    <div class="thm-tip">
+      <span class="tip-icon">🗺️</span>
+      <span>This is a curated <strong>SOC Analyst learning path</strong> ordered for Security+ prep. Work through it top-to-bottom alongside your study materials. Check off rooms as you complete them.</span>
+    </div>
+
+    <div class="path-section">
+      <div class="path-title">📚 Phase 1 — Foundations <span style="font-size:0.75rem;color:var(--muted);font-weight:400;">(Start here)</span></div>
+      <div class="path-sub">Core concepts before diving into Security+ domains</div>
+      <div class="path-steps" id="path-phase1"></div>
+    </div>
+
+    <div class="path-section">
+      <div class="path-title">🛡️ Phase 2 — Defensive Security</div>
+      <div class="path-sub">Blue team operations, SIEM, and network defense</div>
+      <div class="path-steps" id="path-phase2"></div>
+    </div>
+
+    <div class="path-section">
+      <div class="path-title">🎯 Phase 3 — Threat Intelligence &amp; IR</div>
+      <div class="path-sub">Threat actors, incident response, and forensics</div>
+      <div class="path-steps" id="path-phase3"></div>
+    </div>
+
+    <div class="path-section">
+      <div class="path-title">⚡ Phase 4 — Advanced Topics</div>
+      <div class="path-sub">Exam-level depth on key Security+ domains</div>
+      <div class="path-steps" id="path-phase4"></div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <p>CompTIA Security+ SY0-701 · TryHackMe Resources</p>
+  <p style="margin-top:0.4rem; font-size:0.75rem;">
+    TryHackMe rooms are external content — <a href="https://tryhackme.com" target="_blank" style="color:var(--thm);text-decoration:none;border-bottom:1px dotted var(--thm);">tryhackme.com ↗</a>
+    &nbsp;·&nbsp;
+    <a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a>
+  </p>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────
+const ROOMS = {
+  soc: [
+    { id:'introtosiem', icon:'📊', name:'Intro to SIEM', diff:'easy', free:true,  url:'https://tryhackme.com/room/introtosiem',       desc:'Learn what a SIEM is, how it works, and how analysts use it to detect threats in real time.',               tags:['SIEM','Log Analysis','Alerts'] },
+    { id:'splunk101',   icon:'🔍', name:'Splunk 101',    diff:'easy', free:true,  url:'https://tryhackme.com/room/splunk101',           desc:'Get hands-on with Splunk — search queries, dashboards, and basic threat hunting workflows.',                 tags:['Splunk','SPL','Dashboards'] },
+    { id:'splunk2gcd',  icon:'🔍', name:'Splunk 2',      diff:'medium',free:false, url:'https://tryhackme.com/room/splunk2gcd',         desc:'Advanced Splunk usage — correlating events, building alerts, and investigating incidents.',                   tags:['Splunk','Correlation','Alerting'] },
+    { id:'investigating',icon:'🕵️',name:'Investigating with ELK 101', diff:'easy', free:true, url:'https://tryhackme.com/room/investigatingwithelk101', desc:'Use the ELK stack (Elasticsearch, Logstash, Kibana) to investigate and visualize security logs.',         tags:['ELK','Kibana','Log Analysis'] },
+    { id:'socfundamentals',icon:'🛡️',name:'SOC Fundamentals', diff:'easy', free:true, url:'https://tryhackme.com/room/socfundamentals', desc:'Understand the structure of a SOC, analyst roles (L1/L2/L3), escalation workflows, and day-to-day operations.', tags:['SOC','Analyst','Workflow'] },
+    { id:'networkminer', icon:'📡', name:'NetworkMiner',  diff:'easy', free:true,  url:'https://tryhackme.com/room/networkminer',       desc:'Analyze network traffic artifacts to extract hosts, files, credentials, and suspicious activity.',               tags:['PCAP','Network Forensics','Artifacts'] },
+    { id:'bpf',          icon:'📋', name:'Zeek',          diff:'medium',free:true, url:'https://tryhackme.com/room/zeekbro',            desc:'Use Zeek (formerly Bro) for network traffic analysis and building detection scripts.',                          tags:['Zeek','NSM','Detection'] },
+  ],
+  network: [
+    { id:'introtonetworking', icon:'🌐', name:'Intro to Networking', diff:'easy', free:true, url:'https://tryhackme.com/room/introtonetworking', desc:'OSI model, TCP/IP, subnetting, and essential networking concepts that underpin all security work.', tags:['OSI','TCP/IP','Subnetting'] },
+    { id:'wireshark101', icon:'🦈', name:'Wireshark 101', diff:'easy', free:true, url:'https://tryhackme.com/room/wireshark', desc:'Capture and analyze live network packets. Identify protocols, filter traffic, and spot anomalies.', tags:['Wireshark','PCAP','Protocol Analysis'] },
+    { id:'wiresharkthebasics', icon:'🦈', name:'Wireshark: The Basics', diff:'easy', free:true, url:'https://tryhackme.com/room/wiresharkthebasics', desc:'Deep dive into Wireshark features — dissecting HTTP, DNS, TLS traffic and building display filters.', tags:['Wireshark','Filters','TLS'] },
+    { id:'arp',          icon:'📡', name:'ARP Spoofing',  diff:'medium',free:true, url:'https://tryhackme.com/room/arpspoofing', desc:'Understand and simulate ARP cache poisoning attacks on switched networks — critical for understanding MITM.', tags:['ARP','MITM','Layer 2'] },
+    { id:'snort',        icon:'🐷', name:'Snort',         diff:'medium',free:true, url:'https://tryhackme.com/room/snort', desc:'Write and deploy Snort IDS/IPS rules to detect attacks. Understand rule syntax, thresholds, and suppression.', tags:['IDS','IPS','Snort','Rules'] },
+    { id:'networksec',   icon:'🔒', name:'Network Security',diff:'easy', free:true, url:'https://tryhackme.com/room/intronetworksecurity', desc:'Firewall concepts, DMZ architecture, VPN tunneling, and network segmentation explained with examples.', tags:['Firewall','DMZ','VPN','Segmentation'] },
+  ],
+  crypto: [
+    { id:'cryptobasics', icon:'🔐', name:'Cryptography Basics', diff:'easy', free:true, url:'https://tryhackme.com/room/cryptographybasics', desc:'Symmetric vs asymmetric, hashing, digital signatures, and PKI explained hands-on with examples.', tags:['Symmetric','Asymmetric','Hashing'] },
+    { id:'encryptionintro', icon:'🔑', name:'Encryption — Crypto 101', diff:'easy', free:true, url:'https://tryhackme.com/room/encryptioncrypto101', desc:'AES, RSA, DH key exchange, and common encryption algorithms with practical challenges.', tags:['AES','RSA','Key Exchange'] },
+    { id:'pki',          icon:'📜', name:'PKI — Public Key Infrastructure', diff:'medium', free:false, url:'https://tryhackme.com/room/publickeycryptography', desc:'Certificates, CAs, certificate chains, CRL, OCSP — everything you need to know for SY0-701 PKI questions.', tags:['PKI','Certificates','CA','TLS'] },
+    { id:'hashing',      icon:'#️⃣', name:'Hashing — Crypto 101', diff:'easy', free:true, url:'https://tryhackme.com/room/hashingcrypto101', desc:'MD5, SHA-1, SHA-256, bcrypt. Hash cracking with Hashcat. Rainbow tables and salting.', tags:['Hashing','SHA','MD5','Hashcat'] },
+    { id:'tlsbasics',    icon:'🔒', name:'TLS 1.3',       diff:'medium',free:false, url:'https://tryhackme.com/room/tlsbasics', desc:'Deep dive into TLS handshake, cipher suites, forward secrecy, and common TLS vulnerabilities like POODLE.', tags:['TLS','Cipher Suites','ECDHE','Handshake'] },
+  ],
+  threat: [
+    { id:'threatintelligencetools', icon:'🔭', name:'Threat Intelligence Tools', diff:'easy', free:true, url:'https://tryhackme.com/room/threatinteltools', desc:'OSINT frameworks, VirusTotal, AbuseIPDB, Shodan, and other threat intel platforms used by SOC analysts.', tags:['OSINT','VirusTotal','Shodan','Threat Intel'] },
+    { id:'mitre',        icon:'🎯', name:'MITRE ATT&CK',  diff:'easy', free:true, url:'https://tryhackme.com/room/mitre', desc:'Navigate the MITRE ATT&CK framework — tactics, techniques, and procedures (TTPs) for real-world threat actors.', tags:['MITRE','ATT&CK','TTPs','Tactics'] },
+    { id:'threatmodeling', icon:'🗺️', name:'Threat Modelling', diff:'easy', free:true, url:'https://tryhackme.com/room/threatmodelling', desc:'STRIDE, PASTA, and DREAD frameworks for identifying and rating threats during the design phase.', tags:['STRIDE','PASTA','Risk','Modeling'] },
+    { id:'yara',         icon:'📝', name:'YARA',           diff:'medium',free:true, url:'https://tryhackme.com/room/yara', desc:'Write YARA rules to detect malware samples by signatures. Used extensively in threat hunting.', tags:['YARA','Malware','Detection','Hunting'] },
+    { id:'cyberthreatintel', icon:'🕵️', name:'Cyber Threat Intelligence', diff:'easy', free:true, url:'https://tryhackme.com/room/cyberthreatintel', desc:'Strategic, tactical, operational, and technical threat intel. Learn how to consume and act on CTI feeds.', tags:['CTI','Intel Cycle','Feeds','IOCs'] },
+    { id:'apt',          icon:'🏴', name:'Advanced Persistent Threats', diff:'medium', free:false, url:'https://tryhackme.com/room/advancedpersistentthreats', desc:'Nation-state actor TTPs, lateral movement, living-off-the-land techniques, and long-term campaign analysis.', tags:['APT','Nation-State','Lateral Movement','Stealth'] },
+  ],
+  ir: [
+    { id:'introdigitalforensics', icon:'🔬', name:'Intro to Digital Forensics', diff:'easy', free:true, url:'https://tryhackme.com/room/introdigitalforensics', desc:'Forensics fundamentals — evidence collection, chain of custody, disk imaging, and metadata analysis.', tags:['Forensics','Chain of Custody','Disk Imaging'] },
+    { id:'iractionplan',  icon:'📋', name:'IR Fundamentals', diff:'easy', free:true, url:'https://tryhackme.com/room/irfundamentals', desc:'NIST SP 800-61 lifecycle — preparation, detection, containment, eradication, recovery, and lessons learned.', tags:['NIST 800-61','IR Lifecycle','Containment'] },
+    { id:'malwareintroductory', icon:'🦠', name:'Malware Introductory', diff:'easy', free:true, url:'https://tryhackme.com/room/malwareintroductory', desc:'Malware types, behavior analysis, static vs dynamic analysis, sandboxing, and IOC extraction.', tags:['Malware','Static Analysis','IOCs','Sandbox'] },
+    { id:'volatility',    icon:'💾', name:'Volatility',     diff:'medium',free:true, url:'https://tryhackme.com/room/volatility', desc:'Memory forensics with Volatility — extract processes, network connections, and artifacts from RAM dumps.', tags:['Memory Forensics','Volatility','RAM','Artifacts'] },
+    { id:'autopsy',       icon:'🩻', name:'Autopsy',         diff:'easy', free:true, url:'https://tryhackme.com/room/autopsy2ze0', desc:'Disk forensics with Autopsy — recover deleted files, analyze file system timelines, and build evidence reports.', tags:['Autopsy','Disk Forensics','Timeline','Recovery'] },
+    { id:'ransomware',    icon:'💀', name:'Ransomware Incident Response', diff:'medium', free:false, url:'https://tryhackme.com/room/ransomwareresponsechallenge', desc:'Work a full ransomware incident from detection through containment, eradication, and recovery. Mirrors the IR PBQ exactly.', tags:['Ransomware','IR','Containment','Recovery'] },
+  ],
+};
+
+const PAIRINGS = [
+  { page:'Firewall ACL PBQ',      pageIcon:'🛡️', pageDesc:'Configure firewall rules, ACLs, order of operations', pageUrl:'pbq-simulator.html#acl',
+    rooms:[{name:'Snort',id:'snort',diff:'medium'},{name:'Network Security',id:'networksec',diff:'easy'}] },
+  { page:'Network Diagram PBQ',   pageIcon:'🌐', pageDesc:'Place devices in correct DMZ/internal/internet zones',  pageUrl:'pbq-simulator.html#net',
+    rooms:[{name:'Intro to Networking',id:'introtonetworking',diff:'easy'},{name:'Wireshark 101',id:'wireshark101',diff:'easy'}] },
+  { page:'Log Analysis PBQ',      pageIcon:'📋', pageDesc:'Analyze SIEM logs to identify attack patterns',         pageUrl:'pbq-simulator.html#log',
+    rooms:[{name:'Intro to SIEM',id:'introtosiem',diff:'easy'},{name:'Splunk 101',id:'splunk101',diff:'easy'},{name:'Investigating with ELK',id:'investigating',diff:'easy'}] },
+  { page:'Incident Response PBQ', pageIcon:'🚨', pageDesc:'Sequence NIST 800-61 IR steps in correct order',        pageUrl:'pbq-simulator.html#ir',
+    rooms:[{name:'IR Fundamentals',id:'iractionplan',diff:'easy'},{name:'Ransomware IR',id:'ransomware',diff:'medium'}] },
+  { page:'Cryptography PBQ',      pageIcon:'🔐', pageDesc:'Sort algorithms into symmetric/asymmetric/hashing/key exchange', pageUrl:'pbq-simulator.html#crypto',
+    rooms:[{name:'Cryptography Basics',id:'cryptobasics',diff:'easy'},{name:'Encryption — Crypto 101',id:'encryptionintro',diff:'easy'},{name:'Hashing',id:'hashing',diff:'easy'}] },
+  { page:'Threat Actor Profiles', pageIcon:'🎭', pageDesc:'Study nation-state, cybercriminal, hacktivist profiles', pageUrl:'threat-actors.html',
+    rooms:[{name:'MITRE ATT&CK',id:'mitre',diff:'easy'},{name:'Cyber Threat Intel',id:'cyberthreatintel',diff:'easy'},{name:'APT',id:'apt',diff:'medium'}] },
+  { page:'Concept Comparisons',   pageIcon:'⚖️', pageDesc:'IDS vs IPS, symmetric vs asymmetric, DAC vs MAC',        pageUrl:'concept-comparisons.html',
+    rooms:[{name:'Snort (IDS/IPS)',id:'snort',diff:'medium'},{name:'Cryptography Basics',id:'cryptobasics',diff:'easy'},{name:'Network Security',id:'networksec',diff:'easy'}] },
+];
+
+const LEARNING_PATH = {
+  phase1: [
+    { id:'introtonetworking', name:'Intro to Networking', url:'https://tryhackme.com/room/introtonetworking', free:true, diff:'easy', desc:'OSI model, TCP/IP stack, subnetting — the foundation for every other room on this path.' },
+    { id:'encryptionintro',   name:'Encryption — Crypto 101', url:'https://tryhackme.com/room/encryptioncrypto101', free:true, diff:'easy', desc:'Symmetric, asymmetric, key exchange basics. Understand the crypto building blocks before the exam.' },
+    { id:'hashing',           name:'Hashing — Crypto 101',   url:'https://tryhackme.com/room/hashingcrypto101', free:true, diff:'easy', desc:'SHA, MD5, bcrypt, rainbow tables. Pairs directly with your Cryptography PBQ.' },
+    { id:'cryptobasics',      name:'Cryptography Basics',    url:'https://tryhackme.com/room/cryptographybasics', free:true, diff:'easy', desc:'Combines encryption and hashing concepts with PKI intro — great Security+ prep.' },
+  ],
+  phase2: [
+    { id:'networksec',        name:'Network Security',       url:'https://tryhackme.com/room/intronetworksecurity', free:true, diff:'easy', desc:'Firewalls, DMZ, VPN, segmentation — reinforces your Firewall ACL and Network Diagram PBQs.' },
+    { id:'snort',             name:'Snort (IDS/IPS)',        url:'https://tryhackme.com/room/snort', free:true, diff:'medium', desc:'Build and deploy real IDS/IPS rules. Understand the IDS vs IPS distinction hands-on.' },
+    { id:'socfundamentals',   name:'SOC Fundamentals',       url:'https://tryhackme.com/room/socfundamentals', free:true, diff:'easy', desc:'L1/L2/L3 analyst roles, escalation, alert triage — essential for your SOC analyst career goal.' },
+    { id:'introtosiem',       name:'Intro to SIEM',          url:'https://tryhackme.com/room/introtosiem', free:true, diff:'easy', desc:'SIEM architecture, log ingestion, correlation rules, and dashboards.' },
+    { id:'splunk101',         name:'Splunk 101',             url:'https://tryhackme.com/room/splunk101', free:true, diff:'easy', desc:'SPL queries, saved searches, and basic threat hunting in Splunk.' },
+    { id:'wireshark101',      name:'Wireshark 101',          url:'https://tryhackme.com/room/wireshark', free:true, diff:'easy', desc:'Packet capture and analysis — identify malicious traffic patterns.' },
+  ],
+  phase3: [
+    { id:'threatintelligencetools', name:'Threat Intelligence Tools', url:'https://tryhackme.com/room/threatinteltools', free:true, diff:'easy', desc:'VirusTotal, Shodan, AbuseIPDB, and OSINT platforms. Direct extension of your Threat Actor Profiles page.' },
+    { id:'mitre',             name:'MITRE ATT&CK',           url:'https://tryhackme.com/room/mitre', free:true, diff:'easy', desc:'Navigate ATT&CK matrices and map TTPs to real threat actors. Pairs with your Threat Actor profiles.' },
+    { id:'cyberthreatintel',  name:'Cyber Threat Intelligence', url:'https://tryhackme.com/room/cyberthreatintel', free:true, diff:'easy', desc:'CTI lifecycle, intel types, IOC sharing — how real analysts consume and act on threat intel.' },
+    { id:'iractionplan',      name:'IR Fundamentals',        url:'https://tryhackme.com/room/irfundamentals', free:true, diff:'easy', desc:'NIST 800-61 lifecycle in practice. Mirrors your Incident Response PBQ exactly.' },
+    { id:'introdigitalforensics', name:'Intro to Digital Forensics', url:'https://tryhackme.com/room/introdigitalforensics', free:true, diff:'easy', desc:'Chain of custody, disk imaging, metadata — essential for the forensics phase of IR.' },
+  ],
+  phase4: [
+    { id:'yara',              name:'YARA',                   url:'https://tryhackme.com/room/yara', free:true, diff:'medium', desc:'Write malware detection rules. Used daily in threat hunting and malware analysis roles.' },
+    { id:'malwareintroductory', name:'Malware Introductory', url:'https://tryhackme.com/room/malwareintroductory', free:true, diff:'easy', desc:'Types of malware, static vs dynamic analysis, sandboxing — covers Security+ malware domain.' },
+    { id:'volatility',        name:'Volatility Memory Forensics', url:'https://tryhackme.com/room/volatility', free:true, diff:'medium', desc:'Advanced IR skill — extract artifacts from RAM dumps during active incidents.' },
+    { id:'pki',               name:'PKI — Public Key Infrastructure', url:'https://tryhackme.com/room/publickeycryptography', free:false, diff:'medium', desc:'Certificate chains, CAs, OCSP, CRL — required knowledge for Security+ PKI questions.' },
+    { id:'apt',               name:'Advanced Persistent Threats', url:'https://tryhackme.com/room/advancedpersistentthreats', free:false, diff:'medium', desc:'Nation-state TTPs and long-term campaign analysis — extends your Threat Actor Profiles page significantly.' },
+  ],
+};
+
+// ─────────────────────────────────────────────────────────────────
+// STATE (localStorage)
+// ─────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'thm_completed_rooms';
+
+function getCompleted() {
+  try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')); }
+  catch { return new Set(); }
+}
+
+function saveCompleted(set) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...set])); }
+  catch {}
+}
+
+function toggleRoom(id) {
+  const completed = getCompleted();
+  if (completed.has(id)) completed.delete(id);
+  else completed.add(id);
+  saveCompleted(completed);
+  refreshAll();
+}
+
+// ─────────────────────────────────────────────────────────────────
+// RENDER ROOMS
+// ─────────────────────────────────────────────────────────────────
+function renderRoomGrid(catKey) {
+  const completed = getCompleted();
+  const rooms = ROOMS[catKey];
+  const grid = document.getElementById('grid-' + catKey);
+
+  grid.innerHTML = rooms.map(r => {
+    const done = completed.has(r.id);
+    return `<div class="room-card${done?' completed':''}" id="rc-${r.id}">
+      <div class="room-top">
+        <span class="room-icon">${r.icon}</span>
+        <div style="flex:1">
+          <div class="room-name">${r.name}</div>
+          <div class="room-meta">
+            <span class="diff-badge diff-${r.diff}">${r.diff}</span>
+            ${r.free ? '<span class="free-badge">FREE</span>' : '<span class="sub-badge">SUBSCRIBER</span>'}
+          </div>
+        </div>
+      </div>
+      <div class="room-desc">${r.desc}</div>
+      <div class="room-tags">${r.tags.map(t=>`<span class="room-tag">${t}</span>`).join('')}</div>
+      <div class="room-footer">
+        <a href="${r.url}" target="_blank" rel="noopener" class="room-link">↗ Open in THM</a>
+        <button class="complete-btn" onclick="toggleRoom('${r.id}')">${done ? '✓ Completed' : 'Mark Done'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// RENDER PAIRINGS
+// ─────────────────────────────────────────────────────────────────
+function renderPairings() {
+  const list = document.getElementById('pairings-list');
+  list.innerHTML = PAIRINGS.map(p => {
+    const roomsHtml = p.rooms.map(r => {
+      // find full room data
+      const full = Object.values(ROOMS).flat().find(x => x.id === r.id);
+      const url = full ? full.url : 'https://tryhackme.com';
+      return `<a href="${url}" target="_blank" rel="noopener" class="pair-room-chip">
+        ↗ ${r.name}
+        <span class="chip-diff diff-badge diff-${r.diff}">${r.diff}</span>
+      </a>`;
+    }).join('');
+
+    return `<div class="pairing-row">
+      <div class="pair-page">
+        <span class="pair-page-icon">${p.pageIcon}</span>
+        <div>
+          <div class="pair-page-name">${p.page}</div>
+          <div class="pair-page-desc">${p.pageDesc}</div>
+          <a href="${p.pageUrl}" class="pair-page-link">📖 Open study page →</a>
+        </div>
+      </div>
+      <div class="pair-arrow">
+        <span class="arrow-icon">→</span>
+        then practice
+      </div>
+      <div class="pair-rooms">${roomsHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// RENDER LEARNING PATH
+// ─────────────────────────────────────────────────────────────────
+function renderPath() {
+  const completed = getCompleted();
+  Object.entries(LEARNING_PATH).forEach(([phase, steps]) => {
+    const container = document.getElementById('path-' + phase);
+    let num = 0;
+    if (phase === 'phase2') num = LEARNING_PATH.phase1.length;
+    if (phase === 'phase3') num = LEARNING_PATH.phase1.length + LEARNING_PATH.phase2.length;
+    if (phase === 'phase4') num = LEARNING_PATH.phase1.length + LEARNING_PATH.phase2.length + LEARNING_PATH.phase3.length;
+
+    container.innerHTML = steps.map((s, i) => {
+      const done = completed.has(s.id);
+      return `<div class="path-step${done?' completed':''}" id="ps-${s.id}">
+        <div class="step-num">${num + i + 1}</div>
+        <div class="step-body">
+          <div class="step-name">${s.name}</div>
+          <div class="step-desc">${s.desc}</div>
+          <div class="step-meta">
+            <span class="diff-badge diff-${s.diff}">${s.diff}</span>
+            ${s.free ? '<span class="free-badge">FREE</span>' : '<span class="sub-badge">SUBSCRIBER</span>'}
+          </div>
+        </div>
+        <div class="step-actions">
+          <a href="${s.url}" target="_blank" rel="noopener" class="step-link">↗ Open Room</a>
+          <button class="step-check" onclick="toggleRoom('${s.id}')">${done ? '✓ Done' : 'Mark Done'}</button>
+        </div>
+      </div>`;
+    }).join('');
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// STATS
+// ─────────────────────────────────────────────────────────────────
+function updateStats() {
+  const completed = getCompleted();
+  const allRooms = Object.values(ROOMS).flat();
+  const total = allRooms.length;
+  const doneCount = allRooms.filter(r => completed.has(r.id)).length;
+  const freeRooms = allRooms.filter(r => r.free);
+  const freeDone = freeRooms.filter(r => completed.has(r.id)).length;
+
+  // Domains covered
+  const catKeys = Object.keys(ROOMS);
+  const domainsCovered = catKeys.filter(k => ROOMS[k].some(r => completed.has(r.id))).length;
+
+  // Path progress
+  const allPathRooms = Object.values(LEARNING_PATH).flat();
+  const pathDone = allPathRooms.filter(s => completed.has(s.id)).length;
+  const pathPct = Math.round(pathDone / allPathRooms.length * 100);
+
+  document.getElementById('stat-completed').textContent = doneCount;
+  document.getElementById('stat-completed-sub').textContent = `of ${total} total`;
+  document.getElementById('stat-free').textContent = freeDone;
+  document.getElementById('stat-domains').textContent = domainsCovered;
+  document.getElementById('stat-path').textContent = pathPct + '%';
+
+  const overallPct = Math.round(doneCount / total * 100);
+  document.getElementById('op-fill').style.width = overallPct + '%';
+  document.getElementById('op-pct').textContent = overallPct + '%';
+
+  // Tab counts
+  catKeys.forEach(k => {
+    const done = ROOMS[k].filter(r => completed.has(r.id)).length;
+    const tc = document.getElementById('tc-' + k);
+    if (tc) tc.textContent = `${done}/${ROOMS[k].length}`;
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// FULL REFRESH
+// ─────────────────────────────────────────────────────────────────
+function refreshAll() {
+  Object.keys(ROOMS).forEach(k => renderRoomGrid(k));
+  renderPath();
+  updateStats();
+}
+
+// ─────────────────────────────────────────────────────────────────
+// TAB SWITCH
+// ─────────────────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────
+refreshAll();
+renderPairings();
+</script>
+</body>
+</html>
