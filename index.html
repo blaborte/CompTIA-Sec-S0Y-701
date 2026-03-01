@@ -969,6 +969,45 @@
       grid-template-columns: 1fr;
     }
   }
+
+  /* ── WEAK SPOT WIDGET ── */
+  .wst-widget {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    text-decoration: none;
+    display: block;
+  }
+  .wst-widget::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #ff4757, #ffd32a, #00f5a0);
+  }
+  .wst-widget:hover { border-color: var(--accent); }
+  .wst-widget-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .wst-title { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .wst-overall {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--accent);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .wst-cta { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+  .wst-domains { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; }
+  .wst-domain { display: flex; flex-direction: column; gap: 0.3rem; }
+  .wst-domain-label { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wst-bar-track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .wst-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .wst-domain-score { font-family: var(--mono); font-size: 0.65rem; }
+  .wst-no-data { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-align: center; padding: 0.5rem 0; }
+  @media(max-width:600px) { .wst-domains { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -1033,6 +1072,19 @@
             <div class="vs-average" id="accuracyCompare"></div>
           </div>
         </div>
+
+        
+        <!-- WEAK SPOT WIDGET -->
+        <a href="weak-spot-tracker.html" class="wst-widget" id="wstWidget">
+          <div class="wst-widget-header">
+            <span class="wst-title">⚠ Weak Spot Tracker</span>
+            <span class="wst-overall" id="wstOverall"></span>
+            <span class="wst-cta">View full dashboard →</span>
+          </div>
+          <div class="wst-domains" id="wstDomains">
+            <div class="wst-no-data" style="grid-column:1/-1">Loading your domain scores...</div>
+          </div>
+        </a>
 
         <div class="exam-grid">
           <a href="Practice-tests.html" class="exam-card">
@@ -1105,6 +1157,14 @@
             <div class="exam-title">TryHackMe Resources</div>
             <div class="exam-desc">Curated THM rooms paired with your study materials — SOC, network, crypto, threat intel, and IR. Track your room completion progress.</div>
             <div class="exam-arrow">VIEW ROOMS →</div>
+          </a>
+
+          <a href="weak-spot-tracker.html" class="exam-card">
+            <div class="exam-progress" id="wstProgress">5 Domains</div>
+            <div class="exam-label">Performance Analytics</div>
+            <div class="exam-title">Weak Spot Tracker</div>
+            <div class="exam-desc">Track your scores across all 5 Security+ domains from practice tests, PBQs, flashcards, and self-ratings. See exactly where to focus next.</div>
+            <div class="exam-arrow">VIEW TRACKER →</div>
           </a>
 
         </div>
@@ -1241,5 +1301,66 @@
   </div>
 
   <script src="gamification-social.js"></script>
+
+  <!-- WEAK SPOT WIDGET SCRIPT -->
+  <script>
+  (function() {
+    const KEY = 'wst_data_v2';
+    const DOMAINS = [
+      { id:'threats',        label:'Threats',        short:'Threats' },
+      { id:'architecture',   label:'Architecture',   short:'Arch.' },
+      { id:'implementation', label:'Implementation', short:'Impl.' },
+      { id:'operations',     label:'Operations',     short:'Ops.' },
+      { id:'governance',     label:'Governance',     short:'Gov.' },
+    ];
+
+    function getScore(id) {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return null;
+        const state = JSON.parse(raw);
+        const sources = ['practice','pbq','flash','manual'];
+        let total = 0, count = 0;
+        sources.forEach(src => {
+          const v = state.sources && state.sources[src] && state.sources[src][id];
+          if (v !== null && v !== undefined) { total += v; count++; }
+        });
+        return count ? Math.round(total / count) : null;
+      } catch { return null; }
+    }
+
+    function scoreColor(s) {
+      if (s === null) return 'var(--border)';
+      if (s < 45) return '#ff4757';
+      if (s < 72) return '#ffd32a';
+      return '#00f5a0';
+    }
+
+    const scores = DOMAINS.map(d => ({ ...d, score: getScore(d.id) }));
+    const scored = scores.filter(s => s.score !== null);
+    const domsEl = document.getElementById('wstDomains');
+    const overallEl = document.getElementById('wstOverall');
+
+    if (scored.length === 0) {
+      domsEl.innerHTML = '<div class="wst-no-data" style="grid-column:1/-1">No data yet — click to start tracking your weak spots</div>';
+      overallEl.textContent = '';
+      return;
+    }
+
+    const avg = Math.round(scored.reduce((a,b) => a + b.score, 0) / scored.length);
+    overallEl.innerHTML = 'Overall: <strong style="color:' + scoreColor(avg) + '">' + avg + '%</strong>';
+
+    domsEl.innerHTML = scores.map(d => {
+      const pct = d.score || 0;
+      const hasData = d.score !== null;
+      return '<div class="wst-domain">' +
+        '<span class="wst-domain-label">' + d.short + '</span>' +
+        '<div class="wst-bar-track"><div class="wst-bar-fill" style="width:' + pct + '%;background:' + scoreColor(d.score) + ';opacity:' + (hasData?1:0.2) + '"></div></div>' +
+        '<span class="wst-domain-score" style="color:' + scoreColor(d.score) + '">' + (hasData ? pct+'%' : '—') + '</span>' +
+        '</div>';
+    }).join('');
+  })();
+  </script>
+
 </body>
 </html>

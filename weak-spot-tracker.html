@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weak Spot Tracker | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --purple: #b47aff;
+    --accent2: #ff6b2b;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
+
+  /* HEADER */
+  header { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:70px; flex-shrink:0; }
+  .logo { font-family:var(--mono); font-size:0.85rem; color:var(--muted); letter-spacing:0.1em; text-decoration:none; }
+  .logo span { color:var(--accent); }
+  .back-link { font-family:var(--mono); font-size:0.75rem; color:var(--muted); text-decoration:none; border:1px solid var(--border); padding:0.4rem 0.9rem; border-radius:6px; transition:all 0.2s; }
+  .back-link:hover { color:var(--accent); border-color:var(--accent); }
+
+  main { flex:1; padding:2rem; }
+  .container { max-width:1150px; margin:0 auto; }
+
+  h1 { font-size:2rem; font-weight:600; margin-bottom:0.4rem; background:linear-gradient(135deg,var(--red),var(--yellow)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
+  .subtitle { color:var(--muted); font-size:0.9rem; margin-bottom:2.5rem; font-family:var(--mono); letter-spacing:0.05em; text-align:center; }
+
+  /* OVERALL SCORE HERO */
+  .hero-row { display:grid; grid-template-columns:auto 1fr; gap:2rem; align-items:center; background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:2rem; margin-bottom:2rem; position:relative; overflow:hidden; }
+  .hero-row::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--red),var(--yellow),var(--green)); }
+
+  .readiness-ring { position:relative; width:120px; height:120px; flex-shrink:0; }
+  .ring-svg { width:120px; height:120px; transform:rotate(-90deg); }
+  .ring-bg { fill:none; stroke:var(--bg3); stroke-width:10; }
+  .ring-fill { fill:none; stroke-width:10; stroke-linecap:round; transition:stroke-dashoffset 1s ease; }
+  .ring-label { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
+  .ring-pct { font-family:var(--mono); font-size:1.5rem; font-weight:600; display:block; line-height:1; }
+  .ring-sub { font-family:var(--mono); font-size:0.6rem; color:var(--muted); letter-spacing:0.08em; }
+
+  .hero-info { }
+  .hero-title { font-size:1.3rem; font-weight:600; margin-bottom:0.25rem; }
+  .hero-desc { font-size:0.85rem; color:var(--muted); margin-bottom:1rem; }
+  .hero-meta { display:flex; gap:1rem; flex-wrap:wrap; }
+  .hero-pill { font-family:var(--mono); font-size:0.72rem; padding:0.3rem 0.8rem; border-radius:20px; border:1px solid var(--border); background:var(--bg3); color:var(--muted); }
+  .hero-pill span { font-weight:600; }
+  .hero-pill.critical span { color:var(--red); }
+  .hero-pill.warn span { color:var(--yellow); }
+  .hero-pill.good span { color:var(--green); }
+
+  /* SOURCE PILLS */
+  .source-tabs { display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+  .source-tab { padding:0.45rem 1.1rem; background:var(--bg3); border:1px solid var(--border); border-radius:20px; color:var(--muted); font-family:var(--mono); font-size:0.75rem; cursor:pointer; transition:all 0.2s; letter-spacing:0.04em; display:flex; align-items:center; gap:0.4rem; }
+  .source-tab:hover { border-color:var(--accent); color:var(--text); }
+  .source-tab.active { background:rgba(0,212,255,0.1); border-color:var(--accent); color:var(--accent); }
+  .source-tab .dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+  /* MAIN GRID */
+  .main-grid { display:grid; grid-template-columns:1fr 340px; gap:1.5rem; }
+
+  /* DOMAIN CARDS */
+  .domains-col { display:flex; flex-direction:column; gap:1rem; }
+
+  .domain-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.25rem 1.5rem; transition:all 0.25s; position:relative; overflow:hidden; }
+  .domain-card::before { content:''; position:absolute; top:0; left:0; bottom:0; width:3px; border-radius:12px 0 0 12px; }
+  .domain-card.weak::before { background:var(--red); }
+  .domain-card.moderate::before { background:var(--yellow); }
+  .domain-card.strong::before { background:var(--green); }
+
+  .domain-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem; gap:1rem; }
+  .domain-left { display:flex; align-items:center; gap:0.75rem; }
+  .domain-icon { font-size:1.4rem; }
+  .domain-name { font-size:0.95rem; font-weight:600; color:var(--text); }
+  .domain-num { font-family:var(--mono); font-size:0.65rem; color:var(--muted); letter-spacing:0.08em; }
+  .domain-score-badge { font-family:var(--mono); font-size:0.85rem; font-weight:600; padding:0.3rem 0.8rem; border-radius:6px; }
+  .domain-card.weak .domain-score-badge { color:var(--red); background:rgba(255,71,87,0.1); border:1px solid rgba(255,71,87,0.2); }
+  .domain-card.moderate .domain-score-badge { color:var(--yellow); background:rgba(255,211,42,0.1); border:1px solid rgba(255,211,42,0.2); }
+  .domain-card.strong .domain-score-badge { color:var(--green); background:rgba(0,245,160,0.1); border:1px solid rgba(0,245,160,0.2); }
+
+  /* Multi-bar (one per source) */
+  .source-bars { display:flex; flex-direction:column; gap:0.45rem; margin-bottom:0.9rem; }
+  .source-bar-row { display:flex; align-items:center; gap:0.6rem; }
+  .sb-label { font-family:var(--mono); font-size:0.65rem; color:var(--muted); width:82px; flex-shrink:0; letter-spacing:0.04em; }
+  .sb-track { flex:1; height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+  .sb-fill { height:100%; border-radius:3px; transition:width 0.8s ease; }
+  .sb-pct { font-family:var(--mono); font-size:0.65rem; color:var(--muted); width:32px; text-align:right; flex-shrink:0; }
+
+  .domain-topics { display:flex; flex-wrap:wrap; gap:0.3rem; margin-bottom:0.75rem; }
+  .topic-tag { font-family:var(--mono); font-size:0.65rem; padding:0.2rem 0.55rem; border-radius:4px; background:var(--bg3); border:1px solid var(--border); color:var(--text); }
+  .topic-tag.weak-topic { border-color:rgba(255,71,87,0.25); color:var(--red); background:rgba(255,71,87,0.06); }
+
+  .domain-action { display:flex; align-items:center; justify-content:space-between; }
+  .action-link { font-family:var(--mono); font-size:0.72rem; color:var(--accent); text-decoration:none; display:flex; align-items:center; gap:0.3rem; transition:all 0.2s; }
+  .action-link:hover { text-decoration:underline; }
+  .log-btn { font-family:var(--mono); font-size:0.68rem; padding:0.3rem 0.8rem; border-radius:5px; cursor:pointer; border:1px solid var(--border); background:var(--bg3); color:var(--muted); transition:all 0.2s; }
+  .log-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* RIGHT SIDEBAR */
+  .sidebar { display:flex; flex-direction:column; gap:1rem; }
+
+  .side-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.25rem; position:relative; overflow:hidden; }
+  .side-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; border-radius:12px 12px 0 0; }
+  .side-card:nth-child(1)::before { background:linear-gradient(90deg,var(--red),transparent); }
+  .side-card:nth-child(2)::before { background:linear-gradient(90deg,var(--yellow),transparent); }
+  .side-card:nth-child(3)::before { background:linear-gradient(90deg,var(--purple),transparent); }
+  .side-card:nth-child(4)::before { background:linear-gradient(90deg,var(--green),transparent); }
+
+  .side-title { font-family:var(--mono); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.9rem; }
+
+  /* Priority list */
+  .priority-list { display:flex; flex-direction:column; gap:0.5rem; }
+  .priority-item { display:flex; align-items:center; gap:0.75rem; padding:0.55rem 0.75rem; background:var(--bg3); border-radius:6px; border:1px solid var(--border); }
+  .pri-rank { font-family:var(--mono); font-size:0.7rem; font-weight:600; width:18px; text-align:center; flex-shrink:0; }
+  .pri-rank.r1 { color:var(--red); }
+  .pri-rank.r2 { color:var(--accent2); }
+  .pri-rank.r3 { color:var(--yellow); }
+  .pri-name { font-size:0.82rem; color:var(--text); flex:1; }
+  .pri-score { font-family:var(--mono); font-size:0.72rem; font-weight:600; }
+
+  /* Radar chart */
+  .radar-wrap { display:flex; justify-content:center; align-items:center; padding:0.5rem 0; }
+  canvas#radarChart { max-width:100%; }
+
+  /* Log panel */
+  .log-entries { display:flex; flex-direction:column; gap:0.4rem; max-height:220px; overflow-y:auto; }
+  .log-entry { display:flex; align-items:flex-start; gap:0.6rem; font-size:0.78rem; padding:0.4rem 0.5rem; border-radius:5px; background:var(--bg3); }
+  .log-entry .le-time { font-family:var(--mono); font-size:0.65rem; color:var(--muted); flex-shrink:0; margin-top:0.15rem; }
+  .log-entry .le-icon { flex-shrink:0; }
+  .log-entry .le-text { color:var(--text); line-height:1.4; }
+  .log-entry.correct .le-icon::after { content:'✓'; color:var(--green); }
+  .log-entry.wrong .le-icon::after { content:'✗'; color:var(--red); }
+  .log-entry.manual .le-icon::after { content:'✎'; color:var(--purple); }
+  .no-log { font-family:var(--mono); font-size:0.78rem; color:var(--muted); text-align:center; padding:1.5rem 0; }
+
+  /* Manual rating modal */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:2rem; width:100%; max-width:480px; position:relative; }
+  .modal::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--purple),var(--accent)); border-radius:14px 14px 0 0; }
+  .modal-title { font-size:1.05rem; font-weight:600; margin-bottom:0.3rem; }
+  .modal-sub { font-size:0.82rem; color:var(--muted); margin-bottom:1.5rem; font-family:var(--mono); }
+  .modal-domain { font-size:0.9rem; font-weight:600; color:var(--purple); margin-bottom:1rem; }
+  .rating-row { display:flex; gap:0.5rem; margin-bottom:1.5rem; }
+  .rating-btn { flex:1; padding:0.7rem; border-radius:8px; border:2px solid var(--border); background:var(--bg3); font-family:var(--mono); font-size:0.78rem; cursor:pointer; transition:all 0.2s; text-align:center; }
+  .rating-btn:hover { transform:translateY(-2px); }
+  .rating-btn.r-weak { color:var(--red); }
+  .rating-btn.r-weak:hover, .rating-btn.r-weak.selected { border-color:var(--red); background:rgba(255,71,87,0.1); }
+  .rating-btn.r-moderate { color:var(--yellow); }
+  .rating-btn.r-moderate:hover, .rating-btn.r-moderate.selected { border-color:var(--yellow); background:rgba(255,211,42,0.1); }
+  .rating-btn.r-strong { color:var(--green); }
+  .rating-btn.r-strong:hover, .rating-btn.r-strong.selected { border-color:var(--green); background:rgba(0,245,160,0.1); }
+  .modal-actions { display:flex; gap:0.75rem; }
+  .btn-primary { padding:0.6rem 1.5rem; background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(0,245,160,0.1)); border:1px solid var(--accent); border-radius:6px; color:var(--accent); font-family:var(--mono); font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
+  .btn-primary:hover { background:linear-gradient(135deg,rgba(0,212,255,0.25),rgba(0,245,160,0.18)); }
+  .btn-secondary { padding:0.6rem 1.2rem; background:none; border:1px solid var(--border); border-radius:6px; color:var(--muted); font-family:var(--mono); font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
+  .btn-secondary:hover { border-color:var(--muted); color:var(--text); }
+
+  /* Recs */
+  .rec-list { display:flex; flex-direction:column; gap:0.5rem; }
+  .rec-item { display:flex; gap:0.75rem; align-items:flex-start; padding:0.6rem 0.75rem; background:var(--bg3); border-radius:7px; border:1px solid var(--border); font-size:0.8rem; line-height:1.5; }
+  .rec-icon { flex-shrink:0; font-size:1rem; }
+  .rec-text { color:var(--text); }
+  .rec-text a { color:var(--accent); text-decoration:none; }
+  .rec-text a:hover { text-decoration:underline; }
+
+  /* Reset button */
+  .reset-row { display:flex; justify-content:flex-end; margin-top:1.5rem; }
+  .reset-btn { font-family:var(--mono); font-size:0.72rem; color:var(--muted); background:none; border:1px solid var(--border); padding:0.4rem 1rem; border-radius:6px; cursor:pointer; transition:all 0.2s; }
+  .reset-btn:hover { border-color:var(--red); color:var(--red); }
+
+  footer { background:var(--bg2); border-top:1px solid var(--border); padding:1.5rem 2rem; text-align:center; font-size:0.85rem; color:var(--muted); font-family:var(--mono); }
+
+  @media(max-width:900px) { .main-grid { grid-template-columns:1fr; } }
+  @media(max-width:600px) { .hero-row { grid-template-columns:1fr; } .readiness-ring { margin:0 auto; } main { padding:1.25rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">SECURITY+ <span>SY0-701</span> PRACTICE EXAMS</a>
+  <a href="index.html" class="back-link">← BACK</a>
+</header>
+
+<main>
+<div class="container">
+
+  <h1>Weak Spot Tracker</h1>
+  <p class="subtitle">// tracks your performance across all 5 Security+ domains · surfaces what needs work</p>
+
+  <!-- HERO -->
+  <div class="hero-row">
+    <div class="readiness-ring">
+      <svg class="ring-svg" viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="50"/>
+        <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+      </svg>
+      <div class="ring-label">
+        <span class="ring-pct" id="ringPct">—</span>
+        <span class="ring-sub">OVERALL</span>
+      </div>
+    </div>
+    <div class="hero-info">
+      <div class="hero-title" id="heroTitle">Start tracking to see your readiness</div>
+      <div class="hero-desc" id="heroDesc">Log practice test results, rate yourself on domains, and mark flashcard misses. The tracker will surface exactly where to focus.</div>
+      <div class="hero-meta">
+        <div class="hero-pill critical">Critical: <span id="heroWeak">—</span> domain(s)</div>
+        <div class="hero-pill warn">Needs work: <span id="heroMod">—</span> domain(s)</div>
+        <div class="hero-pill good">Strong: <span id="heroStrong">—</span> domain(s)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCE FILTER -->
+  <div class="source-tabs">
+    <span style="font-family:var(--mono);font-size:0.72rem;color:var(--muted);align-self:center;margin-right:0.25rem;">VIEW BY SOURCE:</span>
+    <button class="source-tab active" onclick="setSource('all',this)"><span class="dot"></span>All Sources</button>
+    <button class="source-tab" onclick="setSource('practice',this)"><span class="dot"></span>Practice Tests</button>
+    <button class="source-tab" onclick="setSource('pbq',this)"><span class="dot"></span>PBQ Simulator</button>
+    <button class="source-tab" onclick="setSource('flash',this)"><span class="dot"></span>Flashcards</button>
+    <button class="source-tab" onclick="setSource('manual',this)"><span class="dot"></span>Self-Rating</button>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- DOMAIN CARDS -->
+    <div class="domains-col" id="domainsCol"></div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- Priority -->
+      <div class="side-card">
+        <div class="side-title">⚠ Study Priority Queue</div>
+        <div class="priority-list" id="priorityList"></div>
+      </div>
+
+      <!-- Radar -->
+      <div class="side-card">
+        <div class="side-title">◈ Domain Radar</div>
+        <div class="radar-wrap">
+          <canvas id="radarChart" width="280" height="260"></canvas>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="side-card">
+        <div class="side-title">→ Recommended Actions</div>
+        <div class="rec-list" id="recList"></div>
+      </div>
+
+      <!-- Activity Log -->
+      <div class="side-card">
+        <div class="side-title">📋 Recent Activity Log</div>
+        <div class="log-entries" id="logEntries"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="reset-row">
+    <button class="reset-btn" onclick="confirmReset()">↺ Reset All Tracking Data</button>
+  </div>
+
+</div>
+</main>
+
+<!-- MANUAL RATING MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">Rate Your Confidence</div>
+    <div class="modal-sub">// manual self-assessment · updates your domain score</div>
+    <div class="modal-domain" id="modalDomainName"></div>
+    <div class="rating-row">
+      <button class="rating-btn r-weak" onclick="selectRating('weak',this)">😰<br>Weak<br><span style="font-size:0.62rem;color:var(--muted);">Need lots of work</span></button>
+      <button class="rating-btn r-moderate" onclick="selectRating('moderate',this)">😐<br>Moderate<br><span style="font-size:0.62rem;color:var(--muted);">Getting there</span></button>
+      <button class="rating-btn r-strong" onclick="selectRating('strong',this)">💪<br>Strong<br><span style="font-size:0.62rem;color:var(--muted);">Confident</span></button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="saveManualRating()">Save Rating</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>CompTIA Security+ SY0-701 · Weak Spot Tracker</p>
+  <p style="margin-top:0.4rem;font-size:0.75rem;"><a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a></p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════
+// DOMAIN DEFINITIONS
+// ═══════════════════════════════════════════════
+const DOMAINS = [
+  {
+    id:'threats', num:'1.0', icon:'⚔️',
+    name:'Threats, Attacks & Mitigations',
+    weight:0.24,
+    topics:['Malware Types','Social Engineering','Phishing','Ransomware','APT','Vulnerability Scanning','Penetration Testing','CVSS'],
+    weakTopics:['Social Engineering','APT','CVSS'],
+    studyUrl:'pbq-simulator.html',
+    studyLabel:'Log Analysis PBQ',
+    thmUrl:'https://tryhackme.com/room/mitre',
+    thmLabel:'MITRE ATT&CK',
+  },
+  {
+    id:'architecture', num:'2.0', icon:'🏗️',
+    name:'Architecture & Design',
+    weight:0.21,
+    topics:['Cloud Security','Virtualization','Zero Trust','Network Segmentation','DMZ','SASE','Infrastructure as Code'],
+    weakTopics:['Zero Trust','SASE'],
+    studyUrl:'concept-comparisons.html',
+    studyLabel:'Concept Comparisons',
+    thmUrl:'https://tryhackme.com/room/intronetworksecurity',
+    thmLabel:'Network Security',
+  },
+  {
+    id:'implementation', num:'3.0', icon:'⚙️',
+    name:'Implementation',
+    weight:0.25,
+    topics:['PKI & Certificates','Wireless Security','Firewall Config','VPN','IAM','MFA','Cryptography','Protocols'],
+    weakTopics:['PKI & Certificates','Wireless Security'],
+    studyUrl:'pbq-simulator.html',
+    studyLabel:'Firewall ACL + Crypto PBQs',
+    thmUrl:'https://tryhackme.com/room/cryptographybasics',
+    thmLabel:'Cryptography Basics',
+  },
+  {
+    id:'operations', num:'4.0', icon:'🔍',
+    name:'Operations & Incident Response',
+    weight:0.16,
+    topics:['IR Lifecycle','Digital Forensics','Log Analysis','SIEM','Vulnerability Management','Threat Hunting'],
+    weakTopics:['Digital Forensics','Threat Hunting'],
+    studyUrl:'pbq-simulator.html',
+    studyLabel:'IR + Log Analysis PBQs',
+    thmUrl:'https://tryhackme.com/room/irfundamentals',
+    thmLabel:'IR Fundamentals',
+  },
+  {
+    id:'governance', num:'5.0', icon:'📜',
+    name:'Governance, Risk & Compliance',
+    weight:0.14,
+    topics:['Risk Management','Frameworks (NIST, ISO)','Privacy Laws','GDPR','HIPAA','Security Policies','BCP/DR'],
+    weakTopics:['GDPR','BCP/DR'],
+    studyUrl:'concept-comparisons.html',
+    studyLabel:'Concept Comparisons',
+    thmUrl:'https://tryhackme.com/room/threatmodelling',
+    thmLabel:'Threat Modelling',
+  },
+];
+
+// ═══════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════
+const KEY = 'wst_data_v2';
+
+function getState() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  // Default state
+  return {
+    sources: {
+      practice: { threats:null, architecture:null, implementation:null, operations:null, governance:null },
+      pbq:      { threats:null, architecture:null, implementation:null, operations:null, governance:null },
+      flash:    { threats:null, architecture:null, implementation:null, operations:null, governance:null },
+      manual:   { threats:null, architecture:null, implementation:null, operations:null, governance:null },
+    },
+    log: [],
+  };
+}
+
+function saveState(s) {
+  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {}
+}
+
+// ═══════════════════════════════════════════════
+// SCORE LOGIC
+// ═══════════════════════════════════════════════
+function computeDomainScore(domainId, state, sourceFilter) {
+  const sources = sourceFilter === 'all'
+    ? ['practice','pbq','flash','manual']
+    : [sourceFilter];
+
+  let total = 0, count = 0;
+  sources.forEach(src => {
+    const v = state.sources[src][domainId];
+    if (v !== null && v !== undefined) { total += v; count++; }
+  });
+  if (count === 0) return null;
+  return Math.round(total / count);
+}
+
+function scoreToClass(score) {
+  if (score === null) return 'moderate';
+  if (score < 45) return 'weak';
+  if (score < 72) return 'moderate';
+  return 'strong';
+}
+
+function scoreToLabel(score) {
+  if (score === null) return '—';
+  return score + '%';
+}
+
+function ratingToScore(rating) {
+  if (rating === 'weak') return 25;
+  if (rating === 'moderate') return 58;
+  if (rating === 'strong') return 88;
+  return 50;
+}
+
+// ═══════════════════════════════════════════════
+// SOURCE COLOR
+// ═══════════════════════════════════════════════
+function sourceColor(src) {
+  return { practice:'var(--accent)', pbq:'var(--purple)', flash:'var(--yellow)', manual:'var(--green)' }[src] || 'var(--muted)';
+}
+function sourceLabel(src) {
+  return { practice:'Practice Test', pbq:'PBQ Sim', flash:'Flashcards', manual:'Self-Rate' }[src];
+}
+
+// ═══════════════════════════════════════════════
+// ACTIVE SOURCE FILTER
+// ═══════════════════════════════════════════════
+let activeSource = 'all';
+function setSource(src, btn) {
+  activeSource = src;
+  document.querySelectorAll('.source-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+// ═══════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════
+function render() {
+  const state = getState();
+  renderHero(state);
+  renderDomains(state);
+  renderSidebar(state);
+  renderRadar(state);
+  renderLog(state);
+}
+
+function renderHero(state) {
+  const scores = DOMAINS.map(d => ({ id:d.id, score:computeDomainScore(d.id, state, 'all') }));
+  const scored = scores.filter(s => s.score !== null);
+
+  if (scored.length === 0) {
+    document.getElementById('ringPct').textContent = '—';
+    document.getElementById('ringFill').style.strokeDashoffset = 314;
+    document.getElementById('ringFill').style.stroke = 'var(--muted)';
+    document.getElementById('heroTitle').textContent = 'No data yet — start logging your results';
+    document.getElementById('heroDesc').textContent = 'Rate yourself on domains below, or your practice test results will feed in automatically once synced.';
+    document.getElementById('heroWeak').textContent = '—';
+    document.getElementById('heroMod').textContent = '—';
+    document.getElementById('heroStrong').textContent = '—';
+    return;
+  }
+
+  // Weighted average
+  let weightedSum = 0, weightTotal = 0;
+  DOMAINS.forEach(d => {
+    const s = computeDomainScore(d.id, state, 'all');
+    if (s !== null) { weightedSum += s * d.weight; weightTotal += d.weight; }
+  });
+  const overall = Math.round(weightedSum / weightTotal);
+
+  const weak = scored.filter(s => s.score < 45).length;
+  const mod = scored.filter(s => s.score >= 45 && s.score < 72).length;
+  const strong = scored.filter(s => s.score >= 72).length;
+
+  // Ring
+  const offset = 314 - (314 * overall / 100);
+  const ringEl = document.getElementById('ringFill');
+  ringEl.style.strokeDashoffset = offset;
+  ringEl.style.stroke = overall < 45 ? 'var(--red)' : overall < 72 ? 'var(--yellow)' : 'var(--green)';
+  document.getElementById('ringPct').textContent = overall + '%';
+
+  const titles = ['Critical — heavy focus needed', 'Below target — keep pushing', 'Getting there — stay consistent', 'Looking solid — fine-tune weak spots', 'Exam ready — review and go!'];
+  const ti = overall < 40 ? 0 : overall < 55 ? 1 : overall < 70 ? 2 : overall < 85 ? 3 : 4;
+  document.getElementById('heroTitle').textContent = titles[ti];
+  document.getElementById('heroDesc').textContent = `Based on ${scored.length} of 5 domains tracked. Weighted by exam domain importance. Score reflects combined data from all active sources.`;
+  document.getElementById('heroWeak').textContent = weak;
+  document.getElementById('heroMod').textContent = mod;
+  document.getElementById('heroStrong').textContent = strong;
+}
+
+function renderDomains(state) {
+  const col = document.getElementById('domainsCol');
+  const sources = activeSource === 'all' ? ['practice','pbq','flash','manual'] : [activeSource];
+
+  col.innerHTML = DOMAINS.map(d => {
+    const score = computeDomainScore(d.id, state, activeSource);
+    const cls = scoreToClass(score);
+
+    // Source bars
+    const barsHtml = sources.map(src => {
+      const v = state.sources[src][d.id];
+      const pct = v !== null && v !== undefined ? v : 0;
+      const hasData = v !== null && v !== undefined;
+      return `<div class="source-bar-row">
+        <span class="sb-label">${sourceLabel(src)}</span>
+        <div class="sb-track"><div class="sb-fill" style="width:${pct}%;background:${hasData ? sourceColor(src) : 'var(--border)'};opacity:${hasData?1:0.3}"></div></div>
+        <span class="sb-pct">${hasData ? pct+'%' : '—'}</span>
+      </div>`;
+    }).join('');
+
+    const topicsHtml = d.topics.map(t =>
+      `<span class="topic-tag${d.weakTopics.includes(t)?' weak-topic':''}">${t}</span>`
+    ).join('');
+
+    return `<div class="domain-card ${cls}">
+      <div class="domain-header">
+        <div class="domain-left">
+          <span class="domain-icon">${d.icon}</span>
+          <div>
+            <div class="domain-name">${d.name}</div>
+            <div class="domain-num">Domain ${d.num} · ${Math.round(d.weight*100)}% of exam</div>
+          </div>
+        </div>
+        <span class="domain-score-badge">${scoreToLabel(score)}</span>
+      </div>
+      <div class="source-bars">${barsHtml}</div>
+      <div class="domain-topics">${topicsHtml}</div>
+      <div class="domain-action">
+        <a href="${d.studyUrl}" class="action-link">📖 ${d.studyLabel} →</a>
+        <button class="log-btn" onclick="openModal('${d.id}')">✎ Rate Yourself</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderSidebar(state) {
+  // Priority list
+  const scored = DOMAINS.map(d => {
+    const s = computeDomainScore(d.id, state, 'all');
+    return { ...d, score: s === null ? 999 : s };
+  }).sort((a,b) => a.score - b.score);
+
+  const priList = document.getElementById('priorityList');
+  priList.innerHTML = scored.map((d, i) => {
+    const rankClass = i === 0 ? 'r1' : i === 1 ? 'r2' : 'r3';
+    const scoreColor = d.score === 999 ? 'var(--muted)' : d.score < 45 ? 'var(--red)' : d.score < 72 ? 'var(--yellow)' : 'var(--green)';
+    return `<div class="priority-item">
+      <span class="pri-rank ${rankClass}">${i+1}</span>
+      <span class="pri-name">${d.icon} ${d.name.split(' ').slice(0,2).join(' ')}</span>
+      <span class="pri-score" style="color:${scoreColor}">${d.score === 999 ? '—' : d.score+'%'}</span>
+    </div>`;
+  }).join('');
+
+  // Recommendations
+  const recList = document.getElementById('recList');
+  const weakDomains = scored.filter(d => d.score < 72 && d.score !== 999).slice(0,3);
+  if (weakDomains.length === 0) {
+    recList.innerHTML = `<div class="rec-item"><span class="rec-icon">✅</span><div class="rec-text">All domains looking strong! Keep reviewing and log more data to stay accurate.</div></div>`;
+  } else {
+    recList.innerHTML = weakDomains.map(d => `
+      <div class="rec-item">
+        <span class="rec-icon">${d.score < 45 ? '🔴' : '🟡'}</span>
+        <div class="rec-text">
+          <strong>${d.name.split(',')[0]}</strong> needs work.
+          Try <a href="${d.studyUrl}">${d.studyLabel}</a> then
+          <a href="${d.thmUrl}" target="_blank" rel="noopener">${d.thmLabel} on THM ↗</a>
+        </div>
+      </div>`).join('');
+  }
+}
+
+function renderLog(state) {
+  const logEl = document.getElementById('logEntries');
+  if (!state.log || state.log.length === 0) {
+    logEl.innerHTML = `<div class="no-log">No activity yet.<br>Rate yourself or complete a PBQ to start logging.</div>`;
+    return;
+  }
+  const recent = [...state.log].reverse().slice(0, 20);
+  logEl.innerHTML = recent.map(e => `
+    <div class="log-entry ${e.type}">
+      <span class="le-icon"></span>
+      <span class="le-time">${e.time}</span>
+      <span class="le-text">${e.text}</span>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// RADAR CHART (pure canvas)
+// ═══════════════════════════════════════════════
+function renderRadar(state) {
+  const canvas = document.getElementById('radarChart');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2 + 8;
+  const R = Math.min(W, H) * 0.36;
+  const N = 5;
+  ctx.clearRect(0, 0, W, H);
+
+  const angles = DOMAINS.map((_, i) => (i * 2 * Math.PI / N) - Math.PI/2);
+
+  // Grid rings
+  [0.25, 0.5, 0.75, 1].forEach(frac => {
+    ctx.beginPath();
+    angles.forEach((a, i) => {
+      const x = cx + Math.cos(a) * R * frac;
+      const y = cy + Math.sin(a) * R * frac;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(31,39,64,0.9)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    if (frac === 0.5 || frac === 1) {
+      ctx.fillStyle = 'rgba(90,106,138,0.3)';
+      ctx.font = '9px IBM Plex Mono, monospace';
+      ctx.fillText(Math.round(frac * 100) + '%', cx + 4, cy - R * frac + 3);
+    }
+  });
+
+  // Spokes
+  angles.forEach(a => {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+    ctx.strokeStyle = 'rgba(31,39,64,0.8)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Data polygon
+  const scores = DOMAINS.map(d => {
+    const s = computeDomainScore(d.id, state, 'all');
+    return s === null ? 0.3 : s / 100;
+  });
+
+  ctx.beginPath();
+  angles.forEach((a, i) => {
+    const x = cx + Math.cos(a) * R * scores[i];
+    const y = cy + Math.sin(a) * R * scores[i];
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(0,212,255,0.12)';
+  ctx.fill();
+  ctx.strokeStyle = 'var(--accent)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Dots
+  angles.forEach((a, i) => {
+    const x = cx + Math.cos(a) * R * scores[i];
+    const y = cy + Math.sin(a) * R * scores[i];
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+    const s = scores[i];
+    ctx.fillStyle = s < 0.45 ? 'var(--red)' : s < 0.72 ? 'var(--yellow)' : 'var(--green)';
+    ctx.fill();
+  });
+
+  // Labels
+  ctx.fillStyle = '#d0d8f0';
+  ctx.font = '10px IBM Plex Mono, monospace';
+  ctx.textAlign = 'center';
+  const labels = ['Threats', 'Architecture', 'Implementation', 'Operations', 'Governance'];
+  const labelR = R + 22;
+  angles.forEach((a, i) => {
+    const x = cx + Math.cos(a) * labelR;
+    const y = cy + Math.sin(a) * labelR;
+    ctx.fillText(labels[i], x, y + 3);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════
+let modalDomainId = null;
+let selectedRating = null;
+
+function openModal(domainId) {
+  modalDomainId = domainId;
+  selectedRating = null;
+  const d = DOMAINS.find(x => x.id === domainId);
+  document.getElementById('modalDomainName').textContent = d.icon + ' ' + d.name;
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  modalDomainId = null;
+  selectedRating = null;
+}
+
+function selectRating(r, btn) {
+  selectedRating = r;
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function saveManualRating() {
+  if (!selectedRating || !modalDomainId) return;
+  const state = getState();
+  const score = ratingToScore(selectedRating);
+  state.sources.manual[modalDomainId] = score;
+
+  const d = DOMAINS.find(x => x.id === modalDomainId);
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-US', {month:'short',day:'numeric'}) + ' ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  state.log.push({ type:'manual', time:timeStr, text:`Self-rated ${d.name.split(',')[0]}: ${selectedRating} (${score}%)` });
+
+  saveState(state);
+  closeModal();
+  render();
+}
+
+// ═══════════════════════════════════════════════
+// PUBLIC API — called from other pages
+// ═══════════════════════════════════════════════
+window.WSTLog = function(source, domainId, score, label) {
+  const state = getState();
+  if (!state.sources[source]) return;
+  const prev = state.sources[source][domainId];
+  // Rolling average if existing data
+  const newScore = prev !== null && prev !== undefined
+    ? Math.round((prev * 0.6) + (score * 0.4))
+    : score;
+  state.sources[source][domainId] = newScore;
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  state.log.push({ type: score >= 60 ? 'correct' : 'wrong', time:timeStr, text: label });
+  saveState(state);
+};
+
+// ═══════════════════════════════════════════════
+// DEMO DATA (first visit only)
+// ═══════════════════════════════════════════════
+function seedDemoIfEmpty() {
+  const state = getState();
+  const hasData = Object.values(state.sources).some(src => Object.values(src).some(v => v !== null));
+  if (hasData) return;
+
+  // Seed some realistic demo scores
+  state.sources.practice.threats = 62;
+  state.sources.practice.architecture = 71;
+  state.sources.practice.implementation = 55;
+  state.sources.practice.operations = 48;
+  state.sources.practice.governance = 79;
+
+  state.sources.manual.threats = 58;
+  state.sources.manual.implementation = 50;
+  state.sources.manual.operations = 42;
+
+  const now = new Date();
+  const fmt = (d) => d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const t1 = new Date(now - 86400000*2);
+  const t2 = new Date(now - 86400000);
+  state.log = [
+    { type:'correct', time:fmt(t1), text:'Practice Test: Governance — 79% (strong)' },
+    { type:'wrong',   time:fmt(t1), text:'Practice Test: Operations — 48% (needs work)' },
+    { type:'manual',  time:fmt(t2), text:'Self-rated Implementation: moderate (50%)' },
+    { type:'wrong',   time:fmt(t2), text:'Self-rated Operations: weak (42%)' },
+    { type:'correct', time:fmt(now),'text':'Practice Test: Architecture — 71% (solid)' },
+  ];
+  saveState(state);
+}
+
+// ═══════════════════════════════════════════════
+// RESET
+// ═══════════════════════════════════════════════
+function confirmReset() {
+  if (confirm('Reset all tracking data? This cannot be undone.')) {
+    localStorage.removeItem(KEY);
+    render();
+  }
+}
+
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+seedDemoIfEmpty();
+render();
+</script>
+</body>
+</html>
