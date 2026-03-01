@@ -1084,7 +1084,7 @@
           </a>
 
           <a href="concept-comparisons.html" class="exam-card">
-            <div class="exam-progress" id="comparisonsProgress">18 Pairs</div>
+            <div class="exam-progress">18 Pairs</div>
             <div class="exam-label">Study Reference</div>
             <div class="exam-title">Concept Comparisons</div>
             <div class="exam-desc">Side-by-side breakdowns of commonly confused pairs — IDS vs IPS, symmetric vs asymmetric, authentication vs authorization, and more</div>
@@ -1092,7 +1092,7 @@
           </a>
 
           <a href="threat-actors.html" class="exam-card">
-            <div class="exam-progress" id="threatActorsProgress">6 Profiles</div>
+            <div class="exam-progress">6 Profiles</div>
             <div class="exam-label">Threat Intelligence</div>
             <div class="exam-title">Threat Actor Profiles</div>
             <div class="exam-desc">Study threat actor profiles and test yourself with a drag-and-match game — nation-state, cybercriminal, hacktivist, insider, script kiddie, and more</div>
@@ -1100,7 +1100,7 @@
           </a>
 
           <a href="tryhackme.html" class="exam-card">
-            <div class="exam-progress" id="thmProgress">30 Rooms</div>
+            <div class="exam-progress">30 Rooms</div>
             <div class="exam-label">Hands-On Practice</div>
             <div class="exam-title">TryHackMe Resources</div>
             <div class="exam-desc">Curated THM rooms paired with your study materials — SOC, network, crypto, threat intel, and IR. Track your room completion progress.</div>
@@ -1108,7 +1108,7 @@
           </a>
 
           <a href="weak-spot-tracker.html" class="exam-card">
-            <div class="exam-progress" id="wstProgress">5 Domains</div>
+            <div class="exam-progress">5 Domains</div>
             <div class="exam-label">Performance Analytics</div>
             <div class="exam-title">Weak Spot Tracker</div>
             <div class="exam-desc">Track your scores across all 5 Security+ domains from practice tests, PBQs, flashcards, and self-ratings. See exactly where to focus next.</div>
@@ -1116,10 +1116,10 @@
           </a>
 
           <a href="ai-tutor.html" class="exam-card">
-            <div class="exam-progress" id="aiProgress">Claude AI</div>
+            <div class="exam-progress">Free AI</div>
             <div class="exam-label">AI Powered</div>
             <div class="exam-title">AI Study Tutor</div>
-            <div class="exam-desc">Chat with an AI tutor — ask Security+ questions, get quizzed on weak domains, have concepts explained, and generate practice questions on demand.</div>
+            <div class="exam-desc">Free AI tutor — ask Security+ questions, get quizzed on weak domains, have concepts explained, and generate practice questions. No key needed.</div>
             <div class="exam-arrow">OPEN TUTOR →</div>
           </a>
 
@@ -1484,32 +1484,26 @@
     document.getElementById('miniSendBtn').disabled = true;
 
     try {
-      const headers = { 'Content-Type': 'application/json' };
-      const key = (function() { try { return localStorage.getItem('claude_api_key') || ''; } catch { return ''; } })();
-      if (key) headers['x-api-key'] = key;
-
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('https://text.pollinations.ai/', {
         method: 'POST',
-        headers,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 400,
-          system: MINI_SYSTEM,
-          messages: miniHistory.slice(-8), // keep context window small
+          model: 'openai',
+          messages: [{ role:'system', content: MINI_SYSTEM }, ...miniHistory.slice(-6)],
+          seed: Math.floor(Math.random() * 9999),
         }),
       });
 
       removeMiniTyping(typingId);
 
       if (!res.ok) throw new Error('Status ' + res.status);
-      const data = await res.json();
-      const reply = data.content?.[0]?.text || 'No response.';
+      const reply = await res.text();
       miniHistory.push({ role:'assistant', content:reply });
       appendMiniMsg('assistant', reply);
 
     } catch (err) {
       removeMiniTyping(typingId);
-      appendMiniMsg('assistant', '⚠️ Couldn\'t reach AI. Try opening the <a href="ai-tutor.html" style="color:#00d4ff">full tutor page</a> or add an API key there.');
+      appendMiniMsg('assistant', '⚠️ Couldn\'t reach AI. Check your connection or <a href="ai-tutor.html" style="color:#00d4ff">open the full tutor ↗</a>');
     }
 
     miniLoading = false;
