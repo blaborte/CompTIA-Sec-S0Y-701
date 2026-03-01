@@ -203,6 +203,32 @@
     .intro-stats { grid-template-columns: 1fr 1fr; }
     .results-grid { grid-template-columns: 1fr 1fr; }
   }
+
+  /* Explanation box */
+  .explanation-box {
+    margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px;
+    background: rgba(123,47,190,0.08); border: 1px solid rgba(123,47,190,0.3);
+    font-size: 0.83rem; line-height: 1.7; color: var(--text);
+  }
+  .explanation-box .expl-label {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+    color: #a06fdb; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;
+  }
+  /* Domain summary */
+  .domain-section { margin-top: 2rem; }
+  .domain-section h3 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; }
+  .domain-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; padding: 1rem 1.2rem; margin-bottom: 0.6rem; }
+  .domain-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+  .domain-card-name { font-size: 0.82rem; color: var(--text); font-weight: 500; }
+  .domain-card-pct { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; }
+  .domain-bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .domain-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .domain-badge { font-family: var(--mono); font-size: 0.6rem; padding: 0.15rem 0.5rem; border-radius: 2px; margin-left: 0.5rem; letter-spacing: 0.06em; }
+  .badge-strong { background: rgba(0,245,160,0.12); color: var(--green); border: 1px solid rgba(0,245,160,0.25); }
+  .badge-weak { background: rgba(255,71,87,0.12); color: var(--red); border: 1px solid rgba(255,71,87,0.25); }
+  .badge-ok { background: rgba(255,211,42,0.12); color: var(--yellow); border: 1px solid rgba(255,211,42,0.25); }
+  .domain-detail { font-size: 0.72rem; color: var(--muted); font-family: var(--mono); margin-top: 0.3rem; }
+
 </style>
 </head>
 <body>
@@ -214,10 +240,16 @@
     <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
     <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
   </div>
-    <a href="index.html" class="home-btn">
+    <div style="display:flex;gap:0.5rem;align-items:center;">
+    <button class="home-btn" onclick="goBackToIntro()" id="backToIntroBtn" style="display:none">
       <span>←</span>
+      <span>Back</span>
+    </button>
+    <a href="index.html" class="home-btn">
+      <span>⌂</span>
       <span>Home</span>
     </a>
+  </div>
   </header>
 <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
@@ -355,349 +387,350 @@
           <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
         </div>
       </div>
+      <div class="domain-section" id="domainSummary"></div>
     </div>
   </main>
 </div>
 
 <script>
 const questions = [
-  {id:'C6',type:'mc',
+  {id:'C6',domain:'PM',explanation:'Data retention policies set the required duration for keeping records. A daily archive backup specifically for applicable records is the best way to meet a 7-year legal retention requirement.',type:'mc',
    text:'A finance company is legally required to maintain seven years of tax records for all of their customers. Which of the following would be the <strong>BEST</strong> way to implement this requirement?',
    options:['Automate a script to remove all tax information more than seven years old','Print and store all tax records in a seven-year cycle','Allow users to download tax records from their account login','Create a separate daily backup archive for all applicable tax records'],
    answer:[3]},
-  {id:'C7',type:'mc',
+  {id:'C7',domain:'GRC',explanation:'A Key Management System (KMS) automates lifecycle tasks like key rotation, storage, and access control — purpose-built for exactly this use case in cloud environments.',type:'mc',
    text:'A system administrator is designing a data center for an insurance company\'s new public cloud and would like to automatically rotate encryption keys on a regular basis. Which of the following would provide this functionality?',
    options:['TPM','Key management system','Secure enclave','XDR'],
    answer:[1]},
-  {id:'C8',type:'mc',
+  {id:'C8',domain:'SecOps',explanation:'IPS alert tuning suppresses or adjusts specific signatures to reduce false positives without disabling protection entirely. Disabling a signature removes all protection for that attack vector.',type:'mc',
    text:'A newly installed IPS is flagging a legitimate corporate application as malicious network traffic. Which of the following would be the <strong>BEST</strong> way to resolve this issue?',
    options:['Disable the IPS signature','Block the application','Log all IPS events','Tune the IPS alerts'],
    answer:[3]},
-  {id:'C9',type:'mc',
+  {id:'C9',domain:'TVM',explanation:'Allowing modification of SQL queries via user input is a SQL injection vulnerability. Input validation (sanitizing and restricting what users can enter) is the direct fix.',type:'mc',
    text:'A security administrator has identified an internally developed application which allows modification of SQL queries through the web-based front-end. Which of the following changes would resolve this vulnerability?',
    options:['Store all credentials as salted hashes','Verify the application\'s digital signature','Validate all application input','Obfuscate the application\'s source code'],
    answer:[2]},
-  {id:'C10',type:'mc',
+  {id:'C10',domain:'GRC',explanation:'A fingerprint scanner uses biometrics — it verifies \'something you are.\' Digital signatures and security keys are different authentication mechanisms.',type:'mc',
    text:'A system administrator is implementing a fingerprint scanner to provide access to the data center. Which of the following authentication technologies would be associated with this access?',
    options:['Digital signature','Hard authentication token','Security key','Something you are'],
    answer:[3]},
-  {id:'C11',type:'mc',
+  {id:'C11',domain:'PM',explanation:'MTTR (Mean Time to Repair) is the average time to restore a failed component. The 60-minute restoration time is an MTTR metric, not MTBF (failure frequency) or RTO (recovery target).',type:'mc',
    text:'The IT department of a transportation company maintains an on-site inventory of chassis-based network switch interface cards. If a failure occurs, the on-site technician can replace the interface card and have the system running again in sixty minutes. Which of the following <strong>BEST</strong> describes this recovery metric?',
    options:['MTBF','MTTR','RPO','RTO'],
    answer:[1]},
-  {id:'C12',type:'mc',
+  {id:'C12',domain:'TVM',explanation:'Only internal systems were breached before patches were applied, with no external breach attempts logged. This points to an insider threat — someone with internal access acting before patches could be deployed.',type:'mc',
    text:'A company maintains a server farm in a large data center. These servers are used internally and are not accessible from outside of the data center. The security team has discovered a group of servers was breached before the latest security patches were applied. Breach attempts were not logged on any other servers. Which of these threat actors would be <strong>MOST</strong> likely involved in this breach?',
    options:['Organized crime','Insider','Nation state','Unskilled attacker'],
    answer:[1]},
-  {id:'C13',type:'mc',
+  {id:'C13',domain:'SecOps',explanation:'The administrator has verified JRE is not installed, so the vulnerability is a false positive — the scanner detected something that doesn\'t actually exist on the server. The correct response is to tune/ignore the alert.',type:'mc',
    text:'An organization has received a vulnerability scan report of their Internet-facing web servers. The report shows the servers have multiple Sun Java Runtime Environment (JRE) vulnerabilities, but the server administrator has verified that JRE is not installed. Which of the following would be the <strong>BEST</strong> way to handle this report?',
    options:['Install the latest version of JRE on the server','Quarantine the server and scan for malware','Harden the operating system of the web server','Ignore the JRE vulnerability alert'],
    answer:[3]},
-  {id:'C14',type:'mc',
+  {id:'C14',domain:'TVM',explanation:'A Trojan disguises itself as a legitimate utility but carries a malicious payload. Immediate performance degradation after installing a \'compression tool\' is classic Trojan behavior.',type:'mc',
    text:'A user downloaded and installed a utility for compressing and decompressing files. Immediately after installing the utility, the user\'s overall workstation performance degraded and it now takes twice as much time to perform any tasks on the computer. Which of the following is the <strong>BEST</strong> description of this malware infection?',
    options:['Ransomware','Bloatware','Logic bomb','Trojan'],
    answer:[3]},
-  {id:'C15',type:'mc',
+  {id:'C15',domain:'GRC',explanation:'Tokenization replaces sensitive data with a non-sensitive functional placeholder (token). Masking hides data visually but the original remains; tokenization creates a surrogate value entirely.',type:'mc',
    text:'Which of the following is the process for replacing sensitive data with a non-sensitive and functional placeholder?',
    options:['Steganography','Tokenization','Retention','Masking'],
    answer:[1]},
-  {id:'C16',type:'mc',
+  {id:'C16',domain:'SecArch',explanation:'TCP port 443 is HTTPS — encrypted web traffic. Port 80 is unencrypted HTTP. The rule must allow port 443 to enforce encrypted sessions. Port 22 is SSH; port 23 is Telnet.',type:'mc',
    text:'A security administrator has installed a new firewall to protect a web server VLAN. The application owner requires all web server sessions communicate over an encrypted channel. Which of these rules should the security administrator include in the firewall rulebase?',
    options:['Source: ANY, Destination: ANY, Protocol: TCP, Port: 23, Deny','Source: ANY, Destination: ANY, Protocol: TCP, Port: 22, Allow','Source: ANY, Destination: ANY, Protocol: TCP, Port: 80, Allow','Source: ANY, Destination: ANY, Protocol: TCP, Port: 443, Allow'],
    answer:[3]},
-  {id:'C17',type:'mc',
+  {id:'C17',domain:'GRC',explanation:'A smart card (something you have) combined with a picture ID (something you are/know via identity) provides MFA. A USB storage drive with FDE is one factor; a policy manual is not a factor.',type:'mc',
    text:'Which of these would be used to provide multi-factor authentication?',
    options:['USB-connected storage drive with FDE','Employee policy manual','Just-in-time permissions','Smart card with picture ID'],
    answer:[3]},
-  {id:'C18',type:'mc',
+  {id:'C18',domain:'SecArch',explanation:'Building an IPsec tunnel to a new partner introduces supply chain risk — you\'re trusting their infrastructure and security posture. A compromise at the partner could affect your network.',type:'mc',
    text:'A company\'s network team has been asked to build an IPsec tunnel to a new business partner. Which of the following security risks would be the <strong>MOST</strong> important to consider?',
    options:['Supply chain attack','Unsupported systems','Business email compromise','Typosquatting'],
    answer:[0]},
-  {id:'C19',type:'mc',
+  {id:'C19',domain:'PM',explanation:'A data processor processes personal data on behalf of the controller/owner. The financial company uses HR\'s data to manage investments — it processes but doesn\'t own or control the original data.',type:'mc',
    text:'A company\'s human resources team maintains a list of all employees participating in the corporate savings plan. A third-party financial company uses this information to manage stock investments for the employees. Which of the following would describe this financial company?',
    options:['Processor','Owner','Controller','Custodian'],
    answer:[0]},
-  {id:'C20',type:'mc',
+  {id:'C20',domain:'SecArch',explanation:'RTOS (Real-Time Operating System) is designed for systems that must respond instantly to inputs with guaranteed timing — critical for military tracking systems that cannot tolerate latency.',type:'mc',
    text:'A technology company is manufacturing a military-grade radar tracking system that can instantly identify any nearby unmanned aerial vehicles (UAVs). The UAV detector must be able to instantly identify and react to a vehicle without delay. Which of the following would <strong>BEST</strong> describe this tracking system?',
    options:['RTOS','IoT','ICS','SDN'],
    answer:[0]},
-  {id:'C21',type:'mc',
+  {id:'C21',domain:'SecOps',explanation:'Orchestration automates multi-step workflows by coordinating actions across different systems — converting an email to a ticket and routing it is a classic orchestration use case.',type:'mc',
    text:'An administrator is writing a script to convert an email message to a help desk ticket and assign the ticket to the correct department. Which of the following should the administrator use to complete this script?',
    options:['Role-based access controls','Federation','Due diligence','Orchestration'],
    answer:[3]},
-  {id:'C22',type:'mc',
+  {id:'C22',domain:'SecOps',explanation:'An IPS log records all detected and blocked attack attempts against network resources, including counts of attacks using known vulnerability signatures against web servers.',type:'mc',
    text:'A security administrator would like a report showing how many attackers are attempting to use a known vulnerability to gain access to a corporate web server. Which of the following should be used to gather this information?',
    options:['Application log','Metadata','IPS log','Windows log'],
    answer:[2]},
-  {id:'C23',type:'mc',
+  {id:'C23',domain:'SecOps',explanation:'Rebuilding database servers from known-good backups to restore operations is the Recovery phase of incident response. Lessons learned comes after; containment and detection come before recovery.',type:'mc',
    text:'During a ransomware outbreak, an organization was forced to rebuild database servers from known good backup systems. In which of the following incident response phases were these database servers brought back online?',
    options:['Recovery','Lessons learned','Containment','Detection'],
    answer:[0]},
-  {id:'C24',type:'mc',
+  {id:'C24',domain:'SecArch',explanation:'OS hardening removes unnecessary software, services, and features to minimize the attack surface. Creating backups and device certificates are security practices but don\'t harden the OS itself.',type:'mc',
    text:'A security administrator is installing a web server with a newly built operating system. Which of the following would be the best way to harden this OS?',
    options:['Create a backup schedule','Install a device certificate','Remove unnecessary software','Disable power management features'],
    answer:[2]},
-  {id:'C25',type:'mc',
+  {id:'C25',domain:'TVM',explanation:'The application data shows SQL queries with OR \'x\'=\'x\' — a classic SQL injection payload using always-true conditions to bypass authentication. Port 1433 is Microsoft SQL Server.',type:'mc',
    text:'A network IPS has created this log entry:<div class="code-block">Frame 4: 937 bytes on wire (7496 bits), 937 bytes captured\nEthernet II, Src: HewlettP_82:d8:31, Dst: Cisco_a1:b0:d1\nInternet Protocol Version 4, Src: 172.16.22.7, Dst: 10.8.122.244\nTransmission Control Protocol, Src Port: 3863, Dst Port: 1433\nApplication Data: SELECT * FROM users WHERE\nusername=\'x\' or \'x\'=\'x\' AND password=\'x\' or \'x\'=\'x\'</div>Which of the following would describe this log entry?',
    options:['Phishing','Brute force','SQL injection','Cross-site scripting'],
    answer:[2]},
-  {id:'C26',type:'mc',
+  {id:'C26',domain:'PM',explanation:'A tabletop exercise is a discussion-based DR plan validation that doesn\'t require any infrastructure changes or actual failover — exactly what \'without making changes\' requires.',type:'mc',
    text:'An incident response team would like to validate their disaster recovery plans without making any changes to the infrastructure. Which of the following would be the best course of action?',
    options:['Tabletop exercise','Hot site fail-over','Simulation','Penetration test'],
    answer:[0]},
-  {id:'C27',type:'mc',
+  {id:'C27',domain:'SecArch',explanation:'Default-deny firewalls block all traffic until explicit allow rules are created. The fix is to create firewall rules matching the application\'s specific traffic flows (ports, protocols, IPs).',type:'mc',
    text:'A system administrator has installed a new firewall between the corporate user network and the data center network. When the firewall is turned on with the default settings, users complain that the application in the data center is no longer working. Which of the following would be the <strong>BEST</strong> way to correct this application issue?',
    options:['Create a single firewall rule with an explicit deny','Build a separate VLAN for the application','Create firewall rules that match the application traffic flow','Enable firewall threat blocking'],
    answer:[2]},
-  {id:'C28',type:'mc',
+  {id:'C28',domain:'SecArch',explanation:'A UPS (Uninterruptible Power Supply) maintains power during outages, providing high availability for the database application. SIEM is security monitoring; DLP prevents data loss; VPN concentrator manages VPNs.',type:'mc',
    text:'Which of these would be used to provide HA for a web-based database application?',
    options:['SIEM','UPS','DLP','VPN concentrator'],
    answer:[1]},
-  {id:'C29',type:'mc',
+  {id:'C29',domain:'PM',explanation:'ALE (Annual Loss Expectancy) = SLE × ARO — it\'s the total expected annual financial loss. The cost of replacing lost/stolen laptops each year is ALE. SLE is per-event cost; ARO is the annual frequency.',type:'mc',
    text:'Each year, a certain number of laptops are lost or stolen and must be replaced by the company. Which of the following would describe the total cost the company spends each year on laptop replacements?',
    options:['SLE','SLA','ALE','ARO'],
    answer:[2]},
-  {id:'C30',type:'mc',
+  {id:'C30',domain:'TVM',explanation:'The log shows a URL path traversal / code injection attempt using invokefunction parameters to execute PHP functions. Input validation prevents unintended user-supplied values from being executed.',type:'mc',
    text:'A network administrator is viewing a log file from a web server:<div class="code-block">https://www.example.com/?s=/Index/think/app/invokefunction\n&amp;function=call_user_func_array&amp;vars[0]=md5\n&amp;vars[1][0]=__HelloThinkPHP</div>Which of the following would be the <strong>BEST</strong> way to prevent this attack?',
    options:['Static code analyzer','Input validation','Allow list','Secure cookies'],
    answer:[1]},
-  {id:'C31',type:'mc',
+  {id:'C31',domain:'GRC',explanation:'Sam signs with Sam\'s own private key. Jack can verify the signature using Sam\'s public key — this proves Sam (and only Sam) sent it, since only Sam has the private key.',type:'mc',
    text:'Sam would like to send an email to Jack and have Jack verify that Sam was the sender of the email. Which of these should Sam use to provide this verification?',
    options:['Digitally sign with Sam\'s private key','Digitally sign with Sam\'s public key','Digitally sign with Jack\'s private key','Digitally sign with Jack\'s public key'],
    answer:[0]},
-  {id:'C32',type:'mc',
+  {id:'C32',domain:'PM',explanation:'Archiving decryption keys during offboarding ensures encrypted data remains accessible after the employee leaves. Losing these keys could permanently lock the organization out of their own data.',type:'mc',
    text:'The contract of a long-term temporary employee is ending. Which of these would be the <strong>MOST</strong> important part of the off-boarding process?',
    options:['Perform an on-demand audit of the user\'s privileges','Archive the decryption keys associated with the user account','Document the user\'s outstanding tasks','Obtain a signed copy of the Acceptable Use Policies'],
    answer:[1]},
-  {id:'C33',type:'mc',
+  {id:'C33',domain:'SecOps',explanation:'Data hashing creates a unique fingerprint of collected evidence. If anyone modifies the data, the hash changes — this proves the data is original and unaltered for legal chain of custody purposes.',type:'mc',
    text:'A cybersecurity analyst has been asked to respond to a denial of service attack against a web server, and the analyst has collected the log files and data from the server. Which of the following would allow a future analyst to verify the data as original and unaltered?',
    options:['E-discovery','Root cause analysis','Legal hold','Data hashing'],
    answer:[3]},
-  {id:'C34',type:'mc',
+  {id:'C34',domain:'TVM',explanation:'Multiple accounts each with ~3 failed attempts (not many from one account) is consistent with password spraying — trying a few common passwords across many accounts to avoid lockout.',type:'mc',
    text:'A security administrator is reviewing authentication logs. The logs show a large number of accounts with at least three failed authentication attempts during the previous week. Which of the following would <strong>BEST</strong> explain this report data?',
    options:['Downgrade attack','Phishing','Injection','Spraying'],
    answer:[3]},
-  {id:'C35',type:'mc',
+  {id:'C35',domain:'SecOps',explanation:'A content filter (web filter / URL categorization) blocks access to specific categories of websites like gambling or gaming. DNS filtering and proxy rules can also do this; IPS tuning is for attack signatures.',type:'mc',
    text:'A security administrator has been asked to block all browsing to casino gaming websites. Which of the following would be the <strong>BEST</strong> way to implement this requirement?',
    options:['Tune the IPS signatures','Block port tcp/443 on the firewall','Configure 802.1X for web browsing','Add a content filter rule'],
    answer:[3]},
-  {id:'C36',type:'mc',
+  {id:'C36',domain:'PM',explanation:'Change management procedures control when and how patches and updates are deployed, including testing, scheduling, and rollback plans — preventing unplanned outages from untested changes.',type:'mc',
    text:'A company is experiencing downtime and outages when application patches and updates are deployed during the week. Which of the following would help to resolve these issues?',
    options:['Onboarding considerations','Incident response policies','Change management procedures','Decentralized governance'],
    answer:[2]},
-  {id:'C37',type:'mc',
+  {id:'C37',domain:'SecOps',explanation:'A playbook provides step-by-step procedures for responding to specific security events. MDM manages mobile devices; DLP prevents data loss; zero trust is an architecture model, not a procedure set.',type:'mc',
    text:'A company is implementing a series of steps to follow when responding to a security event. Which of the following would provide this set of processes and procedures?',
    options:['MDM','DLP','Playbook','Zero trust'],
    answer:[2]},
-  {id:'C38',type:'mc',
+  {id:'C38',domain:'SecArch',explanation:'A snapshot captures the entire state of a VM or application at a point in time in a cloud environment — the best backup method for virtualized cloud workloads. Journaling is for databases.',type:'mc',
    text:'A transportation company maintains a scheduling application and a database in a virtualized cloud-based environment. Which of the following would be the <strong>BEST</strong> way to backup these services?',
    options:['Journaling','Snapshot','RTOS','Containerization'],
    answer:[1]},
-  {id:'C39',type:'mc',
+  {id:'C39',domain:'GRC',explanation:'In DAC (Discretionary Access Control), the owner of the resource controls its permissions. This is in contrast to MAC (system-enforced) or RBAC (role-based) where owners may not control permissions.',type:'mc',
    text:'In an environment using discretionary access controls, which of these would control the rights and permissions associated with a file or directory?',
    options:['Administrator','Owner','Group','System'],
    answer:[1]},
-  {id:'C40',type:'mc',
+  {id:'C40',domain:'GRC',explanation:'Data in-transit (also called data in-motion) is data actively being transferred over a network. A DLP monitoring file transfers is inspecting in-transit data. In-use is being processed; at-rest is stored.',type:'mc',
    text:'A security administrator has installed a network-based DLP solution to determine if file transfers contain PII. Which of the following describes the data during the file transfer?',
    options:['In-use','In-transit','Highly available','At-rest'],
    answer:[1]},
-  {id:'C41',type:'mc',
+  {id:'C41',domain:'PM',explanation:'An SLA (Service Level Agreement) is the contractual document that defines minimum performance requirements — throughput and availability guarantees — with a service provider.',type:'mc',
    text:'A medical imaging company would like to connect all remote locations together with high speed network links. The network connections must maintain high throughput rates and must always be available during working hours. In which of the following should these requirements be enforced with the network provider?',
    options:['Service level agreement','Memorandum of understanding','Non-disclosure agreement','Acceptable use policy'],
    answer:[0]},
-  {id:'C42',type:'mc',
+  {id:'C42',domain:'PM',explanation:'Security awareness programs should include practical, actionable guidance like password best practices. Firewall reports and vulnerability scanning are technical processes, not awareness training content.',type:'mc',
    text:'A company is implementing a security awareness program for their user community. Which of the following should be included for additional user guidance and training?',
    options:['Daily firewall exception reporting','Information on proper password management','Periodic vulnerability scanning of external services','Adjustments to annualized loss expectancy'],
    answer:[1]},
-  {id:'C43',type:'mc',
+  {id:'C43',domain:'PM',explanation:'Users should report suspicious emails to the help desk (security team) — not click links, not forward to others, and not just delete without reporting. Reporting enables the org to respond.',type:'mc',
    text:'A security administrator is preparing a phishing email as part of a periodic employee security awareness campaign. The email is spoofed to appear as an unknown third-party and asks employees to immediately click a link or their state licensing will be revoked. Which of the following should be the expected response from the users?',
    options:['Delete the message','Click the link and make a note of the URL','Forward the message to others in the department','Report the suspicious link to the help desk'],
    answer:[3]},
-  {id:'C44',type:'mc',
+  {id:'C44',domain:'GRC',explanation:'OCSP stapling has the server pre-fetch its own certificate status from the CA and include (staple) it in the TLS handshake, eliminating client-to-CA queries. CRL requires clients to download a list.',type:'mc',
    text:'A security administrator would like to minimize the number of certificate status checks made by web site clients to the certificate authority. Which of the following would be the <strong>BEST</strong> option for this requirement?',
    options:['OCSP stapling','Self-signed certificates','CRL','Wildcards'],
    answer:[0]},
-  {id:'C45',type:'mc',
+  {id:'C45',domain:'GRC',explanation:'A backup-and-restore utility that gets systems running again after an attack is a compensating control — it doesn\'t stop the attack (preventive) but provides an alternative recovery path.',type:'mc',
    text:'A company is concerned their EDR solution will not be able to stop more advanced ransomware variants. Technicians have created a backup and restore utility to get most systems up and running less than an hour after an attack. What type of security control is associated with this restore process?',
    options:['Directive','Compensating','Preventive','Detective'],
    answer:[1]},
-  {id:'C46',type:'mc',
+  {id:'C46',domain:'PM',explanation:'The development team provides instructions; operations schedules and communicates; testing occurs afterward — this full structured process of planning, communication, implementation, and validation is change management.',type:'mc',
    text:'To upgrade an internal application, the development team provides the operations team with instructions for backing up, patching the application, and reverting the patch if needed. The operations team schedules a date for the upgrade, informs the business divisions, and tests the upgrade process after completion. Which of the following describes this process?',
    options:['Code signing','Continuity planning','Usage auditing','Change management'],
    answer:[3]},
-  {id:'C47',type:'mc',
+  {id:'C47',domain:'GRC',explanation:'Federation allows users to authenticate to a third-party service using their existing identity from a trusted provider. SSO is for within one organization; federation is for cross-organization authentication.',type:'mc',
    text:'A company is implementing a public file-storage and cloud-based sharing service, and would like users to authenticate with an existing account on a trusted third-party web site. Which of the following should the company implement?',
    options:['SSO','Federation','Least privilege','Discretionary access controls'],
    answer:[1]},
-  {id:'C48',type:'mc',
+  {id:'C48',domain:'TVM',explanation:'System File Checker repairing core OS DLLs (kernel32, netapi32, user32) is characteristic of rootkit removal — rootkits modify core system files to maintain persistence and hide themselves.',type:'mc',
    text:'A system administrator is viewing this output from Microsoft\'s System File Checker:<div class="code-block">15:43:01 - Repairing corrupted file C:\\Windows\\System32\\kernel32.dll\n15:43:03 - Repairing corrupted file C:\\Windows\\System32\\netapi32.dll\n15:43:07 - Repairing corrupted file C:\\Windows\\System32\\user32.dll\n15:43:43 - Repair complete</div>Which of the following malware types is the <strong>MOST</strong> likely cause of this output?',
    options:['Ransomware','Logic bomb','Rootkit','Keylogger'],
    answer:[2]},
-  {id:'C49',type:'mc',
+  {id:'C49',domain:'TVM',explanation:'The URL ../../Windows/system.ini uses dot-dot-slash sequences to navigate outside the web root — this is directory traversal (path traversal), exploiting insufficient input validation on file paths.',type:'mc',
    text:'What type of vulnerability would be associated with this log information?<div class="code-block">GET http://example.com/show.asp?view=../../Windows/system.ini HTTP/1.1</div>',
    options:['Buffer overflow','Directory traversal','DoS','Cross-site scripting'],
    answer:[1]},
-  {id:'C50',type:'mc',
+  {id:'C50',domain:'GRC',explanation:'Salting adds random data to a password before hashing, ensuring identical passwords produce different hash values and preventing rainbow table attacks. It \'protects by adding random data.\'',type:'mc',
    text:'A developer has created an application to store password information in a database. Which of the following <strong>BEST</strong> describes a way of protecting these credentials by adding random data to the password?',
    options:['Hashing','Data masking','Salting','Asymmetric encryption'],
    answer:[2]},
-  {id:'C51',type:'mc',
+  {id:'C51',domain:'SecOps',explanation:'CI/CD (Continuous Integration/Continuous Delivery) automates the ongoing building, testing, and deployment of newly written code — enabling frequent, reliable software releases.',type:'mc',
    text:'Which of the following processes provides ongoing building and testing of newly written code?',
    options:['Continuous integration','Continuity of operations','Version control','Race condition'],
    answer:[0]},
-  {id:'C52',type:'mc',
+  {id:'C52',domain:'PM',explanation:'A responsibility matrix (like a RACI or shared responsibility model) documents which tasks belong to which party — defining who is responsible, accountable, consulted, and informed.',type:'mc',
    text:'Which of the following <strong>BEST</strong> describes a responsibility matrix?',
    options:['A visual summary of cloud provider accountability','Identification of tasks at each step of a project plan','A list of cybersecurity requirements based on the identified risks','Ongoing group discussions regarding cybersecurity'],
    answer:[0]},
-  {id:'C53',type:'mc',
+  {id:'C53',domain:'SecOps',explanation:'LDAP (Lightweight Directory Access Protocol) is the standard protocol for querying and authenticating against a directory service (like Active Directory) — validating credentials centrally.',type:'mc',
    text:'A security administrator is implementing an authentication system for the company. Which of the following would be the best choice for validating login credentials for all usernames and passwords in the authentication system?',
    options:['CA','SIEM','LDAP','WAF'],
    answer:[2]},
-  {id:'C54',type:'multi',
+  {id:'C54',domain:'SecOps',explanation:'The log shows a WebDAV OPTIONS request from 10.1.111.7 to 192.168.11.1:80 — the source IP is the attacker. The category \'info-leak\' and HTTP method OPTIONS indicate reconnaissance activity.',type:'multi',
    text:'A technician is reviewing this information from an IPS log:<div class="code-block">MAIN_IPS: 22June2023 09:02:50 reject 10.1.111.7\nAlert: HTTP Suspicious Webdav OPTIONS Method Request; Host: Server\nSeverity: medium; Performance Impact:3;\nCategory: info-leak; Packet capture; disable\nProto:tcp; dst:192.168.11.1; src:10.1.111.7</div>Which of the following can be associated with this log information? <strong>(Select TWO)</strong>',
    options:['The attacker sent a non-authenticated BGP packet to trigger the IPS','The source of the attack is 192.168.11.1','The event was logged but no packets were dropped','The source of the attack is 10.1.111.7','The attacker sent an unusual HTTP packet to trigger the IPS'],
    answer:[3,4]},
-  {id:'C55',type:'mc',
+  {id:'C55',domain:'SecOps',explanation:'A third-party port scanning externally-facing devices is active reconnaissance conducted as part of a penetration test engagement.',type:'mc',
    text:'A company has contracted with a third-party to provide penetration testing services. The service includes a port scan of each externally-facing device. This is an example of:',
    options:['Initial exploitation','Privilege escalation','Known environment','Active reconnaissance'],
    answer:[3]},
-  {id:'C56',type:'mc',
+  {id:'C56',domain:'SecArch',explanation:'The AP is using WEP-PSK (Wired Equivalent Privacy) — an outdated, broken encryption standard deprecated since 2004. WPA2 or WPA3 should replace it immediately.',type:'mc',
    text:'An access point in a corporate headquarters office has the following configuration:<div class="code-block">IP address: 10.1.10.1\nSubnet mask: 255.255.255.0\nDHCPv4 Server: Enabled\nSSID: Wireless\nWireless Mode: 802.11n\nSecurity Mode: WEP-PSK\nFrequency band: 2.4 GHz\nSoftware revision: 2.1\nMAC Address: 60:3D:26:71:FF:AA\nIPv4 Firewall: Enabled</div>Which of the following would apply to this configuration?',
    options:['Invalid frequency band','Weak encryption','Incorrect IP address and subnet mask','Invalid software version'],
    answer:[1]},
-  {id:'C57',type:'mc',
+  {id:'C57',domain:'TVM',explanation:'Gaining access through packet captures means the attacker used replay attack — capturing and replaying authentication tokens or credentials observed in cleartext network traffic.',type:'mc',
    text:'An attacker has gained access to an application through the use of packet captures. Which of the following would be <strong>MOST</strong> likely used by the attacker?',
    options:['Overflow','Forgery','Replay','Injection'],
    answer:[2]},
-  {id:'C58',type:'mc',
+  {id:'C58',domain:'TVM',explanation:'Excessive traffic from thousands of different IP addresses overwhelming a web server is a DDoS (Distributed Denial of Service) attack — the distributed nature distinguishes it from a regular DoS.',type:'mc',
    text:'A company is receiving complaints of slowness and disconnections to their Internet-facing web server. A network administrator monitors the Internet link and finds excessive bandwidth utilization from thousands of different IP addresses. Which of the following would be the <strong>MOST</strong> likely reason for these performance issues?',
    options:['DDoS','DNS spoofing','RFID cloning','Wireless jamming'],
    answer:[0]},
-  {id:'C59',type:'mc',
+  {id:'C59',domain:'PM',explanation:'An SOW (Statement of Work) itemizes specific tasks and deliverables and is used to validate completion of services. An SLA defines performance levels; an MOU is a broad partnership agreement.',type:'mc',
    text:'A company has created an itemized list of tasks to be completed by a third-party service provider. After the services are complete, this document will be used to validate the completion of the services. Which of the following would describe this agreement type?',
    options:['SLA','SOW','NDA','BPA'],
    answer:[1]},
-  {id:'C60',type:'mc',
+  {id:'C60',domain:'SecArch',explanation:'SD-WAN (Software-Defined WAN) is designed for connecting multiple sites to multiple cloud providers with intelligent path selection, flexibility, and centralized management — ideal for multi-cloud app deployment.',type:'mc',
    text:'A company is deploying a series of internal applications to different cloud providers. Which of the following connection types should be deployed for this configuration?',
    options:['Air-gapped','802.1X','Site-to-site IPsec VPN','Jump server','SD-WAN'],
    answer:[4]},
-  {id:'C61',type:'mc',
+  {id:'C61',domain:'SecArch',explanation:'The zero-trust control plane contains the policy engine (evaluates access requests), policy administrator (executes decisions), and policy enforcement points. Subjects and zones are in the data plane.',type:'mc',
    text:'A company is updating components within the control plane of their zero-trust implementation. Which of the following would be part of this update?',
    options:['Policy engine','Subjects','Policy enforcement point','Zone configurations'],
    answer:[0]},
-  {id:'C62',type:'mc',
+  {id:'C62',domain:'TVM',explanation:'A bot is malware that registers the infected device in a botnet, which can then be commanded to participate in DDoS attacks. Ransomware encrypts; keyloggers capture keystrokes; logic bombs trigger on conditions.',type:'mc',
    text:'Which of the following malware types would cause a workstation to participate in a DDoS?',
    options:['Bot','Logic bomb','Ransomware','Keylogger'],
    answer:[0]},
-  {id:'C63',type:'mc',
+  {id:'C63',domain:'SecOps',explanation:'A legal hold (litigation hold) preserves data from deletion or modification when litigation is anticipated. E-discovery is the process of finding/producing that data; chain of custody documents evidence handling.',type:'mc',
    text:'Which of these are used to force the preservation of data for later use in court?',
    options:['Chain of custody','Data loss prevention','Legal hold','E-discovery'],
    answer:[2]},
-  {id:'C64',type:'mc',
+  {id:'C64',domain:'SecArch',explanation:'Motion sensors detect physical movement in open areas like fields around data centers, alerting to unauthorized presence. Video surveillance records but doesn\'t automatically detect motion without analytics.',type:'mc',
    text:'A company would like to automatically monitor and report on any movement occurring in an open field at the data center. Which of the following would be the <strong>BEST</strong> choice for this task?',
    options:['Bollard','Microwave sensor','Access control vestibule','Fencing'],
    answer:[1]},
-  {id:'C65',type:'mc',
+  {id:'C65',domain:'PM',explanation:'Installing load balancers as part of a new product release is capacity planning — proactively adding infrastructure resources to support anticipated demand and ensure availability.',type:'mc',
    text:'A company is releasing a new product, and part of the release includes the installation of load balancers to the public web site. Which of the following would best describe this process?',
    options:['Platform diversity','Capacity planning','Multi-cloud systems','Permission restrictions'],
    answer:[1]},
-  {id:'C66',type:'mc',
+  {id:'C66',domain:'GRC',explanation:'Non-repudiation proves that a specific person sent a message — a digital signature using the sender\'s private key creates a cryptographic proof that cannot be denied (repudiated).',type:'mc',
    text:'A system administrator would like to prove an email message was sent by a specific person. Which of the following describes the verification of this message source?',
    options:['Non-repudiation','Key escrow','Asymmetric encryption','Steganography'],
    answer:[0]},
-  {id:'C67',type:'mc',
+  {id:'C67',domain:'TVM',explanation:'Modifying the hosts file redirects DNS lookups locally, bypassing DNS servers — a technique used by malware and attackers for DNS hijacking or preventing access to security update sites.',type:'mc',
    text:'A security administrator has created a policy to alert if a user modifies the hosts file on their system. Which of the following behaviors does this policy address?',
    options:['Unexpected','Self-assessment','Unintentional','Risky'],
    answer:[3]},
-  {id:'C68',type:'mc',
+  {id:'C68',domain:'TVM',explanation:'The breach occurred because a security patch available for two months was not applied. Patch management (timely application of security updates) would have prevented the vulnerability from being exploited.',type:'mc',
    text:'A company has identified a web server data breach resulting in the theft of financial records from 150 million customers. A security update to the company\'s web server software was available for two months prior to the breach. Which of the following would have prevented this breach from occurring?',
    options:['Patch management','Full disk encryption','Disabling unnecessary services','Application allow lists'],
    answer:[0]},
-  {id:'C69',type:'mc',
+  {id:'C69',domain:'PM',explanation:'Gathering a list of required software during onboarding is application allow-listing / least functionality — ensuring new employees only get the applications necessary for their specific job functions.',type:'mc',
    text:'During the onboarding process, the IT department requires a list of software applications associated with the new employee\'s job functions. Which of the following would describe the use of this information?',
    options:['Access control configuration','Encryption settings','Physical security requirements','Change management'],
    answer:[0]},
-  {id:'C70',type:'mc',
+  {id:'C70',domain:'SecOps',explanation:'Disconnecting the Ethernet cable, disabling the account, and blocking file transfers via firewall rules are all containment actions — isolating the compromised system to stop the ongoing attack.',type:'mc',
    text:'A system administrator has identified an unexpected username on a database server, and the user has been transferring database files to an external server over the company\'s Internet connection. The administrator then performed these tasks:<ul style="margin:0.75rem 0 0.75rem 1.5rem;line-height:1.8;"><li>Physically disconnected the Ethernet cable on the database server</li><li>Disabled the unknown account</li><li>Configured a firewall rule to prevent file transfers from the server</li></ul>Which of the following would <strong>BEST</strong> describe this part of the incident response process?',
    options:['Eradication','Containment','Lessons learned','Preparation'],
    answer:[1]},
-  {id:'C71',type:'mc',
+  {id:'C71',domain:'GRC',explanation:'The most effective use of asymmetric encryption is exchanging encrypted messages with someone you\'ve never met — using their public key to encrypt, ensuring only they can decrypt with their private key.',type:'mc',
    text:'Which of the following would be the <strong>MOST</strong> effective use of asymmetric encryption?',
    options:['Real-time video encryption','Securely store passwords','Protect data on mobile devices','Create a shared session key'],
    answer:[3]},
-  {id:'C72',type:'mc',
+  {id:'C72',domain:'SecArch',explanation:'Full-disk encryption (FDE) protects all data on a laptop if stolen — the disk contents are unreadable without the encryption key. Without FDE, physical access to the drive exposes all data.',type:'mc',
    text:'Each salesperson in a company receives a laptop with applications and data to support their sales efforts. The IT manager would like to prevent third-parties from gaining access to this information if the laptop is stolen. Which of the following would be the <strong>BEST</strong> way to protect this data?',
    options:['Remote wipe','Full disk encryption','Biometrics','VPN'],
    answer:[1]},
-  {id:'C73',type:'mc',
+  {id:'C73',domain:'PM',explanation:'A data inventory (also called an asset registry or data catalog) is a comprehensive list of all information assets stored and managed by an organization — required for data governance and compliance.',type:'mc',
    text:'A security administrator has compiled a list of all information stored and managed by an organization. Which of the following would best describe this list?',
    options:['Sanitization','Metadata','Known environment','Data inventory'],
    answer:[3]},
-  {id:'C74',type:'mc',
+  {id:'C74',domain:'SecOps',explanation:'An IPS or next-gen firewall with malware scanning monitors outbound connections and can detect/block C2 communications and data exfiltration by malicious software.',type:'mc',
    text:'A security administrator would like to monitor all outbound Internet connections for malicious software. Which of the following would provide this functionality?',
    options:['Jump server','IPsec tunnel','Forward proxy','Load balancer'],
    answer:[2]},
-  {id:'C75',type:'mc',
+  {id:'C75',domain:'GRC',explanation:'Corporate security policies are directive controls — they provide instructions and requirements for behavior but rely on other controls for enforcement. They direct what should be done.',type:'mc',
    text:'What type of security control would be associated with corporate security policies?',
    options:['Technical','Operational','Managerial','Physical'],
    answer:[2]},
-  {id:'C76',type:'mc',
+  {id:'C76',domain:'TVM',explanation:'Organized crime is financially motivated and targets high-value data like financial account information. An unencrypted financial database exposed to the Internet is the most significant target.',type:'mc',
    text:'Which of the following would be the <strong>MOST</strong> significant security concern when protecting against organized crime?',
    options:['Prevent users from posting passwords near their workstations','Require identification cards for all employees and guests','Maintain reliable backup data','Use access control vestibules at all data center locations'],
    answer:[2]},
-  {id:'C77',type:'mc',
+  {id:'C77',domain:'SecArch',explanation:'A WAF (Web Application Firewall) specifically protects web applications from injection attacks, XSS, and other web-based exploits on a hardened server. It inspects HTTP/HTTPS traffic at the application layer.',type:'mc',
    text:'An application team has been provided with a hardened version of Linux to use with a new application installation, and this includes installing a web service and the application code on the server. Which of the following would <strong>BEST</strong> protect the application from attacks?',
    options:['Build a backup server for the application','Run the application in a cloud-based environment','Implement a secure configuration of the web service','Send application logs to the SIEM via syslog'],
    answer:[2]},
-  {id:'C78',type:'mc',
+  {id:'C78',domain:'SecArch',explanation:'MAC filtering is easily bypassed by spoofing a legitimate MAC address. Implementing WPA2/WPA3 with proper encryption prevents unauthorized users even if they spoof a MAC address.',type:'mc',
    text:'A system administrator has configured MAC filtering on their corporate access point, but access logs show unauthorized users accessing the network. Which of the following should the administrator configure to prevent future unauthorized use?',
    options:['Enable WPA3 encryption','Remove unauthorized MAC addresses from the filter','Modify the SSID name','Modify the channel frequencies'],
    answer:[0]},
-  {id:'C79',type:'mc',
+  {id:'C79',domain:'PM',explanation:'A dependency is a change management issue where one upgrade is blocked because it depends on (or conflicts with) another scheduled change. The outdated driver installation is a dependency conflict.',type:'mc',
    text:'A system administrator has been tasked with performing an application upgrade, but the upgrade has been delayed due to a different scheduled installation of an outdated device driver. Which of the following issues would best describe this change management delay?',
    options:['Deny list','Legacy application','Dependency','Restricted activity'],
    answer:[2]},
-  {id:'C80',type:'mc',
+  {id:'C80',domain:'SecArch',explanation:'A supplicant-to-authenticator-to-RADIUS/AD flow is the 802.1X authentication model — the standard for port-based NAC used in enterprise wireless and wired networks.',type:'mc',
    text:'During an initial network connection, a supplicant communicates to an authenticator, which then sends an authentication request to an Active Directory database. Which of the following would <strong>BEST</strong> describe this authentication technology?',
    options:['Federation','UTM','802.1X','PKI'],
    answer:[2]},
-  {id:'C81',type:'mc',
+  {id:'C81',domain:'TVM',explanation:'Hardware vulnerabilities (like speculative execution flaws in CPUs) can be exploited at the firmware/chip level. A hardware vulnerability report requires evaluating the affected CPU or chip.',type:'mc',
    text:'A security researcher has been notified of a potential hardware vulnerability. Which of the following should the researcher evaluate as a potential security issue?',
    options:['Firmware versions','Firewall configuration','SQL requests','XSS attachments'],
    answer:[0]},
-  {id:'C82',type:'multi',
+  {id:'C82',domain:'SecArch',explanation:'Lighting and fencing/bollards guide visitors toward the main entrance by making other paths less visible and less accessible. Cameras and access controls don\'t physically direct foot traffic.',type:'multi',
    text:'Visitors to a corporate data center must enter through the main doors of the building. Which of the following security controls would be the <strong>BEST</strong> choice to successfully guide people to the front door? <strong>(Select TWO)</strong>',
    options:['Infrared sensors','Bollards','Biometrics','Fencing','Access badges','Video surveillance'],
    answer:[1,3]},
-  {id:'C83',type:'mc',
+  {id:'C83',domain:'GRC',explanation:'SSO (Single Sign-On) lets users authenticate once and access multiple resources without re-entering credentials — minimizing authentication prompts across file shares, printers, and storage systems.',type:'mc',
    text:'A company\'s employees are required to authenticate each time a file share, printer, or SAN imaging system is accessed. Which of the following should be used to minimize the number of employee authentication requests?',
    options:['SSO','OSINT','MFA','SCAP'],
    answer:[0]},
-  {id:'C84',type:'mc',
+  {id:'C84',domain:'PM',explanation:'After a system migration, an access review (permission audit) verifies that each employee has been granted the correct access rights for their role in the new system — preventing over-provisioning.',type:'mc',
    text:'A company has recently moved from one accounting system to another, and the new system includes integration with many other divisions of the organization. Which of the following would ensure that the correct access has been provided to the proper employees in each division?',
    options:['Geolocation','Onboarding process','Account de-provisioning','Internal self-assessment'],
    answer:[3]},
-  {id:'C85',type:'mc',
+  {id:'C85',domain:'TVM',explanation:'Bypassing a web application to send commands directly to a database is SQL injection — the attacker circumvents the app\'s intended query logic to issue arbitrary database commands.',type:'mc',
    text:'An attacker has circumvented a web-based application to send commands directly to a database. Which of the following would describe this attack type?',
    options:['Downgrade','SQL injection','Cross-site scripting','On-path'],
    answer:[1]},
-  {id:'C86',type:'mc',
+  {id:'C86',domain:'GRC',explanation:'Blockchain stores all transactions in a distributed, immutable ledger. Partners can find tracking details in the distributed ledger — all nodes have a copy and changes are permanent and transparent.',type:'mc',
    text:'A group of business partners is using blockchain technology to monitor and track raw materials and parts as they are transferred between companies. Where would a partner find these tracking details?',
    options:['Ledger','HSM','SIEM','HIPS'],
    answer:[0]},
-  {id:'C87',type:'mc',
+  {id:'C87',domain:'TVM',explanation:'DNS server poisoning affects the DNS infrastructure itself so that changing local cache or DNS entries has no effect. A rogue DNS server or upstream poisoning redirects all users regardless of local settings.',type:'mc',
    text:'A network technician at a bank has noticed a significant decrease in traffic to the bank\'s public website. After additional investigation, the technician finds that users are being directed to a web site which looks similar to the bank\'s site but is not under the bank\'s control. Flushing the local DNS cache and changing the DNS entry does not have any effect. Which of the following has most likely occurred?',
    options:['DDoS','Disassociation attack','Buffer overflow','Domain hijacking'],
    answer:[3]},
-  {id:'C88',type:'mc',
+  {id:'C88',domain:'SecArch',explanation:'An air gap physically separates two systems with zero network connectivity — the most absolute way to prevent all communication between two applications in a data center.',type:'mc',
    text:'A company runs two separate applications in their data center. The security administrator has been tasked with preventing all communication between these applications. Which of the following would be the <strong>BEST</strong> way to implement this security requirement?',
    options:['Firewall','SDN','Air gap','VLANs'],
    answer:[2]},
-  {id:'C89',type:'mc',
+  {id:'C89',domain:'PM',explanation:'An employee receiving a spoofed CEO email requesting the employee directory is a phishing/BEC (Business Email Compromise) attack. Security awareness training helps users recognize and report impersonation attempts.',type:'mc',
    text:'A receptionist at a manufacturing company recently received an email from the CEO asking for a copy of the internal corporate employee directory. It was later determined that the email address was not sent from the CEO and the domain associated with the email address was not a corporate domain name. What type of training could help identify this type of attack in the future?',
    options:['Recognizing social engineering','Proper password management','Securing remote work environments','Understanding insider threats'],
    answer:[0]},
-  {id:'C90',type:'mc',
+  {id:'C90',domain:'PM',explanation:'BYOD (Bring Your Own Device) is the policy where employees use their personal phones for work purposes. COPE is company-owned personally-enabled; CYOD is choose your own device.',type:'mc',
    text:'Which of the following deployment models would a company follow if they require individuals to use their personal phones for work purposes?',
    options:['CYOD','MDM','BYOD','COPE'],
    answer:[2]}
@@ -799,9 +832,14 @@ function renderQuestion(idx) {
   if (submitted) {
     const correct = arrEq((ua||[]).slice().sort(), q.answer.slice().sort());
     const correctLetters = q.answer.map(i => letters[i]).join(', ');
+    const domainLabel = {GRC:'General Security Concepts',TVM:'Threats, Vulnerabilities & Mitigations',SecArch:'Security Architecture',SecOps:'Security Operations',PM:'Security Program Management'}[q.domain] || q.domain;
     feedbackHTML = `<div class="feedback ${correct?'correct':'wrong'} visible">
       <div class="feedback-icon">${correct ? '✓ CORRECT' : '✗ INCORRECT'}</div>
       ${correct ? 'Well done!' : `The correct answer is: <strong>${correctLetters}</strong>`}
+    </div>
+    <div class="explanation-box">
+      <div class="expl-label">💡 EXPLANATION &nbsp;·&nbsp; <span style="color:var(--accent)">${domainLabel}</span></div>
+      ${q.explanation || ''}
     </div>`;
   }
 
@@ -819,7 +857,7 @@ function renderQuestion(idx) {
       <button class="nav-btn" onclick="goTo(${idx-1})" ${idx===0?'disabled':''}>← PREV</button>
       <div style="display:flex;gap:0.5rem;align-items:center;">
         ${!submitted ? `<button class="submit-btn" onclick="submitAnswer()">CHECK ANSWER</button>` : ''}
-        ${submitted && !isLast ? `<button class="nav-btn" onclick="goTo(${idx+1})" style="border-color:var(--accent);color:var(--accent);">NEXT →</button>` : ''}
+        ${!isLast ? `<button class="nav-btn" onclick="goTo(${idx+1})" style="border-color:var(--accent);color:var(--accent);${!submitted?'opacity:0.45;':''}">NEXT →</button>` : ''}
         ${submitted && isLast ? `<button class="submit-btn finish" onclick="showResults()">VIEW RESULTS</button>` : ''}
       </div>
     </div>`;
@@ -870,8 +908,24 @@ function startExam() {
   document.getElementById('introSection').style.display = 'none';
   document.getElementById('pbqSection').style.display = 'block';
   document.getElementById('finishBtn').style.display = 'block';
+  document.getElementById('backToIntroBtn').style.display = 'flex';
   buildGrid();
   startTimer();
+}
+
+function goBackToIntro() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  state.userAnswers = new Array(questions.length).fill(null);
+  state.submitted = new Array(questions.length).fill(false);
+  state.current = 0;
+  document.getElementById('pbqSection').style.display = 'none';
+  document.getElementById('mcqSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('introSection').style.display = 'block';
+  document.getElementById('finishBtn').style.display = 'none';
+  document.getElementById('backToIntroBtn').style.display = 'none';
+  state.timerSeconds = 90 * 60;
+  updateTimerDisplay();
 }
 
 function showMCQ() {
@@ -907,7 +961,49 @@ function showResults() {
   document.getElementById('resCorrect').textContent = correct;
   document.getElementById('resWrong').textContent = wrong;
   document.getElementById('resSkipped').textContent = skipped;
+  renderDomainSummary();
   updateGrid();
+}
+
+function renderDomainSummary() {
+  const el = document.getElementById('domainSummary');
+  if (!el) return;
+  const domainMeta = {
+    GRC:'1.0 General Security Concepts',
+    TVM:'2.0 Threats, Vulnerabilities & Mitigations',
+    SecArch:'3.0 Security Architecture',
+    SecOps:'4.0 Security Operations',
+    PM:'5.0 Security Program Management & Oversight'
+  };
+  const stats = {};
+  Object.keys(domainMeta).forEach(d => { stats[d] = {total:0,correct:0,wrong:0,skipped:0}; });
+  questions.forEach((q,i) => {
+    const d = q.domain; if (!stats[d]) return;
+    stats[d].total++;
+    if (!state.submitted[i] || !(state.userAnswers[i]||[]).length) stats[d].skipped++;
+    else if (arrEq((state.userAnswers[i]||[]).slice().sort(), q.answer.slice().sort())) stats[d].correct++;
+    else stats[d].wrong++;
+  });
+  const sorted = Object.entries(domainMeta)
+    .map(([key,name]) => ({key,name,...stats[key]}))
+    .filter(d => d.total > 0)
+    .map(d => ({...d, pct: d.total ? Math.round((d.correct/d.total)*100) : 0}))
+    .sort((a,b) => b.pct - a.pct);
+  let html = '<h3>DOMAIN PERFORMANCE BREAKDOWN</h3>';
+  sorted.forEach(d => {
+    let badge='<span class="domain-badge badge-ok">DEVELOPING</span>', barColor='var(--yellow)';
+    if (d.pct >= 80) { badge='<span class="domain-badge badge-strong">STRENGTH</span>'; barColor='var(--green)'; }
+    else if (d.pct < 60) { badge='<span class="domain-badge badge-weak">NEEDS WORK</span>'; barColor='var(--red)'; }
+    html += `<div class="domain-card">
+      <div class="domain-card-header">
+        <span class="domain-card-name">${d.name}${badge}</span>
+        <span class="domain-card-pct" style="color:${barColor}">${d.pct}%</span>
+      </div>
+      <div class="domain-bar-track"><div class="domain-bar-fill" style="width:${d.pct}%;background:${barColor}"></div></div>
+      <div class="domain-detail">${d.correct}/${d.total} correct${d.skipped?' · '+d.skipped+' skipped':''}</div>
+    </div>`;
+  });
+  el.innerHTML = html;
 }
 
 function reviewAnswers() {
