@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberLabs | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080b12; --bg2: #0d1117; --bg3: #131a24; --bg4: #1a2233;
+  --border: #1e2d40; --border2: #253450;
+  --accent: #00d4ff; --green: #00f5a0; --red: #ff4757;
+  --yellow: #ffd32a; --purple: #b47aff; --orange: #ff6b2b;
+  --text: #cdd6f4; --muted: #4a5a7a; --dim: #2a3a5a;
+  --terminal: #0a1628; --term-green: #00ff88; --term-amber: #ffb347;
+  --font: 'IBM Plex Sans', sans-serif; --mono: 'IBM Plex Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; display:flex; flex-direction:column; }
+
+/* ── HEADER ── */
+header { background:var(--bg2); border-bottom:1px solid var(--border); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:64px; flex-shrink:0; position:sticky; top:0; z-index:100; }
+.logo-wrap { display:flex; align-items:center; gap:0.75rem; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,#00d4ff,#00f5a0); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+.logo-text { font-family:var(--mono); font-size:0.9rem; font-weight:700; color:var(--text); letter-spacing:0.05em; }
+.logo-text span { color:var(--accent); }
+.logo-sub { font-family:var(--mono); font-size:0.62rem; color:var(--muted); letter-spacing:0.08em; }
+.header-right { display:flex; align-items:center; gap:1rem; }
+.xp-bar-wrap { display:flex; align-items:center; gap:0.5rem; }
+.xp-label { font-family:var(--mono); font-size:0.68rem; color:var(--yellow); }
+.xp-track { width:100px; height:6px; background:var(--bg4); border-radius:3px; overflow:hidden; }
+.xp-fill { height:100%; background:linear-gradient(90deg,var(--yellow),var(--orange)); border-radius:3px; transition:width 0.5s ease; }
+.back-link { font-family:var(--mono); font-size:0.72rem; color:var(--muted); text-decoration:none; border:1px solid var(--border); padding:0.35rem 0.8rem; border-radius:5px; transition:all 0.2s; }
+.back-link:hover { color:var(--accent); border-color:var(--accent); }
+
+/* ── HERO ── */
+.hero { background:linear-gradient(135deg, #0d1117 0%, #0a1628 50%, #0d1117 100%); border-bottom:1px solid var(--border); padding:3rem 2rem 2.5rem; text-align:center; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e2d40' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); opacity:0.3; }
+.hero h1 { font-size:2.4rem; font-weight:700; margin-bottom:0.5rem; position:relative; background:linear-gradient(135deg,var(--accent),var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero-sub { font-family:var(--mono); font-size:0.85rem; color:var(--muted); margin-bottom:1.5rem; position:relative; letter-spacing:0.06em; }
+.stats-row { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; position:relative; }
+.stat-pill { display:flex; align-items:center; gap:0.5rem; font-family:var(--mono); font-size:0.78rem; color:var(--text); }
+.stat-pill .dot { width:8px; height:8px; border-radius:50%; }
+
+/* ── MAIN ── */
+main { flex:1; padding:2rem; max-width:1300px; margin:0 auto; width:100%; }
+
+/* ── CATEGORY FILTER ── */
+.cat-filter { display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+.cat-btn { padding:0.45rem 1.1rem; background:var(--bg3); border:1px solid var(--border); border-radius:20px; color:var(--muted); font-family:var(--mono); font-size:0.72rem; cursor:pointer; transition:all 0.2s; letter-spacing:0.04em; display:flex; align-items:center; gap:0.4rem; }
+.cat-btn:hover { border-color:var(--accent); color:var(--text); }
+.cat-btn.active { background:rgba(0,212,255,0.08); border-color:var(--accent); color:var(--accent); }
+
+/* ── LAB GRID ── */
+.labs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.25rem; }
+
+/* ── LAB CARD ── */
+.lab-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:pointer; transition:all 0.25s; position:relative; }
+.lab-card:hover { border-color:var(--accent); transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,0.5); }
+.lab-card.completed { border-color:rgba(0,245,160,0.3); }
+.lab-card.completed::after { content:'✓ COMPLETED'; position:absolute; top:0.75rem; right:0.75rem; font-family:var(--mono); font-size:0.6rem; color:var(--green); background:rgba(0,245,160,0.1); border:1px solid rgba(0,245,160,0.25); padding:0.15rem 0.5rem; border-radius:4px; letter-spacing:0.08em; }
+
+.lab-banner { height:90px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.lab-banner-icon { font-size:2.5rem; position:relative; z-index:1; }
+.lab-banner-grid { position:absolute; inset:0; opacity:0.12; }
+
+.lab-body { padding:1.1rem 1.25rem; }
+.lab-meta { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem; flex-wrap:wrap; }
+.lab-type { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.15rem 0.55rem; border-radius:4px; border:1px solid; }
+.type-terminal { color:var(--term-green); border-color:rgba(0,255,136,0.25); background:rgba(0,255,136,0.06); }
+.type-guided { color:var(--accent); border-color:rgba(0,212,255,0.25); background:rgba(0,212,255,0.06); }
+.type-logs { color:var(--yellow); border-color:rgba(255,211,42,0.25); background:rgba(255,211,42,0.06); }
+.type-ctf { color:var(--red); border-color:rgba(255,71,87,0.25); background:rgba(255,71,87,0.06); }
+.type-network { color:var(--purple); border-color:rgba(180,122,255,0.25); background:rgba(180,122,255,0.06); }
+
+.diff-tag { font-family:var(--mono); font-size:0.6rem; padding:0.15rem 0.5rem; border-radius:4px; }
+.diff-beginner { color:var(--green); background:rgba(0,245,160,0.08); border:1px solid rgba(0,245,160,0.2); }
+.xp-tag { font-family:var(--mono); font-size:0.6rem; color:var(--yellow); margin-left:auto; }
+
+.lab-title { font-size:1rem; font-weight:600; color:var(--text); margin-bottom:0.4rem; }
+.lab-desc { font-size:0.8rem; color:var(--muted); line-height:1.55; margin-bottom:0.9rem; }
+.lab-footer { display:flex; align-items:center; justify-content:space-between; }
+.lab-tasks { font-family:var(--mono); font-size:0.68rem; color:var(--muted); }
+.lab-tasks span { color:var(--accent); }
+.start-btn { font-family:var(--mono); font-size:0.72rem; padding:0.4rem 1rem; background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(0,245,160,0.08)); border:1px solid var(--accent); border-radius:6px; color:var(--accent); cursor:pointer; transition:all 0.2s; }
+.start-btn:hover { background:linear-gradient(135deg,rgba(0,212,255,0.25),rgba(0,245,160,0.15)); }
+
+/* ── LAB MODAL ── */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200; align-items:stretch; }
+.modal-overlay.open { display:flex; }
+.lab-modal { background:var(--bg2); border-left:1px solid var(--border); width:100%; max-width:1100px; margin-left:auto; display:flex; flex-direction:column; height:100vh; overflow:hidden; animation:slideIn 0.25s ease; }
+@keyframes slideIn { from{transform:translateX(40px);opacity:0} to{transform:translateX(0);opacity:1} }
+
+.modal-header { background:var(--bg3); border-bottom:1px solid var(--border); padding:1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.modal-title-wrap { display:flex; align-items:center; gap:0.75rem; }
+.modal-lab-icon { font-size:1.5rem; }
+.modal-lab-name { font-size:1rem; font-weight:600; color:var(--text); }
+.modal-lab-meta { font-family:var(--mono); font-size:0.68rem; color:var(--muted); margin-top:0.1rem; }
+.modal-close { width:32px; height:32px; background:none; border:1px solid var(--border); border-radius:6px; color:var(--muted); cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+.modal-close:hover { border-color:var(--red); color:var(--red); }
+
+/* Lab layout */
+.lab-layout { display:grid; grid-template-columns:300px 1fr; flex:1; overflow:hidden; }
+.lab-sidebar { background:var(--bg3); border-right:1px solid var(--border); overflow-y:auto; display:flex; flex-direction:column; }
+.lab-main { display:flex; flex-direction:column; overflow:hidden; }
+
+/* Task list */
+.task-list { padding:1rem; }
+.task-section-label { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); padding:0.5rem 0.25rem; border-bottom:1px solid var(--border); margin-bottom:0.75rem; }
+.task-item { display:flex; align-items:flex-start; gap:0.6rem; padding:0.65rem 0.75rem; border-radius:7px; cursor:pointer; transition:all 0.2s; margin-bottom:0.3rem; border:1px solid transparent; }
+.task-item:hover { background:var(--bg4); }
+.task-item.active { background:rgba(0,212,255,0.07); border-color:rgba(0,212,255,0.15); }
+.task-item.done { opacity:0.65; }
+.task-check { width:18px; height:18px; border-radius:50%; border:2px solid var(--border2); flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; font-size:0.65rem; transition:all 0.25s; }
+.task-item.done .task-check { background:var(--green); border-color:var(--green); color:#000; }
+.task-item.active .task-check { border-color:var(--accent); }
+.task-name { font-size:0.82rem; color:var(--text); line-height:1.4; }
+.task-item.done .task-name { text-decoration:line-through; color:var(--muted); }
+
+/* Hint area */
+.hint-area { padding:1rem; border-top:1px solid var(--border); margin-top:auto; }
+.hint-label { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem; }
+.hint-btn { width:100%; padding:0.5rem; background:rgba(255,211,42,0.06); border:1px solid rgba(255,211,42,0.2); border-radius:6px; color:var(--yellow); font-family:var(--mono); font-size:0.72rem; cursor:pointer; transition:all 0.2s; }
+.hint-btn:hover { background:rgba(255,211,42,0.12); }
+.hint-text { margin-top:0.6rem; font-size:0.8rem; color:var(--yellow); background:rgba(255,211,42,0.05); border:1px solid rgba(255,211,42,0.15); border-radius:6px; padding:0.65rem 0.8rem; line-height:1.6; display:none; }
+.hint-text.show { display:block; }
+
+/* Progress bar */
+.lab-progress { padding:0.75rem 1rem; background:var(--bg3); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.75rem; font-family:var(--mono); font-size:0.7rem; flex-shrink:0; }
+.lp-label { color:var(--muted); }
+.lp-bar { flex:1; height:5px; background:var(--bg4); border-radius:3px; overflow:hidden; }
+.lp-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--green)); border-radius:3px; transition:width 0.4s ease; }
+.lp-pct { color:var(--accent); min-width:32px; text-align:right; }
+
+/* Task content area */
+.task-content { flex:1; overflow-y:auto; padding:1.5rem; }
+.task-content::-webkit-scrollbar { width:4px; }
+.task-content::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+.content-section { margin-bottom:1.5rem; }
+.content-label { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.6rem; }
+.content-text { font-size:0.88rem; line-height:1.75; color:var(--text); }
+.content-text strong { color:var(--accent); font-weight:600; }
+.content-text code { font-family:var(--mono); font-size:0.82em; background:var(--bg4); padding:0.15em 0.45em; border-radius:4px; color:var(--term-green); }
+.content-text ul { padding-left:1.25rem; margin:0.4rem 0; }
+.content-text li { margin:0.3rem 0; }
+
+/* Info box */
+.info-box { background:rgba(0,212,255,0.05); border:1px solid rgba(0,212,255,0.15); border-radius:8px; padding:0.85rem 1rem; margin:0.75rem 0; font-size:0.83rem; line-height:1.6; color:var(--text); }
+.info-box.warning { background:rgba(255,211,42,0.05); border-color:rgba(255,211,42,0.2); }
+.info-box.danger { background:rgba(255,71,87,0.05); border-color:rgba(255,71,87,0.2); }
+
+/* ── TERMINAL ── */
+.terminal-wrap { background:var(--terminal); border:1px solid var(--border2); border-radius:10px; overflow:hidden; margin:1rem 0; flex-shrink:0; }
+.terminal-titlebar { background:#1a2233; padding:0.5rem 1rem; display:flex; align-items:center; gap:0.5rem; border-bottom:1px solid var(--border); }
+.term-dot { width:11px; height:11px; border-radius:50%; }
+.term-title { font-family:var(--mono); font-size:0.7rem; color:var(--muted); margin-left:0.5rem; letter-spacing:0.06em; }
+.terminal-output { font-family:var(--mono); font-size:0.82rem; padding:0.9rem 1rem; min-height:140px; max-height:260px; overflow-y:auto; line-height:1.65; color:var(--term-green); }
+.terminal-output::-webkit-scrollbar { width:3px; }
+.terminal-output::-webkit-scrollbar-thumb { background:var(--border2); }
+.term-line { margin:0.1rem 0; }
+.term-line.cmd { color:var(--accent); }
+.term-line.cmd::before { content:'$ '; color:var(--term-green); }
+.term-line.err { color:var(--red); }
+.term-line.warn { color:var(--yellow); }
+.term-line.success { color:var(--green); }
+.term-line.info { color:var(--muted); }
+.term-line.flag { color:var(--yellow); font-weight:700; animation:flagPulse 0.5s ease; }
+@keyframes flagPulse { 0%{opacity:0;transform:scale(0.95)} 100%{opacity:1;transform:scale(1)} }
+.terminal-input-row { display:flex; align-items:center; padding:0.5rem 1rem; border-top:1px solid var(--border); background:#0d1628; }
+.term-prompt { font-family:var(--mono); font-size:0.82rem; color:var(--term-green); margin-right:0.4rem; white-space:nowrap; }
+.term-input { flex:1; background:none; border:none; outline:none; font-family:var(--mono); font-size:0.82rem; color:var(--text); caret-color:var(--term-green); }
+
+/* ── LOG VIEWER ── */
+.log-viewer { background:var(--terminal); border:1px solid var(--border2); border-radius:10px; overflow:hidden; margin:1rem 0; }
+.log-toolbar { background:#1a2233; padding:0.5rem 1rem; display:flex; align-items:center; gap:0.75rem; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.log-filter-input { background:var(--bg4); border:1px solid var(--border); border-radius:5px; padding:0.3rem 0.65rem; font-family:var(--mono); font-size:0.72rem; color:var(--text); outline:none; width:160px; }
+.log-filter-input:focus { border-color:var(--accent); }
+.log-filter-input::placeholder { color:var(--muted); }
+.log-count { font-family:var(--mono); font-size:0.68rem; color:var(--muted); margin-left:auto; }
+.log-table { font-family:var(--mono); font-size:0.75rem; width:100%; overflow-x:auto; }
+.log-table table { width:100%; border-collapse:collapse; min-width:600px; }
+.log-table th { text-align:left; padding:0.4rem 0.75rem; color:var(--muted); font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; border-bottom:1px solid var(--border); background:#111a28; }
+.log-table td { padding:0.35rem 0.75rem; border-bottom:1px solid rgba(30,45,64,0.5); white-space:nowrap; }
+.log-table tr:hover td { background:rgba(0,212,255,0.03); }
+.log-table tr.highlight td { background:rgba(255,71,87,0.07); }
+.sev-crit { color:var(--red); } .sev-high { color:var(--orange); } .sev-med { color:var(--yellow); } .sev-low { color:var(--green); } .sev-info { color:var(--muted); }
+.log-scroll { max-height:240px; overflow-y:auto; }
+.log-scroll::-webkit-scrollbar { width:3px; }
+.log-scroll::-webkit-scrollbar-thumb { background:var(--border2); }
+
+/* ── NETWORK DIAGRAM ── */
+.net-canvas-wrap { background:var(--terminal); border:1px solid var(--border2); border-radius:10px; overflow:hidden; margin:1rem 0; }
+.net-toolbar { background:#1a2233; padding:0.5rem 1rem; display:flex; align-items:center; gap:0.5rem; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:0.7rem; color:var(--muted); }
+canvas.net-canvas { display:block; width:100%; cursor:pointer; }
+
+/* ── CTF FLAG INPUT ── */
+.flag-input-wrap { display:flex; gap:0.6rem; margin:1rem 0; align-items:center; }
+.flag-input { flex:1; background:var(--terminal); border:2px solid var(--border2); border-radius:8px; padding:0.7rem 1rem; font-family:var(--mono); font-size:0.88rem; color:var(--yellow); outline:none; letter-spacing:0.05em; transition:border-color 0.2s; }
+.flag-input:focus { border-color:var(--yellow); }
+.flag-input::placeholder { color:var(--muted); font-size:0.78rem; }
+.flag-submit { padding:0.7rem 1.5rem; background:linear-gradient(135deg,rgba(255,211,42,0.15),rgba(255,107,43,0.1)); border:1px solid var(--yellow); border-radius:8px; color:var(--yellow); font-family:var(--mono); font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
+.flag-submit:hover { background:linear-gradient(135deg,rgba(255,211,42,0.25),rgba(255,107,43,0.18)); }
+.flag-result { padding:0.6rem 1rem; border-radius:7px; font-family:var(--mono); font-size:0.82rem; margin-top:0.5rem; display:none; animation:fadeIn 0.2s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+.flag-result.correct { background:rgba(0,245,160,0.08); border:1px solid rgba(0,245,160,0.25); color:var(--green); }
+.flag-result.wrong { background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.25); color:var(--red); }
+
+/* ── ANSWER INPUT ── */
+.answer-wrap { margin:1rem 0; }
+.answer-input { width:100%; background:var(--terminal); border:2px solid var(--border2); border-radius:8px; padding:0.65rem 1rem; font-family:var(--mono); font-size:0.85rem; color:var(--text); outline:none; transition:border-color 0.2s; }
+.answer-input:focus { border-color:var(--accent); }
+.answer-input::placeholder { color:var(--muted); }
+.answer-btn { margin-top:0.5rem; padding:0.55rem 1.25rem; background:rgba(0,212,255,0.1); border:1px solid var(--accent); border-radius:6px; color:var(--accent); font-family:var(--mono); font-size:0.78rem; cursor:pointer; transition:all 0.2s; }
+.answer-btn:hover { background:rgba(0,212,255,0.2); }
+.answer-result { margin-top:0.5rem; padding:0.6rem 0.9rem; border-radius:6px; font-size:0.83rem; display:none; }
+.answer-result.correct { background:rgba(0,245,160,0.08); border:1px solid rgba(0,245,160,0.2); color:var(--green); }
+.answer-result.wrong { background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.2); color:var(--red); }
+
+/* Complete button */
+.complete-task-btn { padding:0.6rem 1.5rem; background:linear-gradient(135deg,rgba(0,245,160,0.15),rgba(0,212,255,0.1)); border:1px solid var(--green); border-radius:8px; color:var(--green); font-family:var(--mono); font-size:0.8rem; cursor:pointer; transition:all 0.2s; margin-top:1rem; }
+.complete-task-btn:hover { background:linear-gradient(135deg,rgba(0,245,160,0.25),rgba(0,212,255,0.18)); transform:translateY(-1px); }
+.complete-task-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+
+/* XP toast */
+.xp-toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px); background:var(--bg2); border:1px solid var(--yellow); border-radius:10px; padding:0.75rem 1.5rem; font-family:var(--mono); font-size:0.82rem; color:var(--yellow); z-index:500; opacity:0; transition:all 0.35s ease; pointer-events:none; }
+.xp-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* Lab complete banner */
+.lab-complete-banner { display:none; background:linear-gradient(135deg,rgba(0,245,160,0.1),rgba(0,212,255,0.08)); border:1px solid rgba(0,245,160,0.3); border-radius:10px; padding:1.25rem 1.5rem; margin:1rem; text-align:center; }
+.lab-complete-banner.show { display:block; animation:fadeIn 0.4s ease; }
+.lcb-title { font-size:1.2rem; font-weight:600; color:var(--green); margin-bottom:0.3rem; }
+.lcb-sub { font-size:0.83rem; color:var(--muted); font-family:var(--mono); }
+
+footer { background:var(--bg2); border-top:1px solid var(--border); padding:1rem 2rem; text-align:center; font-size:0.78rem; color:var(--muted); font-family:var(--mono); flex-shrink:0; }
+
+@media(max-width:768px) { .lab-layout { grid-template-columns:1fr; } .lab-sidebar { max-height:220px; } main { padding:1rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-icon">🛡️</div>
+    <div>
+      <div class="logo-text">Cyber<span>Labs</span></div>
+      <div class="logo-sub">Security+ SY0-701 · Hands-On Practice</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="xp-bar-wrap">
+      <span class="xp-label">XP <span id="xpVal">0</span></span>
+      <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    </div>
+    <a href="index.html" class="back-link">← BACK</a>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>🧪 CyberLabs</h1>
+  <div class="hero-sub">// hands-on security labs · no external links · everything runs in your browser</div>
+  <div class="stats-row">
+    <div class="stat-pill"><span class="dot" style="background:var(--term-green)"></span> <span id="statCompleted">0</span> / <span id="statTotal">0</span> Labs Completed</div>
+    <div class="stat-pill"><span class="dot" style="background:var(--yellow)"></span> <span id="statXP">0</span> XP Earned</div>
+    <div class="stat-pill"><span class="dot" style="background:var(--accent)"></span> 6 Topics Covered</div>
+  </div>
+</div>
+
+<main>
+  <div class="cat-filter">
+    <span style="font-family:var(--mono);font-size:0.7rem;color:var(--muted);align-self:center;">FILTER:</span>
+    <button class="cat-btn active" onclick="filterLabs('all',this)">All Labs</button>
+    <button class="cat-btn" onclick="filterLabs('soc',this)">📊 SOC & Logs</button>
+    <button class="cat-btn" onclick="filterLabs('network',this)">🌐 Network</button>
+    <button class="cat-btn" onclick="filterLabs('crypto',this)">🔐 Cryptography</button>
+    <button class="cat-btn" onclick="filterLabs('ir',this)">🚨 Incident Response</button>
+    <button class="cat-btn" onclick="filterLabs('threat',this)">🎭 Threat Intel</button>
+    <button class="cat-btn" onclick="filterLabs('malware',this)">🦠 Malware</button>
+  </div>
+  <div class="labs-grid" id="labsGrid"></div>
+</main>
+
+<!-- LAB MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="lab-modal" id="labModal">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <span class="modal-lab-icon" id="modalIcon"></span>
+        <div>
+          <div class="modal-lab-name" id="modalName"></div>
+          <div class="modal-lab-meta" id="modalMeta"></div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="lab-layout">
+      <div class="lab-sidebar">
+        <div class="task-list" id="taskList"></div>
+        <div class="hint-area">
+          <div class="hint-label">💡 Need a Hint?</div>
+          <button class="hint-btn" onclick="showHint()">Reveal Hint</button>
+          <div class="hint-text" id="hintText"></div>
+        </div>
+      </div>
+      <div class="lab-main">
+        <div class="lab-progress">
+          <span class="lp-label">PROGRESS</span>
+          <div class="lp-bar"><div class="lp-fill" id="labProgressFill" style="width:0%"></div></div>
+          <span class="lp-pct" id="labProgressPct">0%</span>
+        </div>
+        <div class="task-content" id="taskContent"></div>
+        <div class="lab-complete-banner" id="labCompleteBanner">
+          <div class="lcb-title" id="lcbTitle">🎉 Lab Complete!</div>
+          <div class="lcb-sub" id="lcbSub"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="xp-toast" id="xpToast"></div>
+
+<footer>CyberLabs · Security+ SY0-701 · All labs run entirely in your browser · No external connections</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// LAB DATA
+// ══════════════════════════════════════════════════════════
+const LABS = [
+{
+  id:'soc-siem-basics', cat:'soc', icon:'📊', xp:150,
+  type:'guided', typeLabel:'Guided Lab',
+  title:'SIEM Alert Triage',
+  desc:'Work through a live SIEM dashboard, triage incoming alerts, and identify true positives from false positives just like a real SOC analyst.',
+  banner:'#0d2137',
+  tasks:[
+    { id:'t1', name:'Understand the SIEM dashboard', hint:'Look at the alert severity levels — Critical alerts always need immediate attention.' },
+    { id:'t2', name:'Identify the suspicious IP address', hint:'Sort logs by source IP. An IP generating hundreds of requests in seconds is suspicious.' },
+    { id:'t3', name:'Classify alert as True/False Positive', hint:'Check if the traffic pattern matches known attack signatures like port scanning.' },
+    { id:'t4', name:'Write an incident summary', hint:'Include: What happened, When, Source IP, Destination, Severity, and recommended action.' },
+  ],
+  content: {
+    t1: {
+      title:'SIEM Dashboard Overview',
+      body:`<p>A <strong>Security Information and Event Management (SIEM)</strong> system collects logs from across the network and correlates them to detect threats.</p>
+<p style="margin-top:0.75rem">As a SOC analyst, your first job when sitting down at the SIEM is to:</p>
+<ul class="content-text"><li>Review the alert queue by severity</li><li>Check the event timeline for spikes</li><li>Identify systems generating the most events</li></ul>
+<div class="info-box">💡 <strong>Key concept:</strong> SIEM doesn't just collect logs — it <strong>correlates</strong> them. A single failed login is normal. 500 failed logins from the same IP in 60 seconds is a brute force attack.</div>`,
+      widget:'terminal',
+      termPrompt:'analyst@soc:~$',
+      termWelcome:['SIEM Console v3.2 — Welcome, Analyst', '─────────────────────────────────────────', 'Type: status, alerts, help'],
+      commands:{
+        'status':   ['[INFO] SIEM Status: ONLINE','[INFO] Log sources connected: 47','[INFO] Events/sec: 2,847','[INFO] Active alerts: 12 (3 CRITICAL, 5 HIGH, 4 MEDIUM)','[INFO] Last updated: 2 seconds ago'],
+        'alerts':   ['ALERT ID   SEVERITY   SOURCE IP        DESCRIPTION','─────────────────────────────────────────────────────','A-001      CRITICAL   192.168.1.105    Brute force - SSH (847 attempts)','A-002      HIGH       10.0.0.23        Port scan detected (all ports)','A-003      HIGH       192.168.1.105    Multiple failed logins - AD','A-004      MEDIUM     172.16.5.12      Outbound traffic spike','A-005      MEDIUM     10.0.0.88        Unusual process execution','','Focus on A-001 first — Critical severity.'],
+        'help':     ['Available commands:','  status    — Show SIEM health','  alerts    — List active alerts','  logs      — Show recent event log','  clear     — Clear terminal'],
+        'logs':     ['[2024-01-15 09:42:11] FAIL  192.168.1.105 → 10.0.0.5:22 (SSH)','[2024-01-15 09:42:12] FAIL  192.168.1.105 → 10.0.0.5:22 (SSH)','[2024-01-15 09:42:13] FAIL  192.168.1.105 → 10.0.0.5:22 (SSH)','... (847 more failed attempts) ...','[2024-01-15 09:43:58] SUCC  192.168.1.105 → 10.0.0.5:22 (SSH) ← BREACH?','[WARN] Brute force pattern detected. Recommend: Block 192.168.1.105'],
+        'clear':    ['__CLEAR__'],
+        'default':  ['Command not found. Type "help" for available commands.'],
+      },
+      question:'What command shows you active alerts in this SIEM?',
+      answer:'alerts',
+      questionLabel:'Type the command used to list active alerts:',
+    },
+    t2: {
+      title:'Identify the Suspicious IP',
+      body:`<p>Based on the alerts, we need to identify the attacker's IP address. Look at the pattern:</p>
+<div class="info-box danger">🚨 Alert A-001: <strong>192.168.1.105</strong> made 847 failed SSH login attempts in under 2 minutes, then one successful login. This is a classic <strong>brute force attack</strong>.</div>
+<p style="margin-top:0.75rem">The IP <code>192.168.1.105</code> also appears in A-003 (multiple failed AD logins), suggesting this is a coordinated credential stuffing attack.</p>`,
+      widget:'logs',
+      logs:[
+        {time:'09:42:11', src:'192.168.1.105', dst:'10.0.0.5', event:'SSH Login FAIL', sev:'HIGH'},
+        {time:'09:42:12', src:'192.168.1.105', dst:'10.0.0.5', event:'SSH Login FAIL', sev:'HIGH'},
+        {time:'09:42:13', src:'192.168.1.105', dst:'10.0.0.5', event:'SSH Login FAIL', sev:'HIGH'},
+        {time:'09:42:45', src:'10.0.0.23',     dst:'10.0.0.5', event:'Port Scan (SYN)', sev:'MED'},
+        {time:'09:42:58', src:'192.168.1.105', dst:'10.0.0.5', event:'SSH Login FAIL', sev:'HIGH'},
+        {time:'09:43:01', src:'172.16.5.12',   dst:'8.8.8.8',  event:'DNS Query Spike', sev:'MED'},
+        {time:'09:43:58', src:'192.168.1.105', dst:'10.0.0.5', event:'SSH Login SUCCESS', sev:'CRIT'},
+        {time:'09:44:01', src:'192.168.1.105', dst:'10.0.0.5', event:'File Transfer (scp)', sev:'CRIT'},
+      ],
+      question:'What is the attacker IP address?',
+      answer:'192.168.1.105',
+      questionLabel:'Enter the suspicious IP address:',
+    },
+    t3: {
+      title:'True Positive or False Positive?',
+      body:`<p>Now classify alert A-001. Ask yourself:</p>
+<ul class="content-text">
+<li>Is this <strong>expected behavior</strong>? (No — 847 failed logins is never normal)</li>
+<li>Is there a <strong>known legitimate reason</strong>? (No — no maintenance windows scheduled)</li>
+<li>Did the attack <strong>succeed</strong>? (Yes — one successful SSH login at 09:43:58)</li>
+</ul>
+<div class="info-box">📖 <strong>True Positive</strong> = Real attack, alert is correct<br><strong>False Positive</strong> = Benign activity that triggered alert incorrectly</div>
+<p style="margin-top:0.75rem">This is a <strong>True Positive</strong>. The attacker successfully brute-forced SSH.</p>`,
+      widget:'quiz',
+      question:'Alert A-001 (847 failed SSH logins → 1 success) is:',
+      options:['A. False Positive — this is normal admin activity','B. True Positive — confirmed brute force attack','C. False Negative — the alert missed the attack','D. True Negative — no attack occurred'],
+      correct:1,
+      explanation:'✓ Correct! 847 failed logins followed by a success is a confirmed brute force attack. This is a True Positive — the SIEM correctly identified a real threat.',
+    },
+    t4: {
+      title:'Write the Incident Summary',
+      body:`<p>The final step is documenting the incident. Good incident reports answer: <strong>Who, What, When, Where, How, Impact</strong>.</p>
+<div class="info-box warning">⚡ Exam tip: Security+ loves testing the NIST SP 800-61 IR lifecycle: Preparation → Detection & Analysis → Containment → Eradication → Recovery → Post-Incident Activity</div>
+<p style="margin-top:0.75rem">Your recommended actions for this incident:</p>
+<ul class="content-text">
+<li>Immediately <strong>block 192.168.1.105</strong> at the firewall</li>
+<li><strong>Kill the active SSH session</strong> from that IP</li>
+<li>Check what files were <strong>exfiltrated via SCP</strong></li>
+<li><strong>Reset credentials</strong> for the compromised account</li>
+<li>Escalate to L2 analyst for forensic investigation</li>
+</ul>`,
+      widget:'complete',
+      completeMsg:'Great work! You triaged a real SIEM alert, identified the attacker, classified it correctly, and documented your findings.',
+    },
+  },
+},
+{
+  id:'net-firewall-acl', cat:'network', icon:'🌐', xp:175,
+  type:'terminal', typeLabel:'Terminal Lab',
+  title:'Firewall Rule Debugging',
+  desc:'Use a simulated firewall CLI to diagnose misconfigured ACL rules, block a malicious IP, and verify network segmentation is working.',
+  banner:'#0d1a2e',
+  tasks:[
+    { id:'t1', name:'View current firewall rules', hint:'Use "show acl" to display all access control list rules.' },
+    { id:'t2', name:'Identify the misconfigured rule', hint:'Look for rules that are too permissive — "any any allow" is a red flag.' },
+    { id:'t3', name:'Block the malicious IP', hint:'Use: deny ip host 192.168.100.50 any' },
+    { id:'t4', name:'Verify the block is working', hint:'Use "test connection" to simulate traffic and verify the rule works.' },
+  ],
+  content: {
+    t1: {
+      title:'Firewall CLI — View Current Rules',
+      body:`<p>Firewalls use <strong>Access Control Lists (ACLs)</strong> to permit or deny traffic. Rules are evaluated <strong>top-to-bottom</strong> and the first match wins.</p>
+<div class="info-box">💡 The <strong>implicit deny</strong> rule at the end blocks all traffic not explicitly permitted. This is a security best practice.</div>
+<p style="margin-top:0.75rem">Start by displaying the current rules with <code>show acl</code></p>`,
+      widget:'terminal',
+      termPrompt:'fw01#',
+      termWelcome:['FirewallOS 4.2 — Production Firewall FW-01','CAUTION: Unauthorized access is prohibited','Type "help" for available commands'],
+      commands:{
+        'show acl':       ['Access Control List — INBOUND','Seq  Action  Protocol  Source           Destination    Port','───────────────────────────────────────────────────────────','10   permit  tcp       10.0.0.0/8       any            443','20   permit  tcp       10.0.0.0/8       any            80','30   permit  any       any              any            any  ← PROBLEM','40   permit  tcp       any              10.0.5.0/24    22','50   deny    ip        any              any            any  (implicit)','','[WARN] Rule 30 permits ALL traffic from ANY source — review immediately!'],
+        'show interfaces':['Interface  Status   IP Address       Zone','──────────────────────────────────────────────','eth0       UP       203.0.113.1      OUTSIDE','eth1       UP       10.0.0.1         INSIDE','eth2       UP       10.0.5.1         DMZ'],
+        'show connections':['Active Connections:','SRC IP          SRC PORT  DST IP      DST PORT  STATE','────────────────────────────────────────────────────────','192.168.100.50  54321     10.0.5.22   22        ESTABLISHED ← SUSPICIOUS','10.0.0.25       49234     8.8.8.8     53        ESTABLISHED','10.0.0.10       52100     10.0.5.80   80        ESTABLISHED'],
+        'help':           ['Commands: show acl, show interfaces, show connections, deny [rule], test connection [ip]'],
+        'deny ip host 192.168.100.50 any':['[OK] Rule added: deny ip host 192.168.100.50 any','[INFO] Rule inserted at sequence 5 (before rule 30)','[INFO] Existing connection from 192.168.100.50 terminated','[SUCCESS] Malicious IP 192.168.100.50 is now blocked'],
+        'test connection 192.168.100.50':['Testing connection from 192.168.100.50...','Matching rule: seq 5 — deny ip host 192.168.100.50 any','Result: BLOCKED ✓','[SUCCESS] Firewall rule is working correctly'],
+        'default':        ['Unknown command. Type "help" for options.'],
+        'clear':          ['__CLEAR__'],
+      },
+      question:'What command shows you all firewall ACL rules?',
+      answer:'show acl',
+      questionLabel:'Enter the command to view ACL rules:',
+    },
+    t2: {
+      title:'Spot the Misconfigured Rule',
+      body:`<p>When you ran <code>show acl</code>, rule <strong>30</strong> should have jumped out at you:</p>
+<div class="info-box danger">🚨 <code>permit any any any</code> — This allows <strong>ALL traffic from ALL sources to ALL destinations</strong>. This completely negates firewall protection!</div>
+<p style="margin-top:0.75rem">This violates the <strong>principle of least privilege</strong> — only allow what is explicitly needed. Also notice from <code>show connections</code> that <strong>192.168.100.50</strong> has an active SSH connection to a DMZ server — likely an attacker who got through rule 30.</p>`,
+      widget:'quiz',
+      question:'Which firewall principle does rule 30 (permit any any any) violate?',
+      options:['A. Defense in Depth','B. Principle of Least Privilege','C. Separation of Duties','D. Need to Know'],
+      correct:1,
+      explanation:'✓ Correct! Principle of Least Privilege means only granting the minimum permissions necessary. "permit any any any" is the opposite — it grants all permissions to everyone.',
+    },
+    t3: {
+      title:'Block the Malicious IP',
+      body:`<p>Now block the attacker IP <code>192.168.100.50</code> using the firewall CLI. The command syntax is:</p>
+<div class="info-box"><code>deny ip host [IP] any</code> — blocks all traffic from that specific host</div>
+<p style="margin-top:0.75rem">This rule needs to be added <strong>before</strong> rule 30, otherwise rule 30's "permit any" would match first and allow the traffic.</p>`,
+      widget:'terminal',
+      termPrompt:'fw01#',
+      termWelcome:['FirewallOS 4.2 — Continuing session...','Current active threat: 192.168.100.50 (SSH to DMZ)'],
+      commands:{
+        'deny ip host 192.168.100.50 any':['[OK] Rule added: deny ip host 192.168.100.50 any','[INFO] Rule inserted at sequence 5 (before rule 30)','[SUCCESS] Active connection from 192.168.100.50 terminated'],
+        'show acl':       ['Seq  Action  Protocol  Source              Destination  Port','5    DENY    ip        host 192.168.100.50  any          any  ← NEW','10   permit  tcp       10.0.0.0/8          any          443','20   permit  tcp       10.0.0.0/8          any          80','30   permit  any       any                 any          any','50   deny    ip        any                 any          any  (implicit)'],
+        'help':           ['Commands: deny ip host [ip] any, show acl, test connection [ip]'],
+        'default':        ['Unknown command. Type "help"'],
+        'clear':          ['__CLEAR__'],
+      },
+      question:'What is the correct command to block IP 192.168.100.50?',
+      answer:'deny ip host 192.168.100.50 any',
+      questionLabel:'Enter the block command:',
+    },
+    t4: {
+      title:'Verify the Block',
+      body:`<p>Always verify your firewall changes are working. Use <code>test connection 192.168.100.50</code> to confirm the block is active.</p>
+<div class="info-box">⚡ Exam tip: ACL rules are processed <strong>top to bottom</strong>. The <strong>first matching rule wins</strong>. This is why order matters — putting a deny rule after a broad permit rule means the deny never gets evaluated.</div>`,
+      widget:'complete',
+      completeMsg:'Lab complete! You identified a dangerously permissive firewall rule, blocked a malicious IP, and verified the fix. These are real SOC skills.',
+    },
+  },
+},
+{
+  id:'crypto-hashing', cat:'crypto', icon:'🔐', xp:140,
+  type:'terminal', typeLabel:'Terminal Lab',
+  title:'Hash Analysis & Cracking',
+  desc:'Analyze file hashes to verify integrity, identify hash algorithms, detect a tampered file, and understand why MD5 is no longer safe.',
+  banner:'#1a0d2e',
+  tasks:[
+    { id:'t1', name:'Identify hash algorithms by length', hint:'MD5=32 chars, SHA-1=40 chars, SHA-256=64 chars. Count the characters!' },
+    { id:'t2', name:'Verify file integrity using hashes', hint:'If the hash of the file you downloaded matches the published hash — the file is unmodified.' },
+    { id:'t3', name:'Detect the tampered file', hint:'Generate hashes of all files and compare. The tampered file will have a different hash.' },
+    { id:'t4', name:'Understand salting and why it matters', hint:'A salt adds random data before hashing. Even identical passwords produce different hashes.' },
+  ],
+  content:{
+    t1:{
+      title:'Identify Hash Algorithms',
+      body:`<p>Every hash algorithm produces a fixed-length output. You can identify the algorithm just by counting characters:</p>
+<ul class="content-text">
+<li><strong>MD5</strong> — 32 hex characters (128-bit) — deprecated, vulnerable to collisions</li>
+<li><strong>SHA-1</strong> — 40 hex characters (160-bit) — deprecated</li>
+<li><strong>SHA-256</strong> — 64 hex characters (256-bit) — current standard</li>
+<li><strong>SHA-512</strong> — 128 hex characters (512-bit) — high security</li>
+</ul>
+<div class="info-box warning">⚡ Exam tip: MD5 and SHA-1 are <strong>cryptographically broken</strong> — never use them for security. SHA-256 and above are acceptable.</div>`,
+      widget:'terminal',
+      termPrompt:'analyst@crypto:~$',
+      termWelcome:['Hash Analysis Lab — Crypto Toolkit v2.1','Type "help" to see available commands'],
+      commands:{
+        'help':['Commands: identify [hash], hash md5 [text], hash sha256 [text], compare [hash1] [hash2]'],
+        'identify 5d41402abc4b2a76b9719d911017c592':['Hash: 5d41402abc4b2a76b9719d911017c592','Length: 32 characters','Algorithm: MD5 (128-bit)','Status: DEPRECATED — Do not use for security purposes','Known plaintext: "hello" (in rainbow tables)'],
+        'identify aaf4c61ddcc5e8a2dabede0f3b482cd9aa3dc8ca':['Hash: aaf4c61ddcc5e8a2dabede0f3b482cd9aa3dc8ca','Length: 40 characters','Algorithm: SHA-1 (160-bit)','Status: DEPRECATED — Collision vulnerabilities found (2017)'],
+        'identify 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c7fa78c7ad53fe5a3afa12345':['Hash: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c7fa78c7ad53fe5a3afa12345','Length: 64 characters','Algorithm: SHA-256 (256-bit)','Status: SECURE — Current standard'],
+        'hash md5 hello':['MD5("hello") = 5d41402abc4b2a76b9719d911017c592','[WARN] MD5 is deprecated. This hash exists in rainbow tables.'],
+        'hash sha256 hello':['SHA-256("hello") = 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c7fa78c7ad53fe5a3afa12345','[OK] SHA-256 is secure and collision-resistant.'],
+        'default':['Unknown command. Type "help"'],
+        'clear':['__CLEAR__'],
+      },
+      question:'How many characters does a SHA-256 hash produce?',
+      answer:'64',
+      questionLabel:'Enter the character count for SHA-256:',
+    },
+    t2:{
+      title:'Verify File Integrity',
+      body:`<p>Hashes are used to verify that a file hasn't been modified. If you download software and the hash matches the publisher's, the file is authentic.</p>
+<p style="margin-top:0.75rem">Run <code>verify installer.exe</code> to check if our downloaded file is authentic.</p>
+<div class="info-box">💡 This is how <strong>code signing</strong> works. The publisher hashes their software and signs it. You verify the hash matches before installing.</div>`,
+      widget:'terminal',
+      termPrompt:'analyst@crypto:~$',
+      termWelcome:['File Integrity Checker — Ready'],
+      commands:{
+        'verify installer.exe':['Computing SHA-256 of installer.exe...','File hash:      a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4','Published hash: a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4','','Result: ✓ MATCH — File integrity verified. Safe to install.'],
+        'verify malware.exe':['Computing SHA-256 of malware.exe...','File hash:      deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef','Published hash: a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4','','Result: ✗ MISMATCH — File has been tampered! Do NOT install.','[ALERT] Possible malware or corrupted download.'],
+        'ls':['Files in current directory:','  installer.exe  (4.2 MB)','  malware.exe    (4.2 MB) ← same size, different hash!','  document.pdf   (1.1 MB)'],
+        'help':['Commands: verify [filename], ls'],
+        'default':['Unknown command. Type "help"'],
+        'clear':['__CLEAR__'],
+      },
+      question:'What does a hash MISMATCH indicate when verifying a file?',
+      answer:'tampered',
+      questionLabel:'Enter one word: the file has been ___?',
+    },
+    t3:{
+      title:'Detect the Tampered File',
+      body:`<p>A malicious actor has replaced one file in our software package. Your job: find which file was tampered with by comparing hashes.</p>`,
+      widget:'logs',
+      logs:[
+        {time:'EXPECTED', src:'SHA-256', dst:'readme.txt',     event:'abc123def456...7890', sev:'INFO'},
+        {time:'ACTUAL',   src:'SHA-256', dst:'readme.txt',     event:'abc123def456...7890', sev:'LOW'},
+        {time:'EXPECTED', src:'SHA-256', dst:'setup.exe',      event:'ff00aa11bb22...cc33', sev:'INFO'},
+        {time:'ACTUAL',   src:'SHA-256', dst:'setup.exe',      event:'DEAD0000BEEF...1234', sev:'CRIT'},
+        {time:'EXPECTED', src:'SHA-256', dst:'license.txt',    event:'112233445566...7788', sev:'INFO'},
+        {time:'ACTUAL',   src:'SHA-256', dst:'license.txt',    event:'112233445566...7788', sev:'LOW'},
+        {time:'EXPECTED', src:'SHA-256', dst:'uninstall.exe',  event:'aabbccddeeff...0011', sev:'INFO'},
+        {time:'ACTUAL',   src:'SHA-256', dst:'uninstall.exe',  event:'aabbccddeeff...0011', sev:'LOW'},
+      ],
+      question:'Which file has been tampered with?',
+      answer:'setup.exe',
+      questionLabel:'Enter the filename that was tampered:',
+    },
+    t4:{
+      title:'Salting — Why Identical Passwords Hash Differently',
+      body:`<p>A <strong>salt</strong> is a random value added to a password before hashing. This prevents <strong>rainbow table attacks</strong> where pre-computed hashes are used to reverse passwords.</p>
+<ul class="content-text">
+<li>Without salt: <code>hash("password123")</code> → always same output → crackable with rainbow tables</li>
+<li>With salt: <code>hash("password123" + "xK7!pQ2")</code> → unique output → rainbow tables useless</li>
+</ul>
+<div class="info-box">⚡ Exam tip: <strong>bcrypt</strong> and <strong>Argon2</strong> are the recommended password hashing algorithms because they're slow by design (making brute force harder) AND they handle salting automatically.</div>`,
+      widget:'complete',
+      completeMsg:'Excellent! You can now identify hash algorithms by length, verify file integrity, detect tampering, and understand why salting is essential.',
+    },
+  },
+},
+{
+  id:'ir-ransomware', cat:'ir', icon:'🚨', xp:200,
+  type:'guided', typeLabel:'Guided Lab',
+  title:'Ransomware Incident Response',
+  desc:'Walk through a real ransomware attack as the IR lead. Detect, contain, eradicate, and recover — following the NIST SP 800-61 framework.',
+  banner:'#2a0d0d',
+  tasks:[
+    { id:'t1', name:'Detection — identify patient zero', hint:'Check the SIEM for the first machine that showed encryption activity.' },
+    { id:'t2', name:'Containment — isolate affected systems', hint:'Disconnect from network FIRST, then preserve evidence for forensics.' },
+    { id:'t3', name:'Eradication — remove the malware', hint:'Identify the malware family, find all persistence mechanisms, then wipe and restore.' },
+    { id:'t4', name:'Recovery & Lessons Learned', hint:'Restore from clean backups, patch the entry vector, update detection rules.' },
+  ],
+  content:{
+    t1:{
+      title:'Detection: Find Patient Zero',
+      body:`<p>At 14:32 on Monday, the SIEM fires a critical alert: multiple workstations are showing rapid file encryption activity. You've been paged as IR lead.</p>
+<div class="info-box danger">🚨 CRITICAL ALERT: Ransomware activity detected<br>Affected systems: WS-001, WS-045, WS-103, FILE-SERVER-01<br>Files with extension .lockbit detected on network shares</div>
+<p style="margin-top:0.75rem"><strong>Patient zero</strong> is the first infected machine. Finding it tells you how the attack started.</p>`,
+      widget:'logs',
+      logs:[
+        {time:'13:45:02', src:'WS-001',         dst:'EMAIL-GW',  event:'Received: invoice_urgent.pdf.exe', sev:'HIGH'},
+        {time:'13:45:47', src:'WS-001',         dst:'WS-001',    event:'Macro execution detected', sev:'CRIT'},
+        {time:'13:46:01', src:'WS-001',         dst:'185.X.X.X', event:'C2 beaconing (outbound)', sev:'CRIT'},
+        {time:'13:55:12', src:'WS-001',         dst:'FILE-SRV',  event:'Mass file access (encrypt)', sev:'CRIT'},
+        {time:'14:05:33', src:'WS-045',         dst:'FILE-SRV',  event:'Mass file access (encrypt)', sev:'CRIT'},
+        {time:'14:12:18', src:'WS-103',         dst:'FILE-SRV',  event:'Mass file access (encrypt)', sev:'CRIT'},
+        {time:'14:32:00', src:'SIEM',           dst:'SOC',       event:'RANSOMWARE ALERT TRIGGERED', sev:'CRIT'},
+      ],
+      question:'Which workstation is patient zero (first infected)?',
+      answer:'WS-001',
+      questionLabel:'Enter the patient zero hostname:',
+    },
+    t2:{
+      title:'Containment: Isolate Now',
+      body:`<p>Your priority: <strong>stop the spread</strong>. Every second of delay means more encrypted files.</p>
+<div class="info-box warning">⚠️ Containment order matters:<br>1. Network isolation (pull the cable / disable port)<br>2. Do NOT power off yet — memory forensics may be needed<br>3. Document everything you do with timestamps</div>
+<ul class="content-text">
+<li>Disable WS-001's network port at the switch</li>
+<li>Block the C2 IP <code>185.X.X.X</code> at the firewall</li>
+<li>Take a memory dump of WS-001 before anything else</li>
+<li>Notify stakeholders (management, legal, IT)</li>
+</ul>`,
+      widget:'quiz',
+      question:'What should you do FIRST when containing a ransomware-infected system?',
+      options:['A. Power off the machine immediately','B. Run antivirus software','C. Isolate from the network (pull cable/disable port)','D. Pay the ransom to stop spread'],
+      correct:2,
+      explanation:'✓ Correct! Network isolation stops the spread while preserving volatile memory for forensics. Never power off first — you lose memory evidence. Never pay ransoms as it funds criminals and doesn\'t guarantee recovery.',
+    },
+    t3:{
+      title:'Eradication: Kill the Malware',
+      body:`<p>The malware family is <strong>LockBit 3.0</strong> — a Ransomware-as-a-Service (RaaS) variant. It typically:</p>
+<ul class="content-text">
+<li>Drops persistence via <strong>Registry Run keys</strong></li>
+<li>Deletes Volume Shadow Copies (backups)</li>
+<li>Exfiltrates data before encrypting (double extortion)</li>
+<li>Uses <strong>AES-256</strong> for file encryption, <strong>RSA-2048</strong> for the AES key</li>
+</ul>
+<div class="info-box">💡 Why RSA wraps AES: AES encrypts files fast (symmetric), but RSA encrypts the AES key (asymmetric). Only the attacker has the RSA private key to decrypt the AES key — this is called <strong>hybrid encryption</strong>.</div>`,
+      widget:'quiz',
+      question:'LockBit uses AES to encrypt files and RSA to encrypt the AES key. What is this pattern called?',
+      options:['A. Double encryption','B. Hybrid encryption','C. Key escrow','D. Asymmetric chaining'],
+      correct:1,
+      explanation:'✓ Correct! Hybrid encryption uses symmetric (AES) for speed on bulk data, and asymmetric (RSA) to securely exchange the symmetric key. TLS uses the same pattern.',
+    },
+    t4:{
+      title:'Recovery & Lessons Learned',
+      body:`<p>With the malware eradicated, restore from <strong>clean backups</strong> (that weren't connected when the attack hit) and patch the entry vector.</p>
+<div class="info-box">📋 Post-Incident Report must include:<br>
+• Timeline of the attack (patient zero → spread → detection → containment)<br>
+• Root cause (phishing email with malicious attachment)<br>
+• What worked well in response<br>
+• What to improve (detection time was 47 minutes — too long)</div>
+<div class="info-box warning">⚡ Exam tip: The 6 phases of NIST 800-61 IR: <strong>Preparation → Detection & Analysis → Containment → Eradication → Recovery → Post-Incident Activity</strong></div>`,
+      widget:'complete',
+      completeMsg:'Outstanding! You worked a full ransomware incident from detection through recovery. This is exactly what Security+ Domain 4 tests.',
+    },
+  },
+},
+{
+  id:'threat-osint', cat:'threat', icon:'🎭', xp:160,
+  type:'ctf', typeLabel:'CTF Challenge',
+  title:'Threat Actor OSINT Hunt',
+  desc:'Use OSINT techniques to investigate a threat actor. Analyze IOCs, map TTPs to MITRE ATT&CK, and identify the attacker\'s origin. Find the flag!',
+  banner:'#0d1a0d',
+  tasks:[
+    { id:'t1', name:'Analyze the suspicious email header', hint:'Look at the X-Originating-IP and the sending domain registration date.' },
+    { id:'t2', name:'Investigate the C2 domain', hint:'WHOIS data and creation dates reveal a lot about malicious infrastructure.' },
+    { id:'t3', name:'Map TTPs to MITRE ATT&CK', hint:'Spear phishing = T1566.001, C2 = T1071, Credential harvesting = T1056.' },
+    { id:'t4', name:'Find the hidden flag', hint:'The flag is encoded in the email attachment filename. Decode it from Base64.' },
+  ],
+  content:{
+    t1:{
+      title:'Analyze the Phishing Email Header',
+      body:`<p>You've received an escalated alert. An employee clicked a suspicious email. Analyze the raw headers to find where it really came from.</p>`,
+      widget:'terminal',
+      termPrompt:'analyst@threat:~$',
+      termWelcome:['OSINT Toolkit v1.0 — Threat Intelligence Platform','Commands: analyze email, whois [domain], decode [b64]'],
+      commands:{
+        'analyze email':['Parsing email headers...','','From:        "HR Department" <hr@company-payroll.net>','Reply-To:    attacker@protonmail.com  ← RED FLAG','X-Orig-IP:   45.33.32.156 (Linode VPS)','Received:    from mail.company-payroll.net','Domain reg:  2024-01-10 (3 days before attack) ← Freshly registered','SPF check:   FAIL  ← domain not authorized','DKIM:        FAIL  ← not signed by real HR','','Subject: URGENT: Update your direct deposit info','Attachment:  BankForm_2024.pdf.exe','','[ALERT] Multiple indicators of spear phishing. DO NOT CLICK ATTACHMENT.'],
+        'whois company-payroll.net':['Domain: company-payroll.net','Registrar: NameCheap (privacy protected)','Created: 2024-01-10','Expires: 2025-01-10','Registrant: REDACTED','Name Servers: ns1.privatename.com','','[ANALYSIS] Domain created 3 days before attack. Typosquat of legitimate company domain.','Classic domain-based phishing infrastructure.'],
+        'decode QlM6U2VjdXJpdHkrRmxhZ3tQSDFTSDFOR19GMXNo':['Decoding Base64...','Result: BS:Security+Flag{PH1SH1NG_F1sh}','','[CTF] You found the flag!'],
+        'help':['Commands: analyze email, whois [domain], decode [base64text]'],
+        'default':['Unknown command. Try: analyze email, whois, decode'],
+        'clear':['__CLEAR__'],
+      },
+      question:'What OSINT indicator shows the email is suspicious (failed check)?',
+      answer:'SPF',
+      questionLabel:'Enter the failed email authentication check (3 letters):',
+    },
+    t2:{
+      title:'C2 Domain Investigation',
+      body:`<p>The attachment would have connected to a <strong>Command & Control (C2)</strong> server. Run <code>whois company-payroll.net</code> to investigate the infrastructure.</p>
+<div class="info-box">💡 <strong>Indicators of Compromise (IOCs)</strong> for this attack:<br>
+IP: 45.33.32.156<br>Domain: company-payroll.net<br>Email: hr@company-payroll.net<br>Attachment hash: (from previous lab)</div>
+<p style="margin-top:0.75rem">Fresh domain registration (days before attack) is a classic indicator of malicious infrastructure.</p>`,
+      widget:'quiz',
+      question:'A domain registered 3 days before it was used in a phishing attack is called:',
+      options:['A. A watering hole domain','B. A freshly-registered/throwaway domain','C. A subdomain hijack','D. A DNS poisoning target'],
+      correct:1,
+      explanation:'✓ Correct! Attackers register fresh domains to avoid reputation blocklists. Freshly-registered domains (especially privacy-protected) with suspicious names are major red flags in threat intel.',
+    },
+    t3:{
+      title:'Map to MITRE ATT&CK',
+      body:`<p>The <strong>MITRE ATT&CK</strong> framework maps attacker behaviors to standardized technique IDs. This helps defenders build detection rules.</p>
+<ul class="content-text">
+<li><strong>T1566.001</strong> — Spearphishing Attachment (Initial Access)</li>
+<li><strong>T1059</strong> — Command & Scripting Interpreter (Execution)</li>
+<li><strong>T1071</strong> — Application Layer Protocol (C2)</li>
+<li><strong>T1486</strong> — Data Encrypted for Impact (if ransomware)</li>
+</ul>
+<div class="info-box warning">⚡ Exam tip: MITRE ATT&CK has 14 <strong>Tactics</strong> (the "why") and hundreds of <strong>Techniques</strong> (the "how"). Initial Access → Execution → Persistence → Privilege Escalation → Defense Evasion → Credential Access → Discovery → Lateral Movement → Collection → C2 → Exfiltration → Impact</div>`,
+      widget:'quiz',
+      question:'In MITRE ATT&CK, "Initial Access" via a phishing email with malicious attachment maps to which technique?',
+      options:['A. T1078 — Valid Accounts','B. T1566.001 — Spearphishing Attachment','C. T1190 — Exploit Public-Facing Application','D. T1133 — External Remote Services'],
+      correct:1,
+      explanation:'✓ Correct! T1566.001 is Spearphishing Attachment under the Initial Access tactic. The .001 sub-technique specifically means the phish carried a malicious attachment.',
+    },
+    t4:{
+      title:'🚩 Find the Flag',
+      body:`<p>The attacker left a breadcrumb. The attachment filename contains a Base64-encoded flag.</p>
+<div class="info-box"><strong>Attachment filename:</strong> <code>QlM6U2VjdXJpdHkrRmxhZ3tQSDFTSDFOR19GMXNo</code></div>
+<p style="margin-top:0.75rem">Use the terminal command <code>decode QlM6U2VjdXJpdHkrRmxhZ3tQSDFTSDFOR19GMXNo</code> to decode it, then submit the flag below.</p>`,
+      widget:'ctf',
+      flag:'Security+Flag{PH1SH1NG_F1sh}',
+      flagHint:'Format: Security+Flag{...}',
+    },
+  },
+},
+{
+  id:'malware-analysis', cat:'malware', icon:'🦠', xp:180,
+  type:'guided', typeLabel:'Guided Lab',
+  title:'Static Malware Analysis',
+  desc:'Analyze a malware sample using static analysis techniques — strings extraction, PE header analysis, and hash identification — without executing the code.',
+  banner:'#1a1a0d',
+  tasks:[
+    { id:'t1', name:'Extract strings from the binary', hint:'The "strings" command reveals readable text embedded in binaries — URLs, registry keys, commands.' },
+    { id:'t2', name:'Analyze the PE header', hint:'The PE header reveals compilation info, imported DLLs, and sections — all reveal behavior.' },
+    { id:'t3', name:'Identify malware behavior from IOCs', hint:'Strings containing registry paths, C2 domains, and Windows API calls reveal what the malware does.' },
+    { id:'t4', name:'Generate threat intelligence report', hint:'Summarize: hash, type, behavior, IOCs, MITRE techniques, and recommended detections.' },
+  ],
+  content:{
+    t1:{
+      title:'String Extraction',
+      body:`<p><strong>Static analysis</strong> means analyzing malware without running it. The safest approach.</p>
+<p style="margin-top:0.75rem">The <code>strings</code> command extracts all readable ASCII text from a binary. Malware often contains hardcoded:</p>
+<ul class="content-text"><li>C2 server URLs</li><li>Registry keys for persistence</li><li>Windows API function names</li><li>Encryption keys (sometimes!)</li></ul>`,
+      widget:'terminal',
+      termPrompt:'analyst@sandbox:~$',
+      termWelcome:['Static Analysis Sandbox — ISOLATED ENVIRONMENT','Malware sample: suspicious_update.exe (MD5: d41d8cd98f00b204e9800998ecf8427e)'],
+      commands:{
+        'strings suspicious_update.exe':['Extracting strings... (min length: 4)','','=== NETWORK INDICATORS ===','http://update-service[.]cn/payload','http://update-service[.]cn/c2/beacon','185.220.101.47:4444','','=== REGISTRY PERSISTENCE ===','HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run','SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion','update_service','','=== WINDOWS API CALLS ===','CreateRemoteThread','VirtualAllocEx','WriteProcessMemory','RegSetValueEx','WinExec','InternetOpenUrl','','=== SUSPICIOUS STRINGS ===','cmd.exe /c net user administrator','whoami','ipconfig /all','This program cannot be run in DOS mode'],
+        'hash suspicious_update.exe':['MD5:    d41d8cd98f00b204e9800998ecf8427e','SHA1:   da39a3ee5e6b4b0d3255bfef95601890afd80709','SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855','','[INFO] Submit to VirusTotal for AV detection results'],
+        'file suspicious_update.exe':['suspicious_update.exe: PE32 executable for MS Windows (GUI) Intel 80386, 3 sections'],
+        'help':['Commands: strings [file], hash [file], file [file], pe-header [file]'],
+        'pe-header suspicious_update.exe':['PE Header Analysis:','Compile time: 2024-01-08 03:22:11 UTC','Sections: .text, .data, .rsrc','Entropy: 7.8 (HIGH — possibly packed/encrypted)','Imports: WS2_32.dll (network), ADVAPI32.dll (registry), KERNEL32.dll','','[ALERT] High entropy suggests packed binary — may unpack to reveal more code'],
+        'default':['Unknown command. Type "help"'],
+        'clear':['__CLEAR__'],
+      },
+      question:'What command extracts readable text strings from a binary?',
+      answer:'strings',
+      questionLabel:'Enter the command name:',
+    },
+    t2:{
+      title:'PE Header Analysis',
+      body:`<p>Run <code>pe-header suspicious_update.exe</code>. The PE (Portable Executable) header reveals critical metadata:</p>
+<div class="info-box"><strong>Key findings:</strong><br>
+• <strong>Entropy 7.8</strong> — Very high. Normal code is ~5-6. Values above 7 suggest <strong>packed or encrypted</strong> code (malware hides itself this way)<br>
+• <strong>WS2_32.dll</strong> import — Network socket operations = C2 communication<br>
+• <strong>ADVAPI32.dll</strong> import — Registry operations = persistence mechanism<br>
+• <strong>Compile time</strong> — 3am UTC, 7 days ago</div>`,
+      widget:'quiz',
+      question:'A PE binary with entropy of 7.8 (out of 8.0) most likely indicates:',
+      options:['A. A normal, well-optimized program','B. A packed or encrypted binary (possibly malware)','C. A corrupted file','D. A digitally signed executable'],
+      correct:1,
+      explanation:'✓ Correct! High entropy (close to 8.0) means the data is very random — consistent with compression or encryption used by packers to hide malware from static analysis.',
+    },
+    t3:{
+      title:'Identify Malware Behavior',
+      body:`<p>Based on the strings analysis, we can identify this malware's behavior <strong>without running it</strong>:</p>
+<ul class="content-text">
+<li>🌐 <strong>C2 Communication</strong> — connects to <code>update-service[.]cn:4444</code></li>
+<li>🔒 <strong>Persistence</strong> — adds itself to <code>HKCU\\...\\Run</code> registry key (survives reboot)</li>
+<li>💉 <strong>Process Injection</strong> — <code>CreateRemoteThread + WriteProcessMemory + VirtualAllocEx</code> = classic DLL injection</li>
+<li>📋 <strong>Reconnaissance</strong> — runs <code>whoami</code> and <code>ipconfig</code> to profile victim</li>
+</ul>
+<div class="info-box warning">⚡ Exam tip: The three Windows API calls <code>VirtualAllocEx + WriteProcessMemory + CreateRemoteThread</code> together are the hallmark of <strong>process injection</strong> — malware hiding inside legitimate processes.</div>`,
+      widget:'quiz',
+      question:'A malware sample using VirtualAllocEx, WriteProcessMemory, and CreateRemoteThread is most likely performing:',
+      options:['A. File encryption (ransomware)','B. Process injection','C. Keylogging','D. SQL injection'],
+      correct:1,
+      explanation:'✓ Correct! These three API calls together = process injection. The malware allocates memory in another process, writes code there, then creates a thread to execute it — hiding malicious code inside a legitimate process like explorer.exe.',
+    },
+    t4:{
+      title:'Threat Intel Report',
+      body:`<p>Good threat intelligence turns raw analysis into actionable detections. Your report summary:</p>
+<div class="info-box"><strong>Sample:</strong> suspicious_update.exe<br>
+<strong>Type:</strong> Remote Access Trojan (RAT) with persistence<br>
+<strong>C2:</strong> update-service[.]cn / 185.220.101.47:4444<br>
+<strong>Persistence:</strong> Registry Run key<br>
+<strong>Techniques:</strong> T1547.001 (Registry Run Keys), T1055 (Process Injection), T1071 (C2)<br>
+<strong>Recommended detections:</strong><br>
+• Block outbound to update-service[.]cn and 185.220.101.47<br>
+• Alert on HKCU\\Run modifications by non-admin users<br>
+• Alert on CreateRemoteThread from non-system processes</div>
+<div class="info-box warning">⚡ Exam tip: <strong>Static analysis</strong> = no execution (safe). <strong>Dynamic analysis</strong> = run in a sandbox (reveals runtime behavior). <strong>Hybrid</strong> = both.</div>`,
+      widget:'complete',
+      completeMsg:'Lab complete! You performed real static malware analysis — extracted IOCs, identified behavior from API calls, and produced actionable threat intel.',
+    },
+  },
+},
+];
+
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+const KEY = 'cyberlabs_state';
+function getState() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || { completed:{}, xp:0 }; }
+  catch { return { completed:{}, xp:0 }; }
+}
+function saveState(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} }
+
+// Active lab session
+let currentLab = null;
+let currentTaskIdx = 0;
+let tasksDone = new Set();
+
+// ══════════════════════════════════════════════════════════
+// RENDER LAB CARDS
+// ══════════════════════════════════════════════════════════
+function renderCards(filter) {
+  const state = getState();
+  const grid = document.getElementById('labsGrid');
+  const filtered = LABS.filter(l => filter === 'all' || l.cat === filter);
+
+  grid.innerHTML = filtered.map(lab => {
+    const done = state.completed[lab.id];
+    const typeClass = {terminal:'type-terminal',guided:'type-guided',logs:'type-logs',ctf:'type-ctf',network:'type-network'}[lab.type] || 'type-guided';
+    const gridStyle = `background-image:repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(255,255,255,0.03) 20px),repeating-linear-gradient(90deg,transparent,transparent 19px,rgba(255,255,255,0.03) 20px);`;
+    return `<div class="lab-card${done?' completed':''}" onclick="openLab('${lab.id}')">
+      <div class="lab-banner" style="background:${lab.banner}">
+        <div class="lab-banner-grid" style="${gridStyle}"></div>
+        <span class="lab-banner-icon">${lab.icon}</span>
+      </div>
+      <div class="lab-body">
+        <div class="lab-meta">
+          <span class="lab-type ${typeClass}">${lab.typeLabel}</span>
+          <span class="diff-tag diff-beginner">Beginner</span>
+          <span class="xp-tag">+${lab.xp} XP</span>
+        </div>
+        <div class="lab-title">${lab.title}</div>
+        <div class="lab-desc">${lab.desc}</div>
+        <div class="lab-footer">
+          <span class="lab-tasks">Tasks: <span>${lab.tasks.length}</span></span>
+          <button class="start-btn">${done ? '↺ Replay' : '▶ Start Lab'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterLabs(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards(cat);
+}
+
+// ══════════════════════════════════════════════════════════
+// OPEN / CLOSE LAB
+// ══════════════════════════════════════════════════════════
+function openLab(labId) {
+  currentLab = LABS.find(l => l.id === labId);
+  if (!currentLab) return;
+  tasksDone = new Set();
+  currentTaskIdx = 0;
+
+  document.getElementById('modalIcon').textContent = currentLab.icon;
+  document.getElementById('modalName').textContent = currentLab.title;
+  document.getElementById('modalMeta').textContent = currentLab.typeLabel + ' · Beginner · +' + currentLab.xp + ' XP';
+  document.getElementById('labCompleteBanner').classList.remove('show');
+
+  renderTaskList();
+  loadTask(0);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ══════════════════════════════════════════════════════════
+// TASK LIST
+// ══════════════════════════════════════════════════════════
+function renderTaskList() {
+  const list = document.getElementById('taskList');
+  const tasks = currentLab.tasks;
+  list.innerHTML = `<div class="task-section-label">Lab Tasks</div>` +
+    tasks.map((t, i) => {
+      const done = tasksDone.has(t.id);
+      const active = i === currentTaskIdx;
+      return `<div class="task-item${done?' done':''}${active?' active':''}" id="ti-${t.id}" onclick="loadTask(${i})">
+        <div class="task-check">${done ? '✓' : ''}</div>
+        <div class="task-name">${i+1}. ${t.name}</div>
+      </div>`;
+    }).join('');
+}
+
+function loadTask(idx) {
+  currentTaskIdx = idx;
+  const task = currentLab.tasks[idx];
+  const content = currentLab.content[task.id];
+  if (!content) return;
+
+  // Reset hint
+  document.getElementById('hintText').classList.remove('show');
+  document.getElementById('hintText').textContent = task.hint;
+
+  // Update task list highlighting
+  document.querySelectorAll('.task-item').forEach((el,i) => {
+    el.classList.toggle('active', i === idx);
+  });
+
+  // Render content
+  renderTaskContent(content, task);
+  updateProgress();
+}
+
+// ══════════════════════════════════════════════════════════
+// TASK CONTENT RENDERER
+// ══════════════════════════════════════════════════════════
+function renderTaskContent(content, task) {
+  const area = document.getElementById('taskContent');
+  let html = `<div class="content-section"><div class="content-label">Task ${currentTaskIdx+1} of ${currentLab.tasks.length}</div><h2 style="font-size:1.15rem;font-weight:600;color:var(--text);margin-bottom:1rem;">${content.title}</h2><div class="content-text">${content.body}</div></div>`;
+
+  if (content.widget === 'terminal') {
+    html += buildTerminalHTML(content, task.id);
+  } else if (content.widget === 'logs') {
+    html += buildLogViewerHTML(content, task.id);
+  } else if (content.widget === 'quiz') {
+    html += buildQuizHTML(content, task.id);
+  } else if (content.widget === 'ctf') {
+    html += buildCTFHTML(content, task.id);
+  } else if (content.widget === 'complete') {
+    html += `<div class="info-box" style="margin-top:1rem;"><strong>✅ ${content.completeMsg}</strong></div>
+    <button class="complete-task-btn" onclick="completeTask('${task.id}')" id="ctb-${task.id}">✓ Mark Task Complete</button>`;
+  }
+
+  area.innerHTML = html;
+
+  if (content.widget === 'terminal') initTerminal(content, task.id);
+  if (content.widget === 'logs') initLogViewer(content, task.id);
+  if (content.widget === 'quiz') initQuiz(content, task.id);
+}
+
+// ══════════════════════════════════════════════════════════
+// TERMINAL WIDGET
+// ══════════════════════════════════════════════════════════
+function buildTerminalHTML(content, taskId) {
+  return `<div class="terminal-wrap" id="tw-${taskId}">
+    <div class="terminal-titlebar">
+      <div class="term-dot" style="background:#ff5f57"></div>
+      <div class="term-dot" style="background:#ffbd2e"></div>
+      <div class="term-dot" style="background:#28c941"></div>
+      <span class="term-title">${content.termPrompt} — terminal</span>
+    </div>
+    <div class="terminal-output" id="to-${taskId}"></div>
+    <div class="terminal-input-row">
+      <span class="term-prompt">${content.termPrompt}</span>
+      <input class="term-input" id="ti2-${taskId}" placeholder="type a command..." autocomplete="off" spellcheck="false" />
+    </div>
+  </div>
+  ${content.question ? `<div class="content-section" style="margin-top:1rem;">
+    <div class="content-label">${content.questionLabel || 'Answer the question:'}</div>
+    <div class="answer-wrap">
+      <input class="answer-input" id="ai-${taskId}" placeholder="Your answer..." />
+      <button class="answer-btn" onclick="checkAnswer('${taskId}','${content.answer}')">Check Answer</button>
+      <div class="answer-result" id="ar-${taskId}"></div>
+    </div>
+  </div>` : ''}`;
+}
+
+function initTerminal(content, taskId) {
+  const output = document.getElementById('to-' + taskId);
+  const input = document.getElementById('ti2-' + taskId);
+  if (!output || !input) return;
+
+  // Print welcome
+  content.termWelcome.forEach(l => addTermLine(output, l, 'info'));
+
+  let history = [];
+  let histIdx = -1;
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const cmd = input.value.trim();
+      if (!cmd) return;
+      history.unshift(cmd);
+      histIdx = -1;
+      addTermLine(output, cmd, 'cmd');
+      input.value = '';
+
+      const cmds = content.commands || {};
+      const response = cmds[cmd] || cmds['default'] || ['Command not found.'];
+      if (response[0] === '__CLEAR__') { output.innerHTML = ''; return; }
+      setTimeout(() => {
+        response.forEach(l => addTermLine(output, l, ''));
+        output.scrollTop = output.scrollHeight;
+      }, 80);
+    } else if (e.key === 'ArrowUp') {
+      histIdx = Math.min(histIdx + 1, history.length - 1);
+      input.value = history[histIdx] || '';
+    } else if (e.key === 'ArrowDown') {
+      histIdx = Math.max(histIdx - 1, -1);
+      input.value = histIdx === -1 ? '' : history[histIdx];
+    }
+  });
+}
+
+function addTermLine(output, text, cls) {
+  const div = document.createElement('div');
+  div.className = 'term-line' + (cls ? ' ' + cls : '');
+  div.textContent = text;
+  output.appendChild(div);
+  output.scrollTop = output.scrollHeight;
+}
+
+// ══════════════════════════════════════════════════════════
+// LOG VIEWER WIDGET
+// ══════════════════════════════════════════════════════════
+function buildLogViewerHTML(content, taskId) {
+  return `<div class="log-viewer" id="lv-${taskId}">
+    <div class="log-toolbar">
+      <span style="color:var(--accent);font-family:var(--mono);font-size:0.7rem;">SIEM LOG VIEWER</span>
+      <input class="log-filter-input" id="lf-${taskId}" placeholder="Filter logs..." oninput="filterLogs('${taskId}')" />
+      <span class="log-count" id="lc-${taskId}">${content.logs.length} events</span>
+    </div>
+    <div class="log-scroll"><div class="log-table">
+      <table><thead><tr><th>TIME</th><th>SOURCE</th><th>DESTINATION</th><th>EVENT</th><th>SEV</th></tr></thead>
+      <tbody id="lb-${taskId}">${content.logs.map((l,i) => {
+        const sevClass = {'CRIT':'sev-crit','HIGH':'sev-high','MED':'sev-med','LOW':'sev-low','INFO':'sev-info'}[l.sev] || '';
+        const highlight = l.sev === 'CRIT' ? ' class="highlight"' : '';
+        return `<tr${highlight} data-row="${i}"><td>${l.time}</td><td>${l.src}</td><td>${l.dst}</td><td>${l.event}</td><td class="${sevClass}">${l.sev}</td></tr>`;
+      }).join('')}</tbody>
+      </table>
+    </div></div>
+  </div>
+  <div class="content-section" style="margin-top:1rem;">
+    <div class="content-label">${content.questionLabel || 'Answer based on the logs:'}</div>
+    <div class="answer-wrap">
+      <input class="answer-input" id="ai-${taskId}" placeholder="Your answer..." />
+      <button class="answer-btn" onclick="checkAnswer('${taskId}','${content.answer}')">Check Answer</button>
+      <div class="answer-result" id="ar-${taskId}"></div>
+    </div>
+  </div>`;
+}
+
+function initLogViewer(content, taskId) {}
+
+function filterLogs(taskId) {
+  const filter = document.getElementById('lf-' + taskId).value.toLowerCase();
+  const rows = document.querySelectorAll(`#lb-${taskId} tr`);
+  let count = 0;
+  rows.forEach(row => {
+    const match = row.textContent.toLowerCase().includes(filter);
+    row.style.display = match ? '' : 'none';
+    if (match) count++;
+  });
+  const countEl = document.getElementById('lc-' + taskId);
+  if (countEl) countEl.textContent = count + ' events';
+}
+
+// ══════════════════════════════════════════════════════════
+// QUIZ WIDGET
+// ══════════════════════════════════════════════════════════
+function buildQuizHTML(content, taskId) {
+  const opts = content.options.map((o, i) =>
+    `<button class="quiz-option" onclick="selectOption(${i},'${taskId}',${content.correct},'${content.explanation.replace(/'/g,"\\'")}',this)">${o}</button>`
+  ).join('');
+  return `<div class="quiz-card" id="qc-${taskId}">
+    <div class="quiz-question">${content.question}</div>
+    <div class="quiz-options" id="qo-${taskId}">${opts}</div>
+    <div class="answer-result" id="ar-${taskId}" style="margin-top:0.75rem;"></div>
+  </div>`;
+}
+
+function initQuiz(content, taskId) {}
+
+function selectOption(selected, taskId, correct, explanation, btn) {
+  const container = document.getElementById('qo-' + taskId);
+  if (container.dataset.answered) return;
+  container.dataset.answered = '1';
+
+  container.querySelectorAll('.quiz-option').forEach((b, i) => {
+    if (i === correct) b.classList.add('correct');
+    else if (i === selected && selected !== correct) b.classList.add('wrong');
+    b.style.pointerEvents = 'none';
+  });
+
+  const result = document.getElementById('ar-' + taskId);
+  result.style.display = 'block';
+  result.className = 'answer-result ' + (selected === correct ? 'correct' : 'wrong');
+  result.textContent = explanation;
+
+  if (selected === correct) {
+    setTimeout(() => completeTask(currentLab.tasks[currentTaskIdx].id), 1200);
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// CTF WIDGET
+// ══════════════════════════════════════════════════════════
+function buildCTFHTML(content, taskId) {
+  return `<div style="margin-top:1rem;">
+    <div class="content-label">🚩 SUBMIT THE FLAG</div>
+    <div class="content-text" style="margin-bottom:0.5rem;font-size:0.8rem;color:var(--muted);">${content.flagHint || 'Enter the flag you found:'}</div>
+    <div class="flag-input-wrap">
+      <input class="flag-input" id="fi-${taskId}" placeholder="Security+Flag{...}" />
+      <button class="flag-submit" onclick="checkFlag('${taskId}','${content.flag}')">Submit Flag</button>
+    </div>
+    <div class="flag-result" id="fr-${taskId}"></div>
+  </div>`;
+}
+
+function checkFlag(taskId, correctFlag) {
+  const input = document.getElementById('fi-' + taskId);
+  const result = document.getElementById('fr-' + taskId);
+  const val = input.value.trim();
+  result.style.display = 'block';
+  if (val === correctFlag || val.toLowerCase() === correctFlag.toLowerCase()) {
+    result.className = 'flag-result correct';
+    result.textContent = '🎉 Flag accepted! ' + correctFlag;
+    input.style.borderColor = 'var(--green)';
+    setTimeout(() => completeTask(currentLab.tasks[currentTaskIdx].id), 800);
+  } else {
+    result.className = 'flag-result wrong';
+    result.textContent = '✗ Incorrect flag. Check your decoding and try again.';
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// ANSWER CHECK
+// ══════════════════════════════════════════════════════════
+function checkAnswer(taskId, correct) {
+  const input = document.getElementById('ai-' + taskId);
+  const result = document.getElementById('ar-' + taskId);
+  const val = (input.value || '').trim().toLowerCase();
+  const correctLower = correct.toLowerCase().replace(/\./g,'').replace(/ /g,'');
+  const valClean = val.replace(/\./g,'').replace(/ /g,'');
+
+  result.style.display = 'block';
+  if (valClean === correctLower || valClean.includes(correctLower) || correctLower.includes(valClean)) {
+    result.className = 'answer-result correct';
+    result.textContent = '✓ Correct! ' + correct;
+    input.disabled = true;
+    setTimeout(() => completeTask(currentLab.tasks[currentTaskIdx].id), 800);
+  } else {
+    result.className = 'answer-result wrong';
+    result.textContent = '✗ Not quite. Try again or use the hint.';
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// COMPLETE TASK
+// ══════════════════════════════════════════════════════════
+function completeTask(taskId) {
+  if (tasksDone.has(taskId)) return;
+  tasksDone.add(taskId);
+  renderTaskList();
+  updateProgress();
+
+  // Auto-advance to next task
+  const nextIdx = currentTaskIdx + 1;
+  if (nextIdx < currentLab.tasks.length) {
+    setTimeout(() => loadTask(nextIdx), 600);
+  } else {
+    // Lab complete!
+    finishLab();
+  }
+}
+
+function finishLab() {
+  const state = getState();
+  const alreadyDone = state.completed[currentLab.id];
+  if (!alreadyDone) {
+    state.completed[currentLab.id] = true;
+    state.xp = (state.xp || 0) + currentLab.xp;
+    saveState(state);
+    showXPToast('+' + currentLab.xp + ' XP — Lab Complete! 🎉');
+    updateGlobalStats();
+    renderCards(document.querySelector('.cat-btn.active')?.textContent?.trim()?.toLowerCase().replace('all labs','all') || 'all');
+  }
+
+  const banner = document.getElementById('labCompleteBanner');
+  banner.querySelector('.lcb-title').textContent = '🎉 ' + currentLab.title + ' — Complete!';
+  banner.querySelector('.lcb-sub').textContent = '+' + currentLab.xp + ' XP earned · ' + currentLab.tasks.length + '/' + currentLab.tasks.length + ' tasks done';
+  banner.classList.add('show');
+  document.getElementById('taskContent').scrollTop = 999999;
+}
+
+// ══════════════════════════════════════════════════════════
+// PROGRESS & XP
+// ══════════════════════════════════════════════════════════
+function updateProgress() {
+  const pct = Math.round(tasksDone.size / currentLab.tasks.length * 100);
+  document.getElementById('labProgressFill').style.width = pct + '%';
+  document.getElementById('labProgressPct').textContent = pct + '%';
+}
+
+function showHint() {
+  const ht = document.getElementById('hintText');
+  ht.textContent = currentLab.tasks[currentTaskIdx]?.hint || 'No hint available.';
+  ht.classList.toggle('show');
+}
+
+function showXPToast(msg) {
+  const toast = document.getElementById('xpToast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function updateGlobalStats() {
+  const state = getState();
+  const completed = Object.keys(state.completed).length;
+  const xp = state.xp || 0;
+  document.getElementById('statCompleted').textContent = completed;
+  document.getElementById('statTotal').textContent = LABS.length;
+  document.getElementById('statXP').textContent = xp;
+  document.getElementById('xpVal').textContent = xp;
+  document.getElementById('xpFill').style.width = Math.min(xp / 1200 * 100, 100) + '%';
+}
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+updateGlobalStats();
+renderCards('all');
+</script>
+</body>
+</html>
