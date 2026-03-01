@@ -193,6 +193,68 @@
   .pbq-card { background: var(--bg3); border: 1px solid rgba(0,245,160,0.2); border-radius: 6px; padding: 2rem; margin-bottom: 2rem; }
   .pbq-card h3 { font-family: var(--mono); font-size: 0.8rem; color: var(--green); letter-spacing: 0.1em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
 
+  /* Interactive PBQ styles */
+  .pbq-interactive { margin-top: 1rem; }
+  .pbq-scenario { font-size:0.82rem; color:var(--text); margin-bottom:1rem; line-height:1.7; }
+  .pbq-match-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .pbq-column-title { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.5rem; }
+  .pbq-items { display:flex; flex-direction:column; gap:0.4rem; }
+  .pbq-source-item {
+    background:var(--bg2); border:1px solid var(--border); border-radius:3px;
+    padding:0.5rem 0.75rem; font-size:0.78rem; cursor:grab; user-select:none;
+    transition:all 0.15s; font-family:var(--mono); color:var(--text);
+  }
+  .pbq-source-item:hover { border-color:var(--accent); color:var(--accent); }
+  .pbq-source-item.dragging { opacity:0.4; }
+  .pbq-source-item.used { opacity:0.35; cursor:default; border-style:dashed; }
+  .pbq-target-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; }
+  .pbq-target-label { font-size:0.78rem; color:var(--text); flex:1 1 0; }
+  .pbq-drop-zone {
+    min-height:34px; min-width:140px; flex:0 0 160px;
+    background:var(--bg2); border:1px dashed var(--border); border-radius:3px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:0.7rem; color:var(--muted);
+    transition:all 0.15s; position:relative; cursor:pointer; padding:0.2rem 0.5rem;
+  }
+  .pbq-drop-zone.drag-over { border-color:var(--accent); background:rgba(0,212,255,0.06); }
+  .pbq-drop-zone.filled { border-style:solid; color:var(--text); }
+  .pbq-drop-zone.correct { border-color:var(--green)!important; background:rgba(0,245,160,0.08)!important; color:var(--green)!important; }
+  .pbq-drop-zone.wrong { border-color:var(--red)!important; background:rgba(255,71,87,0.08)!important; color:var(--red)!important; }
+  .pbq-drop-clear { position:absolute; right:4px; top:50%; transform:translateY(-50%); font-size:0.7rem; color:var(--muted); cursor:pointer; padding:0 3px; }
+  .pbq-drop-clear:hover { color:var(--red); }
+  .pbq-check-btn { background:var(--accent2); border:none; color:white; font-family:var(--mono); font-size:0.72rem; font-weight:600; letter-spacing:0.08em; padding:0.5rem 1.4rem; cursor:pointer; border-radius:3px; transition:all 0.2s; margin-top:0.75rem; }
+  .pbq-check-btn:hover { background:#e55e22; }
+  .pbq-check-btn:disabled { opacity:0.5; cursor:default; }
+  .pbq-result { margin-top:0.75rem; padding:0.75rem 1rem; border-radius:3px; font-family:var(--mono); font-size:0.75rem; display:none; }
+  .pbq-result.show { display:block; }
+  .pbq-result.correct { background:rgba(0,245,160,0.07); border:1px solid rgba(0,245,160,0.3); color:var(--green); }
+  .pbq-result.partial { background:rgba(255,211,42,0.07); border:1px solid rgba(255,211,42,0.3); color:var(--yellow); }
+
+  /* Firewall table PBQ */
+  .pbq-fw-table { width:100%; border-collapse:collapse; font-size:0.78rem; margin-bottom:1rem; }
+  .pbq-fw-table th { background:var(--bg2); border:1px solid var(--border); padding:0.5rem 0.75rem; font-family:var(--mono); font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; text-align:left; }
+  .pbq-fw-table td { border:1px solid var(--border); padding:0.4rem 0.6rem; vertical-align:middle; }
+  .pbq-fw-select { background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:0.72rem; padding:0.3rem 0.5rem; border-radius:3px; cursor:pointer; width:100%; }
+  .pbq-fw-select:focus { outline:none; border-color:var(--accent); }
+  .pbq-fw-select.correct { border-color:var(--green); color:var(--green); }
+  .pbq-fw-select.wrong { border-color:var(--red); color:var(--red); }
+
+  /* Mode selector */
+  .mode-selector { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
+  .mode-card {
+    background:var(--bg2); border:2px solid var(--border); border-radius:6px; padding:1.25rem;
+    cursor:pointer; transition:all 0.2s; text-align:center;
+  }
+  .mode-card:hover { border-color:var(--accent); background:rgba(0,212,255,0.04); }
+  .mode-card.active { border-color:var(--accent); background:rgba(0,212,255,0.07); }
+  .mode-card-title { font-family:var(--mono); font-size:0.85rem; color:var(--text); margin-bottom:0.4rem; }
+  .mode-card-sub { font-size:0.72rem; color:var(--muted); }
+  .random-options { display:flex; gap:0.75rem; justify-content:center; margin-top:1rem; flex-wrap:wrap; }
+  .rand-btn { background:var(--bg2); border:1px solid var(--border); color:var(--muted); font-family:var(--mono); font-size:0.78rem; padding:0.5rem 1.2rem; cursor:pointer; border-radius:3px; transition:all 0.2s; }
+  .rand-btn:hover, .rand-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(0,212,255,0.06); }
+  .rand-mode-section { display:none; margin-top:1rem; }
+  .rand-mode-section.show { display:block; }
+
   @media(max-width: 768px) {
     .layout { grid-template-columns: 1fr; }
     .sidebar { display: none; }
@@ -239,12 +301,31 @@
         <h1>PRACTICE EXAM A</h1>
         <div class="subtitle">CompTIA Security+ SY0-701 · Professor Messer</div>
         <div class="intro-stats">
-          <div class="intro-stat"><div class="n">90</div><div class="l">QUESTIONS</div></div>
-          <div class="intro-stat"><div class="n">90</div><div class="l">MINUTES</div></div>
+          <div class="intro-stat"><div class="n" id="statQ">90</div><div class="l">QUESTIONS</div></div>
+          <div class="intro-stat"><div class="n" id="statT">90</div><div class="l">MINUTES</div></div>
           <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
         </div>
-        <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem;">
-          This exam emulates the format and difficulty of the actual Security+ exam. Questions A1–A5 are performance-based questions shown for reference. Questions A6–A90 are graded multiple-choice questions.<br><br>
+        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+        <div class="mode-selector">
+          <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+            <div class="mode-card-title">📋 FULL EXAM</div>
+            <div class="mode-card-sub">All 90 questions · 90 min timer · PBQ + MCQ</div>
+          </div>
+          <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+            <div class="mode-card-title">🎲 RANDOM QUIZ</div>
+            <div class="mode-card-sub">Pick 10, 20, or 30 randomized questions</div>
+          </div>
+        </div>
+        <div class="rand-mode-section" id="randModeSection">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+          <div class="random-options">
+            <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+            <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+            <button class="rand-btn" id="randBtn30" onclick="setRandCount(30)">30 Questions</button>
+          </div>
+        </div>
+        <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;" id="modeDescription">
+          This exam emulates the format and difficulty of the actual Security+ exam. Questions A1–A5 are interactive performance-based questions. Questions A6–A90 are graded multiple-choice.<br><br>
           <strong style="color:var(--text)">Tip:</strong> Set a 90-minute timer to simulate real exam conditions.
         </p>
         <button class="start-btn" onclick="startExam()">START EXAM →</button>
@@ -255,68 +336,224 @@
     <div id="pbqSection" style="display:none">
       <div class="pbq-card">
         <h3>⚡ PERFORMANCE-BASED QUESTIONS (A1–A5)</h3>
-        <div style="font-size:0.85rem;color:var(--text);line-height:1.8;margin-bottom:1rem;">These interactive PBQ questions require matching, drag-and-drop, or configuration tasks on the real exam. Answers are summarized below for study purposes.</div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets or click to assign. Submit each question to check your work.</p>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:0.5rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">A1 — MATCH ATTACK TYPE</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Attacker obtains bank account number by calling the victim → <strong style="color:var(--green)">Vishing</strong></li>
-              <li>• Attacker accesses a database from a web browser → <strong style="color:var(--green)">Injection</strong></li>
-              <li>• Attacker intercepts all communication between client and server → <strong style="color:var(--green)">On-path</strong></li>
-              <li>• Multiple attackers overwhelm a web server → <strong style="color:var(--green)">DDoS</strong></li>
-              <li>• Attacker obtains a list of all login credentials used over 24 hours → <strong style="color:var(--green)">Keylogger</strong></li>
-            </ul>
+        <!-- A1: Match Attack Type -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.5rem;" id="pbq-a1">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">A1 — MATCH ATTACK TYPE</div>
+          <div class="pbq-scenario">Drag each attack type to match the correct description.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">ATTACK TYPES</div>
+                <div class="pbq-items" id="a1-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Vishing">Vishing</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Injection">Injection</div>
+                  <div class="pbq-source-item" draggable="true" data-val="On-path">On-path</div>
+                  <div class="pbq-source-item" draggable="true" data-val="DDoS">DDoS</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Keylogger">Keylogger</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DESCRIPTIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Obtains bank account number by calling the victim</div>
+                    <div class="pbq-drop-zone" data-answer="Vishing" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Accesses a database from a web browser</div>
+                    <div class="pbq-drop-zone" data-answer="Injection" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Intercepts all communication between client and server</div>
+                    <div class="pbq-drop-zone" data-answer="On-path" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Multiple attackers overwhelm a web server</div>
+                    <div class="pbq-drop-zone" data-answer="DDoS" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Obtains a list of all login credentials used over 24 hours</div>
+                    <div class="pbq-drop-zone" data-answer="Keylogger" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a1')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a1-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">A2 — BEST SECURITY CONTROL PER LOCATION</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Outside Building (Parking/Visitor drop-off) → <strong style="color:var(--green)">Fencing + Lighting</strong></li>
-              <li>• Reception / Building lobby → <strong style="color:var(--green)">Security guard + Access control vestibule</strong></li>
-              <li>• Data Center Door (entrance from inside) → <strong style="color:var(--green)">Access badge + Biometrics</strong></li>
-              <li>• Server Administration (console access) → <strong style="color:var(--green)">Authentication token</strong></li>
-            </ul>
+        <!-- A2: Security Control per Location -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a2">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">A2 — BEST SECURITY CONTROL PER LOCATION</div>
+          <div class="pbq-scenario">Match the best security control to each physical location.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">SECURITY CONTROLS</div>
+                <div class="pbq-items" id="a2-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Fencing + Lighting">Fencing + Lighting</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Guard + Vestibule">Guard + Vestibule</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Badge + Biometrics">Badge + Biometrics</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Auth Token">Auth Token</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">LOCATIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Outside Building (Parking/Visitor drop-off)</div>
+                    <div class="pbq-drop-zone" data-answer="Fencing + Lighting" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Reception / Building lobby</div>
+                    <div class="pbq-drop-zone" data-answer="Guard + Vestibule" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Data Center Door (entrance from inside)</div>
+                    <div class="pbq-drop-zone" data-answer="Badge + Biometrics" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Server Administration (console access)</div>
+                    <div class="pbq-drop-zone" data-answer="Auth Token" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a2')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a2-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">A3 — SECURITY CATEGORIES</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• A guard checks identification of visitors → <strong style="color:var(--green)">Operational</strong></li>
-              <li>• All returns approved by VP → <strong style="color:var(--green)">Managerial</strong></li>
-              <li>• Generator used during power outage → <strong style="color:var(--green)">Physical</strong></li>
-              <li>• Doors unlocked with access card → <strong style="color:var(--green)">Physical</strong></li>
-              <li>• System logs transferred to SIEM → <strong style="color:var(--green)">Technical</strong></li>
-            </ul>
+        <!-- A3: Security Categories -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a3">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">A3 — SECURITY CATEGORIES</div>
+          <div class="pbq-scenario">Classify each scenario into the correct security category.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">CATEGORIES</div>
+                <div class="pbq-items" id="a3-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Operational">Operational</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Managerial">Managerial</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Physical">Physical</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Technical">Technical</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">SCENARIOS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">A guard checks identification of visitors</div>
+                    <div class="pbq-drop-zone" data-answer="Operational" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">All returns approved by VP</div>
+                    <div class="pbq-drop-zone" data-answer="Managerial" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Generator used during power outage</div>
+                    <div class="pbq-drop-zone" data-answer="Physical" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">System logs transferred to SIEM</div>
+                    <div class="pbq-drop-zone" data-answer="Technical" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a3')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a3-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">A4 — AUTHENTICATION FACTORS</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Phone receives OTP text → <strong style="color:var(--green)">Something you have</strong></li>
-              <li>• Enter PIN at ATM → <strong style="color:var(--green)">Something you know</strong></li>
-              <li>• Fingerprint unlocks data center door → <strong style="color:var(--green)">Something you are</strong></li>
-              <li>• Login only works on VPN → <strong style="color:var(--green)">Somewhere you are</strong></li>
-            </ul>
+        <!-- A4: Authentication Factors -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a4">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">A4 — AUTHENTICATION FACTORS</div>
+          <div class="pbq-scenario">Match each authentication example to the correct factor type.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">FACTOR TYPES</div>
+                <div class="pbq-items" id="a4-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Something you have">Something you have</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Something you know">Something you know</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Something you are">Something you are</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Somewhere you are">Somewhere you are</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">EXAMPLES</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Phone receives OTP text</div>
+                    <div class="pbq-drop-zone" data-answer="Something you have" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Enter PIN at ATM</div>
+                    <div class="pbq-drop-zone" data-answer="Something you know" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Fingerprint unlocks data center door</div>
+                    <div class="pbq-drop-zone" data-answer="Something you are" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Login only works on VPN</div>
+                    <div class="pbq-drop-zone" data-answer="Somewhere you are" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a4')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a4-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">A5 — FIREWALL RULES CONFIGURATION</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Rule 1: Web Server → Database Server, TCP, Port 80 → <strong style="color:var(--red)">Block</strong></li>
-              <li>• Rule 2: Storage Server → Video Server, TCP, Port 443 → <strong style="color:var(--green)">Allow</strong></li>
-              <li>• Rule 3: Management Server → File Server, TCP, Port 22 → <strong style="color:var(--green)">Allow</strong></li>
-            </ul>
+        <!-- A5: Firewall Rules -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a5">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">A5 — FIREWALL RULES CONFIGURATION</div>
+          <div class="pbq-scenario">For each firewall rule, select whether to <strong style="color:var(--green)">Allow</strong> or <strong style="color:var(--red)">Block</strong> the traffic.</div>
+          <div class="pbq-interactive">
+            <table class="pbq-fw-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>SOURCE</th><th>DESTINATION</th><th>PROTO</th><th>PORT</th><th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">1</td>
+                  <td>Web Server</td><td>Database Server</td><td>TCP</td><td>80</td>
+                  <td><select class="pbq-fw-select" id="fw-rule-1" data-answer="Block">
+                    <option value="">-- Select --</option>
+                    <option>Allow</option><option>Block</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">2</td>
+                  <td>Storage Server</td><td>Video Server</td><td>TCP</td><td>443</td>
+                  <td><select class="pbq-fw-select" id="fw-rule-2" data-answer="Allow">
+                    <option value="">-- Select --</option>
+                    <option>Allow</option><option>Block</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">3</td>
+                  <td>Management Server</td><td>File Server</td><td>TCP</td><td>22</td>
+                  <td><select class="pbq-fw-select" id="fw-rule-3" data-answer="Allow">
+                    <option value="">-- Select --</option>
+                    <option>Allow</option><option>Block</option>
+                  </select></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="pbq-check-btn" onclick="checkFirewall()">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a5-result"></div>
           </div>
         </div>
+
       </div>
       <div style="text-align:center;margin-top:1rem;">
         <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE →</button>
@@ -350,6 +587,176 @@
 </div>
 
 <script>
+// ─── Mode & Random Quiz State ───────────────────────────────────────────────
+let examMode = 'full'; // 'full' | 'random'
+let randCount = 10;
+let activeQuestions = []; // the subset used in current exam
+
+function setMode(mode) {
+  examMode = mode;
+  document.getElementById('modeFullCard').classList.toggle('active', mode === 'full');
+  document.getElementById('modeRandCard').classList.toggle('active', mode === 'random');
+  const randSection = document.getElementById('randModeSection');
+  randSection.classList.toggle('show', mode === 'random');
+  if (mode === 'full') {
+    document.getElementById('statQ').textContent = '90';
+    document.getElementById('statT').textContent = '90';
+    document.getElementById('modeDescription').innerHTML = 'This exam emulates the format and difficulty of the actual Security+ exam. Questions A1–A5 are interactive performance-based questions. Questions A6–A90 are graded multiple-choice.<br><br><strong style="color:var(--text)">Tip:</strong> Set a 90-minute timer to simulate real exam conditions.';
+  } else {
+    updateRandDescription();
+  }
+}
+
+function setRandCount(n) {
+  randCount = n;
+  ['10','20','30'].forEach(x => document.getElementById('randBtn'+x).classList.remove('active'));
+  document.getElementById('randBtn'+n).classList.add('active');
+  updateRandDescription();
+}
+
+function updateRandDescription() {
+  document.getElementById('statQ').textContent = randCount;
+  document.getElementById('statT').textContent = Math.round(randCount * 1.2);
+  document.getElementById('modeDescription').innerHTML = `<strong style="color:var(--text)">${randCount} randomly selected questions</strong> from the full 85-question MCQ pool. Questions are shuffled on every attempt — no two quizzes are alike.<br><br><strong style="color:var(--text)">Tip:</strong> Great for quick review or targeted practice.`;
+}
+
+// ─── PBQ Drag & Drop ─────────────────────────────────────────────────────────
+let draggedValue = null;
+let draggedEl = null;
+let clickSelectMode = null; // currently selected source for click-assign
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDragDrop();
+});
+
+function initDragDrop() {
+  document.querySelectorAll('.pbq-source-item').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      draggedValue = el.dataset.val;
+      draggedEl = el;
+      setTimeout(() => el.classList.add('dragging'), 0);
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      draggedEl = null;
+    });
+    el.addEventListener('click', () => handleSourceClick(el));
+  });
+
+  document.querySelectorAll('.pbq-drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      if (draggedValue) assignToZone(zone, draggedValue);
+    });
+  });
+}
+
+function handleSourceClick(el) {
+  if (el.classList.contains('used')) return;
+  const pbq = el.closest('[id^="pbq-a"]').id.replace('pbq-','');
+  // deselect all in same group
+  document.querySelectorAll(`#pbq-${pbq} .pbq-source-item`).forEach(s => s.style.outline='');
+  if (clickSelectMode === el.dataset.val) {
+    clickSelectMode = null;
+  } else {
+    clickSelectMode = el.dataset.val;
+    el.style.outline = '2px solid var(--accent)';
+  }
+}
+
+function handleDropZoneClick(zone) {
+  if (zone.classList.contains('correct') || zone.classList.contains('wrong')) return;
+  if (clickSelectMode) {
+    assignToZone(zone, clickSelectMode);
+    // clear outline on source
+    document.querySelectorAll('.pbq-source-item').forEach(s => s.style.outline='');
+    clickSelectMode = null;
+  }
+}
+
+function assignToZone(zone, val) {
+  // if zone already filled, return old value to sources
+  const old = zone.dataset.current;
+  if (old) {
+    const src = document.querySelector(`.pbq-source-item[data-val="${old}"]`);
+    if (src) src.classList.remove('used');
+  }
+  // mark source as used
+  const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`);
+  if (src) src.classList.add('used');
+  zone.dataset.current = val;
+  const clear = zone.querySelector('.pbq-drop-clear');
+  zone.classList.add('filled');
+  zone.childNodes[0].textContent = val;
+  if (clear) clear.style.display = 'block';
+}
+
+function clearDrop(e, clearBtn) {
+  e.stopPropagation();
+  const zone = clearBtn.parentElement;
+  const val = zone.dataset.current;
+  if (val) {
+    const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`);
+    if (src) src.classList.remove('used');
+  }
+  zone.dataset.current = '';
+  zone.classList.remove('filled');
+  zone.childNodes[0].textContent = 'Drop here';
+  clearBtn.style.display = 'none';
+}
+
+function checkPBQ(id) {
+  const zones = document.querySelectorAll(`.pbq-drop-zone[data-pbq="${id}"]`);
+  let correct = 0, total = zones.length;
+  zones.forEach(zone => {
+    const ans = zone.dataset.answer;
+    const cur = zone.dataset.current;
+    if (!cur) return;
+    if (cur === ans) { zone.classList.add('correct'); correct++; }
+    else { zone.classList.add('wrong'); }
+  });
+  const result = document.getElementById(`pbq-${id}-result`);
+  result.classList.add('show');
+  if (correct === total && total > 0) {
+    result.className = 'pbq-result show correct';
+    result.textContent = `✓ PERFECT — All ${total} matched correctly!`;
+  } else {
+    result.className = 'pbq-result show partial';
+    result.textContent = `${correct}/${total} correct — Review highlighted zones and try again.`;
+  }
+  // disable check button
+  document.querySelector(`#pbq-${id} .pbq-check-btn`).disabled = true;
+}
+
+function checkFirewall() {
+  const rules = [
+    { id:'fw-rule-1', answer:'Block' },
+    { id:'fw-rule-2', answer:'Allow' },
+    { id:'fw-rule-3', answer:'Allow' }
+  ];
+  let correct = 0;
+  rules.forEach(r => {
+    const sel = document.getElementById(r.id);
+    if (sel.value === r.answer) { sel.classList.add('correct'); correct++; }
+    else if (sel.value) { sel.classList.add('wrong'); }
+    sel.disabled = true;
+  });
+  const result = document.getElementById('pbq-a5-result');
+  result.classList.add('show');
+  if (correct === 3) {
+    result.className = 'pbq-result show correct';
+    result.textContent = '✓ PERFECT — All 3 firewall rules configured correctly!';
+  } else {
+    result.className = 'pbq-result show partial';
+    result.textContent = `${correct}/3 correct — Review highlighted rules.`;
+  }
+  document.querySelector('#pbq-a5 .pbq-check-btn').disabled = true;
+}
+
+// ─── Questions data ──────────────────────────────────────────────────────────
 const questions = [
   {id:'A6',type:'mc',text:'A company has hired a third-party to gather information about the company\'s servers and data. This third-party will not have direct access to the company\'s internal network, but they can gather information from any other source. Which of the following would <strong>BEST</strong> describe this approach?',options:['Vulnerability scanning','Passive reconnaissance','Supply chain analysis','Regulatory audit'],answer:[1]},
   {id:'A7',type:'mc',text:'A company\'s email server has received an email from a third-party, but the origination server does not match the list of authorized devices. Which of the following would determine the disposition of this message?',options:['SPF','NAC','DMARC','DKIM'],answer:[2]},
@@ -440,8 +847,8 @@ const questions = [
 
 const state = {
   current: 0,
-  userAnswers: new Array(questions.length).fill(null),
-  submitted: new Array(questions.length).fill(false),
+  userAnswers: [],
+  submitted: [],
   timerSeconds: 90 * 60,
   timerInterval: null,
   timerRunning: false
@@ -476,7 +883,7 @@ function toggleTimer() {
 function buildGrid() {
   const grid = document.getElementById('qGrid');
   grid.innerHTML = '';
-  questions.forEach((q, i) => {
+  activeQuestions.forEach((q, i) => {
     const dot = document.createElement('div');
     dot.className = 'q-dot';
     dot.textContent = i + 1;
@@ -493,19 +900,19 @@ function updateGrid() {
     if (i === state.current) dot.classList.add('active');
     if (state.submitted[i]) {
       const ua = state.userAnswers[i] || [];
-      dot.classList.add(arrEq(ua.slice().sort(), questions[i].answer.slice().sort()) ? 'correct' : 'wrong');
+      dot.classList.add(arrEq(ua.slice().sort(), activeQuestions[i].answer.slice().sort()) ? 'correct' : 'wrong');
     } else if (state.userAnswers[i] && state.userAnswers[i].length > 0) {
       dot.classList.add('answered');
     }
   });
   const answered = state.userAnswers.filter(a => a && a.length > 0).length;
-  document.getElementById('progressBar').style.width = `${(answered / questions.length) * 100}%`;
+  document.getElementById('progressBar').style.width = `${(answered / activeQuestions.length) * 100}%`;
 }
 
 function arrEq(a, b) { return a.length === b.length && a.every((v,i) => v === b[i]); }
 
 function renderQuestion(idx) {
-  const q = questions[idx];
+  const q = activeQuestions[idx];
   const ua = state.userAnswers[idx] || [];
   const submitted = state.submitted[idx];
   const letters = ['A','B','C','D','E','F','G'];
@@ -539,10 +946,10 @@ function renderQuestion(idx) {
     </div>`;
   }
 
-  const isLast = idx === questions.length - 1;
+  const isLast = idx === activeQuestions.length - 1;
   document.getElementById('questionContainer').innerHTML = `
     <div class="q-header">
-      <span class="q-num">QUESTION ${idx+1} OF ${questions.length} · ${q.id}</span>${tag}
+      <span class="q-num">QUESTION ${idx+1} OF ${activeQuestions.length} · ${q.id}</span>${tag}
     </div>
     <div class="question-card ${submitted?(arrEq((ua||[]).slice().sort(),q.answer.slice().sort())?'answered-correct':'answered-wrong'):''}">
       <div class="question-text">${q.text}</div>
@@ -563,7 +970,7 @@ function renderQuestion(idx) {
 function selectOption(oi) {
   const idx = state.current;
   if (state.submitted[idx]) return;
-  const q = questions[idx];
+  const q = activeQuestions[idx];
   let ua = state.userAnswers[idx] ? [...state.userAnswers[idx]] : [];
   if (q.type === 'multi') {
     ua = ua.includes(oi) ? ua.filter(x => x !== oi) : [...ua, oi];
@@ -581,7 +988,7 @@ function submitAnswer() {
 }
 
 function goTo(idx) {
-  if (idx < 0 || idx >= questions.length) return;
+  if (idx < 0 || idx >= activeQuestions.length) return;
   state.current = idx;
   renderQuestion(idx);
 }
@@ -593,7 +1000,7 @@ function updateScorePanel() {
   let correct = 0;
   state.submitted.forEach((s, i) => {
     if (!s) return;
-    if (arrEq((state.userAnswers[i]||[]).slice().sort(), questions[i].answer.slice().sort())) correct++;
+    if (arrEq((state.userAnswers[i]||[]).slice().sort(), activeQuestions[i].answer.slice().sort())) correct++;
   });
   document.getElementById('scoreBig').textContent = `${Math.round((correct/done)*100)}%`;
   document.getElementById('scoreCorrect').textContent = correct;
@@ -601,17 +1008,46 @@ function updateScorePanel() {
 }
 
 function startExam() {
+  if (examMode === 'random') {
+    // Shuffle and pick N questions
+    const pool = [...questions];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    activeQuestions = pool.slice(0, randCount);
+    const mins = Math.round(randCount * 1.2);
+    state.timerSeconds = mins * 60;
+    updateTimerDisplay();
+  } else {
+    activeQuestions = questions;
+    state.timerSeconds = 90 * 60;
+    updateTimerDisplay();
+  }
+  state.userAnswers = new Array(activeQuestions.length).fill(null);
+  state.submitted = new Array(activeQuestions.length).fill(false);
+  state.current = 0;
+
   document.getElementById('introSection').style.display = 'none';
-  document.getElementById('pbqSection').style.display = 'block';
+  if (examMode === 'full') {
+    document.getElementById('pbqSection').style.display = 'block';
+  } else {
+    document.getElementById('pbqSection').style.display = 'none';
+    document.getElementById('mcqSection').style.display = 'block';
+    buildGrid();
+    renderQuestion(0);
+  }
   document.getElementById('finishBtn').style.display = 'block';
-  buildGrid();
   startTimer();
 }
 
 function showMCQ() {
   document.getElementById('pbqSection').style.display = 'none';
   document.getElementById('mcqSection').style.display = 'block';
+  state.userAnswers = new Array(activeQuestions.length).fill(null);
+  state.submitted = new Array(activeQuestions.length).fill(false);
   state.current = 0;
+  buildGrid();
   renderQuestion(0);
 }
 
@@ -624,17 +1060,17 @@ function showResults() {
   document.getElementById('resultsSection').style.display = 'block';
 
   let correct = 0, wrong = 0, skipped = 0;
-  questions.forEach((q, i) => {
+  activeQuestions.forEach((q, i) => {
     if (!state.submitted[i] || !(state.userAnswers[i]||[]).length) { skipped++; return; }
     if (arrEq((state.userAnswers[i]||[]).slice().sort(), q.answer.slice().sort())) correct++;
     else wrong++;
   });
 
-  const pct = Math.round((correct / questions.length) * 100);
+  const pct = Math.round((correct / activeQuestions.length) * 100);
   const pass = pct >= 70;
   document.getElementById('finalScore').textContent = `${pct}%`;
   document.getElementById('finalScore').className = `final-score ${pass ? 'pass' : 'fail'}`;
-  document.getElementById('finalPct').textContent = `${correct}/${questions.length} Correct`;
+  document.getElementById('finalPct').textContent = `${correct}/${activeQuestions.length} Correct`;
   document.getElementById('passFailMsg').innerHTML = pass
     ? `<span style="color:var(--green)">✓ PASS — You met the 70% threshold!</span>`
     : `<span style="color:var(--red)">✗ BELOW PASSING — Review your weak areas and try again.</span>`;
