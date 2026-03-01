@@ -1,0 +1,3311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Labs | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Courier+Prime:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════════════
+   SHARED HUB STYLES
+   ════════════════════════════════════════════════ */
+:root {
+  --bg: #0b0e17;
+  --bg2: #111520;
+  --bg3: #181d2e;
+  --border: #1f2740;
+  --accent: #00d4ff;
+  --accent2: #ff6b2b;
+  --green: #00f5a0;
+  --red: #ff4757;
+  --yellow: #ffd32a;
+  --purple: #b47aff;
+  --text: #d0d8f0;
+  --muted: #5a6a8a;
+  --font: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HUB HEADER ── */
+.hub-header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.hub-logo {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+}
+.hub-logo span { color: var(--accent); }
+
+.hub-back {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.hub-back:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ── HUB TABS ── */
+.hub-tabs {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 0 2rem;
+}
+
+.hub-tab {
+  padding: 1rem 1.75rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.hub-tab:hover { color: var(--text); }
+.hub-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── HUB SECTIONS ── */
+.hub-section { display: none; flex: 1; }
+.hub-section.active { display: block; }
+
+/* ════════════════════════════════════════════════
+   PBQ SIMULATOR STYLES
+   ════════════════════════════════════════════════ */
+
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --purple: #b47aff;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER (matches index.html) ── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .score-pills {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .score-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,245,160,0.08));
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+  }
+  .score-pill .val { color: var(--accent); font-weight: 600; }
+  .score-pill .lbl { color: var(--muted); }
+
+  /* ── MAIN ── */
+  main { flex: 1; padding: 2rem; }
+
+  .container {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2.5rem;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  /* ── NAV TABS (matches site style exactly) ── */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .nav-tab {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── SCENARIO CARD (matches stat-card / leaderboard-section style) ── */
+  .scenario-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: border-color 0.25s;
+  }
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(90deg, var(--accent), var(--green), transparent);
+  }
+
+  .scenario-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+  }
+
+  .scenario-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .scenario-desc strong { color: var(--text); }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .info-box .info-label {
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .info-box p { color: var(--text); }
+  .info-box span { color: var(--accent); }
+
+  /* ── TWO-COL DRAG LAYOUT ── */
+  .drag-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .col-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .col-label.accent { color: var(--accent); }
+  .col-label.purple { color: var(--purple); }
+
+  .drop-zone {
+    min-height: 160px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.2s;
+  }
+  .drop-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.04);
+  }
+
+  .drop-hint {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-family: var(--mono);
+    text-align: center;
+    padding: 1.5rem;
+    font-style: italic;
+  }
+
+  /* ── DRAGGABLE ITEMS ── */
+  .drag-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    user-select: none;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .drag-item:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+  .drag-item.dragging { opacity: 0.35; }
+  .drag-item .handle { color: var(--muted); font-size: 0.9rem; flex-shrink: 0; }
+
+  /* Step number badge inside drop zones */
+  .step-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .btn-primary {
+    padding: 0.65rem 1.75rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,245,160,0.1));
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(0,245,160,0.18));
+    box-shadow: 0 0 18px rgba(0,212,255,0.18);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    padding: 0.65rem 1.25rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    animation: fadeUp 0.25s ease;
+  }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: translateY(0); } }
+  .feedback.show { display: block; }
+  .feedback.correct {
+    background: rgba(0,245,160,0.07);
+    border: 1px solid rgba(0,245,160,0.25);
+    color: var(--green);
+  }
+  .feedback.incorrect {
+    background: rgba(255,71,87,0.07);
+    border: 1px solid rgba(255,71,87,0.25);
+    color: var(--red);
+  }
+  .feedback strong { font-weight: 600; }
+  .feedback em { font-style: italic; color: var(--yellow); }
+
+  /* ── ACL SPECIFIC ── */
+  .acl-rule-text em { color: var(--green); font-style: normal; }
+  .acl-rule-text em.deny { color: var(--red); }
+  .acl-rule-text em.warn { color: var(--yellow); }
+  .acl-rule-text em.purple { color: var(--purple); }
+
+  /* ── NETWORK DIAGRAM ── */
+  .network-map {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .net-zone {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    min-height: 72px;
+    transition: all 0.2s;
+  }
+  .net-zone.dragover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+
+  .net-zone-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .net-zone.zone-internet { border-color: rgba(255,71,87,0.2); }
+  .net-zone.zone-internet .net-zone-label { color: var(--red); }
+  .net-zone.zone-dmz { border-color: rgba(255,211,42,0.2); }
+  .net-zone.zone-dmz .net-zone-label { color: var(--yellow); }
+  .net-zone.zone-internal { border-color: rgba(0,245,160,0.2); }
+  .net-zone.zone-internal .net-zone-label { color: var(--green); }
+
+  .zone-divider {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    padding: 2px 0;
+  }
+
+  .device-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .device-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .device-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .device-chip.dragging { opacity: 0.35; }
+
+  /* ── LOG ANALYSIS ── */
+  .log-terminal {
+    background: #060910;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  .log-terminal::-webkit-scrollbar { width: 4px; }
+  .log-terminal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .log-line { display: flex; gap: 1rem; }
+  .log-time { color: var(--muted); flex-shrink: 0; min-width: 72px; }
+  .log-src { color: var(--purple); flex-shrink: 0; min-width: 115px; }
+  .log-msg { color: var(--text); }
+  .log-msg.warn { color: var(--yellow); }
+  .log-msg.err { color: var(--red); }
+  .log-msg.ok { color: var(--green); }
+
+  .log-q-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .log-choices { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .log-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.87rem;
+    transition: all 0.2s;
+  }
+  .log-choice:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .log-choice.selected { border-color: var(--accent); background: rgba(0,212,255,0.07); color: var(--accent); }
+  .log-choice.correct-ans { border-color: var(--green); background: rgba(0,245,160,0.07); color: var(--green); }
+  .log-choice.wrong-ans { border-color: var(--red); background: rgba(255,71,87,0.07); color: var(--red); }
+
+  .choice-letter {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* ── INCIDENT RESPONSE TIMELINE ── */
+  .ir-timeline-wrap {
+    position: relative;
+  }
+  .ir-timeline-wrap::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 20px; bottom: 20px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), rgba(0,212,255,0.1));
+    pointer-events: none;
+  }
+
+  .ir-timeline .drag-item {
+    margin-left: 38px;
+    position: relative;
+  }
+  .ir-timeline .drag-item::before {
+    content: attr(data-num);
+    position: absolute;
+    left: -30px;
+    width: 18px; height: 18px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: var(--mono);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .pbq-progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+  }
+  .pbq-progress-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .pbq-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .pbq-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .pbq-progress-score {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 680px) {
+    .drag-cols { grid-template-columns: 1fr; }
+    header { padding: 0 1rem; }
+    main { padding: 1.25rem; }
+    .score-pills { gap: 0.4rem; }
+    .score-pill .lbl { display: none; }
+  }
+
+  /* ── PORT BUCKETS ── */
+  .port-bucket {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    min-height: 42px;
+    transition: all 0.2s;
+  }
+  .port-bucket.dragover { border-color: var(--accent); background: rgba(0,212,255,0.05); }
+  .port-num {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 44px;
+    flex-shrink: 0;
+  }
+  .port-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+  .port-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; flex: 1; }
+
+  /* ── CRYPTO BUCKETS ── */
+  .crypto-bucket {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    min-height: 70px;
+    transition: all 0.2s;
+  }
+  .crypto-bucket.dragover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .crypto-bucket-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── VULN CARDS ── */
+  .vuln-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    cursor: grab;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .vuln-card:hover { border-color: var(--accent); transform: translateX(2px); }
+  .vuln-card.dragging { opacity: 0.35; }
+  .vuln-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
+  .vuln-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .vuln-detail { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+  .cvss-badge {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .cvss-badge.critical { background: rgba(255,71,87,0.2); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
+  .cvss-badge.high { background: rgba(255,107,43,0.2); color: var(--accent2); border: 1px solid rgba(255,107,43,0.3); }
+  .cvss-badge.medium { background: rgba(255,211,42,0.2); color: var(--yellow); border: 1px solid rgba(255,211,42,0.3); }
+  .cvss-badge.low { background: rgba(0,245,160,0.1); color: var(--green); border: 1px solid rgba(0,245,160,0.2); }
+
+  /* Vuln queue numbering (reuse IR timeline style) */
+  #vuln-queue .vuln-card { margin-left: 38px; position: relative; }
+  #vuln-queue .vuln-card::before {
+    content: attr(data-num);
+    position: absolute;
+    left: -30px;
+    width: 18px; height: 18px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 600;
+    font-family: var(--mono);
+  }
+
+  /* ── IAM ROLE BOXES ── */
+  .iam-role-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    min-height: 90px;
+    transition: all 0.2s;
+  }
+  .iam-role-box.dragover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .iam-role-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+
+
+/* ════════════════════════════════════════════════
+   CYBER SIMULATIONS STYLES (namespaced via wrapper)
+   ════════════════════════════════════════════════ */
+#section-sim {
+  --bg: #0a0e1a;
+  --bg2: #0f1419;
+  --bg3: #151b26;
+  --terminal-bg: #000000;
+  --border: #1a2332;
+  --accent: #00ff9f;
+  --accent2: #00d4ff;
+  --warning: #ffaa00;
+  --danger: #ff3366;
+  --success: #00ff9f;
+  --text: #e0e6f0;
+  --muted: #6b7d9f;
+  font-family: 'Courier Prime', monospace;
+}
+
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0f1419;
+    --bg3: #151b26;
+    --terminal-bg: #000000;
+    --border: #1a2332;
+    --accent: #00ff9f;
+    --accent2: #00d4ff;
+    --warning: #ffaa00;
+    --danger: #ff3366;
+    --success: #00ff9f;
+    --text: #e0e6f0;
+    --muted: #6b7d9f;
+    --code-green: #00ff9f;
+    --code-cyan: #00d4ff;
+    --code-yellow: #ffaa00;
+    --font: 'Courier Prime', monospace;
+    --mono: 'Share Tech Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body { 
+    background: var(--bg);
+    color: var(--text); 
+    font-family: var(--font); 
+    min-height: 100vh; 
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      linear-gradient(45deg, transparent 48%, rgba(0, 255, 159, 0.03) 50%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(0, 212, 255, 0.03) 50%, transparent 52%);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridMove 20s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 30px 30px, -30px -30px; }
+  }
+
+  header {
+    background: rgba(15, 20, 25, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--accent);
+    padding: 0 2rem;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.1);
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logo::before {
+    content: '▶';
+    color: var(--accent);
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .intro-section {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .scenario-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .scenario-card {
+    background: linear-gradient(135deg, var(--bg2), var(--bg3));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 159, 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .scenario-card:hover::before {
+    left: 100%;
+  }
+
+  .scenario-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 255, 159, 0.2);
+  }
+
+  .scenario-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: grayscale(0.5);
+  }
+
+  .scenario-card:hover .scenario-icon {
+    filter: grayscale(0);
+  }
+
+  .scenario-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+  }
+
+  .scenario-difficulty {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: var(--mono);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .difficulty-easy { background: rgba(0, 255, 159, 0.2); color: var(--success); }
+  .difficulty-medium { background: rgba(255, 170, 0, 0.2); color: var(--warning); }
+  .difficulty-hard { background: rgba(255, 51, 102, 0.2); color: var(--danger); }
+
+  .scenario-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Simulation Interface */
+  .simulation-container {
+    display: none;
+  }
+
+  .simulation-container.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .simulation-header {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .sim-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+  }
+
+  .sim-context {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .terminal-window {
+    background: var(--terminal-bg);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 255, 159, 0.3);
+  }
+
+  .terminal-header {
+    background: var(--bg3);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .terminal-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .dot-red { background: var(--danger); }
+  .dot-yellow { background: var(--warning); }
+  .dot-green { background: var(--success); }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .terminal-content {
+    padding: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--code-green);
+    min-height: 200px;
+  }
+
+  .terminal-line {
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: typeLine 0.3s ease-out forwards;
+  }
+
+  @keyframes typeLine {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .terminal-prompt {
+    color: var(--accent);
+  }
+
+  .terminal-command {
+    color: var(--code-cyan);
+  }
+
+  .terminal-output {
+    color: var(--text);
+  }
+
+  .terminal-error {
+    color: var(--danger);
+  }
+
+  .terminal-warning {
+    color: var(--warning);
+  }
+
+  .email-window {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+
+  .email-header {
+    background: var(--bg3);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .email-field {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .email-label {
+    color: var(--muted);
+    min-width: 80px;
+  }
+
+  .email-value {
+    color: var(--text);
+  }
+
+  .email-suspicious {
+    color: var(--danger);
+    font-weight: 700;
+  }
+
+  .email-body {
+    padding: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .question-section {
+    background: var(--bg2);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .question-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+
+  .choices-container {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .choice-btn {
+    background: var(--bg3);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .choice-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .choice-btn:hover {
+    border-color: var(--accent);
+    transform: translateX(5px);
+  }
+
+  .choice-btn:hover::before {
+    transform: scaleY(1);
+  }
+
+  .choice-letter {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 4px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    margin-right: 1rem;
+    font-family: var(--mono);
+  }
+
+  .choice-text {
+    color: var(--text);
+    font-size: 1rem;
+  }
+
+  .choice-btn.correct {
+    border-color: var(--success);
+    background: rgba(0, 255, 159, 0.1);
+  }
+
+  .choice-btn.incorrect {
+    border-color: var(--danger);
+    background: rgba(255, 51, 102, 0.1);
+  }
+
+  .choice-btn.correct .choice-letter {
+    background: var(--success);
+  }
+
+  .choice-btn.incorrect .choice-letter {
+    background: var(--danger);
+  }
+
+  .feedback-section {
+    background: var(--bg3);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    display: none;
+  }
+
+  .feedback-section.show {
+    display: block;
+    animation: slideIn 0.5s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .feedback-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .feedback-title.correct {
+    color: var(--success);
+  }
+
+  .feedback-title.incorrect {
+    color: var(--danger);
+  }
+
+  .feedback-text {
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .feedback-explanation {
+    background: var(--bg2);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .explanation-title {
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+  }
+
+  .explanation-text {
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+  }
+
+  .btn {
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-family: var(--font);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--accent);
+    border: 2px solid var(--accent);
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .progress-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+  }
+
+  .progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.3s ease;
+  }
+
+  .progress-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(0, 255, 159, 0.5);
+  }
+
+  .progress-dot.completed {
+    background: var(--success);
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .scenario-selector {
+      grid-template-columns: 1fr;
+    }
+
+    header {
+      padding: 0 1rem;
+    }
+
+    main {
+      padding: 1rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+  }
+
+
+/* ════════════════════════════════════════════════
+   BRANCHING SCENARIOS STYLES
+   ════════════════════════════════════════════════ */
+#section-branch {
+  --bg: #080b12;
+  --bg2: #0d1017;
+  --bg3: #121620;
+  --bg4: #171c28;
+  --border: #1a2135;
+  --accent: #00d4ff;
+  --green: #00f5a0;
+  --red: #ff4757;
+  --yellow: #ffd32a;
+  --orange: #ff6b35;
+  --text: #cdd5e8;
+  --muted: #4a5878;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+  :root {
+    --bg:      #080b12;
+    --bg2:     #0d1017;
+    --bg3:     #121620;
+    --bg4:     #171c28;
+    --border:  #1a2135;
+    --accent:  #00d4ff;
+    --green:   #00f5a0;
+    --red:     #ff4757;
+    --yellow:  #ffd32a;
+    --orange:  #ff6b35;
+    --text:    #cdd5e8;
+    --muted:   #4a5878;
+    --font:    'IBM Plex Sans', sans-serif;
+    --mono:    'IBM Plex Mono', monospace;
+    --display: 'Rajdhani', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--muted); font-weight: 400; }
+
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.45rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    transition: all 0.2s;
+  }
+
+  .home-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* MAIN LAYOUT */
+  #scenarioSelect { display: block; }
+  #gameArea       { display: none; }
+  #debriefArea    { display: none; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+  /* ── SCENARIO SELECT ── */
+  .select-header { text-align: center; margin-bottom: 3rem; }
+
+  .select-header h1 {
+    font-family: var(--display);
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .select-header h1 span { color: var(--accent); }
+
+  .select-header p { color: var(--muted); font-size: 1rem; font-family: var(--mono); }
+
+  .scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .scenario-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom;
+  }
+
+  .scenario-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,212,255,0.12); }
+  .scenario-card:hover::before { transform: scaleY(1); }
+
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; }
+  .card-icon { font-size: 2.5rem; }
+  .card-diff {
+    font-family: var(--mono); font-size: 0.7rem; padding: 0.25rem 0.6rem;
+    border-radius: 3px; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .diff-hard { background: rgba(255,71,87,0.15); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
+  .diff-medium { background: rgba(255,211,42,0.15); color: var(--yellow); border: 1px solid rgba(255,211,42,0.3); }
+
+  .card-title { font-family: var(--display); font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; letter-spacing: 0.05em; }
+  .card-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); margin-bottom: 1rem; }
+  .card-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.5rem; }
+
+  .card-meta { display: flex; gap: 1.5rem; }
+  .meta-item { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+  .meta-item span { color: var(--text); }
+
+  .card-cta {
+    margin-top: 1.5rem; font-family: var(--mono); font-size: 0.8rem;
+    color: var(--accent); opacity: 0; transition: opacity 0.3s;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .scenario-card:hover .card-cta { opacity: 1; }
+
+  .coming-soon {
+    opacity: 0.4; cursor: not-allowed;
+  }
+  .coming-soon:hover { transform: none; border-color: var(--border); box-shadow: none; }
+  .coming-soon::before { display: none; }
+
+  /* ── GAME AREA ── */
+  .game-layout { display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start; }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; position: sticky; top: 80px;
+  }
+
+  .sidebar-header {
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  .scenario-info { padding: 1.25rem; border-bottom: 1px solid var(--border); }
+  .info-scenario-title { font-family: var(--display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+  .info-scenario-sub { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); }
+
+  .threat-section { padding: 1.25rem; border-bottom: 1px solid var(--border); }
+  .threat-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+
+  .threat-bar-wrap { background: var(--bg3); border-radius: 3px; height: 8px; overflow: hidden; margin-bottom: 0.5rem; }
+  .threat-bar { height: 100%; border-radius: 3px; transition: all 0.8s ease; background: var(--green); }
+
+  .threat-text { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; }
+
+  .score-section { padding: 1.25rem; border-bottom: 1px solid var(--border); }
+  .score-num { font-family: var(--display); font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .score-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.25rem; }
+
+  .step-tracker { padding: 1.25rem; }
+  .step-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+  .steps-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .step-dot {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+  }
+  .step-dot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: all 0.3s; }
+  .step-dot.done .dot { background: var(--green); }
+  .step-dot.active .dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .step-dot.done { color: var(--text); }
+  .step-dot.active { color: var(--accent); }
+
+  /* Main game panel */
+  .game-panel { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  /* Timestamp bar */
+  .timestamp-bar {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.75rem 1.25rem;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono); font-size: 0.8rem;
+  }
+  .ts-time { color: var(--accent); font-weight: 600; }
+  .ts-role { color: var(--muted); }
+  .ts-location { color: var(--muted); }
+
+  /* Situation box */
+  .situation-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .sit-header {
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+  }
+  .sit-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .sit-divider { flex: 1; height: 1px; background: var(--border); }
+
+  .sit-body { padding: 1.5rem; font-size: 1rem; line-height: 1.85; color: var(--text); }
+
+  /* Consequence banner */
+  .consequence-banner {
+    border-radius: 6px; padding: 1rem 1.25rem;
+    font-size: 0.95rem; line-height: 1.6; display: none;
+    border-left: 4px solid;
+    animation: slideDown 0.4s ease-out;
+  }
+  .consequence-banner.show { display: block; }
+  .consequence-banner.optimal { border-color: var(--green); background: rgba(0,245,160,0.08); }
+  .consequence-banner.partial  { border-color: var(--yellow); background: rgba(255,211,42,0.08); }
+  .consequence-banner.bad      { border-color: var(--red); background: rgba(255,71,87,0.08); }
+
+  .banner-tag {
+    font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;
+  }
+  .optimal .banner-tag { color: var(--green); }
+  .partial  .banner-tag { color: var(--yellow); }
+  .bad      .banner-tag { color: var(--red); }
+
+  @keyframes slideDown { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform: translateY(0); } }
+
+  /* Question */
+  .question-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.75rem;
+  }
+  .q-label { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .q-text { font-family: var(--display); font-size: 1.45rem; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 1.75rem; letter-spacing: 0.02em; }
+
+  .choices { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .choice {
+    background: var(--bg3); border: 2px solid var(--border);
+    border-radius: 8px; padding: 1.1rem 1.25rem;
+    cursor: pointer; transition: all 0.25s;
+    display: flex; align-items: flex-start; gap: 1rem;
+    text-align: left; width: 100%;
+  }
+
+  .choice:hover:not(:disabled) { border-color: var(--accent); transform: translateX(4px); background: rgba(0,212,255,0.05); }
+
+  .choice-letter {
+    width: 28px; height: 28px; border-radius: 4px;
+    background: var(--border); color: var(--muted);
+    font-family: var(--mono); font-size: 0.8rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.25s;
+  }
+  .choice:hover:not(:disabled) .choice-letter { background: var(--accent); color: var(--bg); }
+
+  .choice-body { flex: 1; }
+  .choice-text { color: var(--text); font-size: 0.97rem; line-height: 1.5; }
+  .choice-tag { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.3rem; }
+
+  /* After answer states */
+  .choice.selected-optimal { border-color: var(--green); background: rgba(0,245,160,0.08); pointer-events: none; }
+  .choice.selected-partial  { border-color: var(--yellow); background: rgba(255,211,42,0.08); pointer-events: none; }
+  .choice.selected-bad      { border-color: var(--red); background: rgba(255,71,87,0.08); pointer-events: none; }
+  .choice.unselected         { opacity: 0.35; pointer-events: none; }
+
+  .choice.selected-optimal .choice-letter { background: var(--green); color: var(--bg); }
+  .choice.selected-partial  .choice-letter { background: var(--yellow); color: var(--bg); }
+  .choice.selected-bad      .choice-letter { background: var(--red); color: var(--bg); }
+
+  .selected-optimal .choice-tag { color: var(--green); }
+  .selected-partial  .choice-tag { color: var(--yellow); }
+  .selected-bad      .choice-tag { color: var(--red); }
+
+  .next-btn {
+    margin-top: 1.25rem; background: linear-gradient(135deg, var(--accent), var(--green));
+    border: none; color: var(--bg); padding: 0.85rem 2.5rem;
+    border-radius: 6px; font-family: var(--display); font-size: 1rem;
+    font-weight: 700; letter-spacing: 0.08em; cursor: pointer;
+    transition: all 0.3s; display: none; text-transform: uppercase;
+  }
+  .next-btn.show { display: inline-block; animation: fadeIn 0.4s ease-out; }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+
+  @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+
+  /* ── DEBRIEF ── */
+  .debrief-wrap { max-width: 800px; margin: 0 auto; }
+
+  .debrief-hero {
+    text-align: center; padding: 3rem 2rem;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 2rem;
+    position: relative; overflow: hidden;
+  }
+
+  .debrief-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 70%);
+  }
+
+  .debrief-result-icon { font-size: 4rem; margin-bottom: 1rem; }
+
+  .debrief-title {
+    font-family: var(--display); font-size: 2.5rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+
+  .debrief-rank {
+    font-family: var(--mono); font-size: 0.9rem; margin-bottom: 1.5rem; letter-spacing: 0.1em;
+  }
+
+  .debrief-score-big {
+    font-family: var(--display); font-size: 5rem; font-weight: 700; line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .debrief-score-label { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.15em; }
+
+  .debrief-message {
+    margin-top: 1.5rem; font-size: 1rem; color: var(--text);
+    line-height: 1.7; max-width: 500px; margin-left: auto; margin-right: auto;
+  }
+
+  .outcome-banner {
+    border-radius: 8px; padding: 1rem 1.5rem; margin-top: 1.5rem;
+    font-family: var(--mono); font-size: 0.85rem; line-height: 1.6;
+  }
+
+  .outcome-good    { background: rgba(0,245,160,0.1); border: 1px solid rgba(0,245,160,0.3); color: var(--green); }
+  .outcome-partial { background: rgba(255,211,42,0.1); border: 1px solid rgba(255,211,42,0.3); color: var(--yellow); }
+  .outcome-bad     { background: rgba(255,71,87,0.1);  border: 1px solid rgba(255,71,87,0.3);  color: var(--red); }
+
+  .debrief-sections { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+
+  .debrief-section {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+
+  .ds-header {
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    padding: 0.9rem 1.5rem; font-family: var(--mono);
+    font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  .ds-body { padding: 1.5rem; }
+
+  .decision-row {
+    padding: 1rem; border-radius: 6px; margin-bottom: 0.75rem;
+    border: 1px solid var(--border); background: var(--bg3);
+  }
+  .decision-row:last-child { margin-bottom: 0; }
+
+  .dr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+  .dr-q { font-size: 0.85rem; color: var(--muted); font-family: var(--mono); }
+  .dr-points { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; }
+  .dr-answer { font-size: 0.95rem; color: var(--text); }
+
+  .pts-high { color: var(--green); }
+  .pts-mid  { color: var(--yellow); }
+  .pts-low  { color: var(--red); }
+
+  .key-concepts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .concept-tag {
+    background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2);
+    color: var(--accent); padding: 0.3rem 0.75rem;
+    border-radius: 20px; font-family: var(--mono); font-size: 0.75rem;
+  }
+
+  .debrief-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .action-btn {
+    padding: 0.85rem 2rem; border-radius: 6px; font-family: var(--display);
+    font-size: 1rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer; transition: all 0.3s; border: none;
+  }
+
+  .action-primary { background: linear-gradient(135deg, var(--accent), var(--green)); color: var(--bg); }
+  .action-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+
+  .action-secondary { background: var(--bg3); border: 1px solid var(--border); color: var(--text); }
+  .action-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .game-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+  }
+
+  @media (max-width: 600px) {
+    .select-header h1 { font-size: 2rem; }
+    .debrief-score-big { font-size: 3.5rem; }
+    .debrief-actions { flex-direction: column; }
+  }
+
+
+/* ── SCANLINE for branch section only ── */
+#section-branch::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+@media (max-width: 768px) {
+  .hub-tabs { padding: 0 1rem; }
+  .hub-header { padding: 0 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ UNIFIED HEADER ══ -->
+<header class="hub-header">
+  <a href="index.html" class="hub-logo">SECURITY+ <span>SY0-701</span> INTERACTIVE LABS</a>
+  <a href="index.html" class="hub-back">← HOME</a>
+</header>
+
+<!-- ══ HUB NAVIGATION ══ -->
+<nav class="hub-tabs" id="hubTabs">
+  <button class="hub-tab active" onclick="switchHub('pbq', this)">🎯 PBQ Simulator</button>
+  <button class="hub-tab" onclick="switchHub('sim', this)">🖥️ Cyber Simulations</button>
+  <button class="hub-tab" onclick="switchHub('branch', this)">🌿 Branching Scenarios</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1: PBQ SIMULATOR
+     ══════════════════════════════════════════════ -->
+<div class="hub-section active" id="section-pbq">
+<main>
+<div class="container">
+  <h1>Performance-Based Questions</h1>
+  <p class="subtitle">// drag-and-drop interactive simulations · SY0-701</p>
+  <!-- Progress -->
+  <div class="pbq-progress">
+    <span class="pbq-progress-label">PBQ PROGRESS</span>
+    <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:12.5%"></div></div>
+    <span class="pbq-progress-score" id="prog-label">1 / 8</span>
+  </div>
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button>
+    <button class="nav-tab" onclick="switchTab('net',this,2)">🌐 Network Diagram</button>
+    <button class="nav-tab" onclick="switchTab('log',this,3)">📋 Log Analysis</button>
+    <button class="nav-tab" onclick="switchTab('ir',this,4)">🚨 Incident Response</button>
+    <button class="nav-tab" onclick="switchTab('ports',this,5)">🔌 Port Matching</button>
+    <button class="nav-tab" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button>
+    <button class="nav-tab" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button>
+    <button class="nav-tab" onclick="switchTab('iam',this,8)">👤 Access Control</button>
+  </div>
+
+  <!-- ============ TAB 1: FIREWALL ACL ============ -->
+  <div class="tab-content active" id="tab-acl">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-01 · Firewall / ACL Configuration</div>
+      <div class="scenario-title">Configure the Perimeter Firewall Ruleset</div>
+      <div class="scenario-desc">
+        A company's web server sits in the DMZ at <strong>10.10.1.5</strong>. Configure the firewall ACL to:
+        allow HTTPS inbound from any source, allow SSH only from the admin subnet <strong>192.168.1.0/24</strong>,
+        and block all other inbound traffic. The firewall processes rules <strong>top-to-bottom, first match wins</strong>.
+        Drag the correct rules into the ACL in the right order.
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">// Network Context</div>
+        <p>Web Server: <span>10.10.1.5</span> &nbsp;·&nbsp; Admin Subnet: <span>192.168.1.0/24</span> &nbsp;·&nbsp; Zone: <span>DMZ</span></p>
+      </div>
+
+      <div class="drag-cols">
+        <div>
+          <div class="col-label purple">Available Rules</div>
+          <div class="drop-zone" id="acl-pool" ondragover="dov(event)" ondrop="aclDropPool(event)" ondragleave="dlv(event)">
+            <div class="drag-item" draggable="true" data-rule="PERMIT TCP any 10.10.1.5 443" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">PERMIT TCP <em>any</em> → 10.10.1.5:<em>443</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="PERMIT TCP 192.168.1.0/24 10.10.1.5 22" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">PERMIT TCP <em class="purple">192.168.1.0/24</em> → 10.10.1.5:<em>22</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="DENY TCP any 10.10.1.5 22" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">DENY TCP <em class="deny">any</em> → 10.10.1.5:<em class="deny">22</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="DENY IP any any" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">DENY IP <em class="deny">any</em> → <em class="deny">any</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="PERMIT TCP any 10.10.1.5 80" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">PERMIT TCP <em class="warn">any</em> → 10.10.1.5:<em class="warn">80</em></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Active ACL — ordered top to bottom</div>
+          <div class="drop-zone" id="acl-list" ondragover="dov(event)" ondrop="aclDropList(event)" ondragleave="dlv(event)">
+            <div class="drop-hint">Drop rules here in the correct order ↓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkACL()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetACL()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-acl"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: NETWORK DIAGRAM ============ -->
+  <div class="tab-content" id="tab-net">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-02 · Network Diagram Analysis</div>
+      <div class="scenario-title">Place Devices in the Correct Network Zones</div>
+      <div class="scenario-desc">
+        Drag each device into its correct security zone. The <strong>DMZ</strong> hosts publicly accessible services while isolating them from internal systems.
+        Place each device where it belongs based on its function and trust level.
+      </div>
+
+      <div class="drag-cols">
+        <div>
+          <div class="col-label purple">Unplaced Devices</div>
+          <div class="drop-zone" id="net-pool" style="min-height:120px"
+            ondragover="dov(event)" ondrop="netDrop(event,'net-pool')" ondragleave="dlv(event)">
+            <div class="device-chips" id="net-pool-chips">
+              <div class="device-chip" draggable="true" data-device="Web Server" data-zone="zone-dmz" ondragstart="ds(event,'net')" ondragend="de(event)">🖥️ Web Server</div>
+              <div class="device-chip" draggable="true" data-device="Public DNS" data-zone="zone-dmz" ondragstart="ds(event,'net')" ondragend="de(event)">📡 Public DNS</div>
+              <div class="device-chip" draggable="true" data-device="HR Database" data-zone="zone-internal" ondragstart="ds(event,'net')" ondragend="de(event)">🗄️ HR Database</div>
+              <div class="device-chip" draggable="true" data-device="Workstations" data-zone="zone-internal" ondragstart="ds(event,'net')" ondragend="de(event)">💻 Workstations</div>
+              <div class="device-chip" draggable="true" data-device="Mail Gateway" data-zone="zone-dmz" ondragstart="ds(event,'net')" ondragend="de(event)">📧 Mail Gateway</div>
+              <div class="device-chip" draggable="true" data-device="External User" data-zone="zone-internet" ondragstart="ds(event,'net')" ondragend="de(event)">👤 External User</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Network Security Zones</div>
+          <div class="network-map">
+            <div class="net-zone zone-internet" id="zone-internet" ondragover="dov(event)" ondrop="netDrop(event,'zone-internet')" ondragleave="dlv(event)">
+              <div class="net-zone-label">🌍 Internet — Untrusted</div>
+              <div class="device-chips" id="zone-internet-chips"></div>
+            </div>
+            <div class="zone-divider">── Perimeter Firewall ──</div>
+            <div class="net-zone zone-dmz" id="zone-dmz" ondragover="dov(event)" ondrop="netDrop(event,'zone-dmz')" ondragleave="dlv(event)">
+              <div class="net-zone-label">⚠️ DMZ — Semi-Trusted</div>
+              <div class="device-chips" id="zone-dmz-chips"></div>
+            </div>
+            <div class="zone-divider">── Internal Firewall ──</div>
+            <div class="net-zone zone-internal" id="zone-internal" ondragover="dov(event)" ondrop="netDrop(event,'zone-internal')" ondragleave="dlv(event)">
+              <div class="net-zone-label">🔒 Internal — Trusted</div>
+              <div class="device-chips" id="zone-internal-chips"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkNet()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetNet()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-net"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: LOG ANALYSIS ============ -->
+  <div class="tab-content" id="tab-log">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-03 · Log Analysis / SIEM</div>
+      <div class="scenario-title">Identify the Attack from Authentication Logs</div>
+      <div class="scenario-desc">
+        Review these authentication logs captured by the SIEM. Analyze the patterns — look at the source IP,
+        timing, usernames, and failure counts — then answer the questions below.
+      </div>
+
+      <div class="log-terminal">
+        <div class="log-line"><span class="log-time">09:14:02</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: admin</span></div>
+        <div class="log-line"><span class="log-time">09:14:03</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: admin</span></div>
+        <div class="log-line"><span class="log-time">09:14:04</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: admin</span></div>
+        <div class="log-line"><span class="log-time">09:14:05</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: administrator</span></div>
+        <div class="log-line"><span class="log-time">09:14:06</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: root</span></div>
+        <div class="log-line"><span class="log-time">09:14:07</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: sysadmin</span></div>
+        <div class="log-line"><span class="log-time">09:14:08</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: guest</span></div>
+        <div class="log-line"><span class="log-time">09:14:09</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: support</span></div>
+        <div class="log-line"><span class="log-time">09:14:10</span><span class="log-src">203.0.113.45</span><span class="log-msg warn">ACCOUNT LOCKED — user: admin (5 failures)</span></div>
+        <div class="log-line"><span class="log-time">09:15:22</span><span class="log-src">10.0.0.12</span><span class="log-msg ok">SUCCESS login — user: jsmith</span></div>
+        <div class="log-line"><span class="log-time">09:17:45</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: jsmith</span></div>
+        <div class="log-line"><span class="log-time">09:17:46</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: jsmith</span></div>
+        <div class="log-line"><span class="log-time">09:17:47</span><span class="log-src">203.0.113.45</span><span class="log-msg warn">ACCOUNT LOCKED — user: jsmith</span></div>
+      </div>
+
+      <div class="log-q-title">Q1 — What type of attack is being conducted from 203.0.113.45?</div>
+      <div class="log-choices" id="log-q1">
+        <div class="log-choice" onclick="logPick('q1','A',this)"><span class="choice-letter">A</span>Password spraying — one password tried against many accounts</div>
+        <div class="log-choice" onclick="logPick('q1','B',this)"><span class="choice-letter">B</span>Brute force — many passwords tried against a single account</div>
+        <div class="log-choice" onclick="logPick('q1','C',this)"><span class="choice-letter">C</span>Username enumeration / dictionary attack against multiple usernames</div>
+        <div class="log-choice" onclick="logPick('q1','D',this)"><span class="choice-letter">D</span>Credential stuffing using previously breached credentials</div>
+      </div>
+
+      <div class="log-q-title">Q2 — Which control would BEST mitigate this attack going forward?</div>
+      <div class="log-choices" id="log-q2">
+        <div class="log-choice" onclick="logPick('q2','A',this)"><span class="choice-letter">A</span>Increase minimum password complexity requirements</div>
+        <div class="log-choice" onclick="logPick('q2','B',this)"><span class="choice-letter">B</span>Account lockout policy with geo-IP blocking on the login page</div>
+        <div class="log-choice" onclick="logPick('q2','C',this)"><span class="choice-letter">C</span>Implement MFA and rate limiting on the authentication endpoint</div>
+        <div class="log-choice" onclick="logPick('q2','D',this)"><span class="choice-letter">D</span>Enable full-disk encryption on the authentication server</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkLog()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetLog()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-log"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4: INCIDENT RESPONSE ============ -->
+  <div class="tab-content" id="tab-ir">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-04 · Incident Response Sequencing</div>
+      <div class="scenario-title">Sequence the IR Steps — Ransomware Incident</div>
+      <div class="scenario-desc">
+        A ransomware attack has been detected on a workstation. Drag the response steps into the correct order
+        based on the <strong>NIST SP 800-61</strong> incident response lifecycle. Order matters — wrong sequencing
+        can destroy evidence or allow the attacker to persist.
+      </div>
+
+      <div class="drag-cols">
+        <div>
+          <div class="col-label purple">IR Steps — Drag to Timeline</div>
+          <div class="drop-zone" id="ir-pool" ondragover="dov(event)" ondrop="irDrop(event,'ir-pool')" ondragleave="dlv(event)">
+            <div class="drag-item" draggable="true" data-step="Eradicate malware and patch vulnerabilities" data-order="5" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🧹 Eradicate malware &amp; patch vulnerabilities</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Notify stakeholders and document findings" data-order="7" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>📣 Notify stakeholders &amp; document</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Isolate the affected system from network" data-order="2" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🔌 Isolate affected system from network</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Detect and identify the ransomware alert" data-order="1" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🔍 Detect &amp; identify the ransomware alert</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Restore from clean backup and verify integrity" data-order="6" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>💾 Restore from clean backup &amp; verify</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Preserve forensic evidence and disk image" data-order="3" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🔬 Preserve forensic evidence &amp; disk image</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Conduct post-incident lessons learned review" data-order="8" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>📝 Post-incident lessons learned review</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Analyze scope — identify IOCs and lateral movement" data-order="4" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🗺️ Analyze scope — IOCs &amp; lateral movement</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Response Timeline — First → Last</div>
+          <div class="drop-zone ir-timeline-wrap" id="ir-timeline" ondragover="dov(event)" ondrop="irDrop(event,'ir-timeline')" ondragleave="dlv(event)" style="min-height:280px;">
+            <div class="drop-hint">Drop steps here in the correct order ↓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkIR()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetIR()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-ir"></div>
+    </div>
+  </div>
+
+
+  <!-- ============ TAB 5: PORT & PROTOCOL MATCHING ============ -->
+  <div class="tab-content" id="tab-ports">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-05 · Port &amp; Protocol Matching</div>
+      <div class="scenario-title">Match Services to Their Correct Default Ports</div>
+      <div class="scenario-desc">
+        Drag each network service chip into the correct port number bucket. Knowing default ports is essential for firewall configuration, log analysis, and identifying anomalous traffic — all heavily tested on SY0-701. Note: <strong>SSH and SFTP both use port 22</strong>.
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+        <div>
+          <div class="col-label purple">Services — Drag to Port Bucket</div>
+          <div class="drop-zone" id="ports-pool" style="min-height:140px; flex-wrap:wrap; flex-direction:row; gap:0.4rem;"
+            ondragover="dov(event)" ondrop="portDrop(event,'ports-pool')" ondragleave="dlv(event)">
+            <div class="device-chip" draggable="true" data-service="HTTPS" data-port="443" ondragstart="ds(event,'port')" ondragend="de(event)">HTTPS</div>
+            <div class="device-chip" draggable="true" data-service="SSH" data-port="22" ondragstart="ds(event,'port')" ondragend="de(event)">SSH</div>
+            <div class="device-chip" draggable="true" data-service="DNS" data-port="53" ondragstart="ds(event,'port')" ondragend="de(event)">DNS</div>
+            <div class="device-chip" draggable="true" data-service="RDP" data-port="3389" ondragstart="ds(event,'port')" ondragend="de(event)">RDP</div>
+            <div class="device-chip" draggable="true" data-service="SMTP" data-port="25" ondragstart="ds(event,'port')" ondragend="de(event)">SMTP</div>
+            <div class="device-chip" draggable="true" data-service="LDAP" data-port="389" ondragstart="ds(event,'port')" ondragend="de(event)">LDAP</div>
+            <div class="device-chip" draggable="true" data-service="SNMP" data-port="161" ondragstart="ds(event,'port')" ondragend="de(event)">SNMP</div>
+            <div class="device-chip" draggable="true" data-service="Kerberos" data-port="88" ondragstart="ds(event,'port')" ondragend="de(event)">Kerberos</div>
+            <div class="device-chip" draggable="true" data-service="FTPS" data-port="990" ondragstart="ds(event,'port')" ondragend="de(event)">FTPS</div>
+            <div class="device-chip" draggable="true" data-service="SFTP" data-port="22" ondragstart="ds(event,'port')" ondragend="de(event)">SFTP</div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Port Buckets</div>
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-22')" ondragleave="dlv(event)"><span class="port-num">:22</span><span class="port-label">TCP 22</span><div class="port-chips" id="bucket-22-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-25')" ondragleave="dlv(event)"><span class="port-num">:25</span><span class="port-label">TCP 25</span><div class="port-chips" id="bucket-25-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-53')" ondragleave="dlv(event)"><span class="port-num">:53</span><span class="port-label">UDP/TCP 53</span><div class="port-chips" id="bucket-53-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-88')" ondragleave="dlv(event)"><span class="port-num">:88</span><span class="port-label">TCP 88</span><div class="port-chips" id="bucket-88-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-161')" ondragleave="dlv(event)"><span class="port-num">:161</span><span class="port-label">UDP 161</span><div class="port-chips" id="bucket-161-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-389')" ondragleave="dlv(event)"><span class="port-num">:389</span><span class="port-label">TCP 389</span><div class="port-chips" id="bucket-389-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-443')" ondragleave="dlv(event)"><span class="port-num">:443</span><span class="port-label">TCP 443</span><div class="port-chips" id="bucket-443-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-990')" ondragleave="dlv(event)"><span class="port-num">:990</span><span class="port-label">TCP 990</span><div class="port-chips" id="bucket-990-chips"></div></div>
+            <div class="port-bucket" ondragover="dov(event)" ondrop="portDrop(event,'bucket-3389')" ondragleave="dlv(event)"><span class="port-num">:3389</span><span class="port-label">TCP 3389</span><div class="port-chips" id="bucket-3389-chips"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkPorts()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetPorts()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-ports"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 6: CRYPTOGRAPHY ============ -->
+  <div class="tab-content" id="tab-crypto">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-06 · Cryptography Algorithm Matching</div>
+      <div class="scenario-title">Match Algorithms to Their Cryptographic Category</div>
+      <div class="scenario-desc">
+        Drag each algorithm into its correct category: <strong>Symmetric Encryption</strong>, <strong>Asymmetric Encryption</strong>, <strong>Hashing / Integrity</strong>, or <strong>Key Exchange</strong>. These distinctions are critical for PKI, TLS, and data-at-rest questions on SY0-701.
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+        <div>
+          <div class="col-label purple">Algorithms — Drag to Category</div>
+          <div class="drop-zone" id="crypto-pool" style="min-height:180px; flex-wrap:wrap; flex-direction:row; gap:0.4rem;"
+            ondragover="dov(event)" ondrop="cryptoDrop(event,'crypto-pool')" ondragleave="dlv(event)">
+            <div class="device-chip" draggable="true" data-algo="AES" data-cat="symmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">AES</div>
+            <div class="device-chip" draggable="true" data-algo="RSA" data-cat="asymmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">RSA</div>
+            <div class="device-chip" draggable="true" data-algo="SHA-256" data-cat="hashing" ondragstart="ds(event,'crypto')" ondragend="de(event)">SHA-256</div>
+            <div class="device-chip" draggable="true" data-algo="Diffie-Hellman" data-cat="keyexchange" ondragstart="ds(event,'crypto')" ondragend="de(event)">Diffie-Hellman</div>
+            <div class="device-chip" draggable="true" data-algo="3DES" data-cat="symmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">3DES</div>
+            <div class="device-chip" draggable="true" data-algo="ECC" data-cat="asymmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">ECC</div>
+            <div class="device-chip" draggable="true" data-algo="MD5" data-cat="hashing" ondragstart="ds(event,'crypto')" ondragend="de(event)">MD5</div>
+            <div class="device-chip" draggable="true" data-algo="ECDH" data-cat="keyexchange" ondragstart="ds(event,'crypto')" ondragend="de(event)">ECDH</div>
+            <div class="device-chip" draggable="true" data-algo="ChaCha20" data-cat="symmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">ChaCha20</div>
+            <div class="device-chip" draggable="true" data-algo="BCRYPT" data-cat="hashing" ondragstart="ds(event,'crypto')" ondragend="de(event)">BCRYPT</div>
+            <div class="device-chip" draggable="true" data-algo="DSA" data-cat="asymmetric" ondragstart="ds(event,'crypto')" ondragend="de(event)">DSA</div>
+            <div class="device-chip" draggable="true" data-algo="ECDHE" data-cat="keyexchange" ondragstart="ds(event,'crypto')" ondragend="de(event)">ECDHE</div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Categories</div>
+          <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-symmetric')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--accent)">Symmetric Encryption</div>
+              <div class="port-chips" id="cat-symmetric-chips"></div>
+            </div>
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-asymmetric')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--purple)">Asymmetric Encryption</div>
+              <div class="port-chips" id="cat-asymmetric-chips"></div>
+            </div>
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-hashing')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--yellow)">Hashing / Integrity</div>
+              <div class="port-chips" id="cat-hashing-chips"></div>
+            </div>
+            <div class="crypto-bucket" ondragover="dov(event)" ondrop="cryptoDrop(event,'cat-keyexchange')" ondragleave="dlv(event)">
+              <div class="crypto-bucket-label" style="color:var(--green)">Key Exchange</div>
+              <div class="port-chips" id="cat-keyexchange-chips"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkCrypto()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetCrypto()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-crypto"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 7: VULNERABILITY PRIORITIZATION ============ -->
+  <div class="tab-content" id="tab-vuln">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-07 · Vulnerability Prioritization</div>
+      <div class="scenario-title">Rank Vulnerabilities by Remediation Priority</div>
+      <div class="scenario-desc">
+        A vulnerability scan returned findings for a production, internet-facing e-commerce platform. Drag them into the remediation queue — <strong>highest priority first</strong>. Consider CVSS score, exploitability, public exploit availability, and business context.
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+        <div>
+          <div class="col-label purple">Scan Findings</div>
+          <div class="drop-zone" id="vuln-pool" ondragover="dov(event)" ondrop="vulnDrop(event,'vuln-pool')" ondragleave="dlv(event)" style="gap:0.6rem;">
+            <div class="vuln-card" draggable="true" data-vuln="SQLi" data-priority="1" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge critical">CVSS 9.8</span><span class="vuln-name">SQL Injection — Login Form</span></div>
+              <div class="vuln-detail">Unauthenticated attacker can dump the entire user database via unsanitized input</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="TLS" data-priority="4" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge medium">CVSS 5.3</span><span class="vuln-name">TLS 1.0 Still Supported</span></div>
+              <div class="vuln-detail">Server accepts TLS 1.0, enabling POODLE-style downgrade attacks on older clients</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="RCE" data-priority="2" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge critical">CVSS 9.0</span><span class="vuln-name">RCE — Unpatched Apache</span></div>
+              <div class="vuln-detail">Known CVE with public exploit — RCE on web server, patch available for 30 days</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="NoMFA" data-priority="3" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge high">CVSS 7.5</span><span class="vuln-name">Admin Panel — No MFA</span></div>
+              <div class="vuln-detail">Internet-accessible admin UI with password-only auth and no rate limiting</div>
+            </div>
+            <div class="vuln-card" draggable="true" data-vuln="Banner" data-priority="5" ondragstart="ds(event,'vuln')" ondragend="de(event)">
+              <div class="vuln-header"><span class="cvss-badge low">CVSS 3.1</span><span class="vuln-name">Server Version Disclosure</span></div>
+              <div class="vuln-detail">HTTP headers expose Apache version and OS — aids attacker reconnaissance</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Remediation Queue — Highest Priority First</div>
+          <div class="drop-zone ir-timeline-wrap" id="vuln-queue" ondragover="dov(event)" ondrop="vulnDrop(event,'vuln-queue')" ondragleave="dlv(event)" style="min-height:280px; gap:0.6rem;">
+            <div class="drop-hint">Drop vulnerabilities here in priority order</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkVuln()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetVuln()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-vuln"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 8: ACCESS CONTROL / IAM ============ -->
+  <div class="tab-content" id="tab-iam">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-08 · Access Control / IAM</div>
+      <div class="scenario-title">Assign Least-Privilege Permissions to Roles</div>
+      <div class="scenario-desc">
+        Apply the <strong>principle of least privilege</strong>. Drag each permission chip into every role that should have it. A permission may belong to multiple roles — drag it into each applicable role box. <strong>Double-click</strong> a chip inside a role box to remove it.
+      </div>
+      <div class="info-box" style="margin-bottom:1.25rem;">
+        <div class="info-label">// System: HR Management Platform</div>
+        <p>Roles: <span>Employee</span> &nbsp;|&nbsp; <span>HR Manager</span> &nbsp;|&nbsp; <span>IT Admin</span> &nbsp;|&nbsp; <span>Auditor</span></p>
+      </div>
+      <div class="col-label purple" style="margin-bottom:0.75rem;">Permissions Pool — Drag to Role(s)</div>
+      <div class="drop-zone" id="iam-pool" style="min-height:72px; flex-wrap:wrap; flex-direction:row; gap:0.4rem; margin-bottom:1.25rem;"
+        ondragover="dov(event)" ondrop="iamDrop(event,'iam-pool')" ondragleave="dlv(event)">
+        <div class="device-chip" draggable="true" data-perm="View own payslip" data-roles="employee,hr_manager" ondragstart="ds(event,'iam')" ondragend="de(event)">View own payslip</div>
+        <div class="device-chip" draggable="true" data-perm="View all employee records" data-roles="hr_manager,auditor" ondragstart="ds(event,'iam')" ondragend="de(event)">View all employee records</div>
+        <div class="device-chip" draggable="true" data-perm="Modify employee salary" data-roles="hr_manager" ondragstart="ds(event,'iam')" ondragend="de(event)">Modify employee salary</div>
+        <div class="device-chip" draggable="true" data-perm="Reset user passwords" data-roles="it_admin" ondragstart="ds(event,'iam')" ondragend="de(event)">Reset user passwords</div>
+        <div class="device-chip" draggable="true" data-perm="Create/delete accounts" data-roles="it_admin" ondragstart="ds(event,'iam')" ondragend="de(event)">Create/delete accounts</div>
+        <div class="device-chip" draggable="true" data-perm="View audit logs" data-roles="it_admin,auditor" ondragstart="ds(event,'iam')" ondragend="de(event)">View audit logs</div>
+        <div class="device-chip" draggable="true" data-perm="Export payroll data" data-roles="hr_manager" ondragstart="ds(event,'iam')" ondragend="de(event)">Export payroll data</div>
+        <div class="device-chip" draggable="true" data-perm="Modify system config" data-roles="it_admin" ondragstart="ds(event,'iam')" ondragend="de(event)">Modify system config</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem;">
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-employee')" ondragleave="dlv(event)">
+          <div class="iam-role-label">Employee</div>
+          <div class="port-chips" id="iam-employee-chips"></div>
+        </div>
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-hr_manager')" ondragleave="dlv(event)">
+          <div class="iam-role-label" style="color:var(--yellow)">HR Manager</div>
+          <div class="port-chips" id="iam-hr_manager-chips"></div>
+        </div>
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-it_admin')" ondragleave="dlv(event)">
+          <div class="iam-role-label" style="color:var(--red)">IT Admin</div>
+          <div class="port-chips" id="iam-it_admin-chips"></div>
+        </div>
+        <div class="iam-role-box" ondragover="dov(event)" ondrop="iamDrop(event,'iam-auditor')" ondragleave="dlv(event)">
+          <div class="iam-role-label" style="color:var(--purple)">Auditor</div>
+          <div class="port-chips" id="iam-auditor-chips"></div>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkIAM()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetIAM()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-iam"></div>
+    </div>
+  </div>
+
+
+</div>
+</main>
+<footer style="padding:1.5rem 2rem;text-align:center;color:var(--muted);font-size:0.85rem;font-family:var(--mono);border-top:1px solid var(--border);">
+  <p>CompTIA Security+ SY0-701 · Performance-Based Question Simulator</p>
+  <p style="margin-top:0.4rem;font-size:0.75rem;"><a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a></p>
+</footer>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2: CYBER SIMULATIONS
+     ══════════════════════════════════════════════ -->
+<div class="hub-section" id="section-sim">
+<main style="position:relative;z-index:1;padding:2rem;max-width:1400px;margin:0 auto;">
+  <!-- Intro Section -->
+  <div class="intro-section" id="simIntroSection">
+    <h1 style="font-family:'Share Tech Mono',monospace;color:var(--accent);text-shadow:0 0 20px rgba(0,255,159,0.5);">Interactive Security Simulations</h1>
+    <p class="subtitle">Practice real-world cybersecurity scenarios with hands-on decision making</p>
+    <div class="scenario-selector">
+      <div class="scenario-card" data-scenario="phishing">
+        <div class="scenario-icon">🎣</div>
+        <div class="scenario-title">Phishing Detection</div>
+        <div class="scenario-difficulty difficulty-easy">Easy</div>
+        <div class="scenario-desc">Analyze suspicious emails and identify phishing attempts before they compromise your organization.</div>
+      </div>
+      <div class="scenario-card" data-scenario="incident">
+        <div class="scenario-icon">🚨</div>
+        <div class="scenario-title">Incident Response</div>
+        <div class="scenario-difficulty difficulty-medium">Medium</div>
+        <div class="scenario-desc">Respond to a security breach in real-time. Make critical decisions to contain and mitigate the threat.</div>
+      </div>
+      <div class="scenario-card" data-scenario="malware">
+        <div class="scenario-icon">🦠</div>
+        <div class="scenario-title">Malware Analysis</div>
+        <div class="scenario-difficulty difficulty-medium">Medium</div>
+        <div class="scenario-desc">Investigate suspicious system behavior and determine the appropriate response to a potential malware infection.</div>
+      </div>
+      <div class="scenario-card" data-scenario="network">
+        <div class="scenario-icon">🌐</div>
+        <div class="scenario-title">Network Security</div>
+        <div class="scenario-difficulty difficulty-hard">Hard</div>
+        <div class="scenario-desc">Analyze network traffic and firewall logs to detect and prevent unauthorized access attempts.</div>
+      </div>
+      <div class="scenario-card" data-scenario="social">
+        <div class="scenario-icon">👤</div>
+        <div class="scenario-title">Social Engineering</div>
+        <div class="scenario-difficulty difficulty-medium">Medium</div>
+        <div class="scenario-desc">Identify and respond to social engineering attacks targeting your organization's employees.</div>
+      </div>
+      <div class="scenario-card" data-scenario="compliance">
+        <div class="scenario-icon">📋</div>
+        <div class="scenario-title">Compliance Audit</div>
+        <div class="scenario-difficulty difficulty-hard">Hard</div>
+        <div class="scenario-desc">Conduct a security audit and ensure systems meet regulatory compliance requirements.</div>
+      </div>
+    </div>
+  </div>
+  <!-- Simulation Container -->
+  <div class="simulation-container" id="simulationContainer"></div>
+</main>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3: BRANCHING SCENARIOS
+     ══════════════════════════════════════════════ -->
+<div class="hub-section" id="section-branch">
+  <!-- SCENARIO SELECT -->
+  <div id="scenarioSelect">
+    <main>
+      <div class="select-header">
+        <h1>Choose Your <span>Scenario</span></h1>
+        <p>// branching simulations — your decisions shape the outcome</p>
+      </div>
+      <div class="scenarios-grid">
+        <div class="scenario-card" onclick="startScenario('midnight_breach')">
+          <div class="card-top"><div class="card-icon">🌙</div><div class="card-diff diff-hard">Hard</div></div>
+          <div class="card-title">The Midnight Breach</div>
+          <div class="card-subtitle">Ransomware Incident Response</div>
+          <div class="card-desc">It's 2:47 AM. Three hospital servers are encrypting simultaneously. Your manager is calling. Every decision you make in the next 5 hours determines whether the breach is contained — or catastrophic.</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>IR &amp; Operations</span></div>
+            <div class="meta-item">Time: <span>10-15 min</span></div>
+          </div>
+          <div class="card-cta">▶ Start Scenario →</div>
+        </div>
+        <div class="scenario-card" onclick="startScenario('phishing_campaign')">
+          <div class="card-top"><div class="card-icon">🎣</div><div class="card-diff diff-medium">Medium</div></div>
+          <div class="card-title">The Phishing Campaign</div>
+          <div class="card-subtitle">Social Engineering Response</div>
+          <div class="card-desc">A targeted spearphishing campaign is hitting your executives. Credential harvesting, BEC attempts, and a potential wire transfer fraud — can you stop it in time?</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>Threats &amp; Attacks</span></div>
+            <div class="meta-item">Time: <span>8-12 min</span></div>
+          </div>
+          <div class="card-cta">▶ Start Scenario →</div>
+        </div>
+        <div class="scenario-card" onclick="startScenario('insider_threat')">
+          <div class="card-top"><div class="card-icon">👤</div><div class="card-diff diff-medium">Medium</div></div>
+          <div class="card-title">The Insider Threat</div>
+          <div class="card-subtitle">Access Controls &amp; Monitoring</div>
+          <div class="card-desc">A disgruntled employee with elevated privileges is exfiltrating sensitive data. Monitoring logs suggest it's been happening for weeks. How do you handle it without tipping them off?</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>Identity &amp; Access</span></div>
+            <div class="meta-item">Time: <span>8-12 min</span></div>
+          </div>
+          <div class="card-cta">▶ Start Scenario →</div>
+        </div>
+        <div class="scenario-card" onclick="startScenario('cloud_misconfiguration')">
+          <div class="card-top"><div class="card-icon">☁️</div><div class="card-diff diff-medium">Medium</div></div>
+          <div class="card-title">Cloud Misconfiguration</div>
+          <div class="card-subtitle">Cloud Security &amp; Data Exposure</div>
+          <div class="card-desc">A misconfigured S3 bucket has exposed 52,000 customer records. A security researcher found it and Reddit is sharing the link. You have 48 hours before it goes public.</div>
+          <div class="card-meta">
+            <div class="meta-item">Domain: <span>Architecture &amp; Design</span></div>
+            <div class="meta-item">Time: <span>8-12 min</span></div>
+          </div>
+          <div class="card-cta">▶ Start Scenario →</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- GAME AREA -->
+  <div id="gameArea" style="display:none;">
+    <main>
+      <div class="game-layout">
+        <div class="sidebar">
+          <div class="sidebar-header">// Active Scenario</div>
+          <div class="scenario-info">
+            <div class="info-scenario-title" id="sideTitle">—</div>
+            <div class="info-scenario-sub" id="sideRole">—</div>
+          </div>
+          <div class="threat-section">
+            <div class="threat-label">Threat Level</div>
+            <div class="threat-bar-wrap"><div class="threat-bar" id="threatBar" style="width:20%"></div></div>
+            <div class="threat-text" id="threatText" style="color:var(--green)">LOW</div>
+          </div>
+          <div class="score-section">
+            <div class="score-num" id="sideScore">0</div>
+            <div class="score-label">Points Earned</div>
+          </div>
+          <div class="step-tracker">
+            <div class="step-label">Decision Path</div>
+            <div class="steps-list" id="stepsList"></div>
+          </div>
+        </div>
+        <div class="game-panel">
+          <div class="timestamp-bar">
+            <div class="ts-time" id="tsTime">—</div>
+            <div class="ts-role" id="tsRole">—</div>
+            <div class="ts-location">MedCorp Regional Hospital</div>
+          </div>
+          <div class="situation-box">
+            <div class="sit-header"><div class="sit-label">Situation Update</div><div class="sit-divider"></div></div>
+            <div class="sit-body" id="situationText">Loading...</div>
+          </div>
+          <div class="consequence-banner" id="consequenceBanner">
+            <div class="banner-tag" id="bannerTag"></div>
+            <div id="bannerText"></div>
+          </div>
+          <div class="question-box">
+            <div class="q-label">// Decision Required</div>
+            <div class="q-text" id="questionText">—</div>
+            <div class="choices" id="choicesContainer"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextNode()">Continue →</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- DEBRIEF -->
+  <div id="debriefArea" style="display:none;">
+    <main>
+      <div class="debrief-wrap">
+        <div class="debrief-hero">
+          <div class="debrief-result-icon" id="debriefIcon">🎖️</div>
+          <div class="debrief-title" id="debriefTitle">—</div>
+          <div class="debrief-rank" id="debriefRank">—</div>
+          <div class="debrief-score-big" id="debriefScoreBig">0</div>
+          <div class="debrief-score-label">Points Scored</div>
+          <div class="debrief-message" id="debriefMessage">—</div>
+          <div class="outcome-banner" id="outcomeBanner"></div>
+        </div>
+        <div class="debrief-sections">
+          <div class="debrief-section">
+            <div class="ds-header">// Your Decision History</div>
+            <div class="ds-body" id="decisionHistory"></div>
+          </div>
+          <div class="debrief-section">
+            <div class="ds-header">// Key Security+ Concepts Tested</div>
+            <div class="ds-body"><div class="key-concepts" id="keyConcepts"></div></div>
+          </div>
+        </div>
+        <div class="debrief-actions">
+          <button class="action-btn action-primary" onclick="retryScenario()">↺ Retry Scenario</button>
+          <button class="action-btn action-secondary" onclick="backToSelect()">← All Scenarios</button>
+          <button class="action-btn action-secondary" onclick="switchHub('branch', document.querySelectorAll('.hub-tab')[2])">⌂ Lab Home</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══ SHARED SCRIPTS ══ -->
+<script src="gamification-social.js"></script>
+<script src="cyber-simulations.js"></script>
+<script src="scenario-data.js"></script>
+
+<script>
+// ════════════════════════════════════════════════
+// HUB NAVIGATION
+// ════════════════════════════════════════════════
+function switchHub(id, btn) {
+  document.querySelectorAll('.hub-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.hub-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════════
+// PBQ SIMULATOR JS
+// ════════════════════════════════════════════════
+
+// ── STATE ──
+let dragSrc = null, dragType = null;
+let correct = 0, attempts = 0;
+const logAns = { q1: null, q2: null };
+
+// ── SCORE ──
+function updScore() {
+  document.getElementById('score-correct').textContent = correct;
+  document.getElementById('score-attempts').textContent = attempts;
+}
+
+// ── TABS ──
+function switchTab(id, btn, n) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('prog-fill').style.width = (n / 8 * 100) + '%';
+  document.getElementById('prog-label').textContent = n + ' / 8';
+}
+
+// ── GENERIC DRAG HELPERS ──
+function ds(e, type) { dragSrc = e.currentTarget; dragType = type; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function de(e) { e.currentTarget.classList.remove('dragging'); }
+function dov(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); e.dataTransfer.dropEffect = 'move'; }
+function dlv(e) { e.currentTarget.classList.remove('dragover'); }
+
+// ── ACL ──
+function aclDropPool(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'acl') return;
+  const num = dragSrc.querySelector('.step-num'); if (num) num.remove();
+  document.getElementById('acl-pool').appendChild(dragSrc);
+  aclRenumber();
+}
+function aclDropList(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'acl') return;
+  const list = document.getElementById('acl-list');
+  const hint = list.querySelector('.drop-hint'); if (hint) hint.remove();
+  if (!dragSrc.querySelector('.step-num')) {
+    const n = document.createElement('span'); n.className = 'step-num';
+    dragSrc.insertBefore(n, dragSrc.firstChild);
+  }
+  list.appendChild(dragSrc);
+  aclRenumber();
+}
+function aclRenumber() {
+  const items = document.getElementById('acl-list').querySelectorAll('.drag-item');
+  items.forEach((item, i) => {
+    let n = item.querySelector('.step-num');
+    if (!n) { n = document.createElement('span'); n.className = 'step-num'; item.insertBefore(n, item.firstChild); }
+    n.textContent = i + 1;
+  });
+}
+function checkACL() {
+  attempts++; updScore();
+  const items = document.getElementById('acl-list').querySelectorAll('.drag-item');
+  const rules = Array.from(items).map(i => i.dataset.rule);
+  const correct_order = ['PERMIT TCP any 10.10.1.5 443','PERMIT TCP 192.168.1.0/24 10.10.1.5 22','DENY TCP any 10.10.1.5 22','DENY IP any any'];
+  const fb = document.getElementById('fb-acl');
+  fb.classList.add('show');
+  if (rules.length !== 4) {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place exactly 4 rules in the ACL. Don\'t include the HTTP:80 rule — the scenario only requires HTTPS.';
+    return;
+  }
+  if (JSON.stringify(rules) === JSON.stringify(correct_order)) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Your ACL is properly configured. Permitting HTTPS first allows web traffic; the admin SSH PERMIT before the SSH DENY ensures only 192.168.1.0/24 can SSH in; and the final implicit deny-all blocks everything else. First-match ordering is critical!';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong order.</strong> Remember: (1) PERMIT HTTPS any, (2) PERMIT SSH from admin subnet only, (3) DENY all other SSH, (4) DENY all. The DENY SSH must come <em>after</em> the PERMIT SSH from admin — otherwise admins get blocked too!';
+  }
+}
+function resetACL() {
+  const pool = document.getElementById('acl-pool'), list = document.getElementById('acl-list');
+  Array.from(list.querySelectorAll('.drag-item')).forEach(item => { const n = item.querySelector('.step-num'); if(n) n.remove(); pool.appendChild(item); });
+  if (!list.querySelector('.drag-item')) list.innerHTML = '<div class="drop-hint">Drop rules here in the correct order ↓</div>';
+  document.getElementById('fb-acl').className = 'feedback';
+}
+
+// ── NETWORK ──
+function netDrop(e, zoneId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'net') return;
+  const chipsId = zoneId === 'net-pool' ? 'net-pool-chips' : zoneId + '-chips';
+  document.getElementById(chipsId).appendChild(dragSrc);
+}
+function checkNet() {
+  attempts++; updScore();
+  const zones = ['zone-internet','zone-dmz','zone-internal'];
+  let wrong = [];
+  zones.forEach(z => {
+    document.getElementById(z + '-chips').querySelectorAll('.device-chip').forEach(chip => {
+      if (chip.dataset.zone !== z) wrong.push(`"${chip.dataset.device}" → should be ${chip.dataset.zone.replace('zone-','').toUpperCase()}`);
+    });
+  });
+  const poolLeft = document.getElementById('net-pool-chips').querySelectorAll('.device-chip').length;
+  const fb = document.getElementById('fb-net');
+  fb.classList.add('show');
+  if (poolLeft > 0) { fb.className = 'feedback show incorrect'; fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all devices into a zone before checking.'; return; }
+  if (wrong.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Web Server, Public DNS, and Mail Gateway belong in the DMZ — publicly accessible but isolated from internal systems. HR Database and Workstations are internal (trusted). External User represents the untrusted internet.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join('; ') + '. Remember: DMZ = publicly accessible services (web, DNS, mail). Internal = private data and endpoints. Don\'t expose sensitive systems directly to the perimeter.';
+  }
+}
+function resetNet() {
+  const pool = document.getElementById('net-pool-chips');
+  ['zone-internet','zone-dmz','zone-internal'].forEach(z => {
+    document.getElementById(z + '-chips').querySelectorAll('.device-chip').forEach(c => pool.appendChild(c));
+  });
+  document.getElementById('fb-net').className = 'feedback';
+}
+
+// ── LOG ANALYSIS ──
+function logPick(q, letter, el) {
+  document.getElementById('log-' + q).querySelectorAll('.log-choice').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  logAns[q] = letter;
+}
+function checkLog() {
+  if (!logAns.q1 || !logAns.q2) {
+    const fb = document.getElementById('fb-log');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ Please answer both questions before checking.';
+    return;
+  }
+  attempts++; updScore();
+  const q1ok = logAns.q1 === 'C', q2ok = logAns.q2 === 'C';
+  ['q1','q2'].forEach((q,qi) => {
+    const ans = qi===0?'C':'C';
+    document.getElementById('log-'+q).querySelectorAll('.log-choice').forEach((c,i) => {
+      const L = ['A','B','C','D'][i];
+      if (L===ans) c.classList.add('correct-ans');
+      else if (c.classList.contains('selected') && L!==ans) c.classList.add('wrong-ans');
+    });
+  });
+  const fb = document.getElementById('fb-log');
+  fb.classList.add('show');
+  if (q1ok && q2ok) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Both correct!</strong><br><strong>Q1:</strong> This is <em>username enumeration</em> — cycling through common usernames from one IP rapidly. Unlike spraying (one password → many accounts) or brute force (many passwords → one account).<br><br><strong>Q2:</strong> MFA + rate limiting is strongest — MFA blocks access even if credentials are guessed; rate limiting slows automation. Lockout alone can cause DoS; disk encryption is irrelevant here.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ ' + (!q1ok ? '<strong>Q1:</strong> The pattern shows many usernames from one IP in rapid succession — username enumeration/dictionary attack. ' : '') + (!q2ok ? '<strong>Q2:</strong> MFA + rate limiting is best. Complexity rules don\'t stop automation; disk encryption doesn\'t protect authentication.' : '');
+  }
+}
+function resetLog() {
+  logAns.q1 = null; logAns.q2 = null;
+  ['q1','q2'].forEach(q => document.getElementById('log-'+q).querySelectorAll('.log-choice').forEach(c => c.classList.remove('selected','correct-ans','wrong-ans')));
+  document.getElementById('fb-log').className = 'feedback';
+}
+
+// ── INCIDENT RESPONSE ──
+function irDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'ir') return;
+  const target = document.getElementById(targetId);
+  const hint = target.querySelector('.drop-hint'); if (hint) hint.remove();
+  target.appendChild(dragSrc);
+  if (targetId === 'ir-timeline') irRenumber();
+}
+function irRenumber() {
+  document.getElementById('ir-timeline').querySelectorAll('.drag-item').forEach((s,i) => s.dataset.num = i+1);
+}
+function checkIR() {
+  const steps = Array.from(document.getElementById('ir-timeline').querySelectorAll('.drag-item'));
+  attempts++; updScore();
+  if (steps.length !== 8) {
+    const fb = document.getElementById('fb-ir');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = `❌ Place all 8 steps in the timeline first. (${steps.length}/8 placed)`;
+    return;
+  }
+  const orders = steps.map(s => parseInt(s.dataset.order));
+  const fb = document.getElementById('fb-ir');
+  fb.classList.add('show');
+  if (JSON.stringify(orders) === JSON.stringify([1,2,3,4,5,6,7,8])) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Perfect!</strong> NIST SP 800-61 order:<br>1️⃣ Detect → 2️⃣ Contain (isolate) → 3️⃣ Preserve evidence → 4️⃣ Analyze scope/IOCs → 5️⃣ Eradicate → 6️⃣ Recover → 7️⃣ Notify → 8️⃣ Lessons learned.<br><br><em>Critical rule: Always preserve forensic evidence BEFORE eradication — never wipe a system before imaging it!</em>';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong order.</strong> Key rules: Contain <em>immediately</em> after detection. Preserve evidence <em>before</em> eradication. Restore only after confirmed clean. Lessons learned is always last.<br><br>Correct: Detect → Isolate → Preserve Evidence → Analyze → Eradicate → Restore → Notify → Lessons Learned';
+  }
+}
+function resetIR() {
+  const pool = document.getElementById('ir-pool'), tl = document.getElementById('ir-timeline');
+  Array.from(tl.querySelectorAll('.drag-item')).forEach(s => { s.removeAttribute('data-num'); pool.appendChild(s); });
+  tl.innerHTML = '<div class="drop-hint">Drop steps here in the correct order ↓</div>';
+  document.getElementById('fb-ir').className = 'feedback';
+}
+
+// ── PORT MATCHING ──
+function portDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'port') return;
+  if (targetId === 'ports-pool') {
+    document.getElementById('ports-pool').appendChild(dragSrc);
+  } else {
+    const chipsId = targetId + '-chips';
+    document.getElementById(chipsId).appendChild(dragSrc);
+  }
+}
+function checkPorts() {
+  attempts++; updScore();
+  const portMap = { '22': ['SSH','SFTP'], '25': ['SMTP'], '53': ['DNS'], '88': ['Kerberos'], '161': ['SNMP'], '389': ['LDAP'], '443': ['HTTPS'], '990': ['FTPS'], '3389': ['RDP'] };
+  let wrong = [];
+  const poolLeft = document.getElementById('ports-pool').querySelectorAll('.device-chip').length;
+  if (poolLeft > 0) {
+    const fb = document.getElementById('fb-ports');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all service chips into port buckets before checking.';
+    return;
+  }
+  ['22','25','53','88','161','389','443','990','3389'].forEach(port => {
+    const chips = document.getElementById('bucket-' + port + '-chips').querySelectorAll('.device-chip');
+    chips.forEach(chip => {
+      if (!portMap[port].includes(chip.dataset.service)) {
+        wrong.push(chip.dataset.service + ' (not port ' + port + ')');
+      }
+    });
+    // check nothing is missing from correct bucket
+  });
+  const fb = document.getElementById('fb-ports');
+  fb.classList.add('show');
+  if (wrong.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Key takeaways: SSH and SFTP both use port 22 (SFTP is SSH-based file transfer, not FTP). FTPS uses port 990 (FTP over SSL — different from SFTP). DNS uses both UDP and TCP 53. Kerberos :88 is essential for AD authentication. LDAP :389 vs LDAPS :636 (secure). SNMP :161 is UDP — important for network monitoring.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join(', ') + '.<br><br>Remember: SFTP ≠ FTPS. SFTP runs over SSH (port 22). FTPS is FTP over SSL/TLS (port 990). RDP is always 3389. SNMP is UDP 161.';
+  }
+}
+function resetPorts() {
+  const pool = document.getElementById('ports-pool');
+  ['22','25','53','88','161','389','443','990','3389'].forEach(port => {
+    document.getElementById('bucket-' + port + '-chips').querySelectorAll('.device-chip').forEach(c => pool.appendChild(c));
+  });
+  document.getElementById('fb-ports').className = 'feedback';
+}
+
+// ── CRYPTOGRAPHY ──
+function cryptoDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'crypto') return;
+  if (targetId === 'crypto-pool') {
+    document.getElementById('crypto-pool').appendChild(dragSrc);
+  } else {
+    const chipsId = targetId + '-chips';
+    document.getElementById(chipsId).appendChild(dragSrc);
+  }
+}
+function checkCrypto() {
+  const poolLeft = document.getElementById('crypto-pool').querySelectorAll('.device-chip').length;
+  if (poolLeft > 0) {
+    const fb = document.getElementById('fb-crypto');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all algorithm chips into categories.';
+    return;
+  }
+  attempts++; updScore();
+  let wrong = [];
+  ['symmetric','asymmetric','hashing','keyexchange'].forEach(cat => {
+    document.getElementById('cat-' + cat + '-chips').querySelectorAll('.device-chip').forEach(chip => {
+      if (chip.dataset.cat !== cat) wrong.push(chip.dataset.algo + ' (not ' + cat + ')');
+    });
+  });
+  const fb = document.getElementById('fb-crypto');
+  fb.classList.add('show');
+  if (wrong.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong><br>🔑 <strong>Symmetric</strong> (same key): AES, 3DES, ChaCha20 — fast, used for bulk encryption<br>🗝️ <strong>Asymmetric</strong> (key pair): RSA, ECC, DSA — slower, used for key exchange and digital signatures<br>🔍 <strong>Hashing</strong> (one-way): SHA-256, MD5, BCRYPT — integrity verification, password storage<br>🤝 <strong>Key Exchange</strong>: Diffie-Hellman, ECDH, ECDHE — establish shared secrets without transmitting them. ECDHE adds ephemeral keys for perfect forward secrecy.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join(', ') + '.<br><br>Tip: Symmetric = same key both sides (fast). Asymmetric = public/private key pair (slow). Hashing = one-way, no decryption. Key Exchange = securely agree on a shared secret (DH, ECDH).';
+  }
+}
+function resetCrypto() {
+  const pool = document.getElementById('crypto-pool');
+  ['symmetric','asymmetric','hashing','keyexchange'].forEach(cat => {
+    document.getElementById('cat-' + cat + '-chips').querySelectorAll('.device-chip').forEach(c => pool.appendChild(c));
+  });
+  document.getElementById('fb-crypto').className = 'feedback';
+}
+
+// ── VULNERABILITY PRIORITIZATION ──
+function vulnDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'vuln') return;
+  const target = document.getElementById(targetId);
+  const hint = target.querySelector('.drop-hint'); if (hint) hint.remove();
+  target.appendChild(dragSrc);
+  if (targetId === 'vuln-queue') vulnRenumber();
+}
+function vulnRenumber() {
+  document.getElementById('vuln-queue').querySelectorAll('.vuln-card').forEach((c,i) => c.dataset.num = i+1);
+}
+function checkVuln() {
+  const cards = Array.from(document.getElementById('vuln-queue').querySelectorAll('.vuln-card'));
+  if (cards.length !== 5) {
+    const fb = document.getElementById('fb-vuln');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ Place all 5 vulnerabilities in the remediation queue first. (' + cards.length + '/5 placed)';
+    return;
+  }
+  attempts++; updScore();
+  const order = cards.map(c => parseInt(c.dataset.priority));
+  const fb = document.getElementById('fb-vuln');
+  fb.classList.add('show');
+  if (JSON.stringify(order) === JSON.stringify([1,2,3,4,5])) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct prioritization!</strong><br>1️⃣ <strong>SQL Injection (9.8)</strong> — highest CVSS, unauthenticated, full data breach risk<br>2️⃣ <strong>RCE Apache (9.0)</strong> — nearly as critical, public exploit available, 30 days unpatched<br>3️⃣ <strong>Admin No MFA (7.5)</strong> — internet-exposed admin = serious risk, easy attacker target<br>4️⃣ <strong>TLS 1.0 (5.3)</strong> — real risk but requires active MITM and specific conditions<br>5️⃣ <strong>Version Disclosure (3.1)</strong> — informational, aids recon but not directly exploitable<br><br><em>Note: CVSS score alone doesn't determine priority — exploitability, exposure, and available patches all factor in.</em>';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Not the optimal order.</strong> Key principle: Prioritize by <em>exploitability × impact × exposure</em>, not just CVSS score alone. An unauthenticated SQLi that leaks your whole database beats a 9.0 that requires a specific condition. Public exploits dramatically increase urgency. Info disclosures are lowest — they aid attackers but aren't directly exploitable.';
+  }
+}
+function resetVuln() {
+  const pool = document.getElementById('vuln-pool'), queue = document.getElementById('vuln-queue');
+  Array.from(queue.querySelectorAll('.vuln-card')).forEach(c => { c.removeAttribute('data-num'); pool.appendChild(c); });
+  queue.innerHTML = '<div class="drop-hint">Drop vulnerabilities here in priority order ↓</div>';
+  document.getElementById('fb-vuln').className = 'feedback';
+}
+
+// ── IAM ACCESS CONTROL ──
+// IAM uses clone-on-drop since permissions can apply to multiple roles
+function iamDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'iam') return;
+  if (targetId === 'iam-pool') {
+    // return to pool — move original back
+    document.getElementById('iam-pool').appendChild(dragSrc);
+  } else {
+    // clone into role box so original stays in pool
+    const chipsId = targetId + '-chips';
+    const container = document.getElementById(chipsId);
+    // prevent duplicates in same role
+    const existing = Array.from(container.querySelectorAll('.device-chip')).map(c => c.dataset.perm);
+    if (existing.includes(dragSrc.dataset.perm)) return;
+    const clone = dragSrc.cloneNode(true);
+    clone.addEventListener('dragstart', (ev) => ds(ev, 'iam'));
+    clone.addEventListener('dragend', de);
+    // add remove-on-click for role chips
+    clone.setAttribute('ondblclick', 'this.remove()');
+    clone.title = 'Double-click to remove';
+    container.appendChild(clone);
+  }
+}
+function checkIAM() {
+  attempts++; updScore();
+  // Expected: perm -> array of roles that should have it
+  const expected = {
+    'View own payslip':         ['employee','hr_manager'],
+    'View all employee records':['hr_manager','auditor'],
+    'Modify employee salary':   ['hr_manager'],
+    'Reset user passwords':     ['it_admin'],
+    'Create/delete accounts':   ['it_admin'],
+    'View audit logs':          ['it_admin','auditor'],
+    'Export payroll data':      ['hr_manager'],
+    'Modify system config':     ['it_admin']
+  };
+  const roles = ['employee','hr_manager','it_admin','auditor'];
+  let issues = [];
+  roles.forEach(role => {
+    const chips = document.getElementById('iam-' + role + '-chips').querySelectorAll('.device-chip');
+    const assigned = Array.from(chips).map(c => c.dataset.perm);
+    // check for over-privilege
+    assigned.forEach(perm => {
+      if (!expected[perm] || !expected[perm].includes(role)) {
+        issues.push(role.replace('_',' ') + ' should NOT have "' + perm + '"');
+      }
+    });
+    // check for missing permissions
+    Object.entries(expected).forEach(([perm, allowedRoles]) => {
+      if (allowedRoles.includes(role) && !assigned.includes(perm)) {
+        issues.push(role.replace('_',' ') + ' is missing "' + perm + '"');
+      }
+    });
+  });
+  const fb = document.getElementById('fb-iam');
+  fb.classList.add('show');
+  if (issues.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Least privilege applied properly.<br><br>Key principles tested: <em>Employees</em> only see their own data. <em>HR Managers</em> can view/modify HR data but cannot touch system config. <em>IT Admins</em> manage infrastructure but should NOT access payroll or HR records. <em>Auditors</em> have read-only access to records and logs for compliance — never write access. Separation of duties prevents any one role from having too much power.';
+  } else {
+    const shown = issues.slice(0,4);
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong> ' + shown.join('; ') + (issues.length>4?'...':'') + '.<br><br>Remember: Least privilege = minimum access needed. IT Admin ≠ HR access. Auditors = read-only. Employees = own data only. Double-click a chip in a role box to remove it.';
+  }
+}
+function resetIAM() {
+  ['employee','hr_manager','it_admin','auditor'].forEach(role => {
+    document.getElementById('iam-' + role + '-chips').innerHTML = '';
+  });
+  document.getElementById('fb-iam').className = 'feedback';
+}
+
+
+
+// ════════════════════════════════════════════════
+// BRANCHING SCENARIOS JS
+// ════════════════════════════════════════════════
+
+    let currentScenario = null;
+    let currentNodeId = null;
+    let totalPoints = 0;
+    let maxPoints = 0;
+    let decisionLog = [];
+    let stepCount = 0;
+
+    const SCENARIO_CONCEPTS = {
+      midnight_breach:        ['Incident Response Lifecycle','Network Segmentation','Ransomware Defense','HIPAA Compliance','Chain of Command','Tor / Port 9050','Containment vs Eradication','Backup & Recovery','Forensic Preservation','OFAC Sanctions'],
+      phishing_campaign:      ['Phishing / Spearphishing','DMARC / SPF / DKIM','Business Email Compromise (BEC)','Email Header Analysis','Social Engineering','Domain Spoofing','Incident Containment','Wire Transfer Fraud','Security Awareness'],
+      insider_threat:         ['Insider Threat Detection','Least Privilege','DLP — Data Loss Prevention','Evidence Preservation','HR & Legal Escalation','Offboarding Procedures','SIEM Alerting','Privileged Account Management','Access Revocation'],
+      cloud_misconfiguration: ['S3 Bucket ACLs','Cloud Security Posture Management (CSPM)','Breach Notification Laws','GDPR vs US State Laws','Data Exposure Response','Root Cause Analysis','AWS Block Public Access','Responsible Disclosure','PII Protection']
+    };
+
+    const THREAT_LEVELS = {
+      1: { label: 'LOW',      color: '#00f5a0', pct: '20%' },
+      2: { label: 'MODERATE', color: '#ffd32a', pct: '45%' },
+      3: { label: 'HIGH',     color: '#ff6b35', pct: '70%' },
+      4: { label: 'CRITICAL', color: '#ff4757', pct: '95%' }
+    };
+
+    function startScenario(id) {
+      currentScenario = SCENARIOS[id];
+      currentNodeId = 'start';
+      totalPoints = 0;
+      maxPoints = 0;
+      decisionLog = [];
+      stepCount = 0;
+
+      // Show intro
+      const intro = currentScenario.intro;
+      document.getElementById('situationText').textContent = intro;
+      document.getElementById('sideTitle').textContent = currentScenario.title;
+      document.getElementById('sideRole').textContent = currentScenario.roles;
+      document.getElementById('tsRole').textContent = currentScenario.roles;
+
+      document.getElementById('scenarioSelect').style.display = 'none';
+      document.getElementById('gameArea').style.display = 'block';
+
+      // Show first node after brief delay
+      setTimeout(() => renderNode('start'), 400);
+    }
+
+    function renderNode(nodeId) {
+      currentNodeId = nodeId;
+      const node = currentScenario.nodes[nodeId];
+      if (!node) return;
+
+      // Handle terminal nodes
+      if (node.isTerminal) {
+        showDebrief(node);
+        return;
+      }
+
+      stepCount++;
+
+      // Update timestamp
+      document.getElementById('tsTime').textContent = node.timeStamp || '—';
+
+      // Update threat
+      const threat = THREAT_LEVELS[node.threatLevel] || THREAT_LEVELS[1];
+      document.getElementById('threatBar').style.width = threat.pct;
+      document.getElementById('threatBar').style.background = threat.color;
+      document.getElementById('threatText').textContent = threat.label;
+      document.getElementById('threatText').style.color = threat.color;
+
+      // Update situation
+      if (node.situation) {
+        document.getElementById('situationText').textContent = node.situation;
+      }
+
+      // Update question
+      document.getElementById('questionText').textContent = node.question;
+
+      // Hide consequence from previous step
+      document.getElementById('consequenceBanner').classList.remove('show');
+
+      // Render choices
+      const container = document.getElementById('choicesContainer');
+      container.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      node.choices.forEach((choice, i) => {
+        // Track max points
+        const choiceMax = Math.max(...node.choices.map(c => c.points));
+        if (i === 0) maxPoints += choiceMax;
+
+        const btn = document.createElement('button');
+        btn.className = 'choice';
+        btn.innerHTML = `
+          <div class="choice-letter">${letters[i]}</div>
+          <div class="choice-body">
+            <div class="choice-text">${choice.text}</div>
+            ${choice.tag ? `<div class="choice-tag">${choice.tag}</div>` : ''}
+          </div>
+        `;
+        btn.onclick = () => selectChoice(choice, i, node.choices);
+        container.appendChild(btn);
+      });
+
+      // Add step to tracker
+      addStepDot(stepCount, node.question.slice(0, 35) + '…', 'active');
+
+      // Hide next btn
+      document.getElementById('nextBtn').classList.remove('show');
+
+      // Scroll to top of game panel
+      window.scrollTo({ top: 80, behavior: 'smooth' });
+    }
+
+    function selectChoice(choice, choiceIndex, allChoices) {
+      // Update score
+      totalPoints += choice.points;
+      document.getElementById('sideScore').textContent = totalPoints;
+
+      // Determine quality
+      const maxPts = Math.max(...allChoices.map(c => c.points));
+      const quality = choice.points >= maxPts ? 'optimal'
+                    : choice.points >= maxPts * 0.5 ? 'partial' : 'bad';
+
+      // Style all choices
+      const btns = document.querySelectorAll('.choice');
+      btns.forEach((btn, i) => {
+        if (i === choiceIndex) {
+          btn.classList.add(`selected-${quality}`);
+        } else {
+          btn.classList.add('unselected');
+        }
+        btn.disabled = true;
+      });
+
+      // Show consequence banner
+      const banner = document.getElementById('consequenceBanner');
+      const bannerTag = document.getElementById('bannerTag');
+      const bannerText = document.getElementById('bannerText');
+
+      banner.className = 'consequence-banner show ' + quality;
+      bannerTag.textContent = choice.tag || (quality === 'optimal' ? '✓ Good Decision' : quality === 'partial' ? '⚠ Suboptimal' : '❌ Poor Decision');
+      bannerText.textContent = choice.outcome;
+
+      // Update step dot
+      updateStepDot(stepCount, quality);
+
+      // Log decision
+      decisionLog.push({
+        step: stepCount,
+        question: document.getElementById('questionText').textContent,
+        answer: choice.text,
+        points: choice.points,
+        maxPoints: maxPts,
+        quality
+      });
+
+      // Show next button
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.classList.add('show');
+      nextBtn.dataset.next = choice.next;
+
+      // Scroll to banner
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function nextNode() {
+      const nextId = document.getElementById('nextBtn').dataset.next;
+      renderNode(nextId);
+    }
+
+    function addStepDot(num, label, state) {
+      const list = document.getElementById('stepsList');
+      // Mark previous active as done
+      list.querySelectorAll('.step-dot.active').forEach(d => {
+        d.classList.remove('active');
+        d.classList.add('done');
+      });
+      const dot = document.createElement('div');
+      dot.className = `step-dot ${state}`;
+      dot.id = `step-${num}`;
+      dot.innerHTML = `<div class="dot"></div><span>Step ${num}</span>`;
+      list.appendChild(dot);
+    }
+
+    function updateStepDot(num, quality) {
+      const dot = document.getElementById(`step-${num}`);
+      if (dot) {
+        dot.classList.remove('active');
+        dot.classList.add('done');
+        const d = dot.querySelector('.dot');
+        if (quality === 'optimal') d.style.background = '#00f5a0';
+        else if (quality === 'partial') d.style.background = '#ffd32a';
+        else d.style.background = '#ff4757';
+      }
+    }
+
+    function showDebrief(terminalNode) {
+      document.getElementById('gameArea').style.display = 'none';
+      document.getElementById('debriefArea').style.display = 'block';
+
+      // Calculate score percentage
+      const pct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+
+      // Determine band
+      let band;
+      if (pct >= 85)      band = SCORE_BANDS.optimal;
+      else if (pct >= 65) band = SCORE_BANDS.good;
+      else if (pct >= 40) band = SCORE_BANDS.partial;
+      else                band = SCORE_BANDS.poor;
+
+      // Result icons
+      const icons = { good: '🎖️', partial: '⚡', bad: '💀' };
+      const termType = terminalNode.terminalType || 'partial';
+
+      document.getElementById('debriefIcon').textContent = icons[termType] || '🎖️';
+      document.getElementById('debriefTitle').textContent = band.label;
+      document.getElementById('debriefTitle').style.color = band.color;
+      document.getElementById('debriefRank').textContent = `// ${currentScenario.title} — Complete`;
+      document.getElementById('debriefRank').style.color = band.color;
+      document.getElementById('debriefScoreBig').textContent = totalPoints;
+      document.getElementById('debriefScoreBig').style.color = band.color;
+      document.getElementById('debriefMessage').textContent = band.desc;
+
+      // Outcome banner
+      const ob = document.getElementById('outcomeBanner');
+      ob.className = `outcome-banner outcome-${termType}`;
+      ob.textContent = '📋 ' + terminalNode.message;
+
+      // Decision history
+      const history = document.getElementById('decisionHistory');
+      history.innerHTML = '';
+      decisionLog.forEach((d, i) => {
+        const ptsClass = d.quality === 'optimal' ? 'pts-high' : d.quality === 'partial' ? 'pts-mid' : 'pts-low';
+        const row = document.createElement('div');
+        row.className = 'decision-row';
+        row.innerHTML = `
+          <div class="dr-top">
+            <div class="dr-q">Step ${d.step}</div>
+            <div class="dr-points ${ptsClass}">+${d.points} / ${d.maxPoints} pts</div>
+          </div>
+          <div class="dr-answer">${d.answer}</div>
+        `;
+        history.appendChild(row);
+      });
+
+      // Key concepts
+      const concepts = SCENARIO_CONCEPTS[currentScenario.id] || [];
+      document.getElementById('keyConcepts').innerHTML = concepts.map(c => `<span class="concept-tag">${c}</span>`).join('');
+
+      // XP award
+      if (window.securityPlusGamification) {
+        window.securityPlusGamification.addXP(Math.round(totalPoints / 2));
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function retryScenario() {
+      const id = currentScenario.id;
+      document.getElementById('debriefArea').style.display = 'none';
+      document.getElementById('stepsList').innerHTML = '';
+      startScenario(id);
+    }
+
+    function backToSelect() {
+      document.getElementById('debriefArea').style.display = 'none';
+      document.getElementById('gameArea').style.display = 'none';
+      document.getElementById('scenarioSelect').style.display = 'block';
+      document.getElementById('stepsList').innerHTML = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  
+</script>
+
+</body>
+</html>
