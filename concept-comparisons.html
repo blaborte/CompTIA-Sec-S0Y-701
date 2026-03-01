@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concept Comparisons | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --purple: #b47aff;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+    flex-shrink: 0;
+  }
+
+  .logo { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); letter-spacing: 0.1em; text-decoration: none; }
+  .logo span { color: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    text-decoration: none; border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem; border-radius: 6px; transition: all 0.2s; letter-spacing: 0.05em;
+  }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  main { flex: 1; padding: 2rem; }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  h1 {
+    font-size: 2rem; font-weight: 600; margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; text-align: center;
+  }
+
+  .subtitle {
+    color: var(--muted); font-size: 0.9rem; margin-bottom: 2.5rem;
+    font-family: var(--mono); letter-spacing: 0.05em; text-align: center;
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin-bottom: 2rem; align-items: center;
+  }
+  .filter-label { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; margin-right: 0.5rem; }
+  .filter-btn {
+    padding: 0.4rem 1rem; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 20px;
+    color: var(--muted); font-family: var(--mono); font-size: 0.75rem;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.05em;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+  .filter-btn.active {
+    background: rgba(0,212,255,0.1);
+    border-color: var(--accent); color: var(--accent);
+  }
+
+  /* Search */
+  .search-wrap { position: relative; margin-left: auto; }
+  .search-input {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.4rem 1rem 0.4rem 2.2rem;
+    font-family: var(--mono); font-size: 0.78rem; color: var(--text);
+    width: 200px; transition: all 0.2s; outline: none;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+  .search-icon { position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.8rem; }
+
+  /* Grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Comparison card */
+  .compare-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.25s;
+    cursor: pointer;
+    position: relative;
+  }
+  .compare-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--green), transparent);
+    border-radius: 12px 12px 0 0;
+  }
+  .compare-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,0.08); }
+  .compare-card.expanded { border-color: var(--accent); }
+
+  .card-header {
+    padding: 1rem 1.25rem 0.75rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .card-topic {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .card-toggle {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--accent);
+    transition: transform 0.25s;
+  }
+  .compare-card.expanded .card-toggle { transform: rotate(180deg); }
+
+  /* VS row */
+  .vs-row {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 0; padding: 0 1.25rem 1rem;
+  }
+
+  .vs-term {
+    font-size: 1.05rem; font-weight: 600;
+  }
+  .vs-term.left { color: var(--accent); }
+  .vs-term.right { color: var(--purple); text-align: right; }
+
+  .vs-badge {
+    font-family: var(--mono); font-size: 0.65rem; font-weight: 600;
+    color: var(--muted); background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 50%;
+    width: 28px; height: 28px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin: 0 0.75rem;
+  }
+
+  /* Collapsed summary */
+  .card-summary {
+    padding: 0 1.25rem 1rem;
+    font-size: 0.83rem; color: var(--muted); line-height: 1.6;
+    border-top: 1px solid var(--border); padding-top: 0.75rem;
+  }
+
+  /* Expanded detail panel */
+  .card-detail {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+  .compare-card.expanded .card-detail { display: block; }
+
+  .detail-cols {
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+
+  .detail-col {
+    padding: 1rem 1.25rem;
+  }
+  .detail-col.left { border-right: 1px solid var(--border); }
+
+  .detail-col-label {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 600;
+  }
+  .detail-col.left .detail-col-label { color: var(--accent); }
+  .detail-col.right .detail-col-label { color: var(--purple); }
+
+  .detail-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+  .detail-list li {
+    font-size: 0.82rem; color: var(--text); line-height: 1.5;
+    padding-left: 0.9rem; position: relative;
+  }
+  .detail-list li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--muted); font-size: 0.7rem;
+  }
+
+  /* Exam tip */
+  .exam-tip {
+    background: rgba(255,211,42,0.05);
+    border-top: 1px solid rgba(255,211,42,0.15);
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem; color: var(--yellow); line-height: 1.6;
+  }
+  .exam-tip strong { font-weight: 600; }
+
+  /* Similarity bar */
+  .similarity-row {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.6rem 1.25rem;
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    font-family: var(--mono); font-size: 0.7rem;
+  }
+  .sim-label { color: var(--muted); min-width: 100px; }
+  .sim-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .sim-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+  .sim-pct { color: var(--text); min-width: 36px; text-align: right; }
+
+  /* Category badge on card */
+  .cat-badge {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.15rem 0.6rem;
+    border-radius: 20px; border: 1px solid;
+  }
+  .cat-detection { color: var(--green); border-color: rgba(0,245,160,0.3); background: rgba(0,245,160,0.06); }
+  .cat-crypto { color: var(--purple); border-color: rgba(180,122,255,0.3); background: rgba(180,122,255,0.06); }
+  .cat-access { color: var(--accent); border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.06); }
+  .cat-protocols { color: var(--yellow); border-color: rgba(255,211,42,0.3); background: rgba(255,211,42,0.06); }
+  .cat-threats { color: var(--red); border-color: rgba(255,71,87,0.3); background: rgba(255,71,87,0.06); }
+  .cat-network { color: var(--accent2); border-color: rgba(255,107,43,0.3); background: rgba(255,107,43,0.06); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 4rem 2rem;
+    color: var(--muted); font-family: var(--mono); font-size: 0.85rem;
+  }
+
+  /* Progress tracker */
+  .progress-row {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem;
+  }
+  .progress-label { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .progress-bar { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); border-radius: 3px; transition: width 0.4s ease; }
+  .progress-count { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); white-space: nowrap; }
+
+  footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem; text-align: center;
+    font-size: 0.85rem; color: var(--muted); font-family: var(--mono);
+  }
+
+  @media(max-width:640px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .detail-cols { grid-template-columns: 1fr; }
+    .detail-col.left { border-right: none; border-bottom: 1px solid var(--border); }
+    .filter-bar { gap: 0.4rem; }
+    .search-wrap { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">SECURITY+ <span>SY0-701</span> PRACTICE EXAMS</a>
+  <a href="index.html" class="back-link">← BACK</a>
+</header>
+
+<main>
+<div class="container">
+
+  <h1>Concept Comparison Cards</h1>
+  <p class="subtitle">// commonly confused pairs · click any card to expand</p>
+
+  <!-- Progress -->
+  <div class="progress-row">
+    <span class="progress-label">CARDS REVIEWED</span>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="progress-count" id="prog-count">0 / 18</span>
+  </div>
+
+  <!-- Filter + Search -->
+  <div class="filter-bar">
+    <span class="filter-label">FILTER:</span>
+    <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
+    <button class="filter-btn" onclick="filterCards('detection',this)">Detection</button>
+    <button class="filter-btn" onclick="filterCards('crypto',this)">Cryptography</button>
+    <button class="filter-btn" onclick="filterCards('access',this)">Access Control</button>
+    <button class="filter-btn" onclick="filterCards('protocols',this)">Protocols</button>
+    <button class="filter-btn" onclick="filterCards('threats',this)">Threats</button>
+    <button class="filter-btn" onclick="filterCards('network',this)">Network</button>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="Search concepts..." oninput="searchCards(this.value)">
+    </div>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="cards-grid" id="cards-grid"></div>
+  <div class="empty-state" id="empty-state" style="display:none;">No cards match your filter.</div>
+
+</div>
+</main>
+
+<footer>
+  <p>CompTIA Security+ SY0-701 · Concept Comparison Cards</p>
+  <p style="margin-top:0.4rem; font-size:0.75rem;"><a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a></p>
+</footer>
+
+<script>
+const CARDS = [
+  {
+    id: 1, cat: 'detection', catLabel: 'Detection',
+    left: 'IDS', right: 'IPS',
+    summary: 'Both monitor network traffic for threats — but only one can stop them.',
+    similarity: 75,
+    leftPoints: [
+      'Intrusion Detection System',
+      'Passive — monitors and alerts only',
+      'Does NOT block traffic',
+      'Out-of-band (traffic is copied to it)',
+      'Zero impact on network performance',
+      'False positives = missed alerts only',
+    ],
+    rightPoints: [
+      'Intrusion Prevention System',
+      'Active — monitors AND blocks',
+      'Sits inline — can drop/reject packets',
+      'In-band (traffic flows through it)',
+      'Slight latency overhead',
+      'False positives = legitimate traffic blocked',
+    ],
+    tip: '⚡ Exam tip: If a question says traffic is <strong>blocked, dropped, or prevented</strong> — it\'s IPS. If it only <strong>alerts or logs</strong> — it\'s IDS. IPS has higher risk from false positives because it disrupts live traffic.',
+  },
+  {
+    id: 2, cat: 'crypto', catLabel: 'Cryptography',
+    left: 'Symmetric', right: 'Asymmetric',
+    summary: 'Both encrypt data — but they use keys very differently.',
+    similarity: 55,
+    leftPoints: [
+      'Same key to encrypt AND decrypt',
+      'Faster — suited for bulk data',
+      'Key distribution is the challenge',
+      'Examples: AES, 3DES, ChaCha20',
+      'Used for data-at-rest encryption',
+      'Requires a secure key exchange first',
+    ],
+    rightPoints: [
+      'Public key encrypts, private key decrypts',
+      'Slower — used for small data / key exchange',
+      'No key distribution problem',
+      'Examples: RSA, ECC, DSA',
+      'Used for digital signatures and PKI',
+      'Public key can be freely shared',
+    ],
+    tip: '⚡ Exam tip: TLS uses <strong>asymmetric</strong> to exchange a session key, then <strong>symmetric</strong> for the actual data. "Hybrid encryption" = best of both worlds. Remember: asymmetric = two different keys (public + private).',
+  },
+  {
+    id: 3, cat: 'access', catLabel: 'Access Control',
+    left: 'Authentication', right: 'Authorization',
+    summary: 'Authentication proves who you are. Authorization determines what you can do.',
+    similarity: 40,
+    leftPoints: [
+      'Verifies identity — "Who are you?"',
+      'Happens before authorization',
+      'Uses credentials (password, MFA, cert)',
+      'Examples: login, biometrics, smart card',
+      'Outcome: identity confirmed or denied',
+      'Related: AAA framework (first A)',
+    ],
+    rightPoints: [
+      'Grants permissions — "What can you do?"',
+      'Happens after authentication',
+      'Uses policies, roles, ACLs',
+      'Examples: RBAC, ABAC, file permissions',
+      'Outcome: access granted or denied',
+      'Related: AAA framework (second A)',
+    ],
+    tip: '⚡ Exam tip: You can be <strong>authenticated but not authorized</strong> (valid user, wrong permissions). You cannot be authorized without first being authenticated. The third A in AAA is <strong>Accounting</strong> (logging/auditing).',
+  },
+  {
+    id: 4, cat: 'detection', catLabel: 'Detection',
+    left: 'Vulnerability', right: 'Exploit',
+    summary: 'A vulnerability is the weakness. An exploit is the weapon that uses it.',
+    similarity: 45,
+    leftPoints: [
+      'A weakness or flaw in a system',
+      'Exists whether discovered or not',
+      'May or may not be exploitable',
+      'Found via scanning and assessments',
+      'Examples: unpatched software, misconfig',
+      'Measured by CVSS score',
+    ],
+    rightPoints: [
+      'Code or technique that leverages a vuln',
+      'Requires a vulnerability to exist first',
+      'Actively weaponized by an attacker',
+      'Found in exploit databases (ExploitDB)',
+      'Examples: buffer overflow, SQL injection payload',
+      'Zero-day = exploit before patch exists',
+    ],
+    tip: '⚡ Exam tip: Risk = Threat × Vulnerability × Impact. A vulnerability with no known exploit is still a risk. A zero-day exploit is especially dangerous because <strong>no patch exists yet</strong>.',
+  },
+  {
+    id: 5, cat: 'protocols', catLabel: 'Protocols',
+    left: 'SFTP', right: 'FTPS',
+    summary: 'Both are secure file transfer protocols — but they work completely differently under the hood.',
+    similarity: 60,
+    leftPoints: [
+      'SSH File Transfer Protocol',
+      'Runs over SSH (port 22)',
+      'Single connection, single port',
+      'Uses SSH encryption end-to-end',
+      'Firewall-friendly — one port only',
+      'Completely different from FTP',
+    ],
+    rightPoints: [
+      'FTP over SSL/TLS',
+      'Uses port 990 (implicit) or 21 (explicit)',
+      'Separate control and data channels',
+      'FTP extended with SSL/TLS',
+      'Firewall can be tricky (passive mode)',
+      'Extension of original FTP protocol',
+    ],
+    tip: '⚡ Exam tip: Despite the similar names, SFTP and FTPS are unrelated protocols. SFTP is part of the SSH suite. FTPS is FTP + SSL. This is a very common trick question — don\'t confuse them with each other or with plain FTP (port 21, no encryption).',
+  },
+  {
+    id: 6, cat: 'network', catLabel: 'Network',
+    left: 'Stateful Firewall', right: 'Stateless Firewall',
+    summary: 'Both filter packets — but one tracks connections while the other treats every packet independently.',
+    similarity: 65,
+    leftPoints: [
+      'Tracks connection state (SYN, established)',
+      'Maintains a state table',
+      'Can detect out-of-sequence packets',
+      'More intelligent — allows return traffic',
+      'Higher resource usage',
+      'Better protection against TCP attacks',
+    ],
+    rightPoints: [
+      'Evaluates each packet independently',
+      'No memory of previous packets',
+      'Faster — less processing overhead',
+      'Rules must explicitly allow return traffic',
+      'Lower resource usage',
+      'Vulnerable to IP spoofing and fragmentation attacks',
+    ],
+    tip: '⚡ Exam tip: Modern firewalls are almost always stateful. Stateless = ACLs on routers (like you built in the PBQ!). If a question mentions "connection tracking" or "established sessions" — think stateful.',
+  },
+  {
+    id: 7, cat: 'access', catLabel: 'Access Control',
+    left: 'DAC', right: 'MAC',
+    summary: 'Both control who accesses resources — but who decides the rules is very different.',
+    similarity: 50,
+    leftPoints: [
+      'Discretionary Access Control',
+      'Owner of resource sets permissions',
+      'Flexible — user-managed',
+      'Common in most OS file systems',
+      'Example: sharing a Google Doc',
+      'Vulnerable to Trojan horse attacks',
+    ],
+    rightPoints: [
+      'Mandatory Access Control',
+      'Central authority (admin/OS) sets policy',
+      'Rigid — users cannot change permissions',
+      'Used in government/military systems',
+      'Example: classified document labels (Top Secret)',
+      'Most secure but least flexible',
+    ],
+    tip: '⚡ Exam tip: The third model is <strong>RBAC</strong> (Role-Based) — permissions tied to job roles, not individuals. MAC is the strictest. DAC is most common. RBAC is most scalable for enterprise. Also know <strong>ABAC</strong> (Attribute-Based) for newer systems.',
+  },
+  {
+    id: 8, cat: 'threats', catLabel: 'Threats',
+    left: 'Virus', right: 'Worm',
+    summary: 'Both are malware — but a worm spreads on its own without any user action.',
+    similarity: 70,
+    leftPoints: [
+      'Requires a host file to attach to',
+      'Needs user action to spread (open file)',
+      'Replicates within a single system',
+      'Spreads via infected files/media',
+      'Cannot propagate without human help',
+      'Example: macro virus in Word doc',
+    ],
+    rightPoints: [
+      'Self-contained — no host file needed',
+      'Self-propagates across networks automatically',
+      'Exploits network vulnerabilities',
+      'Spreads without any user interaction',
+      'Can consume massive bandwidth',
+      'Example: WannaCry ransomware worm',
+    ],
+    tip: '⚡ Exam tip: The key distinction is <strong>self-replication across a network</strong>. Worms self-spread. Viruses need a carrier. A <strong>Trojan</strong> disguises itself as legitimate software — it doesn\'t replicate. A <strong>Rootkit</strong> hides itself and other malware from the OS.',
+  },
+  {
+    id: 9, cat: 'crypto', catLabel: 'Cryptography',
+    left: 'Hashing', right: 'Encryption',
+    summary: 'Encryption is reversible. Hashing is a one-way function — you cannot decrypt a hash.',
+    similarity: 40,
+    leftPoints: [
+      'One-way transformation — no decryption',
+      'Fixed-length output regardless of input',
+      'Deterministic: same input = same output',
+      'Used for integrity verification',
+      'Examples: SHA-256, MD5, BCRYPT',
+      'Passwords stored as hashes, not plaintext',
+    ],
+    rightPoints: [
+      'Two-way — can be decrypted with correct key',
+      'Output length depends on algorithm/input',
+      'Protects confidentiality of data',
+      'Requires a key (symmetric or asymmetric)',
+      'Examples: AES, RSA, ChaCha20',
+      'Used for data-at-rest and data-in-transit',
+    ],
+    tip: '⚡ Exam tip: <strong>Salting</strong> adds random data before hashing to prevent rainbow table attacks. Hashing provides <strong>integrity</strong>. Encryption provides <strong>confidentiality</strong>. Digital signatures use BOTH (hash the message, then encrypt the hash with private key).',
+  },
+  {
+    id: 10, cat: 'detection', catLabel: 'Detection',
+    left: 'False Positive', right: 'False Negative',
+    summary: 'Both are security detection errors — but they fail in opposite directions.',
+    similarity: 55,
+    leftPoints: [
+      'System flags something as a threat — it isn\'t',
+      'Legitimate traffic/activity is blocked',
+      'Results in alert fatigue over time',
+      'IPS false positive = disrupts real users',
+      'Too many = analysts ignore alerts',
+      'Tuning reduces false positives',
+    ],
+    rightPoints: [
+      'System misses an actual threat',
+      'Real attack goes undetected',
+      'More dangerous from a security standpoint',
+      'Attacker gets through undetected',
+      'Zero false negatives = ideal security',
+      'Lowering FP threshold raises FN risk',
+    ],
+    tip: '⚡ Exam tip: There\'s an inverse relationship — lowering false positives often raises false negatives and vice versa. Security teams tune for the right balance. <strong>False negatives are more dangerous</strong> because real attacks succeed.',
+  },
+  {
+    id: 11, cat: 'network', catLabel: 'Network',
+    left: 'Hub', right: 'Switch',
+    summary: 'Both connect devices on a network — but a switch is far smarter about how it delivers traffic.',
+    similarity: 60,
+    leftPoints: [
+      'Layer 1 device (Physical)',
+      'Broadcasts all traffic to every port',
+      'No MAC address table',
+      'Creates a single collision domain',
+      'Security risk — anyone can sniff traffic',
+      'Obsolete in modern networks',
+    ],
+    rightPoints: [
+      'Layer 2 device (Data Link)',
+      'Sends traffic only to the destination port',
+      'Maintains a MAC address table',
+      'Each port = its own collision domain',
+      'More secure — traffic is directed',
+      'Standard in all modern LANs',
+    ],
+    tip: '⚡ Exam tip: ARP poisoning attacks on switches exploit the MAC table by flooding it, forcing the switch to behave like a hub (broadcasting all traffic). This enables <strong>MITM attacks</strong> on switched networks.',
+  },
+  {
+    id: 12, cat: 'protocols', catLabel: 'Protocols',
+    left: 'TLS', right: 'SSL',
+    summary: 'SSL is the predecessor to TLS. SSL is deprecated and insecure — TLS is the modern standard.',
+    similarity: 80,
+    leftPoints: [
+      'Transport Layer Security',
+      'Current standard — TLS 1.2 and 1.3',
+      'Stronger cipher suites and algorithms',
+      'TLS 1.3 removes many legacy features',
+      'Forward secrecy supported (ECDHE)',
+      'What HTTPS actually uses today',
+    ],
+    rightPoints: [
+      'Secure Sockets Layer',
+      'All versions (1.0–3.0) are deprecated',
+      'Vulnerable: POODLE, BEAST, DROWN attacks',
+      'Weak cipher suites allowed',
+      'Should never be used in production',
+      'Still referenced by name (loosely) in casual speech',
+    ],
+    tip: '⚡ Exam tip: The exam still uses "SSL" in some questions colloquially but always means TLS in practice. Know that <strong>TLS 1.0 and 1.1 are also deprecated</strong>. TLS 1.3 is the current gold standard — it removes RSA key exchange and requires forward secrecy.',
+  },
+  {
+    id: 13, cat: 'access', catLabel: 'Access Control',
+    left: 'Identification', right: 'Authentication',
+    summary: 'Identification announces who you claim to be. Authentication proves it.',
+    similarity: 45,
+    leftPoints: [
+      '"Who are you?" — user claims an identity',
+      'No proof required at this step',
+      'Example: typing a username',
+      'First step in the AAA process',
+      'Subject asserts an identity claim',
+      'Usernames, account names, email addresses',
+    ],
+    rightPoints: [
+      '"Prove it" — verifies the claimed identity',
+      'Requires valid credential or factor',
+      'Example: entering the correct password',
+      'Second step in the AAA process',
+      'Validates the identity assertion',
+      'MFA uses multiple authentication factors',
+    ],
+    tip: '⚡ Exam tip: The <strong>three authentication factors</strong> are: Something you <strong>know</strong> (password/PIN), Something you <strong>have</strong> (smart card/token), Something you <strong>are</strong> (biometrics). MFA requires 2+ different factor types — using two passwords is NOT MFA.',
+  },
+  {
+    id: 14, cat: 'threats', catLabel: 'Threats',
+    left: 'Phishing', right: 'Spear Phishing',
+    summary: 'Phishing casts a wide net. Spear phishing is a precision, targeted attack.',
+    similarity: 70,
+    leftPoints: [
+      'Mass, untargeted email campaign',
+      'Generic lure — same email to thousands',
+      'Low effort per target',
+      'Relies on volume to succeed',
+      'Example: fake bank email blast',
+      'Easier to detect — generic content',
+    ],
+    rightPoints: [
+      'Targeted attack on specific individual/org',
+      'Personalized content — uses real details',
+      'High effort — attacker does reconnaissance',
+      'Much higher success rate',
+      'Example: email pretending to be your CEO',
+      'Harder to detect — very convincing',
+    ],
+    tip: '⚡ Exam tip: Know the variants — <strong>Whaling</strong> = spear phishing targeting executives (CEO, CFO). <strong>Vishing</strong> = phishing via phone call. <strong>Smishing</strong> = phishing via SMS. <strong>Pharming</strong> = DNS poisoning to redirect to fake site.',
+  },
+  {
+    id: 15, cat: 'network', catLabel: 'Network',
+    left: 'VPN', right: 'Proxy',
+    summary: 'Both can mask your origin — but their purpose, scope, and security level differ significantly.',
+    similarity: 50,
+    leftPoints: [
+      'Virtual Private Network',
+      'Encrypts ALL traffic from device',
+      'Creates a secure tunnel to VPN server',
+      'Operates at network layer (Layer 3)',
+      'Extends private network over internet',
+      'Used for remote access and site-to-site',
+    ],
+    rightPoints: [
+      'Intermediary server for specific traffic',
+      'May or may not encrypt traffic',
+      'Usually handles only browser/app traffic',
+      'Operates at application layer (Layer 7)',
+      'Used for caching, filtering, anonymity',
+      'Types: forward, reverse, transparent',
+    ],
+    tip: '⚡ Exam tip: A <strong>reverse proxy</strong> sits in front of web servers (protects servers, like a WAF). A <strong>forward proxy</strong> sits in front of clients (controls outbound access). SSL inspection proxies decrypt traffic to inspect it — relevant for DLP.',
+  },
+  {
+    id: 16, cat: 'crypto', catLabel: 'Cryptography',
+    left: 'Stream Cipher', right: 'Block Cipher',
+    summary: 'Both encrypt data — but they work on different units: one bit at a time vs. fixed blocks.',
+    similarity: 60,
+    leftPoints: [
+      'Encrypts data one bit/byte at a time',
+      'Faster — suited for real-time streaming',
+      'Uses a keystream XORed with plaintext',
+      'No padding required',
+      'Examples: RC4 (weak), ChaCha20',
+      'Used in TLS, WPA, VoIP',
+    ],
+    rightPoints: [
+      'Encrypts data in fixed-size chunks (e.g. 128-bit)',
+      'Slightly slower but highly secure',
+      'Multiple modes: CBC, CTR, GCM, ECB',
+      'Padding required if data doesn\'t fit block size',
+      'Examples: AES, 3DES, Blowfish',
+      'Most common in storage encryption',
+    ],
+    tip: '⚡ Exam tip: <strong>ECB mode</strong> is insecure — identical plaintext blocks produce identical ciphertext blocks. <strong>GCM mode</strong> provides both encryption AND authentication (AEAD). AES-256-GCM is widely considered the gold standard.',
+  },
+  {
+    id: 17, cat: 'threats', catLabel: 'Threats',
+    left: 'DoS', right: 'DDoS',
+    summary: 'Both overwhelm a target with traffic — DDoS just does it from thousands of sources at once.',
+    similarity: 75,
+    leftPoints: [
+      'Denial of Service',
+      'Attack from a single source',
+      'Easier to block — filter one IP',
+      'Smaller scale impact',
+      'Can be stopped by upstream filtering',
+      'Examples: SYN flood from one host',
+    ],
+    rightPoints: [
+      'Distributed Denial of Service',
+      'Attack from many sources (botnet)',
+      'Very hard to block — thousands of IPs',
+      'Massive scale — can take down large sites',
+      'Requires scrubbing center / CDN mitigation',
+      'Example: Mirai botnet (IoT devices)',
+    ],
+    tip: '⚡ Exam tip: A <strong>botnet</strong> is the usual source of DDoS. The attacker controls a C2 (Command and Control) server. <strong>Amplification attacks</strong> (DNS, NTP) let attackers multiply traffic volume — a small request triggers a huge response sent to the victim.',
+  },
+  {
+    id: 18, cat: 'protocols', catLabel: 'Protocols',
+    left: 'RADIUS', right: 'TACACS+',
+    summary: 'Both are AAA protocols for network access — but they differ in transport, encryption, and use case.',
+    similarity: 65,
+    leftPoints: [
+      'Remote Authentication Dial-In User Service',
+      'Uses UDP (ports 1812/1813)',
+      'Encrypts only the password field',
+      'Combines Authentication + Authorization',
+      'Best for network access (Wi-Fi, VPN)',
+      'Open standard — widely supported',
+    ],
+    rightPoints: [
+      'Terminal Access Controller Access-Control System+',
+      'Uses TCP (port 49) — more reliable',
+      'Encrypts the entire packet payload',
+      'Separates Auth, Authz, and Accounting',
+      'Best for device administration (routers, switches)',
+      'Cisco proprietary protocol',
+    ],
+    tip: '⚡ Exam tip: TACACS+ is <strong>Cisco proprietary</strong> and encrypts the full body — making it more secure. RADIUS encrypts only the password. TACACS+ is preferred for <strong>managing network devices</strong>. RADIUS is preferred for <strong>user network access</strong> (VPN, 802.1X Wi-Fi).',
+  },
+];
+
+let reviewed = new Set();
+let activeFilter = 'all';
+let searchTerm = '';
+
+function renderCards() {
+  const grid = document.getElementById('cards-grid');
+  const empty = document.getElementById('empty-state');
+  const filtered = CARDS.filter(c => {
+    const matchFilter = activeFilter === 'all' || c.cat === activeFilter;
+    const matchSearch = !searchTerm ||
+      c.left.toLowerCase().includes(searchTerm) ||
+      c.right.toLowerCase().includes(searchTerm) ||
+      c.summary.toLowerCase().includes(searchTerm) ||
+      c.catLabel.toLowerCase().includes(searchTerm);
+    return matchFilter && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(c => {
+    const isReviewed = reviewed.has(c.id);
+    const simColor = c.similarity >= 70 ? 'var(--red)' : c.similarity >= 50 ? 'var(--yellow)' : 'var(--green)';
+    return `
+    <div class="compare-card${isReviewed ? ' reviewed' : ''}" id="card-${c.id}" onclick="toggleCard(${c.id})">
+      <div class="card-header">
+        <span class="cat-badge cat-${c.cat}">${c.catLabel}</span>
+        <span class="card-toggle">▼</span>
+      </div>
+      <div class="vs-row">
+        <span class="vs-term left">${c.left}</span>
+        <span class="vs-badge">VS</span>
+        <span class="vs-term right">${c.right}</span>
+      </div>
+      <div class="card-summary">${c.summary}</div>
+      <div class="card-detail">
+        <div class="detail-cols">
+          <div class="detail-col left">
+            <div class="detail-col-label">${c.left}</div>
+            <ul class="detail-list">${c.leftPoints.map(p => `<li>${p}</li>`).join('')}</ul>
+          </div>
+          <div class="detail-col right">
+            <div class="detail-col-label">${c.right}</div>
+            <ul class="detail-list">${c.rightPoints.map(p => `<li>${p}</li>`).join('')}</ul>
+          </div>
+        </div>
+        <div class="exam-tip">${c.tip}</div>
+        <div class="similarity-row">
+          <span class="sim-label">Similarity:</span>
+          <div class="sim-bar"><div class="sim-fill" style="width:${c.similarity}%; background:${simColor}"></div></div>
+          <span class="sim-pct">${c.similarity}%</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(id) {
+  const el = document.getElementById('card-' + id);
+  const wasExpanded = el.classList.contains('expanded');
+  el.classList.toggle('expanded');
+  if (!wasExpanded) {
+    reviewed.add(id);
+    updateProgress();
+  }
+}
+
+function updateProgress() {
+  const pct = Math.round(reviewed.size / CARDS.length * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-count').textContent = reviewed.size + ' / ' + CARDS.length;
+}
+
+function filterCards(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+function searchCards(val) {
+  searchTerm = val.toLowerCase().trim();
+  renderCards();
+}
+
+renderCards();
+</script>
+</body>
+</html>

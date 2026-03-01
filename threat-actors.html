@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threat Actor Profiles | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --purple: #b47aff;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px; flex-shrink: 0;
+  }
+
+  .logo { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); letter-spacing: 0.1em; text-decoration: none; }
+  .logo span { color: var(--accent); }
+
+  .header-right { display: flex; gap: 1rem; align-items: center; }
+
+  .back-link {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    text-decoration: none; border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem; border-radius: 6px; transition: all 0.2s;
+  }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .mode-toggle {
+    display: flex; gap: 0; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+  }
+  .mode-btn {
+    padding: 0.4rem 1rem; background: none; border: none;
+    font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.05em;
+  }
+  .mode-btn.active { background: rgba(0,212,255,0.12); color: var(--accent); }
+
+  main { flex: 1; padding: 2rem; }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  h1 {
+    font-size: 2rem; font-weight: 600; margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, var(--red), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; text-align: center;
+  }
+
+  .subtitle {
+    color: var(--muted); font-size: 0.9rem; margin-bottom: 2.5rem;
+    font-family: var(--mono); letter-spacing: 0.05em; text-align: center;
+  }
+
+  /* ── MODE PANELS ── */
+  .mode-panel { display: none; }
+  .mode-panel.active { display: block; }
+
+  /* ══════════════ STUDY MODE ══════════════ */
+  .actors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .actor-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.25s;
+    position: relative;
+  }
+  .actor-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    border-radius: 12px 12px 0 0;
+  }
+  .actor-card.apt::before { background: linear-gradient(90deg, var(--red), var(--purple)); }
+  .actor-card.hacktivist::before { background: linear-gradient(90deg, var(--green), var(--accent)); }
+  .actor-card.cybercriminal::before { background: linear-gradient(90deg, var(--yellow), var(--accent2)); }
+  .actor-card.insider::before { background: linear-gradient(90deg, var(--purple), var(--red)); }
+  .actor-card.scriptkiddie::before { background: linear-gradient(90deg, var(--muted), var(--border)); }
+  .actor-card.competitor::before { background: linear-gradient(90deg, var(--accent), var(--green)); }
+
+  .actor-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+
+  .actor-header {
+    padding: 1.25rem 1.25rem 0;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  }
+
+  .actor-icon { font-size: 2rem; line-height: 1; }
+
+  .actor-name { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+  .actor-type-badge {
+    font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.2rem 0.6rem;
+    border-radius: 20px; border: 1px solid;
+  }
+  .badge-apt { color: var(--red); border-color: rgba(255,71,87,0.3); background: rgba(255,71,87,0.08); }
+  .badge-hacktivist { color: var(--green); border-color: rgba(0,245,160,0.3); background: rgba(0,245,160,0.06); }
+  .badge-cybercriminal { color: var(--yellow); border-color: rgba(255,211,42,0.3); background: rgba(255,211,42,0.06); }
+  .badge-insider { color: var(--purple); border-color: rgba(180,122,255,0.3); background: rgba(180,122,255,0.06); }
+  .badge-scriptkiddie { color: var(--muted); border-color: rgba(90,106,138,0.3); background: rgba(90,106,138,0.06); }
+  .badge-competitor { color: var(--accent); border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.06); }
+
+  .actor-body { padding: 1rem 1.25rem 1.25rem; }
+
+  .actor-section { margin-bottom: 0.9rem; }
+  .actor-section-label {
+    font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem;
+  }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .tag {
+    font-family: var(--mono); font-size: 0.72rem;
+    padding: 0.2rem 0.6rem; border-radius: 4px;
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+  }
+  .tag.motivation { border-color: rgba(255,211,42,0.2); color: var(--yellow); background: rgba(255,211,42,0.05); }
+  .tag.resource { border-color: rgba(0,212,255,0.2); color: var(--accent); background: rgba(0,212,255,0.05); }
+  .tag.sophistication-low { border-color: rgba(0,245,160,0.2); color: var(--green); background: rgba(0,245,160,0.05); }
+  .tag.sophistication-med { border-color: rgba(255,211,42,0.2); color: var(--yellow); background: rgba(255,211,42,0.05); }
+  .tag.sophistication-high { border-color: rgba(255,71,87,0.2); color: var(--red); background: rgba(255,71,87,0.05); }
+
+  .actor-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+  .actor-ttps {
+    background: var(--bg3); border-top: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+  }
+  .ttps-label {
+    font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem;
+  }
+  .ttps-list { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .ttp-chip {
+    font-family: var(--mono); font-size: 0.7rem;
+    padding: 0.18rem 0.55rem; border-radius: 4px;
+    background: var(--bg2); border: 1px solid var(--border); color: var(--text);
+  }
+
+  /* Threat level meter */
+  .threat-meter {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.6rem 1.25rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono); font-size: 0.7rem;
+  }
+  .meter-label { color: var(--muted); min-width: 80px; }
+  .meter-dots { display: flex; gap: 3px; }
+  .meter-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); transition: background 0.3s;
+  }
+  .meter-dot.filled { background: var(--red); }
+  .meter-dot.filled.med { background: var(--yellow); }
+  .meter-dot.filled.low { background: var(--green); }
+
+  /* ══════════════ MATCH MODE ══════════════ */
+  .match-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+  }
+  .match-score-row { display: flex; gap: 1rem; }
+  .match-pill {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,245,160,0.08));
+    border: 1px solid var(--border); padding: 0.4rem 0.9rem;
+    border-radius: 20px; font-family: var(--mono); font-size: 0.75rem;
+  }
+  .match-pill .val { color: var(--accent); font-weight: 600; }
+  .match-pill .lbl { color: var(--muted); }
+
+  .match-instructions {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.75rem 1.25rem;
+    font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem;
+    font-family: var(--mono);
+  }
+  .match-instructions span { color: var(--accent); }
+
+  .match-layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+  }
+
+  .match-col-label {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+  }
+  .match-col-label.accent { color: var(--accent); }
+  .match-col-label.red { color: var(--red); }
+
+  /* Actor chips in match mode */
+  .actor-chip {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.75rem 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    cursor: grab; user-select: none; margin-bottom: 0.5rem;
+    transition: all 0.2s; font-size: 0.85rem;
+  }
+  .actor-chip:hover { border-color: var(--accent); transform: translateX(2px); }
+  .actor-chip.dragging { opacity: 0.35; }
+  .actor-chip .chip-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .actor-chip .chip-name { font-weight: 600; color: var(--text); }
+  .actor-chip .chip-handle { color: var(--muted); font-size: 0.9rem; margin-left: auto; }
+
+  /* Attribute cards in match mode */
+  .attr-card {
+    background: var(--bg3); border: 2px dashed var(--border);
+    border-radius: 8px; padding: 0.75rem 1rem;
+    margin-bottom: 0.6rem; min-height: 56px;
+    transition: all 0.2s;
+  }
+  .attr-card.dragover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .attr-card.correct { border-color: var(--green); border-style: solid; background: rgba(0,245,160,0.05); }
+  .attr-card.incorrect { border-color: var(--red); border-style: solid; background: rgba(255,71,87,0.05); }
+
+  .attr-label {
+    font-size: 0.82rem; color: var(--text); margin-bottom: 0.35rem; line-height: 1.4;
+  }
+  .attr-sublabel {
+    font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+  }
+  .attr-slot {
+    margin-top: 0.4rem; min-height: 30px;
+    display: flex; flex-wrap: wrap; gap: 0.3rem;
+  }
+
+  .match-result-chip {
+    font-family: var(--mono); font-size: 0.7rem;
+    padding: 0.2rem 0.6rem; border-radius: 4px;
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .match-result-chip:hover { opacity: 0.7; }
+  .match-result-chip.placed { background: var(--bg2); border: 1px solid var(--border); color: var(--text); }
+
+  .match-btn-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .btn-primary {
+    padding: 0.65rem 1.75rem; background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,245,160,0.1));
+    border: 1px solid var(--accent); border-radius: 6px; color: var(--accent);
+    font-family: var(--mono); font-size: 0.8rem; cursor: pointer;
+    letter-spacing: 0.06em; transition: all 0.2s;
+  }
+  .btn-primary:hover { background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(0,245,160,0.18)); transform: translateY(-1px); }
+  .btn-secondary {
+    padding: 0.65rem 1.25rem; background: none; border: 1px solid var(--border);
+    border-radius: 6px; color: var(--muted); font-family: var(--mono);
+    font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+  .match-feedback {
+    display: none; margin-top: 1.25rem; padding: 1rem 1.25rem;
+    border-radius: 8px; font-size: 0.88rem; line-height: 1.7;
+    animation: fadeUp 0.25s ease;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+  .match-feedback.show { display: block; }
+  .match-feedback.correct { background: rgba(0,245,160,0.07); border: 1px solid rgba(0,245,160,0.25); color: var(--green); }
+  .match-feedback.partial { background: rgba(255,211,42,0.07); border: 1px solid rgba(255,211,42,0.25); color: var(--yellow); }
+  .match-feedback.incorrect { background: rgba(255,71,87,0.07); border: 1px solid rgba(255,71,87,0.25); color: var(--red); }
+
+  footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem; text-align: center;
+    font-size: 0.85rem; color: var(--muted); font-family: var(--mono);
+  }
+
+  @media(max-width:700px) {
+    .actors-grid { grid-template-columns: 1fr; }
+    .match-layout { grid-template-columns: 1fr; }
+    header { padding: 0 1rem; }
+    .mode-toggle { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">SECURITY+ <span>SY0-701</span> PRACTICE EXAMS</a>
+  <div class="header-right">
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode('study',this)">📖 Study</button>
+      <button class="mode-btn" onclick="setMode('match',this)">🎯 Match Game</button>
+    </div>
+    <a href="index.html" class="back-link">← BACK</a>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+  <h1>Threat Actor Profiles</h1>
+  <p class="subtitle">// study mode · or switch to match game to test yourself</p>
+
+  <!-- ══════ STUDY MODE ══════ -->
+  <div class="mode-panel active" id="panel-study">
+    <div class="actors-grid" id="actors-grid"></div>
+  </div>
+
+  <!-- ══════ MATCH MODE ══════ -->
+  <div class="mode-panel" id="panel-match">
+    <div class="match-header">
+      <div>
+        <div style="font-size:1.1rem; font-weight:600; color:var(--text); margin-bottom:0.25rem;">Match Actors to Their Attributes</div>
+        <div style="font-size:0.82rem; color:var(--muted); font-family:var(--mono);">Drag each threat actor to the correct motivation + TTP + resource level</div>
+      </div>
+      <div class="match-score-row">
+        <div class="match-pill"><span class="val" id="m-correct">0</span><span class="lbl">correct</span></div>
+        <div class="match-pill"><span class="val" id="m-attempts">0</span><span class="lbl">attempts</span></div>
+      </div>
+    </div>
+
+    <div class="match-instructions">
+      Drag actor chips from the left onto the matching attribute card on the right. Each card shows a <span>motivation</span>, <span>primary TTP</span>, and <span>resource level</span>. One actor per card. Double-click a placed chip to return it to the pool.
+    </div>
+
+    <div class="match-layout">
+      <div>
+        <div class="match-col-label red">Threat Actors</div>
+        <div id="actor-pool"></div>
+      </div>
+      <div>
+        <div class="match-col-label accent">Attribute Cards — Drop Actor Here</div>
+        <div id="attr-cards"></div>
+      </div>
+    </div>
+
+    <div class="match-btn-row">
+      <button class="btn-primary" onclick="checkMatch()">▶ CHECK MATCHES</button>
+      <button class="btn-secondary" onclick="resetMatch()">↺ RESET</button>
+    </div>
+    <div class="match-feedback" id="match-feedback"></div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <p>CompTIA Security+ SY0-701 · Threat Actor Profiles</p>
+  <p style="margin-top:0.4rem; font-size:0.75rem;"><a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a></p>
+</footer>
+
+<script>
+// ─────────────── DATA ───────────────
+const ACTORS = [
+  {
+    id: 'apt',
+    icon: '🏴',
+    name: 'Nation-State / APT',
+    type: 'apt',
+    typeBadge: 'badge-apt',
+    typeLabel: 'APT',
+    sophistication: 5,
+    desc: 'Advanced Persistent Threats sponsored by nation-states. Conduct long-term, stealthy campaigns targeting government, critical infrastructure, and high-value corporations. Often operate for years inside a network before detection.',
+    motivations: ['Espionage', 'Geopolitical advantage', 'IP theft', 'Sabotage'],
+    resources: ['Unlimited funding', 'Zero-day exploits', 'Large teams'],
+    ttps: ['Spear phishing', 'Supply chain attack', 'Living off the land', 'Watering hole', 'Custom malware', 'APT campaigns'],
+    // Match game attributes
+    matchMotivation: 'Espionage & geopolitical intelligence gathering',
+    matchTTP: 'Supply chain compromise + custom zero-day malware',
+    matchResource: 'Nation-state backed — virtually unlimited',
+  },
+  {
+    id: 'cybercriminal',
+    icon: '💰',
+    name: 'Cybercriminal / eCrime',
+    type: 'cybercriminal',
+    typeBadge: 'badge-cybercriminal',
+    typeLabel: 'eCrime',
+    sophistication: 4,
+    desc: 'Financially motivated actors operating as organized criminal enterprises. Deploy ransomware, steal payment card data, run phishing campaigns, and sell access on dark web marketplaces. Operate like businesses — profit-driven and scalable.',
+    motivations: ['Financial gain', 'Ransomware payouts', 'Data theft for resale'],
+    resources: ['Well-funded', 'RaaS toolkits', 'Criminal networks'],
+    ttps: ['Ransomware', 'Phishing campaigns', 'Credential stuffing', 'BEC fraud', 'Carding', 'Botnet C2'],
+    matchMotivation: 'Direct financial gain — ransomware, fraud, data sales',
+    matchTTP: 'Ransomware-as-a-Service + large-scale phishing',
+    matchResource: 'Well-funded criminal org with RaaS infrastructure',
+  },
+  {
+    id: 'hacktivist',
+    icon: '✊',
+    name: 'Hacktivist',
+    type: 'hacktivist',
+    typeBadge: 'badge-hacktivist',
+    typeLabel: 'Hacktivist',
+    sophistication: 3,
+    desc: 'Ideologically motivated actors using hacking as a form of protest or activism. Targets align with their political or social agenda. Prefer high-visibility attacks that generate publicity rather than covert operations.',
+    motivations: ['Political ideology', 'Social justice', 'Public awareness'],
+    resources: ['Moderate', 'Volunteer collectives', 'Open source tools'],
+    ttps: ['DDoS', 'Website defacement', 'Doxxing', 'Data leaks', 'Ransomware (rare)'],
+    matchMotivation: 'Ideological or political statement — maximum visibility',
+    matchTTP: 'DDoS attacks + website defacement + public data leaks',
+    matchResource: 'Volunteer collective — moderate, open-source tooling',
+  },
+  {
+    id: 'insider',
+    icon: '👔',
+    name: 'Insider Threat',
+    type: 'insider',
+    typeBadge: 'badge-insider',
+    typeLabel: 'Insider',
+    sophistication: 3,
+    desc: 'Current or former employees, contractors, or business partners who misuse authorized access. Can be malicious (intentional) or unintentional (negligent). Among the hardest threats to detect because they already have legitimate credentials.',
+    motivations: ['Financial incentive', 'Revenge / grievance', 'Negligence', 'Coercion'],
+    resources: ['Authorized access', 'Insider knowledge', 'Trusted position'],
+    ttps: ['Data exfiltration', 'Privilege abuse', 'Sabotage', 'Policy violations', 'Unauthorized access'],
+    matchMotivation: 'Revenge, financial gain, or simple negligence',
+    matchTTP: 'Data exfiltration using legitimate authorized access',
+    matchResource: 'Authorized credentials + deep knowledge of internal systems',
+  },
+  {
+    id: 'scriptkiddie',
+    icon: '🎮',
+    name: 'Script Kiddie',
+    type: 'scriptkiddie',
+    typeBadge: 'badge-scriptkiddie',
+    typeLabel: 'Script Kiddie',
+    sophistication: 1,
+    desc: 'Low-skill actors who use pre-written tools and exploit kits without understanding how they work. Opportunistic — target easy, unpatched systems. Despite low sophistication, they represent volume risk and can cause real damage.',
+    motivations: ['Notoriety', 'Fun / thrill', 'Peer recognition', 'Opportunity'],
+    resources: ['Minimal', 'Free tools', 'Public exploits'],
+    ttps: ['Known exploit kits', 'Port scanning', 'Default credentials', 'DDoS tools', 'Metasploit'],
+    matchMotivation: 'Notoriety, fun, or opportunistic targeting of easy systems',
+    matchTTP: 'Pre-written exploit kits + scanning for known unpatched vulns',
+    matchResource: 'Minimal — free tools, public exploits, no original capability',
+  },
+  {
+    id: 'competitor',
+    icon: '🏢',
+    name: 'Corporate Competitor',
+    type: 'competitor',
+    typeBadge: 'badge-competitor',
+    typeLabel: 'Competitor',
+    sophistication: 3,
+    desc: 'Business competitors engaged in corporate espionage to gain unfair competitive advantage. May hire external actors, bribe insiders, or conduct targeted attacks to steal trade secrets, pricing data, or R&D information.',
+    motivations: ['Competitive advantage', 'Trade secret theft', 'Market intelligence'],
+    resources: ['Moderate', 'May hire external actors', 'Corporate funding'],
+    ttps: ['Social engineering', 'Spear phishing', 'Insider recruitment', 'Data theft', 'IP theft'],
+    matchMotivation: 'Competitive advantage — steal trade secrets and R&D data',
+    matchTTP: 'Targeted spear phishing + insider recruitment for IP theft',
+    matchResource: 'Corporate-funded — moderate, may outsource to hired actors',
+  },
+];
+
+// ─────────────── STUDY MODE ───────────────
+function renderStudy() {
+  const grid = document.getElementById('actors-grid');
+  grid.innerHTML = ACTORS.map(a => {
+    const dots = Array.from({length: 5}, (_,i) => {
+      const cls = i < a.sophistication
+        ? (a.sophistication <= 2 ? 'filled low' : a.sophistication <= 3 ? 'filled med' : 'filled')
+        : '';
+      return `<div class="meter-dot ${cls}"></div>`;
+    }).join('');
+
+    return `
+    <div class="actor-card ${a.type}">
+      <div class="actor-header">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem;">
+            <span class="actor-icon">${a.icon}</span>
+            <div>
+              <div class="actor-name">${a.name}</div>
+              <span class="actor-type-badge ${a.typeBadge}">${a.typeLabel}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="actor-body">
+        <p class="actor-desc">${a.desc}</p>
+        <div style="height:1rem;"></div>
+        <div class="actor-section">
+          <div class="actor-section-label">Motivations</div>
+          <div class="tag-row">${a.motivations.map(m => `<span class="tag motivation">${m}</span>`).join('')}</div>
+        </div>
+        <div class="actor-section">
+          <div class="actor-section-label">Resources &amp; Funding</div>
+          <div class="tag-row">${a.resources.map(r => `<span class="tag resource">${r}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div class="actor-ttps">
+        <div class="ttps-label">Common TTPs</div>
+        <div class="ttps-list">${a.ttps.map(t => `<span class="ttp-chip">${t}</span>`).join('')}</div>
+      </div>
+      <div class="threat-meter">
+        <span class="meter-label">Sophistication</span>
+        <div class="meter-dots">${dots}</div>
+        <span style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);margin-left:0.5rem;">${['','Very Low','Low','Medium','High','Nation-State'][a.sophistication]}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────── MATCH MODE ───────────────
+let dragSrc = null;
+let mCorrect = 0, mAttempts = 0;
+
+function renderMatch() {
+  // Actor pool
+  const pool = document.getElementById('actor-pool');
+  pool.innerHTML = ACTORS.map(a => `
+    <div class="actor-chip" id="chip-${a.id}" draggable="true"
+      ondragstart="mDragStart(event,'${a.id}')" ondragend="mDragEnd(event)">
+      <span class="chip-icon">${a.icon}</span>
+      <div>
+        <div class="chip-name">${a.name}</div>
+        <div style="font-family:var(--mono);font-size:0.68rem;color:var(--muted);">${a.typeLabel}</div>
+      </div>
+      <span class="chip-handle">⠿</span>
+    </div>`).join('');
+
+  // Shuffle attribute cards
+  const shuffled = [...ACTORS].sort(() => Math.random() - 0.5);
+  const cards = document.getElementById('attr-cards');
+  cards.innerHTML = shuffled.map(a => `
+    <div class="attr-card" id="attr-${a.id}" data-actor="${a.id}"
+      ondragover="mDragOver(event)" ondrop="mDrop(event,'${a.id}')" ondragleave="mDragLeave(event)">
+      <div class="attr-label">${a.matchMotivation}</div>
+      <div class="attr-sublabel">TTP: ${a.matchTTP}</div>
+      <div class="attr-sublabel" style="margin-top:0.2rem;">Resources: ${a.matchResource}</div>
+      <div class="attr-slot" id="slot-${a.id}"></div>
+    </div>`).join('');
+}
+
+function mDragStart(e, id) {
+  dragSrc = id;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function mDragEnd(e) { e.currentTarget.classList.remove('dragging'); }
+function mDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); }
+function mDragLeave(e) { e.currentTarget.classList.remove('dragover'); }
+
+function mDrop(e, attrId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('dragover');
+  if (!dragSrc) return;
+
+  const slot = document.getElementById('slot-' + attrId);
+  // Clear existing chip in slot
+  slot.innerHTML = '';
+
+  const actor = ACTORS.find(a => a.id === dragSrc);
+  const chip = document.createElement('div');
+  chip.className = 'match-result-chip placed';
+  chip.textContent = actor.icon + ' ' + actor.name;
+  chip.dataset.actor = dragSrc;
+  chip.title = 'Double-click to remove';
+  chip.ondblclick = () => {
+    chip.remove();
+    // Return to pool if chip was removed
+  };
+  slot.appendChild(chip);
+}
+
+function checkMatch() {
+  mAttempts++;
+  document.getElementById('m-attempts').textContent = mAttempts;
+
+  let totalSlots = ACTORS.length;
+  let filled = 0;
+  let correctCount = 0;
+  let wrongList = [];
+
+  ACTORS.forEach(a => {
+    const slot = document.getElementById('slot-' + a.id);
+    const card = document.getElementById('attr-' + a.id);
+    const chip = slot ? slot.querySelector('.match-result-chip') : null;
+
+    if (chip) {
+      filled++;
+      if (chip.dataset.actor === a.id) {
+        correctCount++;
+        card.classList.add('correct');
+        card.classList.remove('incorrect');
+      } else {
+        const wrongActor = ACTORS.find(x => x.id === chip.dataset.actor);
+        wrongList.push(`${wrongActor ? wrongActor.icon + ' ' + wrongActor.name : '?'} → wrong card`);
+        card.classList.add('incorrect');
+        card.classList.remove('correct');
+      }
+    } else {
+      card.classList.remove('correct','incorrect');
+    }
+  });
+
+  const fb = document.getElementById('match-feedback');
+  fb.classList.add('show');
+
+  if (filled < totalSlots) {
+    fb.className = 'match-feedback show partial';
+    fb.innerHTML = `⚠️ <strong>Incomplete.</strong> ${totalSlots - filled} actor(s) not yet placed. Fill all slots before checking.`;
+    return;
+  }
+
+  if (correctCount === totalSlots) {
+    mCorrect++;
+    document.getElementById('m-correct').textContent = mCorrect;
+    fb.className = 'match-feedback show correct';
+    fb.innerHTML = `✅ <strong>Perfect — all ${totalSlots} matched correctly!</strong><br><br>
+    Key exam takeaways: Nation-state APTs = stealth + espionage + zero-days. Cybercriminals = RaaS + financial motive. Hacktivists = ideology + DDoS + defacement. Insiders = authorized access abuse. Script kiddies = low skill + opportunistic. Competitors = IP theft + corporate espionage.`;
+  } else {
+    fb.className = 'match-feedback show partial';
+    fb.innerHTML = `⚠️ <strong>${correctCount}/${totalSlots} correct.</strong> Incorrect: ${wrongList.join(', ')}.<br><br>
+    Tip: Focus on <strong>motivation</strong> first — it's the clearest differentiator. Nation-state = espionage. Criminal = money. Hacktivist = ideology. Insider = access abuse. Script kiddie = fun/notoriety. Competitor = trade secrets.`;
+  }
+}
+
+function resetMatch() {
+  ACTORS.forEach(a => {
+    const card = document.getElementById('attr-' + a.id);
+    const slot = document.getElementById('slot-' + a.id);
+    if (card) { card.classList.remove('correct','incorrect'); }
+    if (slot) slot.innerHTML = '';
+  });
+  document.getElementById('match-feedback').className = 'match-feedback';
+}
+
+// ─────────────── MODE SWITCH ───────────────
+function setMode(mode, btn) {
+  document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + mode).classList.add('active');
+  btn.classList.add('active');
+
+  const sub = document.querySelector('.subtitle');
+  if (mode === 'study') sub.textContent = '// study mode · review threat actor profiles';
+  else sub.textContent = '// match game · drag each actor to their correct attributes';
+}
+
+// ─────────────── INIT ───────────────
+renderStudy();
+renderMatch();
+</script>
+</body>
+</html>
