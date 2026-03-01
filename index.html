@@ -969,45 +969,6 @@
       grid-template-columns: 1fr;
     }
   }
-
-  /* ── WEAK SPOT WIDGET ── */
-  .wst-widget {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color 0.25s;
-    text-decoration: none;
-    display: block;
-  }
-  .wst-widget::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, #ff4757, #ffd32a, #00f5a0);
-  }
-  .wst-widget:hover { border-color: var(--accent); }
-  .wst-widget-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;
-  }
-  .wst-title { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .wst-overall {
-    font-family: var(--mono); font-size: 0.75rem; color: var(--accent);
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .wst-cta { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
-  .wst-domains { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; }
-  .wst-domain { display: flex; flex-direction: column; gap: 0.3rem; }
-  .wst-domain-label { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .wst-bar-track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-  .wst-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
-  .wst-domain-score { font-family: var(--mono); font-size: 0.65rem; }
-  .wst-no-data { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-align: center; padding: 0.5rem 0; }
-  @media(max-width:600px) { .wst-domains { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -1072,19 +1033,6 @@
             <div class="vs-average" id="accuracyCompare"></div>
           </div>
         </div>
-
-        
-        <!-- WEAK SPOT WIDGET -->
-        <a href="weak-spot-tracker.html" class="wst-widget" id="wstWidget">
-          <div class="wst-widget-header">
-            <span class="wst-title">⚠ Weak Spot Tracker</span>
-            <span class="wst-overall" id="wstOverall"></span>
-            <span class="wst-cta">View full dashboard →</span>
-          </div>
-          <div class="wst-domains" id="wstDomains">
-            <div class="wst-no-data" style="grid-column:1/-1">Loading your domain scores...</div>
-          </div>
-        </a>
 
         <div class="exam-grid">
           <a href="Practice-tests.html" class="exam-card">
@@ -1165,6 +1113,14 @@
             <div class="exam-title">Weak Spot Tracker</div>
             <div class="exam-desc">Track your scores across all 5 Security+ domains from practice tests, PBQs, flashcards, and self-ratings. See exactly where to focus next.</div>
             <div class="exam-arrow">VIEW TRACKER →</div>
+          </a>
+
+          <a href="ai-tutor.html" class="exam-card">
+            <div class="exam-progress" id="aiProgress">Claude AI</div>
+            <div class="exam-label">AI Powered</div>
+            <div class="exam-title">AI Study Tutor</div>
+            <div class="exam-desc">Chat with an AI tutor — ask Security+ questions, get quizzed on weak domains, have concepts explained, and generate practice questions on demand.</div>
+            <div class="exam-arrow">OPEN TUTOR →</div>
           </a>
 
         </div>
@@ -1302,65 +1258,303 @@
 
   <script src="gamification-social.js"></script>
 
-  <!-- WEAK SPOT WIDGET SCRIPT -->
-  <script>
-  (function() {
-    const KEY = 'wst_data_v2';
-    const DOMAINS = [
-      { id:'threats',        label:'Threats',        short:'Threats' },
-      { id:'architecture',   label:'Architecture',   short:'Arch.' },
-      { id:'implementation', label:'Implementation', short:'Impl.' },
-      { id:'operations',     label:'Operations',     short:'Ops.' },
-      { id:'governance',     label:'Governance',     short:'Gov.' },
-    ];
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- AI FLOATING BUBBLE — paste before </body> on every page   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<style>
+/* ── FLOATING BUBBLE ── */
+#aiBubbleBtn {
+  position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 9000;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #7b2fbe, #00d4ff);
+  border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(123,47,190,0.45);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; transition: transform 0.25s, box-shadow 0.25s;
+  animation: bubblePop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes bubblePop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+#aiBubbleBtn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(123,47,190,0.6); }
+#aiBubbleBtn .bubble-dot {
+  position: absolute; top: 3px; right: 3px; width: 11px; height: 11px;
+  background: #00f5a0; border-radius: 50%; border: 2px solid #0b0e17;
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
 
-    function getScore(id) {
-      try {
-        const raw = localStorage.getItem(KEY);
-        if (!raw) return null;
-        const state = JSON.parse(raw);
-        const sources = ['practice','pbq','flash','manual'];
-        let total = 0, count = 0;
-        sources.forEach(src => {
-          const v = state.sources && state.sources[src] && state.sources[src][id];
-          if (v !== null && v !== undefined) { total += v; count++; }
-        });
-        return count ? Math.round(total / count) : null;
-      } catch { return null; }
+/* ── MINI CHAT PANEL ── */
+#aiMiniPanel {
+  position: fixed; bottom: 5.5rem; right: 1.75rem; z-index: 9001;
+  width: 360px; max-height: 520px;
+  background: #111520; border: 1px solid #1f2740; border-radius: 16px;
+  display: none; flex-direction: column; overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  animation: panelSlide 0.25s cubic-bezier(0.34,1.2,0.64,1);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+@keyframes panelSlide { from{opacity:0;transform:translateY(16px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+#aiMiniPanel.open { display: flex; }
+
+.mini-header {
+  background: linear-gradient(135deg, rgba(123,47,190,0.2), rgba(0,212,255,0.1));
+  border-bottom: 1px solid #1f2740; padding: 0.85rem 1rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mini-header-left { display: flex; align-items: center; gap: 0.6rem; }
+.mini-ai-dot { width: 8px; height: 8px; border-radius: 50%; background: #b47aff; animation: pulseDot 2s infinite; }
+.mini-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: #d0d8f0; font-weight: 600; }
+.mini-subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: #5a6a8a; }
+.mini-actions { display: flex; gap: 0.4rem; align-items: center; }
+.mini-expand-btn {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: #00d4ff;
+  text-decoration: none; border: 1px solid rgba(0,212,255,0.2);
+  background: rgba(0,212,255,0.06); padding: 0.25rem 0.6rem; border-radius: 5px;
+  transition: all 0.2s; white-space: nowrap;
+}
+.mini-expand-btn:hover { background: rgba(0,212,255,0.14); }
+.mini-close-btn {
+  width: 24px; height: 24px; background: none; border: none;
+  color: #5a6a8a; cursor: pointer; font-size: 1rem; display: flex; align-items: center;
+  justify-content: center; border-radius: 4px; transition: all 0.2s;
+}
+.mini-close-btn:hover { color: #ff4757; background: rgba(255,71,87,0.1); }
+
+.mini-messages {
+  flex: 1; overflow-y: auto; padding: 0.9rem; display: flex; flex-direction: column; gap: 0.65rem;
+  min-height: 200px; scroll-behavior: smooth;
+}
+.mini-messages::-webkit-scrollbar { width: 3px; }
+.mini-messages::-webkit-scrollbar-thumb { background: #1f2740; border-radius: 2px; }
+
+.mini-msg { display: flex; gap: 0.5rem; max-width: 92%; }
+.mini-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.mini-msg.assistant { align-self: flex-start; }
+.mini-avatar { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.mini-msg.user .mini-avatar { background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.2); }
+.mini-msg.assistant .mini-avatar { background: rgba(180,122,255,0.12); border: 1px solid rgba(180,122,255,0.2); }
+.mini-bubble {
+  padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 0.82rem; line-height: 1.55; color: #d0d8f0;
+}
+.mini-msg.user .mini-bubble { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.15); border-bottom-right-radius: 2px; }
+.mini-msg.assistant .mini-bubble { background: #181d2e; border: 1px solid #1f2740; border-bottom-left-radius: 2px; }
+.mini-bubble strong { color: #00d4ff; }
+.mini-bubble code { font-family: monospace; font-size: 0.8em; background: #0b0e17; padding: 0.1em 0.35em; border-radius: 3px; color: #00f5a0; }
+
+.mini-typing { display: flex; gap: 4px; padding: 0.4rem 0.5rem; }
+.mini-typing-dot { width: 6px; height: 6px; border-radius: 50%; background: #b47aff; animation: miniTyping 1.2s infinite; }
+.mini-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.mini-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes miniTyping { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-5px);opacity:1} }
+
+.mini-quick-btns { display: flex; gap: 0.35rem; padding: 0 0.9rem 0.6rem; flex-wrap: wrap; }
+.mini-quick { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; padding: 0.25rem 0.6rem; background: #181d2e; border: 1px solid #1f2740; border-radius: 5px; color: #5a6a8a; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.mini-quick:hover { border-color: #b47aff; color: #b47aff; }
+
+.mini-input-row {
+  border-top: 1px solid #1f2740; padding: 0.65rem 0.9rem;
+  display: flex; gap: 0.5rem; background: #0b0e17; align-items: center;
+}
+.mini-input {
+  flex: 1; background: #181d2e; border: 1px solid #1f2740; border-radius: 8px;
+  padding: 0.5rem 0.75rem; font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem;
+  color: #d0d8f0; outline: none; transition: border-color 0.2s;
+}
+.mini-input:focus { border-color: #00d4ff; }
+.mini-input::placeholder { color: #5a6a8a; }
+.mini-send {
+  width: 34px; height: 34px; background: linear-gradient(135deg, rgba(123,47,190,0.3), rgba(0,212,255,0.2));
+  border: 1px solid #b47aff; border-radius: 8px; cursor: pointer; color: #b47aff;
+  display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.mini-send:hover { background: linear-gradient(135deg, rgba(123,47,190,0.5), rgba(0,212,255,0.3)); }
+.mini-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Tooltip */
+#bubbleTooltip {
+  position: fixed; bottom: 5rem; right: 1.75rem; z-index: 8999;
+  background: #111520; border: 1px solid #1f2740; border-radius: 8px;
+  padding: 0.5rem 0.85rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+  color: #d0d8f0; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  animation: tooltipIn 0.2s ease;
+  pointer-events: none;
+}
+@keyframes tooltipIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+</style>
+
+<!-- Bubble Button -->
+<button id="aiBubbleBtn" onclick="toggleMiniPanel()" title="AI Study Tutor">
+  🎓
+  <span class="bubble-dot"></span>
+</button>
+
+<!-- Tooltip (shows once) -->
+<div id="bubbleTooltip" style="display:none">💬 Ask your AI tutor anything</div>
+
+<!-- Mini Panel -->
+<div id="aiMiniPanel">
+  <div class="mini-header">
+    <div class="mini-header-left">
+      <div class="mini-ai-dot"></div>
+      <div>
+        <div class="mini-title">AI Study Tutor</div>
+        <div class="mini-subtitle">Security+ SY0-701 · Claude AI</div>
+      </div>
+    </div>
+    <div class="mini-actions">
+      <a href="ai-tutor.html" class="mini-expand-btn">Full Tutor ↗</a>
+      <button class="mini-close-btn" onclick="toggleMiniPanel()">✕</button>
+    </div>
+  </div>
+
+  <div class="mini-messages" id="miniMessages">
+    <!-- Welcome msg injected by JS -->
+  </div>
+
+  <div class="mini-quick-btns" id="miniQuickBtns">
+    <button class="mini-quick" onclick="miniQuick('Quiz me on Security+')">🎯 Quiz me</button>
+    <button class="mini-quick" onclick="miniQuick('Explain IDS vs IPS')">IDS vs IPS</button>
+    <button class="mini-quick" onclick="miniQuick('Give me a practice question on cryptography')">📝 Practice Q</button>
+    <button class="mini-quick" onclick="miniQuick('What should I study most for Security+ SY0-701?')">📖 Study tips</button>
+  </div>
+
+  <div class="mini-input-row">
+    <input type="text" class="mini-input" id="miniInput" placeholder="Ask anything Security+..." onkeydown="miniKey(event)" />
+    <button class="mini-send" id="miniSendBtn" onclick="miniSend()">➤</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const MINI_SYSTEM = `You are a compact Security+ SY0-701 AI tutor embedded as a chat bubble on a study website. Keep answers SHORT and punchy — max 3-4 sentences or a brief list. If the user wants more depth, suggest they open the full tutor page. Always end with one ⚡ exam tip when relevant. Answer any question about Security+, cybersecurity, or general IT.`;
+
+  let miniHistory = [];
+  let miniLoading = false;
+  let panelOpen = false;
+  let tooltipShown = false;
+
+  // Show tooltip after 3s on first visit
+  setTimeout(() => {
+    if (!localStorage.getItem('ai_bubble_seen')) {
+      const tip = document.getElementById('bubbleTooltip');
+      tip.style.display = 'block';
+      setTimeout(() => { tip.style.display = 'none'; }, 4000);
+      localStorage.setItem('ai_bubble_seen', '1');
+    }
+  }, 3000);
+
+  window.toggleMiniPanel = function() {
+    panelOpen = !panelOpen;
+    const panel = document.getElementById('aiMiniPanel');
+    if (panelOpen) {
+      panel.classList.add('open');
+      if (miniHistory.length === 0) showMiniWelcome();
+      setTimeout(() => document.getElementById('miniInput').focus(), 100);
+    } else {
+      panel.classList.remove('open');
+    }
+  };
+
+  function showMiniWelcome() {
+    appendMiniMsg('assistant', '👋 Hi! I\'m your Security+ AI tutor. Ask me anything — concepts, quiz questions, exam tips, or anything cybersecurity. What do you need help with?');
+  }
+
+  window.miniQuick = function(text) {
+    document.getElementById('miniQuickBtns').style.display = 'none';
+    document.getElementById('miniInput').value = text;
+    miniSend();
+  };
+
+  window.miniKey = function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); miniSend(); }
+  };
+
+  window.miniSend = async function() {
+    if (miniLoading) return;
+    const input = document.getElementById('miniInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    document.getElementById('miniQuickBtns').style.display = 'none';
+    appendMiniMsg('user', text);
+    miniHistory.push({ role:'user', content:text });
+
+    const typingId = showMiniTyping();
+    miniLoading = true;
+    document.getElementById('miniSendBtn').disabled = true;
+
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      const key = (function() { try { return localStorage.getItem('claude_api_key') || ''; } catch { return ''; } })();
+      if (key) headers['x-api-key'] = key;
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 400,
+          system: MINI_SYSTEM,
+          messages: miniHistory.slice(-8), // keep context window small
+        }),
+      });
+
+      removeMiniTyping(typingId);
+
+      if (!res.ok) throw new Error('Status ' + res.status);
+      const data = await res.json();
+      const reply = data.content?.[0]?.text || 'No response.';
+      miniHistory.push({ role:'assistant', content:reply });
+      appendMiniMsg('assistant', reply);
+
+    } catch (err) {
+      removeMiniTyping(typingId);
+      appendMiniMsg('assistant', '⚠️ Couldn\'t reach AI. Try opening the <a href="ai-tutor.html" style="color:#00d4ff">full tutor page</a> or add an API key there.');
     }
 
-    function scoreColor(s) {
-      if (s === null) return 'var(--border)';
-      if (s < 45) return '#ff4757';
-      if (s < 72) return '#ffd32a';
-      return '#00f5a0';
-    }
+    miniLoading = false;
+    document.getElementById('miniSendBtn').disabled = false;
+  };
 
-    const scores = DOMAINS.map(d => ({ ...d, score: getScore(d.id) }));
-    const scored = scores.filter(s => s.score !== null);
-    const domsEl = document.getElementById('wstDomains');
-    const overallEl = document.getElementById('wstOverall');
+  function appendMiniMsg(role, text) {
+    const msgs = document.getElementById('miniMessages');
+    const div = document.createElement('div');
+    div.className = 'mini-msg ' + role;
+    div.innerHTML = `
+      <div class="mini-avatar">${role === 'user' ? '👤' : '🤖'}</div>
+      <div class="mini-bubble">${miniFormatText(text)}</div>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
 
-    if (scored.length === 0) {
-      domsEl.innerHTML = '<div class="wst-no-data" style="grid-column:1/-1">No data yet — click to start tracking your weak spots</div>';
-      overallEl.textContent = '';
-      return;
-    }
+  function miniFormatText(t) {
+    return t
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      .replace(/`(.*?)`/g,'<code>$1</code>')
+      .replace(/\n/g,'<br>')
+      .replace(/⚡ Exam tip:(.*?)(<br>|$)/,'<span style="color:#ffd32a;font-size:0.8em">⚡$1</span>$2')
+      // re-allow safe anchor tags that we built ourselves
+      .replace(/&lt;a /g,'<a ').replace(/&lt;\/a&gt;/g,'</a>').replace(/&gt;(?=.*<\/a>)/g,'>');
+  }
 
-    const avg = Math.round(scored.reduce((a,b) => a + b.score, 0) / scored.length);
-    overallEl.innerHTML = 'Overall: <strong style="color:' + scoreColor(avg) + '">' + avg + '%</strong>';
-
-    domsEl.innerHTML = scores.map(d => {
-      const pct = d.score || 0;
-      const hasData = d.score !== null;
-      return '<div class="wst-domain">' +
-        '<span class="wst-domain-label">' + d.short + '</span>' +
-        '<div class="wst-bar-track"><div class="wst-bar-fill" style="width:' + pct + '%;background:' + scoreColor(d.score) + ';opacity:' + (hasData?1:0.2) + '"></div></div>' +
-        '<span class="wst-domain-score" style="color:' + scoreColor(d.score) + '">' + (hasData ? pct+'%' : '—') + '</span>' +
-        '</div>';
-    }).join('');
-  })();
-  </script>
+  let typingCtr = 0;
+  function showMiniTyping() {
+    const id = 'mt-' + (++typingCtr);
+    const msgs = document.getElementById('miniMessages');
+    const div = document.createElement('div');
+    div.id = id; div.className = 'mini-msg assistant';
+    div.innerHTML = `<div class="mini-avatar">🤖</div><div class="mini-bubble"><div class="mini-typing"><div class="mini-typing-dot"></div><div class="mini-typing-dot"></div><div class="mini-typing-dot"></div></div></div>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return id;
+  }
+  function removeMiniTyping(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+})();
+</script>
 
 </body>
 </html>
