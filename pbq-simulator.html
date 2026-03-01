@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PBQ Simulator | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --purple: #b47aff;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER (matches index.html) ── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .back-link {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .score-pills {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .score-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,245,160,0.08));
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+  }
+  .score-pill .val { color: var(--accent); font-weight: 600; }
+  .score-pill .lbl { color: var(--muted); }
+
+  /* ── MAIN ── */
+  main { flex: 1; padding: 2rem; }
+
+  .container {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2.5rem;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  /* ── NAV TABS (matches site style exactly) ── */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .nav-tab {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── SCENARIO CARD (matches stat-card / leaderboard-section style) ── */
+  .scenario-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: border-color 0.25s;
+  }
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(90deg, var(--accent), var(--green), transparent);
+  }
+
+  .scenario-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+  }
+
+  .scenario-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .scenario-desc strong { color: var(--text); }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .info-box .info-label {
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .info-box p { color: var(--text); }
+  .info-box span { color: var(--accent); }
+
+  /* ── TWO-COL DRAG LAYOUT ── */
+  .drag-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .col-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .col-label.accent { color: var(--accent); }
+  .col-label.purple { color: var(--purple); }
+
+  .drop-zone {
+    min-height: 160px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.2s;
+  }
+  .drop-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.04);
+  }
+
+  .drop-hint {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-family: var(--mono);
+    text-align: center;
+    padding: 1.5rem;
+    font-style: italic;
+  }
+
+  /* ── DRAGGABLE ITEMS ── */
+  .drag-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    user-select: none;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .drag-item:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+  .drag-item.dragging { opacity: 0.35; }
+  .drag-item .handle { color: var(--muted); font-size: 0.9rem; flex-shrink: 0; }
+
+  /* Step number badge inside drop zones */
+  .step-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .btn-primary {
+    padding: 0.65rem 1.75rem;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,245,160,0.1));
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(0,245,160,0.18));
+    box-shadow: 0 0 18px rgba(0,212,255,0.18);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    padding: 0.65rem 1.25rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    animation: fadeUp 0.25s ease;
+  }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: translateY(0); } }
+  .feedback.show { display: block; }
+  .feedback.correct {
+    background: rgba(0,245,160,0.07);
+    border: 1px solid rgba(0,245,160,0.25);
+    color: var(--green);
+  }
+  .feedback.incorrect {
+    background: rgba(255,71,87,0.07);
+    border: 1px solid rgba(255,71,87,0.25);
+    color: var(--red);
+  }
+  .feedback strong { font-weight: 600; }
+  .feedback em { font-style: italic; color: var(--yellow); }
+
+  /* ── ACL SPECIFIC ── */
+  .acl-rule-text em { color: var(--green); font-style: normal; }
+  .acl-rule-text em.deny { color: var(--red); }
+  .acl-rule-text em.warn { color: var(--yellow); }
+  .acl-rule-text em.purple { color: var(--purple); }
+
+  /* ── NETWORK DIAGRAM ── */
+  .network-map {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .net-zone {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    min-height: 72px;
+    transition: all 0.2s;
+  }
+  .net-zone.dragover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+
+  .net-zone-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .net-zone.zone-internet { border-color: rgba(255,71,87,0.2); }
+  .net-zone.zone-internet .net-zone-label { color: var(--red); }
+  .net-zone.zone-dmz { border-color: rgba(255,211,42,0.2); }
+  .net-zone.zone-dmz .net-zone-label { color: var(--yellow); }
+  .net-zone.zone-internal { border-color: rgba(0,245,160,0.2); }
+  .net-zone.zone-internal .net-zone-label { color: var(--green); }
+
+  .zone-divider {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    padding: 2px 0;
+  }
+
+  .device-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .device-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .device-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .device-chip.dragging { opacity: 0.35; }
+
+  /* ── LOG ANALYSIS ── */
+  .log-terminal {
+    background: #060910;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  .log-terminal::-webkit-scrollbar { width: 4px; }
+  .log-terminal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .log-line { display: flex; gap: 1rem; }
+  .log-time { color: var(--muted); flex-shrink: 0; min-width: 72px; }
+  .log-src { color: var(--purple); flex-shrink: 0; min-width: 115px; }
+  .log-msg { color: var(--text); }
+  .log-msg.warn { color: var(--yellow); }
+  .log-msg.err { color: var(--red); }
+  .log-msg.ok { color: var(--green); }
+
+  .log-q-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .log-choices { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .log-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.87rem;
+    transition: all 0.2s;
+  }
+  .log-choice:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .log-choice.selected { border-color: var(--accent); background: rgba(0,212,255,0.07); color: var(--accent); }
+  .log-choice.correct-ans { border-color: var(--green); background: rgba(0,245,160,0.07); color: var(--green); }
+  .log-choice.wrong-ans { border-color: var(--red); background: rgba(255,71,87,0.07); color: var(--red); }
+
+  .choice-letter {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* ── INCIDENT RESPONSE TIMELINE ── */
+  .ir-timeline-wrap {
+    position: relative;
+  }
+  .ir-timeline-wrap::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 20px; bottom: 20px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), rgba(0,212,255,0.1));
+    pointer-events: none;
+  }
+
+  .ir-timeline .drag-item {
+    margin-left: 38px;
+    position: relative;
+  }
+  .ir-timeline .drag-item::before {
+    content: attr(data-num);
+    position: absolute;
+    left: -30px;
+    width: 18px; height: 18px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: var(--mono);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .pbq-progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+  }
+  .pbq-progress-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .pbq-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .pbq-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .pbq-progress-score {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 680px) {
+    .drag-cols { grid-template-columns: 1fr; }
+    header { padding: 0 1rem; }
+    main { padding: 1.25rem; }
+    .score-pills { gap: 0.4rem; }
+    .score-pill .lbl { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">SECURITY+ <span>SY0-701</span> PRACTICE EXAMS</a>
+  <div class="header-right">
+    <a href="index.html" class="back-link">← BACK</a>
+    <div class="score-pills">
+      <div class="score-pill"><span class="val" id="score-correct">0</span><span class="lbl">correct</span></div>
+      <div class="score-pill"><span class="val" id="score-attempts">0</span><span class="lbl">attempts</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="container">
+
+  <h1>Performance-Based Questions</h1>
+  <p class="subtitle">// drag-and-drop interactive simulations · SY0-701</p>
+
+  <!-- Progress -->
+  <div class="pbq-progress">
+    <span class="pbq-progress-label">PBQ PROGRESS</span>
+    <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:25%"></div></div>
+    <span class="pbq-progress-score" id="prog-label">1 / 4</span>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button>
+    <button class="nav-tab" onclick="switchTab('net',this,2)">🌐 Network Diagram</button>
+    <button class="nav-tab" onclick="switchTab('log',this,3)">📋 Log Analysis</button>
+    <button class="nav-tab" onclick="switchTab('ir',this,4)">🚨 Incident Response</button>
+  </div>
+
+  <!-- ============ TAB 1: FIREWALL ACL ============ -->
+  <div class="tab-content active" id="tab-acl">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-01 · Firewall / ACL Configuration</div>
+      <div class="scenario-title">Configure the Perimeter Firewall Ruleset</div>
+      <div class="scenario-desc">
+        A company's web server sits in the DMZ at <strong>10.10.1.5</strong>. Configure the firewall ACL to:
+        allow HTTPS inbound from any source, allow SSH only from the admin subnet <strong>192.168.1.0/24</strong>,
+        and block all other inbound traffic. The firewall processes rules <strong>top-to-bottom, first match wins</strong>.
+        Drag the correct rules into the ACL in the right order.
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">// Network Context</div>
+        <p>Web Server: <span>10.10.1.5</span> &nbsp;·&nbsp; Admin Subnet: <span>192.168.1.0/24</span> &nbsp;·&nbsp; Zone: <span>DMZ</span></p>
+      </div>
+
+      <div class="drag-cols">
+        <div>
+          <div class="col-label purple">Available Rules</div>
+          <div class="drop-zone" id="acl-pool" ondragover="dov(event)" ondrop="aclDropPool(event)" ondragleave="dlv(event)">
+            <div class="drag-item" draggable="true" data-rule="PERMIT TCP any 10.10.1.5 443" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">PERMIT TCP <em>any</em> → 10.10.1.5:<em>443</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="PERMIT TCP 192.168.1.0/24 10.10.1.5 22" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">PERMIT TCP <em class="purple">192.168.1.0/24</em> → 10.10.1.5:<em>22</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="DENY TCP any 10.10.1.5 22" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">DENY TCP <em class="deny">any</em> → 10.10.1.5:<em class="deny">22</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="DENY IP any any" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">DENY IP <em class="deny">any</em> → <em class="deny">any</em></span>
+            </div>
+            <div class="drag-item" draggable="true" data-rule="PERMIT TCP any 10.10.1.5 80" ondragstart="ds(event,'acl')" ondragend="de(event)">
+              <span class="handle">⠿</span>
+              <span class="acl-rule-text">PERMIT TCP <em class="warn">any</em> → 10.10.1.5:<em class="warn">80</em></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Active ACL — ordered top to bottom</div>
+          <div class="drop-zone" id="acl-list" ondragover="dov(event)" ondrop="aclDropList(event)" ondragleave="dlv(event)">
+            <div class="drop-hint">Drop rules here in the correct order ↓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkACL()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetACL()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-acl"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: NETWORK DIAGRAM ============ -->
+  <div class="tab-content" id="tab-net">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-02 · Network Diagram Analysis</div>
+      <div class="scenario-title">Place Devices in the Correct Network Zones</div>
+      <div class="scenario-desc">
+        Drag each device into its correct security zone. The <strong>DMZ</strong> hosts publicly accessible services while isolating them from internal systems.
+        Place each device where it belongs based on its function and trust level.
+      </div>
+
+      <div class="drag-cols">
+        <div>
+          <div class="col-label purple">Unplaced Devices</div>
+          <div class="drop-zone" id="net-pool" style="min-height:120px"
+            ondragover="dov(event)" ondrop="netDrop(event,'net-pool')" ondragleave="dlv(event)">
+            <div class="device-chips" id="net-pool-chips">
+              <div class="device-chip" draggable="true" data-device="Web Server" data-zone="zone-dmz" ondragstart="ds(event,'net')" ondragend="de(event)">🖥️ Web Server</div>
+              <div class="device-chip" draggable="true" data-device="Public DNS" data-zone="zone-dmz" ondragstart="ds(event,'net')" ondragend="de(event)">📡 Public DNS</div>
+              <div class="device-chip" draggable="true" data-device="HR Database" data-zone="zone-internal" ondragstart="ds(event,'net')" ondragend="de(event)">🗄️ HR Database</div>
+              <div class="device-chip" draggable="true" data-device="Workstations" data-zone="zone-internal" ondragstart="ds(event,'net')" ondragend="de(event)">💻 Workstations</div>
+              <div class="device-chip" draggable="true" data-device="Mail Gateway" data-zone="zone-dmz" ondragstart="ds(event,'net')" ondragend="de(event)">📧 Mail Gateway</div>
+              <div class="device-chip" draggable="true" data-device="External User" data-zone="zone-internet" ondragstart="ds(event,'net')" ondragend="de(event)">👤 External User</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Network Security Zones</div>
+          <div class="network-map">
+            <div class="net-zone zone-internet" id="zone-internet" ondragover="dov(event)" ondrop="netDrop(event,'zone-internet')" ondragleave="dlv(event)">
+              <div class="net-zone-label">🌍 Internet — Untrusted</div>
+              <div class="device-chips" id="zone-internet-chips"></div>
+            </div>
+            <div class="zone-divider">── Perimeter Firewall ──</div>
+            <div class="net-zone zone-dmz" id="zone-dmz" ondragover="dov(event)" ondrop="netDrop(event,'zone-dmz')" ondragleave="dlv(event)">
+              <div class="net-zone-label">⚠️ DMZ — Semi-Trusted</div>
+              <div class="device-chips" id="zone-dmz-chips"></div>
+            </div>
+            <div class="zone-divider">── Internal Firewall ──</div>
+            <div class="net-zone zone-internal" id="zone-internal" ondragover="dov(event)" ondrop="netDrop(event,'zone-internal')" ondragleave="dlv(event)">
+              <div class="net-zone-label">🔒 Internal — Trusted</div>
+              <div class="device-chips" id="zone-internal-chips"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkNet()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetNet()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-net"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: LOG ANALYSIS ============ -->
+  <div class="tab-content" id="tab-log">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-03 · Log Analysis / SIEM</div>
+      <div class="scenario-title">Identify the Attack from Authentication Logs</div>
+      <div class="scenario-desc">
+        Review these authentication logs captured by the SIEM. Analyze the patterns — look at the source IP,
+        timing, usernames, and failure counts — then answer the questions below.
+      </div>
+
+      <div class="log-terminal">
+        <div class="log-line"><span class="log-time">09:14:02</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: admin</span></div>
+        <div class="log-line"><span class="log-time">09:14:03</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: admin</span></div>
+        <div class="log-line"><span class="log-time">09:14:04</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: admin</span></div>
+        <div class="log-line"><span class="log-time">09:14:05</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: administrator</span></div>
+        <div class="log-line"><span class="log-time">09:14:06</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: root</span></div>
+        <div class="log-line"><span class="log-time">09:14:07</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: sysadmin</span></div>
+        <div class="log-line"><span class="log-time">09:14:08</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: guest</span></div>
+        <div class="log-line"><span class="log-time">09:14:09</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: support</span></div>
+        <div class="log-line"><span class="log-time">09:14:10</span><span class="log-src">203.0.113.45</span><span class="log-msg warn">ACCOUNT LOCKED — user: admin (5 failures)</span></div>
+        <div class="log-line"><span class="log-time">09:15:22</span><span class="log-src">10.0.0.12</span><span class="log-msg ok">SUCCESS login — user: jsmith</span></div>
+        <div class="log-line"><span class="log-time">09:17:45</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: jsmith</span></div>
+        <div class="log-line"><span class="log-time">09:17:46</span><span class="log-src">203.0.113.45</span><span class="log-msg err">FAILED login — user: jsmith</span></div>
+        <div class="log-line"><span class="log-time">09:17:47</span><span class="log-src">203.0.113.45</span><span class="log-msg warn">ACCOUNT LOCKED — user: jsmith</span></div>
+      </div>
+
+      <div class="log-q-title">Q1 — What type of attack is being conducted from 203.0.113.45?</div>
+      <div class="log-choices" id="log-q1">
+        <div class="log-choice" onclick="logPick('q1','A',this)"><span class="choice-letter">A</span>Password spraying — one password tried against many accounts</div>
+        <div class="log-choice" onclick="logPick('q1','B',this)"><span class="choice-letter">B</span>Brute force — many passwords tried against a single account</div>
+        <div class="log-choice" onclick="logPick('q1','C',this)"><span class="choice-letter">C</span>Username enumeration / dictionary attack against multiple usernames</div>
+        <div class="log-choice" onclick="logPick('q1','D',this)"><span class="choice-letter">D</span>Credential stuffing using previously breached credentials</div>
+      </div>
+
+      <div class="log-q-title">Q2 — Which control would BEST mitigate this attack going forward?</div>
+      <div class="log-choices" id="log-q2">
+        <div class="log-choice" onclick="logPick('q2','A',this)"><span class="choice-letter">A</span>Increase minimum password complexity requirements</div>
+        <div class="log-choice" onclick="logPick('q2','B',this)"><span class="choice-letter">B</span>Account lockout policy with geo-IP blocking on the login page</div>
+        <div class="log-choice" onclick="logPick('q2','C',this)"><span class="choice-letter">C</span>Implement MFA and rate limiting on the authentication endpoint</div>
+        <div class="log-choice" onclick="logPick('q2','D',this)"><span class="choice-letter">D</span>Enable full-disk encryption on the authentication server</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkLog()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetLog()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-log"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4: INCIDENT RESPONSE ============ -->
+  <div class="tab-content" id="tab-ir">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-04 · Incident Response Sequencing</div>
+      <div class="scenario-title">Sequence the IR Steps — Ransomware Incident</div>
+      <div class="scenario-desc">
+        A ransomware attack has been detected on a workstation. Drag the response steps into the correct order
+        based on the <strong>NIST SP 800-61</strong> incident response lifecycle. Order matters — wrong sequencing
+        can destroy evidence or allow the attacker to persist.
+      </div>
+
+      <div class="drag-cols">
+        <div>
+          <div class="col-label purple">IR Steps — Drag to Timeline</div>
+          <div class="drop-zone" id="ir-pool" ondragover="dov(event)" ondrop="irDrop(event,'ir-pool')" ondragleave="dlv(event)">
+            <div class="drag-item" draggable="true" data-step="Eradicate malware and patch vulnerabilities" data-order="5" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🧹 Eradicate malware &amp; patch vulnerabilities</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Notify stakeholders and document findings" data-order="7" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>📣 Notify stakeholders &amp; document</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Isolate the affected system from network" data-order="2" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🔌 Isolate affected system from network</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Detect and identify the ransomware alert" data-order="1" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🔍 Detect &amp; identify the ransomware alert</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Restore from clean backup and verify integrity" data-order="6" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>💾 Restore from clean backup &amp; verify</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Preserve forensic evidence and disk image" data-order="3" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🔬 Preserve forensic evidence &amp; disk image</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Conduct post-incident lessons learned review" data-order="8" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>📝 Post-incident lessons learned review</span>
+            </div>
+            <div class="drag-item" draggable="true" data-step="Analyze scope — identify IOCs and lateral movement" data-order="4" ondragstart="ds(event,'ir')" ondragend="de(event)">
+              <span class="handle">⠿</span><span>🗺️ Analyze scope — IOCs &amp; lateral movement</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="col-label accent">Response Timeline — First → Last</div>
+          <div class="drop-zone ir-timeline-wrap" id="ir-timeline" ondragover="dov(event)" ondrop="irDrop(event,'ir-timeline')" ondragleave="dlv(event)" style="min-height:280px;">
+            <div class="drop-hint">Drop steps here in the correct order ↓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="checkIR()">▶ CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetIR()">↺ RESET</button>
+      </div>
+      <div class="feedback" id="fb-ir"></div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <p>CompTIA Security+ SY0-701 · Performance-Based Question Simulator</p>
+  <p style="margin-top:0.4rem; font-size:0.75rem;"><a href="disclaimer.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">Disclaimer &amp; Legal Notice</a></p>
+</footer>
+
+<script>
+// ── STATE ──
+let dragSrc = null, dragType = null;
+let correct = 0, attempts = 0;
+const logAns = { q1: null, q2: null };
+
+// ── SCORE ──
+function updScore() {
+  document.getElementById('score-correct').textContent = correct;
+  document.getElementById('score-attempts').textContent = attempts;
+}
+
+// ── TABS ──
+function switchTab(id, btn, n) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('prog-fill').style.width = (n / 4 * 100) + '%';
+  document.getElementById('prog-label').textContent = n + ' / 4';
+}
+
+// ── GENERIC DRAG HELPERS ──
+function ds(e, type) { dragSrc = e.currentTarget; dragType = type; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function de(e) { e.currentTarget.classList.remove('dragging'); }
+function dov(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); e.dataTransfer.dropEffect = 'move'; }
+function dlv(e) { e.currentTarget.classList.remove('dragover'); }
+
+// ── ACL ──
+function aclDropPool(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'acl') return;
+  const num = dragSrc.querySelector('.step-num'); if (num) num.remove();
+  document.getElementById('acl-pool').appendChild(dragSrc);
+  aclRenumber();
+}
+function aclDropList(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'acl') return;
+  const list = document.getElementById('acl-list');
+  const hint = list.querySelector('.drop-hint'); if (hint) hint.remove();
+  if (!dragSrc.querySelector('.step-num')) {
+    const n = document.createElement('span'); n.className = 'step-num';
+    dragSrc.insertBefore(n, dragSrc.firstChild);
+  }
+  list.appendChild(dragSrc);
+  aclRenumber();
+}
+function aclRenumber() {
+  const items = document.getElementById('acl-list').querySelectorAll('.drag-item');
+  items.forEach((item, i) => {
+    let n = item.querySelector('.step-num');
+    if (!n) { n = document.createElement('span'); n.className = 'step-num'; item.insertBefore(n, item.firstChild); }
+    n.textContent = i + 1;
+  });
+}
+function checkACL() {
+  attempts++; updScore();
+  const items = document.getElementById('acl-list').querySelectorAll('.drag-item');
+  const rules = Array.from(items).map(i => i.dataset.rule);
+  const correct_order = ['PERMIT TCP any 10.10.1.5 443','PERMIT TCP 192.168.1.0/24 10.10.1.5 22','DENY TCP any 10.10.1.5 22','DENY IP any any'];
+  const fb = document.getElementById('fb-acl');
+  fb.classList.add('show');
+  if (rules.length !== 4) {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place exactly 4 rules in the ACL. Don\'t include the HTTP:80 rule — the scenario only requires HTTPS.';
+    return;
+  }
+  if (JSON.stringify(rules) === JSON.stringify(correct_order)) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Your ACL is properly configured. Permitting HTTPS first allows web traffic; the admin SSH PERMIT before the SSH DENY ensures only 192.168.1.0/24 can SSH in; and the final implicit deny-all blocks everything else. First-match ordering is critical!';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong order.</strong> Remember: (1) PERMIT HTTPS any, (2) PERMIT SSH from admin subnet only, (3) DENY all other SSH, (4) DENY all. The DENY SSH must come <em>after</em> the PERMIT SSH from admin — otherwise admins get blocked too!';
+  }
+}
+function resetACL() {
+  const pool = document.getElementById('acl-pool'), list = document.getElementById('acl-list');
+  Array.from(list.querySelectorAll('.drag-item')).forEach(item => { const n = item.querySelector('.step-num'); if(n) n.remove(); pool.appendChild(item); });
+  if (!list.querySelector('.drag-item')) list.innerHTML = '<div class="drop-hint">Drop rules here in the correct order ↓</div>';
+  document.getElementById('fb-acl').className = 'feedback';
+}
+
+// ── NETWORK ──
+function netDrop(e, zoneId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'net') return;
+  const chipsId = zoneId === 'net-pool' ? 'net-pool-chips' : zoneId + '-chips';
+  document.getElementById(chipsId).appendChild(dragSrc);
+}
+function checkNet() {
+  attempts++; updScore();
+  const zones = ['zone-internet','zone-dmz','zone-internal'];
+  let wrong = [];
+  zones.forEach(z => {
+    document.getElementById(z + '-chips').querySelectorAll('.device-chip').forEach(chip => {
+      if (chip.dataset.zone !== z) wrong.push(`"${chip.dataset.device}" → should be ${chip.dataset.zone.replace('zone-','').toUpperCase()}`);
+    });
+  });
+  const poolLeft = document.getElementById('net-pool-chips').querySelectorAll('.device-chip').length;
+  const fb = document.getElementById('fb-net');
+  fb.classList.add('show');
+  if (poolLeft > 0) { fb.className = 'feedback show incorrect'; fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all devices into a zone before checking.'; return; }
+  if (wrong.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> Web Server, Public DNS, and Mail Gateway belong in the DMZ — publicly accessible but isolated from internal systems. HR Database and Workstations are internal (trusted). External User represents the untrusted internet.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join('; ') + '. Remember: DMZ = publicly accessible services (web, DNS, mail). Internal = private data and endpoints. Don\'t expose sensitive systems directly to the perimeter.';
+  }
+}
+function resetNet() {
+  const pool = document.getElementById('net-pool-chips');
+  ['zone-internet','zone-dmz','zone-internal'].forEach(z => {
+    document.getElementById(z + '-chips').querySelectorAll('.device-chip').forEach(c => pool.appendChild(c));
+  });
+  document.getElementById('fb-net').className = 'feedback';
+}
+
+// ── LOG ANALYSIS ──
+function logPick(q, letter, el) {
+  document.getElementById('log-' + q).querySelectorAll('.log-choice').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  logAns[q] = letter;
+}
+function checkLog() {
+  if (!logAns.q1 || !logAns.q2) {
+    const fb = document.getElementById('fb-log');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ Please answer both questions before checking.';
+    return;
+  }
+  attempts++; updScore();
+  const q1ok = logAns.q1 === 'C', q2ok = logAns.q2 === 'C';
+  ['q1','q2'].forEach((q,qi) => {
+    const ans = qi===0?'C':'C';
+    document.getElementById('log-'+q).querySelectorAll('.log-choice').forEach((c,i) => {
+      const L = ['A','B','C','D'][i];
+      if (L===ans) c.classList.add('correct-ans');
+      else if (c.classList.contains('selected') && L!==ans) c.classList.add('wrong-ans');
+    });
+  });
+  const fb = document.getElementById('fb-log');
+  fb.classList.add('show');
+  if (q1ok && q2ok) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Both correct!</strong><br><strong>Q1:</strong> This is <em>username enumeration</em> — cycling through common usernames from one IP rapidly. Unlike spraying (one password → many accounts) or brute force (many passwords → one account).<br><br><strong>Q2:</strong> MFA + rate limiting is strongest — MFA blocks access even if credentials are guessed; rate limiting slows automation. Lockout alone can cause DoS; disk encryption is irrelevant here.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ ' + (!q1ok ? '<strong>Q1:</strong> The pattern shows many usernames from one IP in rapid succession — username enumeration/dictionary attack. ' : '') + (!q2ok ? '<strong>Q2:</strong> MFA + rate limiting is best. Complexity rules don\'t stop automation; disk encryption doesn\'t protect authentication.' : '');
+  }
+}
+function resetLog() {
+  logAns.q1 = null; logAns.q2 = null;
+  ['q1','q2'].forEach(q => document.getElementById('log-'+q).querySelectorAll('.log-choice').forEach(c => c.classList.remove('selected','correct-ans','wrong-ans')));
+  document.getElementById('fb-log').className = 'feedback';
+}
+
+// ── INCIDENT RESPONSE ──
+function irDrop(e, targetId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'ir') return;
+  const target = document.getElementById(targetId);
+  const hint = target.querySelector('.drop-hint'); if (hint) hint.remove();
+  target.appendChild(dragSrc);
+  if (targetId === 'ir-timeline') irRenumber();
+}
+function irRenumber() {
+  document.getElementById('ir-timeline').querySelectorAll('.drag-item').forEach((s,i) => s.dataset.num = i+1);
+}
+function checkIR() {
+  const steps = Array.from(document.getElementById('ir-timeline').querySelectorAll('.drag-item'));
+  attempts++; updScore();
+  if (steps.length !== 8) {
+    const fb = document.getElementById('fb-ir');
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = `❌ Place all 8 steps in the timeline first. (${steps.length}/8 placed)`;
+    return;
+  }
+  const orders = steps.map(s => parseInt(s.dataset.order));
+  const fb = document.getElementById('fb-ir');
+  fb.classList.add('show');
+  if (JSON.stringify(orders) === JSON.stringify([1,2,3,4,5,6,7,8])) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Perfect!</strong> NIST SP 800-61 order:<br>1️⃣ Detect → 2️⃣ Contain (isolate) → 3️⃣ Preserve evidence → 4️⃣ Analyze scope/IOCs → 5️⃣ Eradicate → 6️⃣ Recover → 7️⃣ Notify → 8️⃣ Lessons learned.<br><br><em>Critical rule: Always preserve forensic evidence BEFORE eradication — never wipe a system before imaging it!</em>';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Wrong order.</strong> Key rules: Contain <em>immediately</em> after detection. Preserve evidence <em>before</em> eradication. Restore only after confirmed clean. Lessons learned is always last.<br><br>Correct: Detect → Isolate → Preserve Evidence → Analyze → Eradicate → Restore → Notify → Lessons Learned';
+  }
+}
+function resetIR() {
+  const pool = document.getElementById('ir-pool'), tl = document.getElementById('ir-timeline');
+  Array.from(tl.querySelectorAll('.drag-item')).forEach(s => { s.removeAttribute('data-num'); pool.appendChild(s); });
+  tl.innerHTML = '<div class="drop-hint">Drop steps here in the correct order ↓</div>';
+  document.getElementById('fb-ir').className = 'feedback';
+}
+</script>
+</body>
+</html>
