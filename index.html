@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <script>
-/* Prevent flash of wrong theme */
-(function() {
-  var t = 'dark';
-  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
-  document.documentElement.setAttribute('data-theme', t);
+(function(){
+  try {
+    var t = localStorage.getItem('bl-theme');
+    if (t === 'light' || t === 'dark') {
+      document.documentElement.setAttribute('data-theme', t);
+    }
+  } catch(e) {}
 })();
 </script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Security+ SY0-701 | Practice Exams</title>
@@ -1359,36 +1362,30 @@
 
 <!-- AI FLOATING BUBBLE — paste before 
 
+
 <script>
-/* ── THEME TOGGLE ── */
 function toggleTheme() {
-  var html = document.documentElement;
-  var next = (html.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
-  // Add transition class, switch theme, remove class after transition completes
-  html.classList.add('theme-switching');
-  applyTheme(next);
+  var root = document.documentElement;
+  var current = root.getAttribute('data-theme') || 'dark';
+  var next = current === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  root.classList.add('theme-switching');
+  setTimeout(function(){ root.classList.remove('theme-switching'); }, 300);
   try { localStorage.setItem('bl-theme', next); } catch(e) {}
-  setTimeout(function() { html.classList.remove('theme-switching'); }, 300);
+  updateThemeButton(next);
 }
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
+
+function updateThemeButton(theme) {
   var icon  = document.getElementById('themeIcon');
   var label = document.getElementById('themeLabel');
   if (!icon || !label) return;
   icon.textContent  = theme === 'light' ? '🌙' : '☀️';
   label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
 }
-/* Apply immediately before paint to avoid flash */
-(function() {
-  var t = 'dark';
-  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
-  document.documentElement.setAttribute('data-theme', t);
-})();
-/* Update button label once DOM is ready */
+
 document.addEventListener('DOMContentLoaded', function() {
-  var t = 'dark';
-  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
-  applyTheme(t);
+  var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
 });
 </script>
 </body>
