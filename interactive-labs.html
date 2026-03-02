@@ -1,16 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-<script>
-(function(){
-  try {
-    var t = localStorage.getItem('bl-theme');
-    if (t === 'light' || t === 'dark') {
-      document.documentElement.setAttribute('data-theme', t);
-    }
-  } catch(e) {}
-})();
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interactive Labs | Security+ SY0-701</title>
@@ -792,22 +782,7 @@ body { background:var(--bg); color:var(--text); font-family:var(--font); min-hei
     overflow-x: hidden;
   }
 
-  /* Animated background */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-      linear-gradient(45deg, transparent 48%, rgba(0, 255, 159, 0.03) 50%, transparent 52%),
-      linear-gradient(-45deg, transparent 48%, rgba(0, 212, 255, 0.03) 50%, transparent 52%);
-    background-size: 30px 30px;
-    pointer-events: none;
-    z-index: 0;
-    animation: gridMove 20s linear infinite;
-  }
+  
 
   @keyframes gridMove {
     0% { background-position: 0 0, 0 0; }
@@ -1405,11 +1380,7 @@ body { background:var(--bg); color:var(--text); font-family:var(--font); min-hei
 
 
 /* Scanline overlay for sim section */
-#section-sim body::after, #section-sim::after {
-  content:''; position:fixed; inset:0;
-  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.02) 2px,rgba(0,0,0,0.02) 4px);
-  pointer-events:none; z-index:0;
-}
+#section-sim body::after, 
 
 /* ══════════════════════════════════════════
    BRANCHING SCENARIOS STYLES
@@ -1443,21 +1414,7 @@ body { background:var(--bg); color:var(--text); font-family:var(--font); min-hei
     overflow-x: hidden;
   }
 
-  /* Scanline overlay */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.03) 2px,
-      rgba(0,0,0,0.03) 4px
-    );
-    pointer-events: none;
-    z-index: 9999;
-  }
+  
 
   /* HEADER */
   header {
@@ -2143,12 +2100,6 @@ footer { background:var(--bg2); border-top:1px solid var(--border); padding:1rem
   }
   .theme-icon { font-size: 0.82rem; line-height: 1; }
 
-
-/* theme transition — applied only during switch */
-  .theme-switching *, .theme-switching *::before, .theme-switching *::after {
-    transition: background-color 0.2s ease, border-color 0.2s ease,
-                color 0.15s ease, box-shadow 0.2s ease !important;
-  }
 </style>
 </head>
 <body>
@@ -5235,32 +5186,33 @@ renderCards('all');
 
 </script>
 
-
-
 <script>
+/* ── THEME TOGGLE (shared across all pages) ── */
 function toggleTheme() {
-  var root = document.documentElement;
-  var current = root.getAttribute('data-theme') || 'dark';
-  var next = current === 'dark' ? 'light' : 'dark';
-  root.setAttribute('data-theme', next);
-  root.classList.add('theme-switching');
-  setTimeout(function(){ root.classList.remove('theme-switching'); }, 300);
+  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
   try { localStorage.setItem('bl-theme', next); } catch(e) {}
-  updateThemeButton(next);
 }
-
-function updateThemeButton(theme) {
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
   var icon  = document.getElementById('themeIcon');
   var label = document.getElementById('themeLabel');
   if (!icon || !label) return;
   icon.textContent  = theme === 'light' ? '🌙' : '☀️';
   label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
 }
-
+(function() {
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', t);
+})();
 document.addEventListener('DOMContentLoaded', function() {
-  var theme = document.documentElement.getAttribute('data-theme') || 'dark';
-  updateThemeButton(theme);
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  applyTheme(t);
 });
 </script>
+
 </body>
 </html>
