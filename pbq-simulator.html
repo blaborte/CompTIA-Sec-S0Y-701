@@ -13,9 +13,12 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PBQ Simulator | Security+ SY0-701</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>PBQ Simulator · Security+ SY0-701</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
   :root {
     --bg: #0b0e17;
     --bg2: #111520;
@@ -740,12 +743,7 @@
     border-color: #1c2538 !important;
   }
 
-  /* smooth transition on switch */
-  *, *::before, *::after {
-    transition: background-color 0.22s ease, border-color 0.2s ease, color 0.18s ease !important;
-  }
-  .xp-fill, .progress-fill, .cat-toggle-arrow,
-  .expand-arrow, .pbq-progress-fill { transition: none !important; }
+  
 
   /* ── THEME TOGGLE BUTTON ── */
   .theme-toggle {
@@ -769,6 +767,126 @@
                 color 0.15s ease, box-shadow 0.2s ease !important;
   }
 
+
+
+  /* ── PBQ SELECTOR SCREEN ── */
+  .pbq-selector-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .pbq-selector-header h1 { margin-bottom: 0.4rem; }
+
+  .pbq-select-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  @media(max-width: 520px) {
+    .pbq-select-grid { grid-template-columns: 1fr; }
+  }
+
+  .pbq-select-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .pbq-select-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--card-accent, var(--accent));
+    border-radius: 12px 0 0 12px;
+    transition: width 0.2s;
+  }
+  .pbq-select-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+  }
+  .pbq-select-card:hover::before { width: 5px; }
+
+  .psc-icon {
+    font-size: 2rem;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 48px;
+    text-align: center;
+  }
+  .psc-body { flex: 1; min-width: 0; }
+  .psc-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--accent));
+    margin-bottom: 0.2rem;
+  }
+  .psc-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .psc-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .psc-badge {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--accent));
+    background: rgba(0,0,0,0.12);
+    border: 1px solid var(--card-accent, var(--accent));
+    border-radius: 20px;
+    padding: 0.2rem 0.6rem;
+    white-space: nowrap;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+  [data-theme="light"] .psc-badge { background: rgba(0,0,0,0.04); }
+  .psc-arrow {
+    color: var(--muted);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    transition: transform 0.2s, color 0.2s;
+  }
+  .pbq-select-card:hover .psc-arrow {
+    transform: translateX(4px);
+    color: var(--card-accent, var(--accent));
+  }
+
+  /* Back button in simulator view */
+  .back-to-menu {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .back-to-menu:hover { color: var(--accent); border-color: var(--accent); }
+
 </style>
 </head>
 <body>
@@ -781,37 +899,125 @@
       <div class="score-pill"><span class="val" id="score-correct">0</span><span class="lbl">correct</span></div>
       <div class="score-pill"><span class="val" id="score-attempts">0</span><span class="lbl">attempts</span></div>
     </div>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+      <span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span>
+    </button>
   </div>
 </header>
 
 <main>
 <div class="container">
 
-  <h1>Performance-Based Questions</h1>
-  <p class="subtitle">// drag-and-drop interactive simulations · SY0-701</p>
+  <!-- ═══════════════ SELECTOR SCREEN ═══════════════ -->
+  <div id="pbq-selector">
+    <div class="pbq-selector-header">
+      <h1>PBQ Simulator</h1>
+      <p class="subtitle">Performance-Based Questions · Choose a scenario to begin</p>
+    </div>
+    <div class="pbq-select-grid">
 
-  <!-- Progress -->
-  <div class="pbq-progress">
-    <span class="pbq-progress-label">PBQ PROGRESS</span>
-    <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:12.5%"></div></div>
-    <span class="pbq-progress-score" id="prog-label">1 / 8</span>
+    <div class="pbq-select-card" onclick="showTab('acl', this, 1)" style="--card-accent:var(--accent)">
+      <div class="psc-icon">🛡️</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-01</div>
+        <div class="psc-title">Firewall ACL</div>
+        <div class="psc-desc">Configure firewall rules in correct order using drag & drop. Apply first-match logic to allow/deny traffic.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('net', this, 2)" style="--card-accent:var(--yellow)">
+      <div class="psc-icon">🌐</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-02</div>
+        <div class="psc-title">Network Diagram</div>
+        <div class="psc-desc">Place network devices into the correct security zones: Internet, DMZ, and Internal network.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('log', this, 3)" style="--card-accent:var(--purple)">
+      <div class="psc-icon">📋</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-03</div>
+        <div class="psc-title">Log Analysis</div>
+        <div class="psc-desc">Read authentication logs and identify the attack type, then choose the best mitigation strategy.</div>
+      </div>
+      <div class="psc-badge">Multiple Choice</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('ir', this, 4)" style="--card-accent:var(--red)">
+      <div class="psc-icon">🚨</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-04</div>
+        <div class="psc-title">Incident Response</div>
+        <div class="psc-desc">Order the 8 NIST SP 800-61 incident response steps correctly in a drag-and-drop timeline.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('ports', this, 5)" style="--card-accent:var(--green)">
+      <div class="psc-icon">🔌</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-05</div>
+        <div class="psc-title">Port Matching</div>
+        <div class="psc-desc">Match network services to their correct port numbers across 9 critical ports.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('crypto', this, 6)" style="--card-accent:var(--accent2)">
+      <div class="psc-icon">🔐</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-06</div>
+        <div class="psc-title">Cryptography</div>
+        <div class="psc-desc">Categorize cryptographic algorithms into Symmetric, Asymmetric, Hashing, and Key Exchange groups.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('vuln', this, 7)" style="--card-accent:var(--yellow)">
+      <div class="psc-icon">🎯</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-07</div>
+        <div class="psc-title">Vuln Prioritization</div>
+        <div class="psc-desc">Rank 5 vulnerabilities in correct remediation order using CVSS scores, exploitability, and exposure.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('iam', this, 8)" style="--card-accent:var(--purple)">
+      <div class="psc-icon">👤</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-08</div>
+        <div class="psc-title">Access Control (IAM)</div>
+        <div class="psc-desc">Assign permissions to roles following least-privilege. Double-click chips in role boxes to remove them.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    </div>
   </div>
 
-  <!-- NAV TABS -->
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button>
-    <button class="nav-tab" onclick="switchTab('net',this,2)">🌐 Network Diagram</button>
-    <button class="nav-tab" onclick="switchTab('log',this,3)">📋 Log Analysis</button>
-    <button class="nav-tab" onclick="switchTab('ir',this,4)">🚨 Incident Response</button>
-    <button class="nav-tab" onclick="switchTab('ports',this,5)">🔌 Port Matching</button>
-    <button class="nav-tab" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button>
-    <button class="nav-tab" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button>
-    <button class="nav-tab" onclick="switchTab('iam',this,8)">👤 Access Control</button>
-  </div>
+  <!-- ═══════════════ SIMULATOR VIEW ═══════════════ -->
+  <div id="pbq-simulator" style="display:none">
 
-  <!-- ============ TAB 1: FIREWALL ACL ============ -->
+    <button class="back-to-menu" onclick="goBack()">← All PBQs</button>
+
+    <!-- Progress -->
+    <div class="pbq-progress">
+      <span class="pbq-progress-label">PBQ PROGRESS</span>
+      <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:12.5%"></div></div>
+      <span class="pbq-progress-score" id="prog-label">1 / 8</span>
+    </div>
+
+    <!-- NAV TABS -->
+    <div class="nav-tabs"><button class="nav-tab active" data-tab="acl" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button><button class="nav-tab" data-tab="net" onclick="switchTab('net',this,2)">🌐 Network</button><button class="nav-tab" data-tab="log" onclick="switchTab('log',this,3)">📋 Log Analysis</button><button class="nav-tab" data-tab="ir" onclick="switchTab('ir',this,4)">🚨 Incident Response</button><button class="nav-tab" data-tab="ports" onclick="switchTab('ports',this,5)">🔌 Port Matching</button><button class="nav-tab" data-tab="crypto" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button><button class="nav-tab" data-tab="vuln" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button><button class="nav-tab" data-tab="iam" onclick="switchTab('iam',this,8)">👤 Access Control</button></div>
+
+    <!-- TAB CONTENTS -->
+    
   <div class="tab-content active" id="tab-acl">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-01 · Firewall / ACL Configuration</div>
       <div class="scenario-title">Configure the Perimeter Firewall Ruleset</div>
@@ -867,10 +1073,10 @@
       </div>
       <div class="feedback" id="fb-acl"></div>
     </div>
+  
   </div>
-
-  <!-- ============ TAB 2: NETWORK DIAGRAM ============ -->
   <div class="tab-content" id="tab-net">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-02 · Network Diagram Analysis</div>
       <div class="scenario-title">Place Devices in the Correct Network Zones</div>
@@ -921,10 +1127,10 @@
       </div>
       <div class="feedback" id="fb-net"></div>
     </div>
+  
   </div>
-
-  <!-- ============ TAB 3: LOG ANALYSIS ============ -->
   <div class="tab-content" id="tab-log">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-03 · Log Analysis / SIEM</div>
       <div class="scenario-title">Identify the Attack from Authentication Logs</div>
@@ -971,10 +1177,10 @@
       </div>
       <div class="feedback" id="fb-log"></div>
     </div>
+  
   </div>
-
-  <!-- ============ TAB 4: INCIDENT RESPONSE ============ -->
   <div class="tab-content" id="tab-ir">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-04 · Incident Response Sequencing</div>
       <div class="scenario-title">Sequence the IR Steps — Ransomware Incident</div>
@@ -1028,11 +1234,10 @@
       </div>
       <div class="feedback" id="fb-ir"></div>
     </div>
+  
   </div>
-
-
-  <!-- ============ TAB 5: PORT & PROTOCOL MATCHING ============ -->
   <div class="tab-content" id="tab-ports">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-05 · Port &amp; Protocol Matching</div>
       <div class="scenario-title">Match Services to Their Correct Default Ports</div>
@@ -1077,10 +1282,10 @@
       </div>
       <div class="feedback" id="fb-ports"></div>
     </div>
+  
   </div>
-
-  <!-- ============ TAB 6: CRYPTOGRAPHY ============ -->
   <div class="tab-content" id="tab-crypto">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-06 · Cryptography Algorithm Matching</div>
       <div class="scenario-title">Match Algorithms to Their Cryptographic Category</div>
@@ -1134,10 +1339,10 @@
       </div>
       <div class="feedback" id="fb-crypto"></div>
     </div>
+  
   </div>
-
-  <!-- ============ TAB 7: VULNERABILITY PRIORITIZATION ============ -->
   <div class="tab-content" id="tab-vuln">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-07 · Vulnerability Prioritization</div>
       <div class="scenario-title">Rank Vulnerabilities by Remediation Priority</div>
@@ -1183,10 +1388,10 @@
       </div>
       <div class="feedback" id="fb-vuln"></div>
     </div>
+  
   </div>
-
-  <!-- ============ TAB 8: ACCESS CONTROL / IAM ============ -->
   <div class="tab-content" id="tab-iam">
+
     <div class="scenario-card">
       <div class="scenario-badge">PBQ-08 · Access Control / IAM</div>
       <div class="scenario-title">Assign Least-Privilege Permissions to Roles</div>
@@ -1233,9 +1438,12 @@
       </div>
       <div class="feedback" id="fb-iam"></div>
     </div>
+  
   </div>
 
-</div>
+  </div><!-- /pbq-simulator -->
+
+</div><!-- /container -->
 </main>
 
 <footer>
@@ -1244,6 +1452,19 @@
 </footer>
 
 <script>
+
+// ── SELECTOR SCREEN ──
+function showTab(id, btn, n) {
+  // Hide selector, show simulator
+  document.getElementById('pbq-selector').style.display = 'none';
+  document.getElementById('pbq-simulator').style.display = 'block';
+  switchTab(id, document.querySelector('.nav-tab[data-tab="'+id+'"]'), n);
+}
+function goBack() {
+  document.getElementById('pbq-selector').style.display = 'block';
+  document.getElementById('pbq-simulator').style.display = 'none';
+}
+
 // ── STATE ──
 let dragSrc = null, dragType = null;
 let correct = 0, attempts = 0;
@@ -1266,7 +1487,7 @@ function switchTab(id, btn, n) {
 }
 
 // ── GENERIC DRAG HELPERS ──
-function ds(e, type) { dragSrc = e.currentTarget; dragType = type; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function ds(e, type) { dragSrc = e.currentTarget; dragType = type; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', type); }
 function de(e) { e.currentTarget.classList.remove('dragging'); }
 function dov(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); e.dataTransfer.dropEffect = 'move'; }
 function dlv(e) { e.currentTarget.classList.remove('dragover'); }
@@ -1653,8 +1874,8 @@ function resetIAM() {
   document.getElementById('fb-iam').className = 'feedback';
 }
 
-</script>
 
+</script>
 <script>
 function toggleTheme() {
   var root = document.documentElement;
