@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* Prevent flash of wrong theme */
+(function() {
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Security+ SY0-701 | Practice Exams</title>
@@ -1351,10 +1359,10 @@
 
   <script src="gamification-social.js"></script>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
 <!-- AI FLOATING BUBBLE — paste before 
+
 <script>
-/* ── THEME TOGGLE (shared across all pages) ── */
+/* ── THEME TOGGLE ── */
 function toggleTheme() {
   var cur = document.documentElement.getAttribute('data-theme') || 'dark';
   var next = cur === 'dark' ? 'light' : 'dark';
@@ -1369,23 +1377,18 @@ function applyTheme(theme) {
   icon.textContent  = theme === 'light' ? '🌙' : '☀️';
   label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
 }
-/* Apply before paint to avoid flash */
+/* Apply immediately before paint to avoid flash */
 (function() {
   var t = 'dark';
   try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
   document.documentElement.setAttribute('data-theme', t);
 })();
+/* Update button label once DOM is ready */
 document.addEventListener('DOMContentLoaded', function() {
   var t = 'dark';
   try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
   applyTheme(t);
 });
 </script>
-
-</body> on every page   -->
-
-
-
-
 </body>
 </html>
