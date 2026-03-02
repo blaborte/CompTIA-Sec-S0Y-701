@@ -969,7 +969,58 @@
       grid-template-columns: 1fr;
     }
   }
-</style>
+
+  /* ── LIGHT MODE ── */
+  [data-theme="light"] {
+    --bg:     #f0f2f8;
+    --bg2:    #ffffff;
+    --bg3:    #e8ebf4;
+    --border: #d0d6e8;
+    --accent: #0099cc;
+    --accent2:#e05a1a;
+    --green:  #00956a;
+    --red:    #d4213a;
+    --yellow: #b8860b;
+    --purple: #7b3fbf;
+    --text:   #1a1f35;
+    --muted:  #6b7594;
+  }
+
+  /* smooth transition on theme change */
+  *, *::before, *::after {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease, box-shadow 0.25s ease;
+  }
+  /* but don't animate transforms/layout */
+  .xp-fill, .progress-bar, .progress-fill { transition: width 0.4s ease !important; }
+
+  /* ── THEME TOGGLE BUTTON ── */
+  .theme-toggle {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg2);
+  }
+  .theme-toggle-icon {
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  </style>
 </head>
 <body>
   <header>
@@ -988,6 +1039,10 @@
         <span class="streak-text"><span id="streakCount">0</span> day streak</span>
       </div>
     </div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+      <span class="theme-toggle-icon" id="themeIcon">☀️</span>
+      <span id="themeLabel">LIGHT</span>
+    </button>
   </header>
 
   <main>
@@ -1233,7 +1288,35 @@
     </div>
   </div>
 
-  <script src="gamification-social.js"></script>
+  <script src="gamification-social.js">
+  // ── THEME TOGGLE ──
+  function toggleTheme() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const newTheme = isLight ? 'dark' : 'light';
+    applyTheme(newTheme);
+    localStorage.setItem('bl-theme', newTheme);
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const icon  = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (theme === 'light') {
+      icon.textContent  = '🌙';
+      label.textContent = 'DARK';
+    } else {
+      icon.textContent  = '☀️';
+      label.textContent = 'LIGHT';
+    }
+  }
+
+  // Load saved theme on page load
+  (function() {
+    const saved = localStorage.getItem('bl-theme') || 'dark';
+    applyTheme(saved);
+  })();
+
+  </script>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- AI FLOATING BUBBLE — paste before </body> on every page   -->
