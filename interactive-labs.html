@@ -2072,6 +2072,67 @@ footer { background:var(--bg2); border-top:1px solid var(--border); padding:1rem
 
 @media(max-width:768px) { .lab-layout { grid-template-columns:1fr; } .lab-sidebar { max-height:220px; } main { padding:1rem; } }
 
+
+  /* ─────────────────────────────────────────
+     LIGHT MODE VARIABLES
+  ───────────────────────────────────────── */
+  [data-theme="light"] {
+    --bg:     #eef1f8;
+    --bg2:    #ffffff;
+    --bg3:    #dde2f0;
+    --bg4:    #cdd5e8;
+    --border: #c4ccdf;
+    --accent: #006699;
+    --accent2:#cc4400;
+    --green:  #007a52;
+    --red:    #c0172e;
+    --yellow: #8a6200;
+    --orange: #b84800;
+    --purple: #6422aa;
+    --pink:   #a8005e;
+    --teal:   #007a72;
+    --text:   #111827;
+    --muted:  #556080;
+    --font:   'IBM Plex Sans', sans-serif;
+    --mono:   'IBM Plex Mono', monospace;
+  }
+
+  /* smooth transitions on theme switch */
+  *, *::before, *::after {
+    transition: background-color 0.22s ease, border-color 0.2s ease, color 0.18s ease !important;
+  }
+  /* except layout/transform properties */
+  .xp-fill, .progress-fill, .pbq-progress-fill,
+  .cat-toggle-arrow, .expand-arrow, .timer-wrap span {
+    transition: none !important;
+  }
+
+  /* ─────────────────────────────────────────
+     THEME TOGGLE BUTTON
+  ───────────────────────────────────────── */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.26rem 0.75rem 0.26rem 0.5rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    color: var(--muted);
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg2);
+  }
+  .theme-icon { font-size: 0.82rem; line-height: 1; }
+
 </style>
 </head>
 <body>
@@ -2080,6 +2141,7 @@ footer { background:var(--bg2); border-top:1px solid var(--border); padding:1rem
 <header class="hub-header">
   <a href="index.html" class="hub-logo">SECURITY+ <span>SY0-701</span> <span class="hub-logo-text">· INTERACTIVE LABS</span></a>
   <a href="index.html" class="hub-back">← HOME</a>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
 </header>
 
 <!-- ══ TAB NAV ══ -->
@@ -5156,5 +5218,34 @@ updateGlobalStats();
 renderCards('all');
 
 </script>
+
+<script>
+/* ── THEME TOGGLE (shared across all pages) ── */
+function toggleTheme() {
+  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem('bl-theme', next); } catch(e) {}
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var icon  = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  if (!icon || !label) return;
+  icon.textContent  = theme === 'light' ? '🌙' : '☀️';
+  label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
+}
+(function() {
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', t);
+})();
+document.addEventListener('DOMContentLoaded', function() {
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  applyTheme(t);
+});
+</script>
+
 </body>
 </html>
