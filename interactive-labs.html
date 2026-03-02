@@ -1,6 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>
+(function(){
+  try {
+    var t = localStorage.getItem('bl-theme');
+    if (t === 'light' || t === 'dark') {
+      document.documentElement.setAttribute('data-theme', t);
+    }
+  } catch(e) {}
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interactive Labs | Security+ SY0-701</title>
@@ -2132,6 +2142,13 @@ footer { background:var(--bg2); border-top:1px solid var(--border); padding:1rem
     background: var(--bg2);
   }
   .theme-icon { font-size: 0.82rem; line-height: 1; }
+
+
+  /* theme transition — applied only during switch */
+  .theme-switching *, .theme-switching *::before, .theme-switching *::after {
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+                color 0.15s ease, box-shadow 0.2s ease !important;
+  }
 
 </style>
 </head>
@@ -5219,33 +5236,32 @@ renderCards('all');
 
 </script>
 
+
+
 <script>
-/* ── THEME TOGGLE (shared across all pages) ── */
 function toggleTheme() {
-  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
-  var next = cur === 'dark' ? 'light' : 'dark';
-  applyTheme(next);
+  var root = document.documentElement;
+  var current = root.getAttribute('data-theme') || 'dark';
+  var next = current === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  root.classList.add('theme-switching');
+  setTimeout(function(){ root.classList.remove('theme-switching'); }, 300);
   try { localStorage.setItem('bl-theme', next); } catch(e) {}
+  updateThemeButton(next);
 }
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
+
+function updateThemeButton(theme) {
   var icon  = document.getElementById('themeIcon');
   var label = document.getElementById('themeLabel');
   if (!icon || !label) return;
   icon.textContent  = theme === 'light' ? '🌙' : '☀️';
   label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
 }
-(function() {
-  var t = 'dark';
-  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
-  document.documentElement.setAttribute('data-theme', t);
-})();
+
 document.addEventListener('DOMContentLoaded', function() {
-  var t = 'dark';
-  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
-  applyTheme(t);
+  var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
 });
 </script>
-
 </body>
 </html>

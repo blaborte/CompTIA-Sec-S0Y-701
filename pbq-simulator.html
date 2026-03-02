@@ -1,6 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>
+(function(){
+  try {
+    var t = localStorage.getItem('bl-theme');
+    if (t === 'light' || t === 'dark') {
+      document.documentElement.setAttribute('data-theme', t);
+    }
+  } catch(e) {}
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PBQ Simulator | Security+ SY0-701</title>
@@ -751,6 +761,13 @@
   }
   .theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
   .theme-icon { font-size: 0.82rem; line-height: 1; }
+
+
+  /* theme transition — applied only during switch */
+  .theme-switching *, .theme-switching *::before, .theme-switching *::after {
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+                color 0.15s ease, box-shadow 0.2s ease !important;
+  }
 
 </style>
 </head>
@@ -1637,31 +1654,30 @@ function resetIAM() {
 }
 
 </script>
+
 <script>
-/* ── THEME TOGGLE ── */
-function toggleTheme(){
-  var c=document.documentElement.getAttribute('data-theme')||'dark';
-  var n=c==='dark'?'light':'dark';
-  applyTheme(n);
-  try{localStorage.setItem('bl-theme',n);}catch(e){}
+function toggleTheme() {
+  var root = document.documentElement;
+  var current = root.getAttribute('data-theme') || 'dark';
+  var next = current === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  root.classList.add('theme-switching');
+  setTimeout(function(){ root.classList.remove('theme-switching'); }, 300);
+  try { localStorage.setItem('bl-theme', next); } catch(e) {}
+  updateThemeButton(next);
 }
-function applyTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  var i=document.getElementById('themeIcon');
-  var l=document.getElementById('themeLabel');
-  if(!i||!l)return;
-  i.textContent=t==='light'?'🌙':'☀️';
-  l.textContent=t==='light'?'DARK':'LIGHT';
+
+function updateThemeButton(theme) {
+  var icon  = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  if (!icon || !label) return;
+  icon.textContent  = theme === 'light' ? '🌙' : '☀️';
+  label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
 }
-(function(){
-  var t='dark';
-  try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}
-  document.documentElement.setAttribute('data-theme',t);
-})();
-document.addEventListener('DOMContentLoaded',function(){
-  var t='dark';
-  try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}
-  applyTheme(t);
+
+document.addEventListener('DOMContentLoaded', function() {
+  var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
 });
 </script>
 </body>
