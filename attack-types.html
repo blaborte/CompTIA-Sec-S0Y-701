@@ -172,7 +172,7 @@ header {
   display: flex;
   gap: 1rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0 2rem 2.5rem;
   flex-wrap: wrap;
 }
@@ -505,6 +505,80 @@ footer a { color: var(--accent); text-decoration: none; border-bottom: 1px dotte
   .controls { padding: 0 1rem 2rem; }
   .stats-bar { gap: 1.5rem; }
 }
+
+/* ── COLLAPSIBLE CATEGORIES ── */
+.cat-header {
+  cursor: pointer;
+  user-select: none;
+}
+.cat-header:hover { opacity: 0.85; }
+.cat-toggle {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+.cat-header:hover .cat-toggle { color: var(--cat-color, var(--accent)); }
+.cat-toggle-arrow {
+  font-size: 1rem;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  line-height: 1;
+}
+.category.collapsed .cat-toggle-arrow { transform: rotate(-90deg); }
+.category.collapsed .cat-toggle-label::before { content: 'EXPAND'; }
+.category:not(.collapsed) .cat-toggle-label::before { content: 'COLLAPSE'; }
+.category.collapsed .attack-grid { display: none; }
+.cat-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.toggle-all-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+.toggle-all-btn {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 0.18s;
+}
+.toggle-all-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(0,212,255,0.05);
+}
+
+
+.search-clear {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.2rem;
+  transition: color 0.15s;
+}
+.search-clear:hover { color: var(--accent); }
+
 </style>
 </head>
 <body>
@@ -529,7 +603,8 @@ footer a { color: var(--accent); text-decoration: none; border-bottom: 1px dotte
 <div class="controls">
   <div class="search-wrap">
     <span class="search-icon">⌕</span>
-    <input type="text" class="search-input" id="searchInput" placeholder="Search attacks, techniques, keywords..." oninput="filterAttacks()">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search attacks, techniques, keywords..." oninput="filterAttacks()" onkeydown="if(event.key==='Escape')clearSearch()">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none">×</button>
   </div>
   <div class="filter-btns" id="filterBtns">
     <button class="filter-btn active" onclick="filterBySeverity('all', this)">ALL</button>
@@ -537,6 +612,10 @@ footer a { color: var(--accent); text-decoration: none; border-bottom: 1px dotte
     <button class="filter-btn" onclick="filterBySeverity('high', this)" style="color:#ff6b2b;border-color:rgba(255,107,43,0.3)">HIGH</button>
     <button class="filter-btn" onclick="filterBySeverity('medium', this)" style="color:#ffd32a;border-color:rgba(255,211,42,0.3)">MEDIUM</button>
     <button class="filter-btn" onclick="filterBySeverity('low', this)" style="color:#00f5a0;border-color:rgba(0,245,160,0.3)">LOW</button>
+  </div>
+  <div class="toggle-all-bar">
+    <button class="toggle-all-btn" onclick="toggleAllCategories(false)">− Collapse All</button>
+    <button class="toggle-all-btn" onclick="toggleAllCategories(true)">+ Expand All</button>
   </div>
 </div>
 
@@ -1704,13 +1783,19 @@ function buildPage() {
     section.style.setProperty('--cat-color', cat.color);
 
     section.innerHTML = `
-      <div class="cat-header">
+      <div class="cat-header" onclick="toggleCategory(this.closest('.category'))">
         <div class="cat-icon">${cat.icon}</div>
         <div class="cat-info">
           <div class="cat-name">${cat.name}</div>
           <div class="cat-desc">${cat.desc}</div>
         </div>
-        <div class="cat-count">${cat.attacks.length}</div>
+        <div class="cat-header-right">
+          <div class="cat-count">${cat.attacks.length}</div>
+          <div class="cat-toggle">
+            <span class="cat-toggle-label"></span>
+            <span class="cat-toggle-arrow">▾</span>
+          </div>
+        </div>
       </div>
       <div class="attack-grid" id="grid-${cat.id}"></div>
     `;
@@ -1795,6 +1880,14 @@ function toggleCard(card) {
 
 function filterAttacks() {
   currentSearch = document.getElementById('searchInput').value.toLowerCase().trim();
+  const clearBtn = document.getElementById('searchClear');
+  if (clearBtn) clearBtn.style.display = currentSearch ? 'block' : 'none';
+  applyFilters();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  currentSearch = '';
   applyFilters();
 }
 
@@ -1807,17 +1900,25 @@ function filterBySeverity(sev, btn) {
 
 function applyFilters() {
   let anyVisible = false;
+  const hasSearch = currentSearch.length > 0;
 
   document.querySelectorAll('.category').forEach(cat => {
     let catHasVisible = false;
     cat.querySelectorAll('.attack-card').forEach(card => {
       const sevMatch = currentSevFilter === 'all' || card.dataset.severity === currentSevFilter;
-      const searchMatch = !currentSearch || card.dataset.search.includes(currentSearch);
+      const searchMatch = !hasSearch || card.dataset.search.includes(currentSearch);
       const visible = sevMatch && searchMatch;
       card.classList.toggle('hidden', !visible);
       if (visible) { catHasVisible = true; anyVisible = true; }
     });
+
+    // Hide the whole category if nothing matches
     cat.classList.toggle('hidden', !catHasVisible);
+
+    // Auto-expand category when search has results, restore collapse when search cleared
+    if (catHasVisible && hasSearch) {
+      cat.classList.remove('collapsed');
+    }
   });
 
   document.getElementById('noResults').classList.toggle('show', !anyVisible);
@@ -1840,6 +1941,18 @@ function initScrollHighlight() {
   }, { rootMargin: '-30% 0px -60% 0px' });
 
   cats.forEach(cat => obs.observe(cat));
+}
+
+
+function toggleCategory(section) {
+  section.classList.toggle('collapsed');
+}
+
+function toggleAllCategories(expand) {
+  document.querySelectorAll('.category').forEach(cat => {
+    if (expand) cat.classList.remove('collapsed');
+    else cat.classList.add('collapsed');
+  });
 }
 
 // Init
