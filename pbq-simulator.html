@@ -996,6 +996,66 @@
       <div class="psc-badge">Drag & Drop</div>
       <div class="psc-arrow">→</div>
     </div>
+    <div class="pbq-select-card" onclick="showTab('malware', this, 9)" style="--card-accent:var(--red)">
+      <div class="psc-icon">🦠</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-09</div>
+        <div class="psc-title">Malware Identification</div>
+        <div class="psc-desc">Analyze attack scenarios and drop-down descriptions to identify the correct malware type and best remediation action.</div>
+      </div>
+      <div class="psc-badge">Drop-Down</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('wireless', this, 10)" style="--card-accent:var(--accent)">
+      <div class="psc-icon">📶</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-10</div>
+        <div class="psc-title">Wireless Network Config</div>
+        <div class="psc-desc">Configure a RADIUS-backed 802.1X wireless network. Set up the WiFi Controller, RADIUS Server, and Wireless Client correctly.</div>
+      </div>
+      <div class="psc-badge">Form Config</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('csr', this, 11)" style="--card-accent:var(--yellow)">
+      <div class="psc-icon">📜</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-11</div>
+        <div class="psc-title">CSR / PKI Configuration</div>
+        <div class="psc-desc">Complete a Certificate Signing Request by dragging the correct X.509 extensions and values to set up TLS/HTTPS on a server.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('wap', this, 12)" style="--card-accent:var(--purple)">
+      <div class="psc-icon">🔒</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-12</div>
+        <div class="psc-title">WAP Hardening</div>
+        <div class="psc-desc">Configure a corporate WAP in the most secure manner — choose encryption, disable broadcast, and link to RADIUS and LDAP servers.</div>
+      </div>
+      <div class="psc-badge">Form Config</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('sqlnet', this, 13)" style="--card-accent:var(--accent2)">
+      <div class="psc-icon">💉</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-13</div>
+        <div class="psc-title">SQL Injection Attack</div>
+        <div class="psc-desc">Identify SQL injection evidence in a network diagram, select the attack type, and drag compensating controls to the correct servers.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('vpn', this, 14)" style="--card-accent:var(--green)">
+      <div class="psc-icon">🔗</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-14</div>
+        <div class="psc-title">VPN Concentrator Config</div>
+        <div class="psc-desc">Configure a site-to-site IPsec VPN between two branch offices. Set Phase 1 and Phase 2 parameters on both VPN concentrators.</div>
+      </div>
+      <div class="psc-badge">Form Config</div>
+      <div class="psc-arrow">→</div>
+    </div>
     </div>
   </div>
 
@@ -1007,12 +1067,12 @@
     <!-- Progress -->
     <div class="pbq-progress">
       <span class="pbq-progress-label">PBQ PROGRESS</span>
-      <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:12.5%"></div></div>
-      <span class="pbq-progress-score" id="prog-label">1 / 8</span>
+      <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:7.14%"></div></div>
+      <span class="pbq-progress-score" id="prog-label">1 / 14</span>
     </div>
 
     <!-- NAV TABS -->
-    <div class="nav-tabs"><button class="nav-tab active" data-tab="acl" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button><button class="nav-tab" data-tab="net" onclick="switchTab('net',this,2)">🌐 Network</button><button class="nav-tab" data-tab="log" onclick="switchTab('log',this,3)">📋 Log Analysis</button><button class="nav-tab" data-tab="ir" onclick="switchTab('ir',this,4)">🚨 Incident Response</button><button class="nav-tab" data-tab="ports" onclick="switchTab('ports',this,5)">🔌 Port Matching</button><button class="nav-tab" data-tab="crypto" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button><button class="nav-tab" data-tab="vuln" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button><button class="nav-tab" data-tab="iam" onclick="switchTab('iam',this,8)">👤 Access Control</button></div>
+    <div class="nav-tabs"><button class="nav-tab active" data-tab="acl" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button><button class="nav-tab" data-tab="net" onclick="switchTab('net',this,2)">🌐 Network</button><button class="nav-tab" data-tab="log" onclick="switchTab('log',this,3)">📋 Log Analysis</button><button class="nav-tab" data-tab="ir" onclick="switchTab('ir',this,4)">🚨 Incident Response</button><button class="nav-tab" data-tab="ports" onclick="switchTab('ports',this,5)">🔌 Port Matching</button><button class="nav-tab" data-tab="crypto" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button><button class="nav-tab" data-tab="vuln" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button><button class="nav-tab" data-tab="iam" onclick="switchTab('iam',this,8)">👤 Access Control</button><button class="nav-tab" data-tab="malware" onclick="switchTab('malware',this,9)">🦠 Malware ID</button><button class="nav-tab" data-tab="wireless" onclick="switchTab('wireless',this,10)">📶 Wireless Config</button><button class="nav-tab" data-tab="csr" onclick="switchTab('csr',this,11)">📜 CSR / PKI</button><button class="nav-tab" data-tab="wap" onclick="switchTab('wap',this,12)">🔒 WAP Hardening</button><button class="nav-tab" data-tab="sqlnet" onclick="switchTab('sqlnet',this,13)">💉 SQL Injection</button><button class="nav-tab" data-tab="vpn" onclick="switchTab('vpn',this,14)">🔗 VPN Config</button></div>
 
     <!-- TAB CONTENTS -->
     
@@ -1441,6 +1501,722 @@
   
   </div>
 
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PBQ-09 · MALWARE IDENTIFICATION (Drop-Down Matching)      -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-malware">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-09 · Malware Identification</div>
+      <div class="scenario-title">Identify Attack Type & Best Remediation</div>
+      <div class="scenario-desc">
+        For each attack scenario below, select the <strong>correct malware/attack type</strong> and the <strong>best preventative or remediation action</strong>. This mirrors the actual CompTIA PBQ drop-down format.
+      </div>
+      <div class="info-box">
+        <div class="info-label">// Scenario Instructions</div>
+        <p>Not all attack types will be used. Match each description to the best answer from the drop-down lists.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1.25rem;margin-top:1rem;">
+
+        <!-- Row 1 -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-size:0.82rem;color:var(--muted);font-family:var(--mono);margin-bottom:0.5rem;">SCENARIO A</div>
+          <p style="margin-bottom:0.75rem;">Malicious software sends unique packets from this <strong>Web server</strong> to the attacker. It creates a communication channel that allows remote commands to be executed.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Attack Identified</label>
+              <select id="mal-a-type" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Botnet">Botnet</option>
+                <option value="RAT">RAT</option>
+                <option value="Backdoor">Backdoor</option>
+                <option value="Virus">Virus</option>
+                <option value="Spyware">Spyware</option>
+                <option value="Adware">Adware</option>
+                <option value="Ransomware">Ransomware</option>
+                <option value="Keylogger">Keylogger</option>
+                <option value="Phishing">Phishing</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Best Remediation</label>
+              <select id="mal-a-rem" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Enable DDoS protection">Enable DDoS protection</option>
+                <option value="Patch vulnerable systems">Patch vulnerable systems</option>
+                <option value="Disable vulnerable services">Disable vulnerable services</option>
+                <option value="Change the default system password">Change the default system password</option>
+                <option value="Change the default application password">Change the default application password</option>
+                <option value="Update the cryptographic algorithms">Update the cryptographic algorithms</option>
+                <option value="Implement 2FA using push notification">Implement 2FA using push notification</option>
+                <option value="Implement application fuzzing">Implement application fuzzing</option>
+                <option value="Implement a host-based IPS">Implement a host-based IPS</option>
+                <option value="Disable remote access services">Disable remote access services</option>
+                <option value="Conduct a code review">Conduct a code review</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-size:0.82rem;color:var(--muted);font-family:var(--mono);margin-bottom:0.5rem;">SCENARIO B</div>
+          <p style="margin-bottom:0.75rem;">This attack establishes a connection which allows remote commands to be executed on the <strong>User</strong> machine. The attacker can see and interact with the desktop in real time.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Attack Identified</label>
+              <select id="mal-b-type" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Botnet">Botnet</option>
+                <option value="RAT">RAT</option>
+                <option value="Backdoor">Backdoor</option>
+                <option value="Virus">Virus</option>
+                <option value="Spyware">Spyware</option>
+                <option value="Adware">Adware</option>
+                <option value="Ransomware">Ransomware</option>
+                <option value="Keylogger">Keylogger</option>
+                <option value="Phishing">Phishing</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Best Remediation</label>
+              <select id="mal-b-rem" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Enable DDoS protection">Enable DDoS protection</option>
+                <option value="Patch vulnerable systems">Patch vulnerable systems</option>
+                <option value="Disable vulnerable services">Disable vulnerable services</option>
+                <option value="Change the default system password">Change the default system password</option>
+                <option value="Change the default application password">Change the default application password</option>
+                <option value="Update the cryptographic algorithms">Update the cryptographic algorithms</option>
+                <option value="Implement 2FA using push notification">Implement 2FA using push notification</option>
+                <option value="Implement application fuzzing">Implement application fuzzing</option>
+                <option value="Implement a host-based IPS">Implement a host-based IPS</option>
+                <option value="Disable remote access services">Disable remote access services</option>
+                <option value="Conduct a code review">Conduct a code review</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-size:0.82rem;color:var(--muted);font-family:var(--mono);margin-bottom:0.5rem;">SCENARIO C</div>
+          <p style="margin-bottom:0.75rem;">This malware is self-propagating and replicates to other machines using a <strong>SQL database on the Database server</strong>. It spreads across the network without user interaction.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Attack Identified</label>
+              <select id="mal-c-type" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Botnet">Botnet</option>
+                <option value="RAT">RAT</option>
+                <option value="Worm">Worm</option>
+                <option value="Virus">Virus</option>
+                <option value="Spyware">Spyware</option>
+                <option value="Adware">Adware</option>
+                <option value="Ransomware">Ransomware</option>
+                <option value="Keylogger">Keylogger</option>
+                <option value="Phishing">Phishing</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Best Remediation</label>
+              <select id="mal-c-rem" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Enable DDoS protection">Enable DDoS protection</option>
+                <option value="Patch vulnerable systems">Patch vulnerable systems</option>
+                <option value="Disable vulnerable services">Disable vulnerable services</option>
+                <option value="Change the default system password">Change the default system password</option>
+                <option value="Change the default application password">Change the default application password</option>
+                <option value="Update the cryptographic algorithms">Update the cryptographic algorithms</option>
+                <option value="Implement 2FA using push notification">Implement 2FA using push notification</option>
+                <option value="Implement application fuzzing">Implement application fuzzing</option>
+                <option value="Implement a host-based IPS">Implement a host-based IPS</option>
+                <option value="Disable remote access services">Disable remote access services</option>
+                <option value="Conduct a code review">Conduct a code review</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-size:0.82rem;color:var(--muted);font-family:var(--mono);margin-bottom:0.5rem;">SCENARIO D</div>
+          <p style="margin-bottom:0.75rem;">This attacker uses web credentials obtained through a <strong>phishing campaign</strong> to log into the <strong>Application server</strong> and exfiltrate sensitive data.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Attack Identified</label>
+              <select id="mal-d-type" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Botnet">Botnet</option>
+                <option value="RAT">RAT</option>
+                <option value="Backdoor">Backdoor</option>
+                <option value="Virus">Virus</option>
+                <option value="Spyware">Spyware</option>
+                <option value="Adware">Adware</option>
+                <option value="Ransomware">Ransomware</option>
+                <option value="Keylogger">Keylogger</option>
+                <option value="Phishing">Phishing</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px;">Best Remediation</label>
+              <select id="mal-d-rem" style="width:100%;padding:0.5rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:6px;">
+                <option value="">-- Select --</option>
+                <option value="Enable DDoS protection">Enable DDoS protection</option>
+                <option value="Patch vulnerable systems">Patch vulnerable systems</option>
+                <option value="Disable vulnerable services">Disable vulnerable services</option>
+                <option value="Change the default system password">Change the default system password</option>
+                <option value="Change the default application password">Change the default application password</option>
+                <option value="Update the cryptographic algorithms">Update the cryptographic algorithms</option>
+                <option value="Implement 2FA using push notification">Implement 2FA using push notification</option>
+                <option value="Implement application fuzzing">Implement application fuzzing</option>
+                <option value="Implement a host-based IPS">Implement a host-based IPS</option>
+                <option value="Disable remote access services">Disable remote access services</option>
+                <option value="Conduct a code review">Conduct a code review</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end scenarios -->
+
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkMalware()">&#9654; CHECK ANSWERS</button>
+        <button class="btn-secondary" onclick="resetMalware()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-malware"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PBQ-10 · WIRELESS NETWORK CONFIG (802.1X / RADIUS)       -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-wireless">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-10 · Wireless Network Configuration</div>
+      <div class="scenario-title">Configure 802.1X Wireless Network with RADIUS</div>
+      <div class="scenario-desc">
+        A systems administrator needs to install a new wireless network for <strong>authenticated guest access</strong>. The wireless network should support <strong>802.1X using the most secure encryption and protocol available</strong>.<br><br>
+        Configure: (1) the RADIUS server, (2) the WiFi controller, (3) the wireless client for an incoming guest.<br>
+        Guest AD credentials — User: <strong>guest01</strong> &nbsp;|&nbsp; Password: <strong>guestpass</strong>
+      </div>
+      <div class="info-box">
+        <div class="info-label">// Network IPs</div>
+        <p>WiFi Controller: <span>192.168.1.10</span> &nbsp;·&nbsp; AAA/RADIUS Server: <span>192.168.1.20</span> &nbsp;·&nbsp; SSID: <span>CORPGUEST</span></p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1rem;">
+
+        <!-- WiFi Controller -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-weight:600;color:var(--accent);margin-bottom:1rem;font-family:var(--mono);font-size:0.85rem;">📡 WiFi Controller</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">SSID</label>
+              <input id="wc-ssid" value="CORPGUEST" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Shared Key (PSK)</label>
+              <input id="wc-psk" placeholder="Radius-Profile or PSK..." style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">AAA Server IP</label>
+              <input id="wc-aaa" placeholder="e.g. 192.168.1.20" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Authentication Type</label>
+              <select id="wc-auth" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="WPA2-PSK">WPA2-PSK</option>
+                <option value="WPA2-EAP-PEAP-MSCHAPv2">WPA2-EAP-PEAP-MSCHAPv2</option>
+                <option value="WPA-PSK">WPA-PSK</option>
+                <option value="OPEN">OPEN</option>
+                <option value="WEP">WEP</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Controller IP</label>
+              <input id="wc-ip" value="192.168.1.10" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+          </div>
+        </div>
+
+        <!-- RADIUS Server -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-weight:600;color:var(--yellow);margin-bottom:1rem;font-family:var(--mono);font-size:0.85rem;">🔑 RADIUS Server</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Shared Key</label>
+              <input id="rs-key" placeholder="e.g. SECRET" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Client IP (WiFi Controller)</label>
+              <input id="rs-client" placeholder="e.g. 192.168.1.10" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Authentication Type</label>
+              <select id="rs-auth" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="LOCAL">LOCAL</option>
+                <option value="Active Directory">Active Directory</option>
+                <option value="MSSQL">MSSQL</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Server IP</label>
+              <input id="rs-server" placeholder="e.g. 192.168.1.20" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+          </div>
+        </div>
+
+        <!-- Wireless Client -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-weight:600;color:var(--green);margin-bottom:1rem;font-family:var(--mono);font-size:0.85rem;">💻 Wireless Client</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">SSID</label>
+              <input id="cl-ssid" value="CORPGUEST" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Username</label>
+              <input id="cl-user" placeholder="e.g. guest01" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Password</label>
+              <input id="cl-pass" placeholder="e.g. guestpass" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">PSK / Shared Key</label>
+              <input id="cl-psk" placeholder="Must match WiFi Controller PSK" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Authentication Type</label>
+              <select id="cl-auth" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="WPA2-PSK">WPA2-PSK</option>
+                <option value="WPA2-Enterprise">WPA2-Enterprise</option>
+                <option value="WPA-PSK">WPA-PSK</option>
+                <option value="OPEN">OPEN</option>
+                <option value="WEP">WEP</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkWireless()">&#9654; CHECK CONFIG</button>
+        <button class="btn-secondary" onclick="resetWireless()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-wireless"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PBQ-11 · CSR / PKI CONFIGURATION (Drag & Drop)           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-csr">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-11 · CSR / PKI Configuration</div>
+      <div class="scenario-title">Complete the Certificate Signing Request (CSR)</div>
+      <div class="scenario-desc">
+        Using the server information provided, complete the CSR to set up <strong>TLS (HTTPS)</strong>. Drag the correct <strong>extension</strong> and its matching <strong>value</strong> into each row of the CSR form.
+      </div>
+      <div class="info-box">
+        <div class="info-label">// Server Info</div>
+        <p>Hostname: <span>ws01</span> &nbsp;·&nbsp; Domain: <span>comptia.org</span> &nbsp;·&nbsp; IPv4: <span>10.1.9.50</span> &nbsp;·&nbsp; IPv4: <span>10.2.10.50</span> &nbsp;·&nbsp; Root: <span>home.aspx</span> &nbsp;·&nbsp; DNS CNAME: <span>homesite</span></p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem;">
+        <!-- Source Items -->
+        <div>
+          <div class="col-label purple" style="margin-bottom:0.75rem;">Extensions Available</div>
+          <div class="drop-zone" id="csr-ext-pool" style="flex-direction:column;min-height:120px;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-ext-pool','ext')" ondragleave="dlv(event)">
+            <div class="drag-item" draggable="true" data-val="subjectAltName" data-kind="ext" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> subjectAltName</div>
+            <div class="drag-item" draggable="true" data-val="authorityInfoAccess" data-kind="ext" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> authorityInfoAccess</div>
+            <div class="drag-item" draggable="true" data-val="extKeyUsage" data-kind="ext" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> extKeyUsage</div>
+            <div class="drag-item" draggable="true" data-val="subjectKeyIdentifier" data-kind="ext" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> subjectKeyIdentifier</div>
+            <div class="drag-item" draggable="true" data-val="commonName" data-kind="ext" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> commonName</div>
+          </div>
+          <div class="col-label purple" style="margin:0.75rem 0;">Values Available</div>
+          <div class="drop-zone" id="csr-val-pool" style="flex-direction:column;min-height:120px;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-val-pool','val')" ondragleave="dlv(event)">
+            <div class="drag-item" draggable="true" data-val="ws01.comptia.org" data-kind="val" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> ws01.comptia.org</div>
+            <div class="drag-item" draggable="true" data-val="URL=http://homesite.comptia.org/home.aspx" data-kind="val" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> URL=http://homesite.comptia.org/home.aspx</div>
+            <div class="drag-item" draggable="true" data-val="serverAuth" data-kind="val" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> serverAuth</div>
+            <div class="drag-item" draggable="true" data-val="DNS Name=*.comptia.org" data-kind="val" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> DNS Name=*.comptia.org</div>
+            <div class="drag-item" draggable="true" data-val="DNS Name=homesite.comptia.org" data-kind="val" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> DNS Name=homesite.comptia.org</div>
+            <div class="drag-item" draggable="true" data-val="clientAuth" data-kind="val" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> clientAuth</div>
+            <div class="drag-item" draggable="true" data-val="OCSP URI:http://ocsp.comptia.org" data-kind="val" ondragstart="ds(event,'csr')" ondragend="de(event)"><span class="handle">⠿</span> OCSP URI:http://ocsp.comptia.org</div>
+          </div>
+        </div>
+
+        <!-- CSR Form Target -->
+        <div>
+          <div class="col-label" style="margin-bottom:0.75rem;color:var(--accent);">Certificate Signing Request</div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;font-family:var(--mono);">
+              <span>EXTENSION</span><span>VALUE</span>
+            </div>
+            <!-- Row 1 -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+              <div class="drop-zone" id="csr-ext-1" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-ext-1','ext')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Extension</span></div>
+              <div class="drop-zone" id="csr-val-1" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-val-1','val')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Value</span></div>
+            </div>
+            <!-- Row 2 -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+              <div class="drop-zone" id="csr-ext-2" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-ext-2','ext')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Extension</span></div>
+              <div class="drop-zone" id="csr-val-2" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-val-2','val')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Value</span></div>
+            </div>
+            <!-- Row 3 -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+              <div class="drop-zone" id="csr-ext-3" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-ext-3','ext')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Extension</span></div>
+              <div class="drop-zone" id="csr-val-3" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-val-3','val')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Value</span></div>
+            </div>
+            <!-- Row 4 -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+              <div class="drop-zone" id="csr-ext-4" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-ext-4','ext')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Extension</span></div>
+              <div class="drop-zone" id="csr-val-4" style="min-height:40px;padding:0.4rem;" ondragover="dov(event)" ondrop="csrDrop(event,'csr-val-4','val')" ondragleave="dlv(event)"><span class="drop-hint" style="font-size:0.7rem;">Value</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkCSR()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetCSR()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-csr"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PBQ-12 · WAP HARDENING (Form Config)                     -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-wap">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-12 · WAP Hardening</div>
+      <div class="scenario-title">Configure a Corporate WAP in the Most Secure Manner</div>
+      <div class="scenario-desc">
+        A newly purchased corporate WAP needs to be configured in the <strong>MOST secure manner possible</strong>. Configure the WAP's Basic Settings and Wireless Security tab to use enterprise authentication via RADIUS.
+      </div>
+      <div class="info-box">
+        <div class="info-label">// Network Parameters</div>
+        <p>RADIUS Server IP: <span>192.168.1.20</span> &nbsp;·&nbsp; RADIUS Port: <span>1812</span> &nbsp;·&nbsp; Shared Key: <span>corporatenet</span> &nbsp;·&nbsp; SSID: <span>CORPNET</span></p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem;">
+        <!-- Basic Wireless Settings -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-weight:600;color:var(--accent);margin-bottom:1rem;font-family:var(--mono);font-size:0.85rem;">📡 Basic Wireless Settings</div>
+          <div style="display:flex;flex-direction:column;gap:0.7rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Wireless Network Name (SSID)</label>
+              <input id="wap-ssid" placeholder="Enter SSID" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Wireless Network Mode</label>
+              <select id="wap-mode" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="G ONLY">G ONLY</option>
+                <option value="N ONLY">N ONLY</option>
+                <option value="MIXED">MIXED</option>
+                <option value="A ONLY">A ONLY</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Wireless SSID Broadcast</label>
+              <select id="wap-broadcast" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="Enable">Enable</option>
+                <option value="Disable">Disable</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wireless Security -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-weight:600;color:var(--yellow);margin-bottom:1rem;font-family:var(--mono);font-size:0.85rem;">🔐 Wireless Security</div>
+          <div style="display:flex;flex-direction:column;gap:0.7rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Security Mode</label>
+              <select id="wap-secmode" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="WEP">WEP</option>
+                <option value="WPA Personal">WPA Personal</option>
+                <option value="WPA2 Personal">WPA2 Personal</option>
+                <option value="WPA2 Enterprise">WPA2 Enterprise</option>
+                <option value="OPEN">OPEN</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">WPA Algorithms (Encryption)</label>
+              <select id="wap-enc" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="TKIP">TKIP</option>
+                <option value="AES">AES</option>
+                <option value="TKIP+AES">TKIP+AES</option>
+                <option value="RC4">RC4</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">RADIUS Server Address</label>
+              <input id="wap-radius" placeholder="e.g. 192.168.1.20" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">RADIUS Port</label>
+              <input id="wap-port" placeholder="e.g. 1812" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);display:block;">Shared Key</label>
+              <input id="wap-key" placeholder="Shared key..." style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkWAP()">&#9654; CHECK CONFIG</button>
+        <button class="btn-secondary" onclick="resetWAP()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-wap"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PBQ-13 · SQL INJECTION (Drag & Drop + Multiple Choice)   -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-sqlnet">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-13 · SQL Injection Attack</div>
+      <div class="scenario-title">Identify Attack Type & Apply Compensating Controls</div>
+      <div class="scenario-desc">
+        An attack has occurred against a company. The attacker accessed the company website and the output shows database records being returned.<br><br>
+        <strong>Part 1:</strong> Select the type of attack. &nbsp;<strong>Part 2:</strong> Drag the compensating controls to the correct servers to reduce the effectiveness of future attacks.
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">// Attack Evidence (Browser Output)</div>
+        <p style="font-family:var(--mono);font-size:0.8rem;color:var(--green);">
+          user_cookie_id_loginTime<br>
+          pete_j|2012-01-21 10:56:54<br>
+          matt_efAd53a0|EFF12321|2012-01-21 15:37:56<br>
+          cara_e|EFFsdn5dAfa5e000|2012-01-21 16:07:14
+        </p>
+      </div>
+
+      <!-- Part 1: Attack Type -->
+      <div style="margin:1.5rem 0 1rem;">
+        <div class="col-label" style="margin-bottom:0.75rem;">Part 1 — Select the Attack Type</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;padding:0.5rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:6px;">
+            <input type="radio" name="sql-attack" value="SQL Injection"> SQL Injection</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;padding:0.5rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:6px;">
+            <input type="radio" name="sql-attack" value="Cross-site Scripting"> Cross-site Scripting</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;padding:0.5rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:6px;">
+            <input type="radio" name="sql-attack" value="Cross-site Injection"> Cross-site Injection</label>
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;padding:0.5rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:6px;">
+            <input type="radio" name="sql-attack" value="Session Hijacking"> Session Hijacking</label>
+        </div>
+      </div>
+
+      <!-- Part 2: Drag Controls -->
+      <div class="col-label" style="margin-bottom:0.75rem;">Part 2 — Drag Compensating Controls to Correct Servers</div>
+      <div class="drag-cols">
+        <div>
+          <div class="col-label purple" style="margin-bottom:0.5rem;">Available Controls</div>
+          <div class="drop-zone" id="sql-pool" ondragover="dov(event)" ondrop="sqlDrop(event,'sql-pool')" ondragleave="dlv(event)" style="flex-direction:column;min-height:100px;">
+            <div class="drag-item" draggable="true" data-ctrl="Input Validation" ondragstart="ds(event,'sql')" ondragend="de(event)"><span class="handle">⠿</span> Input Validation</div>
+            <div class="drag-item" draggable="true" data-ctrl="WAF" ondragstart="ds(event,'sql')" ondragend="de(event)"><span class="handle">⠿</span> WAF (Web Application Firewall)</div>
+            <div class="drag-item" draggable="true" data-ctrl="Parameterized Queries" ondragstart="ds(event,'sql')" ondragend="de(event)"><span class="handle">⠿</span> Parameterized Queries</div>
+            <div class="drag-item" draggable="true" data-ctrl="Code Review" ondragstart="ds(event,'sql')" ondragend="de(event)"><span class="handle">⠿</span> Code Review</div>
+            <div class="drag-item" draggable="true" data-ctrl="Least Privilege DB" ondragstart="ds(event,'sql')" ondragend="de(event)"><span class="handle">⠿</span> Least Privilege (DB User)</div>
+            <div class="drag-item" draggable="true" data-ctrl="IDS" ondragstart="ds(event,'sql')" ondragend="de(event)"><span class="handle">⠿</span> IDS / Network Monitor</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div>
+            <div class="col-label" style="margin-bottom:0.4rem;color:var(--accent);">🌐 Web Server</div>
+            <div class="drop-zone" id="sql-web" ondragover="dov(event)" ondrop="sqlDrop(event,'sql-web')" ondragleave="dlv(event)" style="flex-direction:column;min-height:60px;">
+              <span class="drop-hint">Drop controls here</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-label" style="margin-bottom:0.4rem;color:var(--yellow);">🗄️ Database Server</div>
+            <div class="drop-zone" id="sql-db" ondragover="dov(event)" ondrop="sqlDrop(event,'sql-db')" ondragleave="dlv(event)" style="flex-direction:column;min-height:60px;">
+              <span class="drop-hint">Drop controls here</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-label" style="margin-bottom:0.4rem;color:var(--purple);">🔀 Network / Firewall</div>
+            <div class="drop-zone" id="sql-net" ondragover="dov(event)" ondrop="sqlDrop(event,'sql-net')" ondragleave="dlv(event)" style="flex-direction:column;min-height:60px;">
+              <span class="drop-hint">Drop controls here</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkSQL()">&#9654; CHECK ANSWER</button>
+        <button class="btn-secondary" onclick="resetSQL()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-sqlnet"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PBQ-14 · VPN CONCENTRATOR CONFIG (Form Config)           -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-vpn">
+    <div class="scenario-card">
+      <div class="scenario-badge">PBQ-14 · VPN Concentrator Configuration</div>
+      <div class="scenario-title">Configure Site-to-Site IPsec VPN</div>
+      <div class="scenario-desc">
+        A systems administrator is configuring a site-to-site VPN between two branch offices. Configure both VPN concentrators with these requirements:
+        <strong>(1)</strong> Most secure algorithms &nbsp;<strong>(2)</strong> All traffic encrypted over the VPN &nbsp;<strong>(3)</strong> PSK authentication
+      </div>
+      <div class="info-box">
+        <div class="info-label">// Network Info</div>
+        <p>Branch 1 Network: <span>192.169.1.0/24</span> &nbsp;·&nbsp; Branch 2 Network: <span>192.168.2.0/24</span> &nbsp;·&nbsp; VPN Concentrator 1 IP: <span>5.5.5.10</span> &nbsp;·&nbsp; VPN Concentrator 2 IP: <span>5.5.5.20</span></p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem;">
+
+        <!-- VPN Concentrator 1 -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-weight:600;color:var(--accent);margin-bottom:0.75rem;font-family:var(--mono);font-size:0.85rem;">🔗 VPN Concentrator 1</div>
+          <div style="font-size:0.75rem;color:var(--yellow);margin-bottom:0.75rem;">Phase 1 (IKE)</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);">Peer IP Address</label>
+              <input id="vpn1-peer" placeholder="Peer concentrator IP..." style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Auth Method</label>
+              <select id="vpn1-auth" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="PSK">PSK (Pre-Shared Key)</option>
+                <option value="Certificate">Certificate</option>
+                <option value="RSA Signatures">RSA Signatures</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Negotiation Mode</label>
+              <select id="vpn1-mode" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="MAIN">MAIN</option>
+                <option value="AGGRESSIVE">AGGRESSIVE</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Encryption Algorithm</label>
+              <select id="vpn1-p1enc" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="AES256">AES256</option>
+                <option value="AES128">AES128</option>
+                <option value="3DES">3DES</option>
+                <option value="DES">DES</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Hash Algorithm</label>
+              <select id="vpn1-p1hash" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="SHA256">SHA256</option>
+                <option value="SHA1">SHA1</option>
+                <option value="MD5">MD5</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">DH Key Group</label>
+              <select id="vpn1-dh" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="14">Group 14 (2048-bit)</option>
+                <option value="2">Group 2 (1024-bit)</option>
+                <option value="1">Group 1 (768-bit)</option>
+                <option value="5">Group 5 (1536-bit)</option>
+              </select>
+            </div>
+          </div>
+          <div style="font-size:0.75rem;color:var(--yellow);margin-bottom:0.75rem;">Phase 2 (IPsec)</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);">Protocol</label>
+              <select id="vpn1-proto" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="ESP">ESP (Encapsulating Security Payload)</option>
+                <option value="AH">AH (Authentication Header)</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Encryption Algorithm</label>
+              <select id="vpn1-p2enc" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="AES256">AES256</option>
+                <option value="AES128">AES128</option>
+                <option value="3DES">3DES</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Hash Algorithm</label>
+              <select id="vpn1-p2hash" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="SHA256">SHA256</option>
+                <option value="SHA1">SHA1</option>
+                <option value="MD5">MD5</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Local Network/Mask</label>
+              <input id="vpn1-local" placeholder="e.g. 192.169.1.0/24" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Remote Network/Mask</label>
+              <input id="vpn1-remote" placeholder="e.g. 192.168.2.0/24" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+          </div>
+        </div>
+
+        <!-- VPN Concentrator 2 -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="font-weight:600;color:var(--green);margin-bottom:0.75rem;font-family:var(--mono);font-size:0.85rem;">🔗 VPN Concentrator 2</div>
+          <div style="font-size:0.75rem;color:var(--yellow);margin-bottom:0.75rem;">Phase 1 (IKE)</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);">Peer IP Address</label>
+              <input id="vpn2-peer" placeholder="Peer concentrator IP..." style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Auth Method</label>
+              <select id="vpn2-auth" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="PSK">PSK (Pre-Shared Key)</option>
+                <option value="Certificate">Certificate</option>
+                <option value="RSA Signatures">RSA Signatures</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Negotiation Mode</label>
+              <select id="vpn2-mode" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="MAIN">MAIN</option>
+                <option value="AGGRESSIVE">AGGRESSIVE</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Encryption Algorithm</label>
+              <select id="vpn2-p1enc" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="AES256">AES256</option>
+                <option value="AES128">AES128</option>
+                <option value="3DES">3DES</option>
+                <option value="DES">DES</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Hash Algorithm</label>
+              <select id="vpn2-p1hash" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="SHA256">SHA256</option>
+                <option value="SHA1">SHA1</option>
+                <option value="MD5">MD5</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">DH Key Group</label>
+              <select id="vpn2-dh" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="14">Group 14 (2048-bit)</option>
+                <option value="2">Group 2 (1024-bit)</option>
+                <option value="1">Group 1 (768-bit)</option>
+                <option value="5">Group 5 (1536-bit)</option>
+              </select>
+            </div>
+          </div>
+          <div style="font-size:0.75rem;color:var(--yellow);margin-bottom:0.75rem;">Phase 2 (IPsec)</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <div><label style="font-size:0.75rem;color:var(--muted);">Protocol</label>
+              <select id="vpn2-proto" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="ESP">ESP (Encapsulating Security Payload)</option>
+                <option value="AH">AH (Authentication Header)</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Encryption Algorithm</label>
+              <select id="vpn2-p2enc" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="AES256">AES256</option>
+                <option value="AES128">AES128</option>
+                <option value="3DES">3DES</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Hash Algorithm</label>
+              <select id="vpn2-p2hash" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;">
+                <option value="">-- Select --</option>
+                <option value="SHA256">SHA256</option>
+                <option value="SHA1">SHA1</option>
+                <option value="MD5">MD5</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Local Network/Mask</label>
+              <input id="vpn2-local" placeholder="e.g. 192.168.2.0/24" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+            <div><label style="font-size:0.75rem;color:var(--muted);">Remote Network/Mask</label>
+              <input id="vpn2-remote" placeholder="e.g. 192.169.1.0/24" style="width:100%;padding:0.4rem 0.6rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.85rem;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:1.5rem;">
+        <button class="btn-primary" onclick="checkVPN()">&#9654; CHECK CONFIG</button>
+        <button class="btn-secondary" onclick="resetVPN()">&#8635; RESET</button>
+      </div>
+      <div class="feedback" id="fb-vpn"></div>
+    </div>
+  </div>
+
   </div><!-- /pbq-simulator -->
 
 </div><!-- /container -->
@@ -1482,8 +2258,8 @@ function switchTab(id, btn, n) {
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
-  document.getElementById('prog-fill').style.width = (n / 8 * 100) + '%';
-  document.getElementById('prog-label').textContent = n + ' / 8';
+  document.getElementById('prog-fill').style.width = (n / 14 * 100) + '%';
+  document.getElementById('prog-label').textContent = n + ' / 14';
 }
 
 // ── GENERIC DRAG HELPERS ──
@@ -1874,6 +2650,315 @@ function resetIAM() {
   document.getElementById('fb-iam').className = 'feedback';
 }
 
+
+// ── UPDATE TOTAL for 14 PBQs ──
+const TOTAL_PBQS = 14;
+function updScore() {
+  document.getElementById('score-correct').textContent = correct;
+  document.getElementById('score-attempts').textContent = attempts;
+}
+
+// ── PBQ-09 · MALWARE IDENTIFICATION ──
+function checkMalware() {
+  attempts++; updScore();
+  const answers = [
+    { typeId:'mal-a-type', remId:'mal-a-rem', correctType:'RAT', correctRem:'Implement a host-based IPS',
+      exp:'A RAT (Remote Access Trojan) creates a covert channel from the victim to the attacker enabling remote commands. Best remediation: host-based IPS to detect C2 communication.' },
+    { typeId:'mal-b-type', remId:'mal-b-rem', correctType:'RAT', correctRem:'Disable remote access services',
+      exp:'A RAT gives full remote desktop control. Disabling unnecessary remote access services reduces the attack surface.' },
+    { typeId:'mal-c-type', remId:'mal-c-rem', correctType:'Worm', correctRem:'Patch vulnerable systems',
+      exp:'A Worm self-replicates across networks without user interaction (e.g., via SQL injection). Patching closes the vulnerability it exploits.' },
+    { typeId:'mal-d-type', remId:'mal-d-rem', correctType:'Phishing', correctRem:'Implement 2FA using push notification',
+      exp:'Phishing steals credentials. Implementing 2FA means stolen passwords alone cannot be used to log in.' }
+  ];
+  let allCorrect = true, details = [];
+  answers.forEach((a, i) => {
+    const t = document.getElementById(a.typeId).value;
+    const r = document.getElementById(a.remId).value;
+    const label = String.fromCharCode(65+i);
+    if (t !== a.correctType || r !== a.correctRem) {
+      allCorrect = false;
+      details.push('Scenario ' + label + ': Type should be <strong>' + a.correctType + '</strong>, Remediation should be <strong>' + a.correctRem + '</strong>. ' + a.exp);
+    }
+  });
+  const fb = document.getElementById('fb-malware');
+  fb.classList.add('show');
+  if (allCorrect) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>All correct!</strong><br>' + answers.map((a,i)=>'Scenario '+String.fromCharCode(65+i)+': '+a.exp).join('<br>');
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Some answers need correction:</strong><br>' + details.join('<br>');
+  }
+}
+function resetMalware() {
+  ['mal-a-type','mal-a-rem','mal-b-type','mal-b-rem','mal-c-type','mal-c-rem','mal-d-type','mal-d-rem'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('fb-malware').className = 'feedback';
+}
+
+// ── PBQ-10 · WIRELESS CONFIG ──
+function checkWireless() {
+  attempts++; updScore();
+  const issues = [];
+  const wcSSID = document.getElementById('wc-ssid').value.trim();
+  const wcPSK  = document.getElementById('wc-psk').value.trim();
+  const wcAAA  = document.getElementById('wc-aaa').value.trim();
+  const wcAuth = document.getElementById('wc-auth').value;
+  const rsKey  = document.getElementById('rs-key').value.trim().toUpperCase();
+  const rsClient = document.getElementById('rs-client').value.trim();
+  const rsAuth = document.getElementById('rs-auth').value;
+  const rsServer = document.getElementById('rs-server').value.trim();
+  const clSSID = document.getElementById('cl-ssid').value.trim();
+  const clUser = document.getElementById('cl-user').value.trim();
+  const clPass = document.getElementById('cl-pass').value.trim();
+  const clPSK  = document.getElementById('cl-psk').value.trim();
+  const clAuth = document.getElementById('cl-auth').value;
+
+  if (wcAuth !== 'WPA2-EAP-PEAP-MSCHAPv2') issues.push('WiFi Controller Auth Type must be WPA2-EAP-PEAP-MSCHAPv2 (most secure 802.1X option)');
+  if (wcAAA !== '192.168.1.20') issues.push('WiFi Controller AAA Server IP should be 192.168.1.20 (RADIUS server)');
+  if (!wcPSK || wcPSK.length < 3) issues.push('WiFi Controller PSK/Shared Key must match the RADIUS profile — enter a shared secret (e.g. "SECRET")');
+  if (rsAuth !== 'Active Directory') issues.push('RADIUS Server Auth Type should be Active Directory (AD credentials used for guest login)');
+  if (rsClient !== '192.168.1.10') issues.push('RADIUS Server Client IP should be 192.168.1.10 (the WiFi controller IP)');
+  if (rsServer !== '192.168.1.20') issues.push('RADIUS Server IP should be 192.168.1.20');
+  if (!rsKey || rsKey.length < 3) issues.push('RADIUS Shared Key must be set');
+  if (clUser.toLowerCase() !== 'guest01') issues.push('Wireless Client Username should be guest01');
+  if (clPass !== 'guestpass') issues.push('Wireless Client Password should be guestpass');
+  if (clAuth !== 'WPA2-Enterprise') issues.push('Wireless Client Auth Type should be WPA2-Enterprise (matches 802.1X)');
+  if (clPSK !== wcPSK) issues.push('Wireless Client PSK must match the WiFi Controller shared key');
+
+  const fb = document.getElementById('fb-wireless');
+  fb.classList.add('show');
+  if (issues.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> 802.1X wireless properly configured.<br><br>Key concepts: WPA2-EAP-PEAP-MSCHAPv2 is the most secure option for 802.1X. The RADIUS server authenticates clients against Active Directory. The WiFi Controller acts as the RADIUS client (NAS). WPA2-Enterprise on the client means it uses 802.1X/EAP rather than a shared passphrase.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+  }
+}
+function resetWireless() {
+  ['wc-ssid','wc-psk','wc-aaa','rs-key','rs-client','rs-server','cl-ssid','cl-user','cl-pass','cl-psk'].forEach(id => {
+    var el = document.getElementById(id);
+    if (el.tagName === 'INPUT') el.value = (id.includes('ssid')) ? 'CORPGUEST' : '';
+  });
+  ['wc-auth','rs-auth','cl-auth'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fb-wireless').className = 'feedback';
+}
+
+// ── PBQ-11 · CSR / PKI ──
+var csrDragSrc = null;
+function csrDrop(e, zoneId, kind) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'csr') return;
+  const zone = document.getElementById(zoneId);
+  // Return existing item in zone to pool
+  const existing = zone.querySelector('.drag-item');
+  if (existing) {
+    const poolId = (existing.dataset.kind === 'ext') ? 'csr-ext-pool' : 'csr-val-pool';
+    document.getElementById(poolId).appendChild(existing);
+  }
+  const hint = zone.querySelector('.drop-hint'); if (hint) hint.remove();
+  zone.appendChild(dragSrc);
+}
+function checkCSR() {
+  attempts++; updScore();
+  // Correct answer: commonName=ws01.comptia.org, authorityInfoAccess=URL=..., extKeyUsage=serverAuth, subjectAltName=DNS Name=*.comptia.org
+  const correct_map = {
+    'csr-ext-1': 'commonName',       'csr-val-1': 'ws01.comptia.org',
+    'csr-ext-2': 'authorityInfoAccess', 'csr-val-2': 'URL=http://homesite.comptia.org/home.aspx',
+    'csr-ext-3': 'extKeyUsage',      'csr-val-3': 'serverAuth',
+    'csr-ext-4': 'subjectAltName',   'csr-val-4': 'DNS Name=*.comptia.org'
+  };
+  // Accept any valid pairing per row (ext+val must match)
+  const rowResults = [1,2,3,4].map(i => {
+    const ext = document.getElementById('csr-ext-'+i).querySelector('.drag-item');
+    const val = document.getElementById('csr-val-'+i).querySelector('.drag-item');
+    return { ext: ext ? ext.dataset.val : null, val: val ? val.dataset.val : null };
+  });
+  // Build placed pairs
+  const placed = {};
+  rowResults.forEach(r => { if (r.ext && r.val) placed[r.ext] = r.val; });
+  const expected = {
+    'commonName': 'ws01.comptia.org',
+    'authorityInfoAccess': 'URL=http://homesite.comptia.org/home.aspx',
+    'extKeyUsage': 'serverAuth',
+    'subjectAltName': 'DNS Name=*.comptia.org'
+  };
+  const issues = [];
+  Object.entries(expected).forEach(([ext, val]) => {
+    if (placed[ext] !== val) issues.push('<strong>' + ext + '</strong> → should map to <em>' + val + '</em>');
+  });
+  const filledCount = rowResults.filter(r => r.ext && r.val).length;
+  if (filledCount < 4) issues.push('Fill all 4 rows of the CSR');
+  const fb = document.getElementById('fb-csr');
+  fb.classList.add('show');
+  if (issues.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct CSR!</strong><br>• <strong>commonName</strong> → ws01.comptia.org (server hostname)<br>• <strong>authorityInfoAccess</strong> → OCSP/AIA URL for certificate revocation checking<br>• <strong>extKeyUsage</strong> → serverAuth (TLS server certificate)<br>• <strong>subjectAltName</strong> → DNS Name=*.comptia.org (wildcard SAN for all subdomains)';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>Incorrect pairing(s):</strong><br>• ' + issues.join('<br>• ');
+  }
+}
+function resetCSR() {
+  ['1','2','3','4'].forEach(i => {
+    ['csr-ext-','csr-val-'].forEach(prefix => {
+      const zone = document.getElementById(prefix+i);
+      const item = zone.querySelector('.drag-item');
+      if (item) {
+        const poolId = (item.dataset.kind === 'ext') ? 'csr-ext-pool' : 'csr-val-pool';
+        document.getElementById(poolId).appendChild(item);
+      }
+    });
+  });
+  document.getElementById('fb-csr').className = 'feedback';
+}
+
+// ── PBQ-12 · WAP HARDENING ──
+function checkWAP() {
+  attempts++; updScore();
+  const issues = [];
+  const ssid = document.getElementById('wap-ssid').value.trim();
+  const broadcast = document.getElementById('wap-broadcast').value;
+  const secmode = document.getElementById('wap-secmode').value;
+  const enc = document.getElementById('wap-enc').value;
+  const radius = document.getElementById('wap-radius').value.trim();
+  const port = document.getElementById('wap-port').value.trim();
+  const key = document.getElementById('wap-key').value.trim();
+
+  if (!ssid) issues.push('SSID must be set');
+  if (broadcast !== 'Disable') issues.push('SSID Broadcast should be Disabled — broadcasting SSID makes the network easier to discover');
+  if (secmode !== 'WPA2 Enterprise') issues.push('Security Mode must be WPA2 Enterprise — the most secure option, uses 802.1X/RADIUS authentication');
+  if (enc !== 'AES') issues.push('Encryption must be AES — TKIP is deprecated and insecure');
+  if (radius !== '192.168.1.20') issues.push('RADIUS Server Address should be 192.168.1.20');
+  if (port !== '1812') issues.push('RADIUS Port should be 1812 (standard RADIUS auth port)');
+  if (!key || key.length < 3) issues.push('Shared Key must be set (used to authenticate the WAP to the RADIUS server)');
+
+  const fb = document.getElementById('fb-wap');
+  fb.classList.add('show');
+  if (issues.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong> WAP configured in the most secure manner.<br><br>Key hardening steps: <strong>WPA2 Enterprise + AES</strong> (strongest encryption), <strong>SSID broadcast disabled</strong> (reduces discoverability), <strong>RADIUS authentication</strong> (individual user credentials instead of shared PSK), <strong>port 1812</strong> (standard RADIUS). Never use WEP, TKIP, or OPEN security in a corporate environment.';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+  }
+}
+function resetWAP() {
+  ['wap-ssid','wap-radius','wap-port','wap-key'].forEach(id => document.getElementById(id).value = '');
+  ['wap-mode','wap-broadcast','wap-secmode','wap-enc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fb-wap').className = 'feedback';
+}
+
+// ── PBQ-13 · SQL INJECTION ──
+function sqlDrop(e, zoneId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'sql') return;
+  const zone = document.getElementById(zoneId);
+  const hint = zone.querySelector('.drop-hint'); if (hint) hint.remove();
+  zone.appendChild(dragSrc);
+}
+function checkSQL() {
+  attempts++; updScore();
+  const attackType = document.querySelector('input[name="sql-attack"]:checked');
+  const webItems = Array.from(document.getElementById('sql-web').querySelectorAll('.drag-item')).map(i=>i.dataset.ctrl);
+  const dbItems = Array.from(document.getElementById('sql-db').querySelectorAll('.drag-item')).map(i=>i.dataset.ctrl);
+  const netItems = Array.from(document.getElementById('sql-net').querySelectorAll('.drag-item')).map(i=>i.dataset.ctrl);
+  const issues = [];
+  if (!attackType) { issues.push('Select the attack type'); }
+  else if (attackType.value !== 'SQL Injection') { issues.push('Attack type should be SQL Injection — the output shows database records being dumped via URL manipulation'); }
+  if (!webItems.includes('Input Validation') && !webItems.includes('Parameterized Queries') && !webItems.includes('Code Review')) {
+    issues.push('Web Server needs at least one of: Input Validation, Parameterized Queries, or Code Review');
+  }
+  if (!dbItems.includes('Least Privilege DB') && !dbItems.includes('Parameterized Queries')) {
+    issues.push('Database Server needs Least Privilege (DB User) or Parameterized Queries');
+  }
+  if (!netItems.includes('WAF') && !netItems.includes('IDS')) {
+    issues.push('Network/Firewall layer needs WAF or IDS');
+  }
+  const fb = document.getElementById('fb-sqlnet');
+  fb.classList.add('show');
+  if (issues.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>Correct!</strong><br><br>The URL output leaking database rows confirms <strong>SQL Injection</strong>. Compensating controls:<br>• <strong>Web Server</strong>: Input validation + parameterized queries prevent malicious SQL being passed to the DB<br>• <strong>Database</strong>: Least privilege DB user limits what an attacker can read/modify even if injection succeeds<br>• <strong>Network</strong>: WAF detects and blocks SQL injection payloads; IDS alerts on anomalous query patterns';
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+  }
+}
+function resetSQL() {
+  const pool = document.getElementById('sql-pool');
+  ['sql-web','sql-db','sql-net'].forEach(id => {
+    Array.from(document.getElementById(id).querySelectorAll('.drag-item')).forEach(i => pool.appendChild(i));
+    const hint = document.createElement('span'); hint.className='drop-hint'; hint.textContent='Drop controls here';
+    document.getElementById(id).appendChild(hint);
+  });
+  const radio = document.querySelector('input[name="sql-attack"]:checked');
+  if (radio) radio.checked = false;
+  document.getElementById('fb-sqlnet').className = 'feedback';
+}
+
+// ── PBQ-14 · VPN CONFIG ──
+function checkVPN() {
+  attempts++; updScore();
+  const issues = [];
+  const fields = [
+    ['vpn1-peer','5.5.5.20','VPN1 Peer IP should be 5.5.5.20 (Concentrator 2 address)'],
+    ['vpn1-auth','PSK','VPN1 Auth Method should be PSK (scenario requires secret password auth)'],
+    ['vpn1-mode','MAIN','VPN1 Negotiation Mode should be MAIN (most secure)'],
+    ['vpn1-p1enc','AES256','VPN1 Phase 1 Encryption should be AES256 (most secure)'],
+    ['vpn1-p1hash','SHA256','VPN1 Phase 1 Hash should be SHA256'],
+    ['vpn1-dh','14','VPN1 DH Key Group should be 14 (2048-bit, most secure listed)'],
+    ['vpn1-proto','ESP','VPN1 Phase 2 Protocol should be ESP (encrypts payload; AH only authenticates)'],
+    ['vpn1-p2enc','AES256','VPN1 Phase 2 Encryption should be AES256'],
+    ['vpn1-p2hash','SHA256','VPN1 Phase 2 Hash should be SHA256'],
+    ['vpn1-local','192.169.1.0/24','VPN1 Local Network should be 192.169.1.0/24 (Branch 1)'],
+    ['vpn1-remote','192.168.2.0/24','VPN1 Remote Network should be 192.168.2.0/24 (Branch 2)'],
+    ['vpn2-peer','5.5.5.10','VPN2 Peer IP should be 5.5.5.10 (Concentrator 1 address)'],
+    ['vpn2-auth','PSK','VPN2 Auth Method should be PSK'],
+    ['vpn2-mode','MAIN','VPN2 Negotiation Mode should be MAIN'],
+    ['vpn2-p1enc','AES256','VPN2 Phase 1 Encryption should be AES256'],
+    ['vpn2-p1hash','SHA256','VPN2 Phase 1 Hash should be SHA256'],
+    ['vpn2-dh','14','VPN2 DH Key Group should be 14'],
+    ['vpn2-proto','ESP','VPN2 Phase 2 Protocol should be ESP'],
+    ['vpn2-p2enc','AES256','VPN2 Phase 2 Encryption should be AES256'],
+    ['vpn2-p2hash','SHA256','VPN2 Phase 2 Hash should be SHA256'],
+    ['vpn2-local','192.168.2.0/24','VPN2 Local Network should be 192.168.2.0/24 (Branch 2)'],
+    ['vpn2-remote','192.169.1.0/24','VPN2 Remote Network should be 192.169.1.0/24 (Branch 1)'],
+  ];
+  fields.forEach(([id, expected, msg]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const val = el.value ? el.value.trim() : '';
+    if (val !== expected) issues.push(msg);
+  });
+  const fb = document.getElementById('fb-vpn');
+  fb.classList.add('show');
+  if (issues.length === 0) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = '✅ <strong>VPN correctly configured!</strong><br><br>Key concepts: <strong>PSK</strong> = pre-shared key authentication as required. <strong>MAIN mode</strong> = more secure than Aggressive (protects identities). <strong>AES256/SHA256</strong> = strongest available algorithms. <strong>ESP</strong> = encrypts + authenticates (AH only authenticates — no encryption). <strong>DH Group 14</strong> = 2048-bit key exchange. Peer IPs must be mirrored on each concentrator, and local/remote networks must be swapped between the two ends.';
+  } else {
+    const shown = issues.slice(0,5);
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s)</strong> (showing first 5):<br>• ' + shown.join('<br>• ') + (issues.length>5 ? '<br>...' : '');
+  }
+}
+function resetVPN() {
+  ['vpn1-peer','vpn1-local','vpn1-remote','vpn2-peer','vpn2-local','vpn2-remote'].forEach(id => document.getElementById(id).value = '');
+  ['vpn1-auth','vpn1-mode','vpn1-p1enc','vpn1-p1hash','vpn1-dh','vpn1-proto','vpn1-p2enc','vpn1-p2hash',
+   'vpn2-auth','vpn2-mode','vpn2-p1enc','vpn2-p1hash','vpn2-dh','vpn2-proto','vpn2-p2enc','vpn2-p2hash'].forEach(id => {
+     document.getElementById(id).value = '';
+   });
+  document.getElementById('fb-vpn').className = 'feedback';
+}
 
 </script>
 <script>
