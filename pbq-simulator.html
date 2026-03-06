@@ -2304,23 +2304,23 @@ function checkACL() {
   const fb = document.getElementById('fb-acl');
   fb.classList.add('show');
   if (rules.length !== 4) {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place exactly 4 rules in the ACL. Don\'t include the HTTP:80 rule — the scenario only requires HTTPS.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = `❌ <strong>Incomplete.</strong> Place exactly 4 rules in the ACL. Don\'t include the HTTP:80 rule — the scenario only requires HTTPS.`;
     return;
   }
   if (JSON.stringify(rules) === JSON.stringify(correct_order)) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong> Your ACL is properly configured. Permitting HTTPS first allows web traffic; the admin SSH PERMIT before the SSH DENY ensures only 192.168.1.0/24 can SSH in; and the final implicit deny-all blocks everything else. First-match ordering is critical!';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong> Your ACL is properly configured. Permitting HTTPS first allows web traffic; the admin SSH PERMIT before the SSH DENY ensures only 192.168.1.0/24 can SSH in; and the final implicit deny-all blocks everything else. First-match ordering is critical!`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Wrong order.</strong> Remember: (1) PERMIT HTTPS any, (2) PERMIT SSH from admin subnet only, (3) DENY all other SSH, (4) DENY all. The DENY SSH must come <em>after</em> the PERMIT SSH from admin — otherwise admins get blocked too!';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = `❌ <strong>Wrong order.</strong> Remember: (1) PERMIT HTTPS any, (2) PERMIT SSH from admin subnet only, (3) DENY all other SSH, (4) DENY all. The DENY SSH must come <em>after</em> the PERMIT SSH from admin — otherwise admins get blocked too!`;
   }
 }
 function resetACL() {
   const pool = document.getElementById('acl-pool'), list = document.getElementById('acl-list');
   Array.from(list.querySelectorAll('.drag-item')).forEach(item => { const n = item.querySelector('.step-num'); if(n) n.remove(); pool.appendChild(item); });
-  if (!list.querySelector('.drag-item')) list.innerHTML = '<div class="drop-hint">Drop rules here in the correct order ↓</div>';
+  if (!list.querySelector('.drag-item')) list.innerHTML = `<div class="drop-hint">Drop rules here in the correct order ↓</div>`;
   document.getElementById('fb-acl').className = 'feedback';
 }
 
@@ -2343,14 +2343,14 @@ function checkNet() {
   const poolLeft = document.getElementById('net-pool-chips').querySelectorAll('.device-chip').length;
   const fb = document.getElementById('fb-net');
   fb.classList.add('show');
-  if (poolLeft > 0) { fb.className = 'feedback show incorrect'; fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all devices into a zone before checking.'; return; }
+  if (poolLeft > 0) { fb.className = "feedback show incorrect"; fb.innerHTML = `❌ <strong>Incomplete.</strong> Place all devices into a zone before checking.`; return; }
   if (wrong.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong> Web Server, Public DNS, and Mail Gateway belong in the DMZ — publicly accessible but isolated from internal systems. HR Database and Workstations are internal (trusted). External User represents the untrusted internet.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong> Web Server, Public DNS, and Mail Gateway belong in the DMZ — publicly accessible but isolated from internal systems. HR Database and Workstations are internal (trusted). External User represents the untrusted internet.`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join('; ') + '. Remember: DMZ = publicly accessible services (web, DNS, mail). Internal = private data and endpoints. Don\'t expose sensitive systems directly to the perimeter.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>Wrong placements:</strong> " + wrong.join('; ') + '. Remember: DMZ = publicly accessible services (web, DNS, mail). Internal = private data and endpoints. Don\'t expose sensitive systems directly to the perimeter.';
   }
 }
 function resetNet() {
@@ -2370,8 +2370,8 @@ function logPick(q, letter, el) {
 function checkLog() {
   if (!logAns.q1 || !logAns.q2) {
     const fb = document.getElementById('fb-log');
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ Please answer both questions before checking.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = `❌ Please answer both questions before checking.`;
     return;
   }
   attempts++; updScore();
@@ -2388,11 +2388,11 @@ function checkLog() {
   fb.classList.add('show');
   if (q1ok && q2ok) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Both correct!</strong><br><strong>Q1:</strong> This is <em>username enumeration</em> — cycling through common usernames from one IP rapidly. Unlike spraying (one password → many accounts) or brute force (many passwords → one account).<br><br><strong>Q2:</strong> MFA + rate limiting is strongest — MFA blocks access even if credentials are guessed; rate limiting slows automation. Lockout alone can cause DoS; disk encryption is irrelevant here.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Both correct!</strong><br><strong>Q1:</strong> This is <em>username enumeration</em> — cycling through common usernames from one IP rapidly. Unlike spraying (one password → many accounts) or brute force (many passwords → one account).<br><br><strong>Q2:</strong> MFA + rate limiting is strongest — MFA blocks access even if credentials are guessed; rate limiting slows automation. Lockout alone can cause DoS; disk encryption is irrelevant here.`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ ' + (!q1ok ? '<strong>Q1:</strong> The pattern shows many usernames from one IP in rapid succession — username enumeration/dictionary attack. ' : '') + (!q2ok ? '<strong>Q2:</strong> MFA + rate limiting is best. Complexity rules don\'t stop automation; disk encryption doesn\'t protect authentication.' : '');
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ " + (!q1ok ? '<strong>Q1:</strong> The pattern shows many usernames from one IP in rapid succession — username enumeration/dictionary attack. ' : '') + (!q2ok ? '<strong>Q2:</strong> MFA + rate limiting is best. Complexity rules don\'t stop automation; disk encryption doesn\'t protect authentication.' : '');
   }
 }
 function resetLog() {
@@ -2418,7 +2418,7 @@ function checkIR() {
   attempts++; updScore();
   if (steps.length !== 8) {
     const fb = document.getElementById('fb-ir');
-    fb.className = 'feedback show incorrect';
+    fb.className = "feedback show incorrect";
     fb.innerHTML = `❌ Place all 8 steps in the timeline first. (${steps.length}/8 placed)`;
     return;
   }
@@ -2427,17 +2427,17 @@ function checkIR() {
   fb.classList.add('show');
   if (JSON.stringify(orders) === JSON.stringify([1,2,3,4,5,6,7,8])) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Perfect!</strong> NIST SP 800-61 order:<br>1️⃣ Detect → 2️⃣ Contain (isolate) → 3️⃣ Preserve evidence → 4️⃣ Analyze scope/IOCs → 5️⃣ Eradicate → 6️⃣ Recover → 7️⃣ Notify → 8️⃣ Lessons learned.<br><br><em>Critical rule: Always preserve forensic evidence BEFORE eradication — never wipe a system before imaging it!</em>';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Perfect!</strong> NIST SP 800-61 order:<br>1️⃣ Detect → 2️⃣ Contain (isolate) → 3️⃣ Preserve evidence → 4️⃣ Analyze scope/IOCs → 5️⃣ Eradicate → 6️⃣ Recover → 7️⃣ Notify → 8️⃣ Lessons learned.<br><br><em>Critical rule: Always preserve forensic evidence BEFORE eradication — never wipe a system before imaging it!</em>`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Wrong order.</strong> Key rules: Contain <em>immediately</em> after detection. Preserve evidence <em>before</em> eradication. Restore only after confirmed clean. Lessons learned is always last.<br><br>Correct: Detect → Isolate → Preserve Evidence → Analyze → Eradicate → Restore → Notify → Lessons Learned';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = `❌ <strong>Wrong order.</strong> Key rules: Contain <em>immediately</em> after detection. Preserve evidence <em>before</em> eradication. Restore only after confirmed clean. Lessons learned is always last.<br><br>Correct: Detect → Isolate → Preserve Evidence → Analyze → Eradicate → Restore → Notify → Lessons Learned`;
   }
 }
 function resetIR() {
   const pool = document.getElementById('ir-pool'), tl = document.getElementById('ir-timeline');
   Array.from(tl.querySelectorAll('.drag-item')).forEach(s => { s.removeAttribute('data-num'); pool.appendChild(s); });
-  tl.innerHTML = '<div class="drop-hint">Drop steps here in the correct order ↓</div>';
+  tl.innerHTML = `<div class="drop-hint">Drop steps here in the correct order ↓</div>`;
   document.getElementById('fb-ir').className = 'feedback';
 }
 
@@ -2459,8 +2459,8 @@ function checkPorts() {
   const poolLeft = document.getElementById('ports-pool').querySelectorAll('.device-chip').length;
   if (poolLeft > 0) {
     const fb = document.getElementById('fb-ports');
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all service chips into port buckets before checking.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = `❌ <strong>Incomplete.</strong> Place all service chips into port buckets before checking.`;
     return;
   }
   ['22','25','53','88','161','389','443','990','3389'].forEach(port => {
@@ -2476,11 +2476,11 @@ function checkPorts() {
   fb.classList.add('show');
   if (wrong.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong> Key takeaways: SSH and SFTP both use port 22 (SFTP is SSH-based file transfer, not FTP). FTPS uses port 990 (FTP over SSL — different from SFTP). DNS uses both UDP and TCP 53. Kerberos :88 is essential for AD authentication. LDAP :389 vs LDAPS :636 (secure). SNMP :161 is UDP — important for network monitoring.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong> Key takeaways: SSH and SFTP both use port 22 (SFTP is SSH-based file transfer, not FTP). FTPS uses port 990 (FTP over SSL — different from SFTP). DNS uses both UDP and TCP 53. Kerberos :88 is essential for AD authentication. LDAP :389 vs LDAPS :636 (secure). SNMP :161 is UDP — important for network monitoring.`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join(', ') + '.<br><br>Remember: SFTP ≠ FTPS. SFTP runs over SSH (port 22). FTPS is FTP over SSL/TLS (port 990). RDP is always 3389. SNMP is UDP 161.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>Wrong placements:</strong> " + wrong.join(', ') + '.<br><br>Remember: SFTP ≠ FTPS. SFTP runs over SSH (port 22). FTPS is FTP over SSL/TLS (port 990). RDP is always 3389. SNMP is UDP 161.';
   }
 }
 function resetPorts() {
@@ -2506,8 +2506,8 @@ function checkCrypto() {
   const poolLeft = document.getElementById('crypto-pool').querySelectorAll('.device-chip').length;
   if (poolLeft > 0) {
     const fb = document.getElementById('fb-crypto');
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Incomplete.</strong> Place all algorithm chips into categories.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = `❌ <strong>Incomplete.</strong> Place all algorithm chips into categories.`;
     return;
   }
   attempts++; updScore();
@@ -2521,11 +2521,11 @@ function checkCrypto() {
   fb.classList.add('show');
   if (wrong.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong><br>🔑 <strong>Symmetric</strong> (same key): AES, 3DES, ChaCha20 — fast, used for bulk encryption<br>🗝️ <strong>Asymmetric</strong> (key pair): RSA, ECC, DSA — slower, used for key exchange and digital signatures<br>🔍 <strong>Hashing</strong> (one-way): SHA-256, MD5, BCRYPT — integrity verification, password storage<br>🤝 <strong>Key Exchange</strong>: Diffie-Hellman, ECDH, ECDHE — establish shared secrets without transmitting them. ECDHE adds ephemeral keys for perfect forward secrecy.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong><br>🔑 <strong>Symmetric</strong> (same key): AES, 3DES, ChaCha20 — fast, used for bulk encryption<br>🗝️ <strong>Asymmetric</strong> (key pair): RSA, ECC, DSA — slower, used for key exchange and digital signatures<br>🔍 <strong>Hashing</strong> (one-way): SHA-256, MD5, BCRYPT — integrity verification, password storage<br>🤝 <strong>Key Exchange</strong>: Diffie-Hellman, ECDH, ECDHE — establish shared secrets without transmitting them. ECDHE adds ephemeral keys for perfect forward secrecy.`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Wrong placements:</strong> ' + wrong.join(', ') + '.<br><br>Tip: Symmetric = same key both sides (fast). Asymmetric = public/private key pair (slow). Hashing = one-way, no decryption. Key Exchange = securely agree on a shared secret (DH, ECDH).';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>Wrong placements:</strong> " + wrong.join(', ') + '.<br><br>Tip: Symmetric = same key both sides (fast). Asymmetric = public/private key pair (slow). Hashing = one-way, no decryption. Key Exchange = securely agree on a shared secret (DH, ECDH).';
   }
 }
 function resetCrypto() {
@@ -2552,8 +2552,8 @@ function checkVuln() {
   const cards = Array.from(document.getElementById('vuln-queue').querySelectorAll('.vuln-card'));
   if (cards.length !== 5) {
     const fb = document.getElementById('fb-vuln');
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ Place all 5 vulnerabilities in the remediation queue first. (' + cards.length + '/5 placed)';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ Place all 5 vulnerabilities in the remediation queue first. (" + cards.length + '/5 placed)';
     return;
   }
   attempts++; updScore();
@@ -2562,17 +2562,17 @@ function checkVuln() {
   fb.classList.add('show');
   if (JSON.stringify(order) === JSON.stringify([1,2,3,4,5])) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct prioritization!</strong><br>1️⃣ <strong>SQL Injection (9.8)</strong> — highest CVSS, unauthenticated, full data breach risk<br>2️⃣ <strong>RCE Apache (9.0)</strong> — nearly as critical, public exploit available, 30 days unpatched<br>3️⃣ <strong>Admin No MFA (7.5)</strong> — internet-exposed admin = serious risk, easy attacker target<br>4️⃣ <strong>TLS 1.0 (5.3)</strong> — real risk but requires active MITM and specific conditions<br>5️⃣ <strong>Version Disclosure (3.1)</strong> — informational, aids recon but not directly exploitable<br><br><em>Note: CVSS score alone doesn't determine priority — exploitability, exposure, and available patches all factor in.</em>';
+    fb.className = "feedback show correct";
+    fb.innerHTML = "✅ <strong>Correct prioritization!</strong><br>1️⃣ <strong>SQL Injection (9.8)</strong> — highest CVSS, unauthenticated, full data breach risk<br>2️⃣ <strong>RCE Apache (9.0)</strong> — nearly as critical, public exploit available, 30 days unpatched<br>3️⃣ <strong>Admin No MFA (7.5)</strong> — internet-exposed admin = serious risk, easy attacker target<br>4️⃣ <strong>TLS 1.0 (5.3)</strong> — real risk but requires active MITM and specific conditions<br>5️⃣ <strong>Version Disclosure (3.1)</strong> — informational, aids recon but not directly exploitable<br><br><em>Note: CVSS score alone does not determine priority — exploitability, exposure, and available patches all factor in.</em>";
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Not the optimal order.</strong> Key principle: Prioritize by <em>exploitability × impact × exposure</em>, not just CVSS score alone. An unauthenticated SQLi that leaks your whole database beats a 9.0 that requires a specific condition. Public exploits dramatically increase urgency. Info disclosures are lowest — they aid attackers but aren't directly exploitable.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>Not the optimal order.</strong> Key principle: Prioritize by <em>exploitability × impact × exposure</em>, not just CVSS score alone. An unauthenticated SQLi that leaks your whole database beats a 9.0 that requires a specific condition. Public exploits dramatically increase urgency. Info disclosures are lowest — they aid attackers but are not directly exploitable.";
   }
 }
 function resetVuln() {
   const pool = document.getElementById('vuln-pool'), queue = document.getElementById('vuln-queue');
   Array.from(queue.querySelectorAll('.vuln-card')).forEach(c => { c.removeAttribute('data-num'); pool.appendChild(c); });
-  queue.innerHTML = '<div class="drop-hint">Drop vulnerabilities here in priority order ↓</div>';
+  queue.innerHTML = `<div class="drop-hint">Drop vulnerabilities here in priority order ↓</div>`;
   document.getElementById('fb-vuln').className = 'feedback';
 }
 
@@ -2635,28 +2635,21 @@ function checkIAM() {
   fb.classList.add('show');
   if (issues.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong> Least privilege applied properly.<br><br>Key principles tested: <em>Employees</em> only see their own data. <em>HR Managers</em> can view/modify HR data but cannot touch system config. <em>IT Admins</em> manage infrastructure but should NOT access payroll or HR records. <em>Auditors</em> have read-only access to records and logs for compliance — never write access. Separation of duties prevents any one role from having too much power.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong> Least privilege applied properly.<br><br>Key principles tested: <em>Employees</em> only see their own data. <em>HR Managers</em> can view/modify HR data but cannot touch system config. <em>IT Admins</em> manage infrastructure but should NOT access payroll or HR records. <em>Auditors</em> have read-only access to records and logs for compliance — never write access. Separation of duties prevents any one role from having too much power.`;
   } else {
     const shown = issues.slice(0,4);
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong> ' + shown.join('; ') + (issues.length>4?'...':'') + '.<br><br>Remember: Least privilege = minimum access needed. IT Admin ≠ HR access. Auditors = read-only. Employees = own data only. Double-click a chip in a role box to remove it.';
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>" + issues.length + ' issue(s):</strong> ' + shown.join('; ') + (issues.length>4?'...':'') + '.<br><br>Remember: Least privilege = minimum access needed. IT Admin ≠ HR access. Auditors = read-only. Employees = own data only. Double-click a chip in a role box to remove it.';
   }
 }
 function resetIAM() {
   ['employee','hr_manager','it_admin','auditor'].forEach(role => {
-    document.getElementById('iam-' + role + '-chips').innerHTML = '';
+    document.getElementById('iam-' + role + '-chips').innerHTML = ``;
   });
   document.getElementById('fb-iam').className = 'feedback';
 }
 
-
-// ── UPDATE TOTAL for 14 PBQs ──
-const TOTAL_PBQS = 14;
-function updScore() {
-  document.getElementById('score-correct').textContent = correct;
-  document.getElementById('score-attempts').textContent = attempts;
-}
 
 // ── PBQ-09 · MALWARE IDENTIFICATION ──
 function checkMalware() {
@@ -2685,11 +2678,11 @@ function checkMalware() {
   fb.classList.add('show');
   if (allCorrect) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>All correct!</strong><br>' + answers.map((a,i)=>'Scenario '+String.fromCharCode(65+i)+': '+a.exp).join('<br>');
+    fb.className = "feedback show correct";
+    fb.innerHTML = "✅ <strong>All correct!</strong><br>" + answers.map((a,i)=>'Scenario '+String.fromCharCode(65+i)+': '+a.exp).join('<br>');
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Some answers need correction:</strong><br>' + details.join('<br>');
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>Some answers need correction:</strong><br>" + details.join('<br>');
   }
 }
 function resetMalware() {
@@ -2733,11 +2726,11 @@ function checkWireless() {
   fb.classList.add('show');
   if (issues.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong> 802.1X wireless properly configured.<br><br>Key concepts: WPA2-EAP-PEAP-MSCHAPv2 is the most secure option for 802.1X. The RADIUS server authenticates clients against Active Directory. The WiFi Controller acts as the RADIUS client (NAS). WPA2-Enterprise on the client means it uses 802.1X/EAP rather than a shared passphrase.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong> 802.1X wireless properly configured.<br><br>Key concepts: WPA2-EAP-PEAP-MSCHAPv2 is the most secure option for 802.1X. The RADIUS server authenticates clients against Active Directory. The WiFi Controller acts as the RADIUS client (NAS). WPA2-Enterprise on the client means it uses 802.1X/EAP rather than a shared passphrase.`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>" + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
   }
 }
 function resetWireless() {
@@ -2750,7 +2743,6 @@ function resetWireless() {
 }
 
 // ── PBQ-11 · CSR / PKI ──
-var csrDragSrc = null;
 function csrDrop(e, zoneId, kind) {
   e.preventDefault(); e.currentTarget.classList.remove('dragover');
   if (!dragSrc || dragType !== 'csr') return;
@@ -2767,7 +2759,7 @@ function csrDrop(e, zoneId, kind) {
 function checkCSR() {
   attempts++; updScore();
   // Correct answer: commonName=ws01.comptia.org, authorityInfoAccess=URL=..., extKeyUsage=serverAuth, subjectAltName=DNS Name=*.comptia.org
-  const correct_map = {
+  const csrCorrectMap = {
     'csr-ext-1': 'commonName',       'csr-val-1': 'ws01.comptia.org',
     'csr-ext-2': 'authorityInfoAccess', 'csr-val-2': 'URL=http://homesite.comptia.org/home.aspx',
     'csr-ext-3': 'extKeyUsage',      'csr-val-3': 'serverAuth',
@@ -2798,11 +2790,11 @@ function checkCSR() {
   fb.classList.add('show');
   if (issues.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct CSR!</strong><br>• <strong>commonName</strong> → ws01.comptia.org (server hostname)<br>• <strong>authorityInfoAccess</strong> → OCSP/AIA URL for certificate revocation checking<br>• <strong>extKeyUsage</strong> → serverAuth (TLS server certificate)<br>• <strong>subjectAltName</strong> → DNS Name=*.comptia.org (wildcard SAN for all subdomains)';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct CSR!</strong><br>• <strong>commonName</strong> → ws01.comptia.org (server hostname)<br>• <strong>authorityInfoAccess</strong> → OCSP/AIA URL for certificate revocation checking<br>• <strong>extKeyUsage</strong> → serverAuth (TLS server certificate)<br>• <strong>subjectAltName</strong> → DNS Name=*.comptia.org (wildcard SAN for all subdomains)`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>Incorrect pairing(s):</strong><br>• ' + issues.join('<br>• ');
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>Incorrect pairing(s):</strong><br>• " + issues.join('<br>• ');
   }
 }
 function resetCSR() {
@@ -2843,11 +2835,11 @@ function checkWAP() {
   fb.classList.add('show');
   if (issues.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong> WAP configured in the most secure manner.<br><br>Key hardening steps: <strong>WPA2 Enterprise + AES</strong> (strongest encryption), <strong>SSID broadcast disabled</strong> (reduces discoverability), <strong>RADIUS authentication</strong> (individual user credentials instead of shared PSK), <strong>port 1812</strong> (standard RADIUS). Never use WEP, TKIP, or OPEN security in a corporate environment.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong> WAP configured in the most secure manner.<br><br>Key hardening steps: <strong>WPA2 Enterprise + AES</strong> (strongest encryption), <strong>SSID broadcast disabled</strong> (reduces discoverability), <strong>RADIUS authentication</strong> (individual user credentials instead of shared PSK), <strong>port 1812</strong> (standard RADIUS). Never use WEP, TKIP, or OPEN security in a corporate environment.`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>" + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
   }
 }
 function resetWAP() {
@@ -2886,11 +2878,11 @@ function checkSQL() {
   fb.classList.add('show');
   if (issues.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>Correct!</strong><br><br>The URL output leaking database rows confirms <strong>SQL Injection</strong>. Compensating controls:<br>• <strong>Web Server</strong>: Input validation + parameterized queries prevent malicious SQL being passed to the DB<br>• <strong>Database</strong>: Least privilege DB user limits what an attacker can read/modify even if injection succeeds<br>• <strong>Network</strong>: WAF detects and blocks SQL injection payloads; IDS alerts on anomalous query patterns';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>Correct!</strong><br><br>The URL output leaking database rows confirms <strong>SQL Injection</strong>. Compensating controls:<br>• <strong>Web Server</strong>: Input validation + parameterized queries prevent malicious SQL being passed to the DB<br>• <strong>Database</strong>: Least privilege DB user limits what an attacker can read/modify even if injection succeeds<br>• <strong>Network</strong>: WAF detects and blocks SQL injection payloads; IDS alerts on anomalous query patterns`;
   } else {
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>" + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
   }
 }
 function resetSQL() {
@@ -2943,12 +2935,12 @@ function checkVPN() {
   fb.classList.add('show');
   if (issues.length === 0) {
     correct++; updScore();
-    fb.className = 'feedback show correct';
-    fb.innerHTML = '✅ <strong>VPN correctly configured!</strong><br><br>Key concepts: <strong>PSK</strong> = pre-shared key authentication as required. <strong>MAIN mode</strong> = more secure than Aggressive (protects identities). <strong>AES256/SHA256</strong> = strongest available algorithms. <strong>ESP</strong> = encrypts + authenticates (AH only authenticates — no encryption). <strong>DH Group 14</strong> = 2048-bit key exchange. Peer IPs must be mirrored on each concentrator, and local/remote networks must be swapped between the two ends.';
+    fb.className = "feedback show correct";
+    fb.innerHTML = `✅ <strong>VPN correctly configured!</strong><br><br>Key concepts: <strong>PSK</strong> = pre-shared key authentication as required. <strong>MAIN mode</strong> = more secure than Aggressive (protects identities). <strong>AES256/SHA256</strong> = strongest available algorithms. <strong>ESP</strong> = encrypts + authenticates (AH only authenticates — no encryption). <strong>DH Group 14</strong> = 2048-bit key exchange. Peer IPs must be mirrored on each concentrator, and local/remote networks must be swapped between the two ends.`;
   } else {
     const shown = issues.slice(0,5);
-    fb.className = 'feedback show incorrect';
-    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s)</strong> (showing first 5):<br>• ' + shown.join('<br>• ') + (issues.length>5 ? '<br>...' : '');
+    fb.className = "feedback show incorrect";
+    fb.innerHTML = "❌ <strong>" + issues.length + ' issue(s)</strong> (showing first 5):<br>• ' + shown.join('<br>• ') + (issues.length>5 ? '<br>...' : '');
   }
 }
 function resetVPN() {
