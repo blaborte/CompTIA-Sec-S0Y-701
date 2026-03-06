@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Security+ SY0-701 | Practice Exam C</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"><style>
   :root {
     --bg: #0b0e17;
     --bg2: #111520;
@@ -120,7 +119,6 @@
   .q-tag { font-family: var(--mono); font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: 2px; letter-spacing: 0.08em; }
   .q-tag.mc { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
   .q-tag.multi { background: rgba(255,107,43,0.1); color: var(--accent2); border: 1px solid rgba(255,107,43,0.2); }
-  .q-tag.pbq { background: rgba(0,245,160,0.1); color: var(--green); border: 1px solid rgba(0,245,160,0.2); }
 
   .question-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 2rem; margin-bottom: 1.5rem; transition: border-color 0.3s; }
   .question-card.answered-correct { border-color: rgba(0,245,160,0.3); }
@@ -173,8 +171,6 @@
   .submit-btn.finish { background: var(--green); color: var(--bg); }
   .submit-btn.finish:hover { background: #00d488; }
 
-  .results-section { display: none; }
-  .results-section.active { display: block; }
   .results-hero { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3rem 2.5rem; text-align: center; margin-bottom: 2rem; }
   .results-hero h2 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 1rem; }
   .final-score { font-family: var(--mono); font-size: 4rem; font-weight: 600; line-height: 1; margin-bottom: 0.5rem; }
@@ -196,6 +192,68 @@
   .pbq-card { background: var(--bg3); border: 1px solid rgba(0,245,160,0.2); border-radius: 6px; padding: 2rem; margin-bottom: 2rem; }
   .pbq-card h3 { font-family: var(--mono); font-size: 0.8rem; color: var(--green); letter-spacing: 0.1em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
 
+  /* Interactive PBQ styles */
+  .pbq-interactive { margin-top: 1rem; }
+  .pbq-scenario { font-size:0.82rem; color:var(--text); margin-bottom:1rem; line-height:1.7; }
+  .pbq-match-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .pbq-column-title { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.5rem; }
+  .pbq-items { display:flex; flex-direction:column; gap:0.4rem; }
+  .pbq-source-item {
+    background:var(--bg2); border:1px solid var(--border); border-radius:3px;
+    padding:0.5rem 0.75rem; font-size:0.78rem; cursor:grab; user-select:none;
+    transition:all 0.15s; font-family:var(--mono); color:var(--text);
+  }
+  .pbq-source-item:hover { border-color:var(--accent); color:var(--accent); }
+  .pbq-source-item.dragging { opacity:0.4; }
+  .pbq-source-item.used { opacity:0.35; cursor:default; border-style:dashed; }
+  .pbq-target-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; }
+  .pbq-target-label { font-size:0.78rem; color:var(--text); flex:1 1 0; }
+  .pbq-drop-zone {
+    min-height:34px; min-width:140px; flex:0 0 160px;
+    background:var(--bg2); border:1px dashed var(--border); border-radius:3px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:0.7rem; color:var(--muted);
+    transition:all 0.15s; position:relative; cursor:pointer; padding:0.2rem 0.5rem;
+  }
+  .pbq-drop-zone.drag-over { border-color:var(--accent); background:rgba(0,212,255,0.06); }
+  .pbq-drop-zone.filled { border-style:solid; color:var(--text); }
+  .pbq-drop-zone.correct { border-color:var(--green)!important; background:rgba(0,245,160,0.08)!important; color:var(--green)!important; }
+  .pbq-drop-zone.wrong { border-color:var(--red)!important; background:rgba(255,71,87,0.08)!important; color:var(--red)!important; }
+  .pbq-drop-clear { position:absolute; right:4px; top:50%; transform:translateY(-50%); font-size:0.7rem; color:var(--muted); cursor:pointer; padding:0 3px; }
+  .pbq-drop-clear:hover { color:var(--red); }
+  .pbq-check-btn { background:var(--accent2); border:none; color:white; font-family:var(--mono); font-size:0.72rem; font-weight:600; letter-spacing:0.08em; padding:0.5rem 1.4rem; cursor:pointer; border-radius:3px; transition:all 0.2s; margin-top:0.75rem; }
+  .pbq-check-btn:hover { background:#e55e22; }
+  .pbq-check-btn:disabled { opacity:0.5; cursor:default; }
+  .pbq-result { margin-top:0.75rem; padding:0.75rem 1rem; border-radius:3px; font-family:var(--mono); font-size:0.75rem; display:none; }
+  .pbq-result.show { display:block; }
+  .pbq-result.correct { background:rgba(0,245,160,0.07); border:1px solid rgba(0,245,160,0.3); color:var(--green); }
+  .pbq-result.partial { background:rgba(255,211,42,0.07); border:1px solid rgba(255,211,42,0.3); color:var(--yellow); }
+
+  /* Firewall table PBQ */
+  .pbq-fw-table { width:100%; border-collapse:collapse; font-size:0.78rem; margin-bottom:1rem; }
+  .pbq-fw-table th { background:var(--bg2); border:1px solid var(--border); padding:0.5rem 0.75rem; font-family:var(--mono); font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; text-align:left; }
+  .pbq-fw-table td { border:1px solid var(--border); padding:0.4rem 0.6rem; vertical-align:middle; }
+  .pbq-fw-select { background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:0.72rem; padding:0.3rem 0.5rem; border-radius:3px; cursor:pointer; width:100%; }
+  .pbq-fw-select:focus { outline:none; border-color:var(--accent); }
+  .pbq-fw-select.correct { border-color:var(--green); color:var(--green); }
+  .pbq-fw-select.wrong { border-color:var(--red); color:var(--red); }
+
+  /* Mode selector */
+  .mode-selector { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
+  .mode-card {
+    background:var(--bg2); border:2px solid var(--border); border-radius:6px; padding:1.25rem;
+    cursor:pointer; transition:all 0.2s; text-align:center;
+  }
+  .mode-card:hover { border-color:var(--accent); background:rgba(0,212,255,0.04); }
+  .mode-card.active { border-color:var(--accent); background:rgba(0,212,255,0.07); }
+  .mode-card-title { font-family:var(--mono); font-size:0.85rem; color:var(--text); margin-bottom:0.4rem; }
+  .mode-card-sub { font-size:0.72rem; color:var(--muted); }
+  .random-options { display:flex; gap:0.75rem; justify-content:center; margin-top:1rem; flex-wrap:wrap; }
+  .rand-btn { background:var(--bg2); border:1px solid var(--border); color:var(--muted); font-family:var(--mono); font-size:0.78rem; padding:0.5rem 1.2rem; cursor:pointer; border-radius:3px; transition:all 0.2s; }
+  .rand-btn:hover, .rand-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(0,212,255,0.06); }
+  .rand-mode-section { display:none; margin-top:1rem; }
+  .rand-mode-section.show { display:block; }
+
   @media(max-width: 768px) {
     .layout { grid-template-columns: 1fr; }
     .sidebar { display: none; }
@@ -214,16 +272,34 @@
     font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
     color: #a06fdb; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;
   }
+
   /* Domain summary */
   .domain-section { margin-top: 2rem; }
-  .domain-section h3 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; }
-  .domain-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; padding: 1rem 1.2rem; margin-bottom: 0.6rem; }
-  .domain-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+  .domain-section h3 {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+  .domain-card {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 5px;
+    padding: 1rem 1.2rem; margin-bottom: 0.6rem;
+  }
+  .domain-card-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;
+  }
   .domain-card-name { font-size: 0.82rem; color: var(--text); font-weight: 500; }
-  .domain-card-pct { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; }
-  .domain-bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-  .domain-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
-  .domain-badge { font-family: var(--mono); font-size: 0.6rem; padding: 0.15rem 0.5rem; border-radius: 2px; margin-left: 0.5rem; letter-spacing: 0.06em; }
+  .domain-card-pct {
+    font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
+  }
+  .domain-bar-track {
+    height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .domain-bar-fill {
+    height: 100%; border-radius: 3px; transition: width 0.6s ease;
+  }
+  .domain-badge {
+    font-family: var(--mono); font-size: 0.6rem; padding: 0.15rem 0.5rem;
+    border-radius: 2px; margin-left: 0.5rem; letter-spacing: 0.06em;
+  }
   .badge-strong { background: rgba(0,245,160,0.12); color: var(--green); border: 1px solid rgba(0,245,160,0.25); }
   .badge-weak { background: rgba(255,71,87,0.12); color: var(--red); border: 1px solid rgba(255,71,87,0.25); }
   .badge-ok { background: rgba(255,211,42,0.12); color: var(--yellow); border: 1px solid rgba(255,211,42,0.25); }
@@ -290,8 +366,7 @@
   }
   .theme-icon { font-size: 0.82rem; line-height: 1; }
 
-</style>
-</head>
+</style></head>
 <body>
 
 <header>
@@ -301,18 +376,14 @@
     <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
     <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
   </div>
-    <div style="display:flex;gap:0.5rem;align-items:center;">
+  <div style="display:flex;gap:0.5rem;align-items:center;">
     <button class="home-btn" onclick="goBackToIntro()" id="backToIntroBtn" style="display:none">
-      <span>←</span>
-      <span>Back</span>
+      <span>&#8592;</span><span>Back</span>
     </button>
-    <a href="index.html" class="home-btn">
-      <span>⌂</span>
-      <span>Home</span>
-    </a>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
+    <a href="index.html" class="home-btn"><span>&#8962;</span><span>Home</span></a>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode"><span class="theme-icon" id="themeIcon">&#9728;&#65039;</span><span id="themeLabel">LIGHT</span></button>
   </div>
-  </header>
+</header>
 <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
 <div class="layout">
@@ -320,7 +391,7 @@
     <div class="sidebar-title">QUESTIONS</div>
     <div class="q-grid" id="qGrid"></div>
     <div class="score-panel" id="scorePanel">
-      <div class="score-big" id="scoreBig">–</div>
+      <div class="score-big" id="scoreBig">&#8211;</div>
       <div class="score-label">SCORE</div>
       <div class="score-breakdown">
         <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
@@ -334,108 +405,208 @@
     <div id="introSection">
       <div class="intro-card">
         <h1>PRACTICE EXAM C</h1>
-        <div class="subtitle">CompTIA Security+ SY0-701 · Professor Messer</div>
+        <div class="subtitle">CompTIA Security+ SY0-701 &middot; Professor Messer</div>
         <div class="intro-stats">
-          <div class="intro-stat"><div class="n">90</div><div class="l">QUESTIONS</div></div>
-          <div class="intro-stat"><div class="n">90</div><div class="l">MINUTES</div></div>
+          <div class="intro-stat"><div class="n" id="statQ">90</div><div class="l">QUESTIONS</div></div>
+          <div class="intro-stat"><div class="n" id="statT">90</div><div class="l">MINUTES</div></div>
           <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
         </div>
-        <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem;">
-          This exam emulates the format and difficulty of the actual Security+ exam. Questions C1–C5 are performance-based questions shown for reference. Questions C6–C90 are graded multiple-choice questions.<br><br>
+        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+        <div class="mode-selector">
+          <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+            <div class="mode-card-title">&#128203; FULL EXAM</div>
+            <div class="mode-card-sub">All 90 questions &middot; 90 min timer &middot; PBQ + MCQ</div>
+          </div>
+          <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+            <div class="mode-card-title">&#127922; RANDOM QUIZ</div>
+            <div class="mode-card-sub">Pick 10, 20, or 30 randomized questions</div>
+          </div>
+        </div>
+        <div class="rand-mode-section" id="randModeSection">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+          <div class="random-options">
+            <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+            <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+            <button class="rand-btn" id="randBtn30" onclick="setRandCount(30)">30 Questions</button>
+          </div>
+        </div>
+        <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;" id="modeDescription">
+          This exam emulates the format and difficulty of the actual Security+ exam. Questions C1&#8211;C5 are interactive performance-based questions. Questions C6&#8211;C90 are graded multiple-choice.<br><br>
           <strong style="color:var(--text)">Tip:</strong> Set a 90-minute timer to simulate real exam conditions.
         </p>
-        <button class="start-btn" onclick="startExam()">START EXAM →</button>
+        <button class="start-btn" onclick="startExam()">START EXAM &#8594;</button>
       </div>
     </div>
 
     <!-- PBQ -->
     <div id="pbqSection" style="display:none">
       <div class="pbq-card">
-        <h3>⚡ PERFORMANCE-BASED QUESTIONS (C1–C5)</h3>
-        <div style="font-size:0.85rem;color:var(--text);line-height:1.8;margin-bottom:1rem;">These interactive PBQ questions require matching, drag-and-drop, or configuration tasks on the real exam. Answers are summarized below for study purposes.</div>
+        <h3>&#9889; PERFORMANCE-BASED QUESTIONS (C1&#8211;C5)</h3>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets or click to assign. Submit each question to check your work.</p>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:0.5rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">C1 — FIREWALL RULES: ALLOWED OR BLOCKED?</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Use a secure terminal to connect to 10.1.10.88 → <strong style="color:var(--green)">ALLOWED</strong> (SSH = TCP/22, Rule 1)</li>
-              <li>• Share the desktop on server 10.1.10.120 → <strong style="color:var(--red)">BLOCKED</strong> (RDP = TCP/3389, not allowed to .120)</li>
-              <li>• Perform a DNS query from 10.1.10.88 to 9.9.9.9 → <strong style="color:var(--green)">ALLOWED</strong> (DNS = UDP/53, Rule 5)</li>
-              <li>• View web pages on 10.1.10.120 → <strong style="color:var(--green)">ALLOWED</strong> (HTTP/HTTPS = TCP/80,443, Rules 2 & 3)</li>
-              <li>• Authenticate to an LDAP server at 10.1.10.61 → <strong style="color:var(--red)">BLOCKED</strong> (LDAP = TCP/389, no matching rule)</li>
-              <li>• Synchronize the clock on a server at 10.1.10.17 → <strong style="color:var(--green)">ALLOWED</strong> (NTP = UDP/123, Rule 6)</li>
-            </ul>
+        <!-- C1: Match Device to Function -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.5rem;" id="pbq-c1">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">C1 &#8212; MATCH DEVICE TO FUNCTION</div>
+          <div class="pbq-scenario">Match each security device to its correct function.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">DEVICES</div>
+                <div class="pbq-items" id="c1-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="IPS">IPS</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Proxy Server">Proxy Server</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Router">Router</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Load Balancer">Load Balancer</div>
+                  <div class="pbq-source-item" draggable="true" data-val="WAF">WAF</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">FUNCTIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row"><div class="pbq-target-label">Block SQL injection over an Internet connection</div><div class="pbq-drop-zone" data-answer="IPS" data-pbq="c1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Intercept all browser requests and cache the results</div><div class="pbq-drop-zone" data-answer="Proxy Server" data-pbq="c1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Forward packets between separate VLANs</div><div class="pbq-drop-zone" data-answer="Router" data-pbq="c1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Configure a group of redundant web servers</div><div class="pbq-drop-zone" data-answer="Load Balancer" data-pbq="c1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Evaluate the input to a browser-based application</div><div class="pbq-drop-zone" data-answer="WAF" data-pbq="c1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('c1')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-c1-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">C2 — MATCH DEVICE TO DESCRIPTION</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Block SQL injection over an Internet connection → <strong style="color:var(--green)">IPS</strong></li>
-              <li>• Intercept all browser requests and cache the results → <strong style="color:var(--green)">Proxy server</strong></li>
-              <li>• Forward packets between separate VLANs → <strong style="color:var(--green)">Router</strong></li>
-              <li>• Configure a group of redundant web servers → <strong style="color:var(--green)">Load balancer</strong></li>
-              <li>• Evaluate the input to a browser-based application → <strong style="color:var(--green)">WAF</strong></li>
-            </ul>
+        <!-- C2: Match Attack Type to Characteristic -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-c2">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">C2 &#8212; MATCH ATTACK TYPE TO CHARACTERISTIC</div>
+          <div class="pbq-scenario">Match each attack type to its correct description.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">ATTACK TYPES</div>
+                <div class="pbq-items" id="c2-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="DDoS">DDoS</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Replay">Replay</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Rootkit">Rootkit</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Brute Force">Brute Force</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Phishing">Phishing</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Injection">Injection</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">CHARACTERISTICS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row"><div class="pbq-target-label">A website stops responding to normal requests</div><div class="pbq-drop-zone" data-answer="DDoS" data-pbq="c2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Data is captured and retransmitted to a server</div><div class="pbq-drop-zone" data-answer="Replay" data-pbq="c2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Malware designed to remain hidden on a system</div><div class="pbq-drop-zone" data-answer="Rootkit" data-pbq="c2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">A list of passwords attempted with a known username</div><div class="pbq-drop-zone" data-answer="Brute Force" data-pbq="c2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Email link redirects user to a fake login page</div><div class="pbq-drop-zone" data-answer="Phishing" data-pbq="c2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Permissions circumvented by adding code as input</div><div class="pbq-drop-zone" data-answer="Injection" data-pbq="c2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('c2')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-c2-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">C3 — MATCH ATTACK TYPE TO CHARACTERISTIC</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• A website stops responding to normal requests → <strong style="color:var(--green)">DDoS</strong></li>
-              <li>• Data is captured and retransmitted to a server → <strong style="color:var(--green)">Replay</strong></li>
-              <li>• Malware designed to remain hidden on a system → <strong style="color:var(--green)">Rootkit</strong></li>
-              <li>• A list of passwords attempted with a known username → <strong style="color:var(--green)">Brute force</strong></li>
-              <li>• Email link redirects user to a site requesting login credentials → <strong style="color:var(--green)">Phishing</strong></li>
-              <li>• Permissions circumvented by adding code as application input → <strong style="color:var(--green)">Injection</strong></li>
-            </ul>
+        <!-- C3: Match Cryptography Technology -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-c3">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">C3 &#8212; MATCH CRYPTOGRAPHY TECHNOLOGY</div>
+          <div class="pbq-scenario">Match each cryptography concept to its correct description.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">CRYPTO CONCEPTS</div>
+                <div class="pbq-items" id="c3-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Key Stretching">Key Stretching</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Steganography">Steganography</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Collision">Collision</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Masking">Masking</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Asymmetric">Asymmetric</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Salting">Salting</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DESCRIPTIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row"><div class="pbq-target-label">Creates a stronger key using multiple processes</div><div class="pbq-drop-zone" data-answer="Key Stretching" data-pbq="c3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Data is hidden within another media type</div><div class="pbq-drop-zone" data-answer="Steganography" data-pbq="c3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Different inputs produce the same hash value</div><div class="pbq-drop-zone" data-answer="Collision" data-pbq="c3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Sensitive data is hidden from view</div><div class="pbq-drop-zone" data-answer="Masking" data-pbq="c3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">A different key is used for decryption than encryption</div><div class="pbq-drop-zone" data-answer="Asymmetric" data-pbq="c3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Random data added to make a unique hash</div><div class="pbq-drop-zone" data-answer="Salting" data-pbq="c3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('c3')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-c3-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">C4 — MATCH CRYPTOGRAPHY TECHNOLOGY</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Create a stronger key using multiple processes → <strong style="color:var(--green)">Key stretching</strong></li>
-              <li>• Data is hidden within another media type → <strong style="color:var(--green)">Steganography</strong></li>
-              <li>• Different inputs create the same hash → <strong style="color:var(--green)">Collision</strong></li>
-              <li>• Sensitive data is hidden from view → <strong style="color:var(--green)">Masking</strong></li>
-              <li>• A different key is used for decryption than encryption → <strong style="color:var(--green)">Asymmetric</strong></li>
-              <li>• Information is added to make a unique hash → <strong style="color:var(--green)">Salting</strong></li>
-            </ul>
+        <!-- C4: Match Security Technology to Scenario -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-c4">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">C4 &#8212; MATCH SECURITY TECHNOLOGY TO SCENARIO</div>
+          <div class="pbq-scenario">Match each security technology to the scenario it addresses.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">TECHNOLOGIES</div>
+                <div class="pbq-items" id="c4-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="VPN">VPN</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Sandboxing">Sandboxing</div>
+                  <div class="pbq-source-item" draggable="true" data-val="NGFW">NGFW</div>
+                  <div class="pbq-source-item" draggable="true" data-val="SD-WAN">SD-WAN</div>
+                  <div class="pbq-source-item" draggable="true" data-val="802.1X">802.1X</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">SCENARIOS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row"><div class="pbq-target-label">Field engineer uses corporate laptop at coffee shops</div><div class="pbq-drop-zone" data-answer="VPN" data-pbq="c4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Developers run tests before deploying an application</div><div class="pbq-drop-zone" data-answer="Sandboxing" data-pbq="c4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Prevent employees from visiting known-malicious websites</div><div class="pbq-drop-zone" data-answer="NGFW" data-pbq="c4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Directly access cloud services from all corporate locations</div><div class="pbq-drop-zone" data-answer="SD-WAN" data-pbq="c4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                  <div class="pbq-target-row"><div class="pbq-target-label">Users connecting to network must use corporate credentials</div><div class="pbq-drop-zone" data-answer="802.1X" data-pbq="c4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">&#10005;</span></div></div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('c4')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-c4-result"></div>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;">
-          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;">C5 — MATCH SECURITY TECHNOLOGY TO SCENARIO</div>
-          <div style="font-size:0.82rem;color:var(--text);line-height:1.8;">
-            <ul style="list-style:none;padding-left:1rem;">
-              <li>• Field engineer uses corporate laptop at coffee shops/hotels → <strong style="color:var(--green)">VPN</strong></li>
-              <li>• Developers run tests before deploying an application → <strong style="color:var(--green)">Sandboxing</strong></li>
-              <li>• Prevent employees from visiting known-malicious websites → <strong style="color:var(--green)">NGFW</strong></li>
-              <li>• Directly access cloud-based services from all corporate locations → <strong style="color:var(--green)">SD-WAN</strong></li>
-              <li>• Users connecting to network should use corporate credentials → <strong style="color:var(--green)">802.1X</strong></li>
-            </ul>
+        <!-- C5: Firewall Rules -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-c5">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">C5 &#8212; FIREWALL RULES: ALLOWED OR BLOCKED?</div>
+          <div class="pbq-scenario">For each firewall rule, select whether to <strong style="color:var(--green)">Allow</strong> or <strong style="color:var(--red)">Block</strong> the traffic.</div>
+          <div class="pbq-interactive">
+            <table class="pbq-fw-table">
+              <thead><tr><th>#</th><th>SOURCE</th><th>DESTINATION</th><th>PROTO</th><th>PORT</th><th>ACTION</th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:var(--mono);color:var(--muted)">1</td><td>ANY</td><td>10.1.10.88</td><td>TCP</td><td>22 (SSH)</td><td><select class="pbq-fw-select" id="fw-rule-1" data-answer="Allow"><option value="">-- Select --</option><option>Allow</option><option>Block</option></select></td></tr>
+                <tr><td style="font-family:var(--mono);color:var(--muted)">2</td><td>ANY</td><td>10.1.10.120</td><td>TCP</td><td>80 (HTTP)</td><td><select class="pbq-fw-select" id="fw-rule-2" data-answer="Allow"><option value="">-- Select --</option><option>Allow</option><option>Block</option></select></td></tr>
+                <tr><td style="font-family:var(--mono);color:var(--muted)">3</td><td>ANY</td><td>10.1.10.61</td><td>TCP</td><td>389 (LDAP)</td><td><select class="pbq-fw-select" id="fw-rule-3" data-answer="Block"><option value="">-- Select --</option><option>Allow</option><option>Block</option></select></td></tr>
+              </tbody>
+            </table>
+            <button class="pbq-check-btn" onclick="checkFirewall()">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-c5-result"></div>
           </div>
         </div>
+
       </div>
       <div style="text-align:center;margin-top:1rem;">
-        <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE →</button>
+        <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE &#8594;</button>
       </div>
     </div>
 
     <!-- MCQ -->
-    <div id="mcqSection" style="display:none">
-      <div id="questionContainer"></div>
-    </div>
+    <div id="mcqSection" style="display:none"><div id="questionContainer"></div></div>
 
     <!-- Results -->
     <div id="resultsSection" style="display:none">
       <div class="results-hero">
-        <h2>EXAM COMPLETE — PRACTICE EXAM C</h2>
+        <h2>EXAM COMPLETE &#8212; PRACTICE EXAM C</h2>
         <div class="final-score" id="finalScore">0</div>
         <div class="final-pct" id="finalPct">0/85 Correct</div>
         <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
@@ -453,8 +624,135 @@
     </div>
   </main>
 </div>
-
 <script>
+
+// ── Mode & Random Quiz State ─────────────────────────────────────────────────
+let examMode = 'full';
+let randCount = 10;
+let activeQuestions = [];
+
+function setMode(mode) {
+  examMode = mode;
+  document.getElementById('modeFullCard').classList.toggle('active', mode === 'full');
+  document.getElementById('modeRandCard').classList.toggle('active', mode === 'random');
+  document.getElementById('randModeSection').classList.toggle('show', mode === 'random');
+  if (mode === 'full') {
+    document.getElementById('statQ').textContent = '90';
+    document.getElementById('statT').textContent = '90';
+    document.getElementById('modeDescription').innerHTML = 'This exam emulates the format and difficulty of the actual Security+ exam. Questions C1\u2013C5 are interactive performance-based questions. Questions C6\u2013C90 are graded multiple-choice.<br><br><strong style="color:var(--text)">Tip:</strong> Set a 90-minute timer to simulate real exam conditions.';
+  } else { updateRandDescription(); }
+}
+
+function setRandCount(n) {
+  randCount = n;
+  ['10','20','30'].forEach(x => document.getElementById('randBtn'+x).classList.remove('active'));
+  document.getElementById('randBtn'+n).classList.add('active');
+  updateRandDescription();
+}
+
+function updateRandDescription() {
+  document.getElementById('statQ').textContent = randCount;
+  document.getElementById('statT').textContent = Math.round(randCount * 1.2);
+  document.getElementById('modeDescription').innerHTML = '<strong style="color:var(--text)">' + randCount + ' randomly selected questions</strong> from the full 85-question MCQ pool. Questions are shuffled on every attempt.';
+}
+
+// ── PBQ Drag & Drop ──────────────────────────────────────────────────────────
+let draggedValue = null;
+let draggedEl = null;
+let clickSelectMode = null;
+
+document.addEventListener('DOMContentLoaded', () => { initDragDrop(); });
+
+function shuffleSourceItems() {
+  ['c1-sources','c2-sources','c3-sources','c4-sources'].forEach(id => {
+    const c = document.getElementById(id); if (!c) return;
+    const items = [...c.children];
+    for (let i = items.length-1; i>0; i--) { const j=Math.floor(Math.random()*(i+1)); c.appendChild(items[j]); items.splice(j,1); }
+  });
+}
+
+function initDragDrop() {
+  shuffleSourceItems();
+  document.querySelectorAll('.pbq-source-item').forEach(el => {
+    el.addEventListener('dragstart', () => { draggedValue = el.dataset.val; draggedEl = el; setTimeout(() => el.classList.add('dragging'), 0); });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); draggedEl = null; });
+    el.addEventListener('click', () => handleSourceClick(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); if (draggedValue) assignToZone(zone, draggedValue); });
+  });
+}
+
+function handleSourceClick(el) {
+  if (el.classList.contains('used')) return;
+  const pbqEl = el.closest('[id^="pbq-c"]'); if (!pbqEl) return;
+  const pbq = pbqEl.id.replace('pbq-','');
+  document.querySelectorAll('#pbq-'+pbq+' .pbq-source-item').forEach(s => s.style.outline='');
+  if (clickSelectMode === el.dataset.val) { clickSelectMode = null; }
+  else { clickSelectMode = el.dataset.val; el.style.outline = '2px solid var(--accent)'; }
+}
+
+function handleDropZoneClick(zone) {
+  if (zone.classList.contains('correct') || zone.classList.contains('wrong')) return;
+  if (clickSelectMode) { assignToZone(zone, clickSelectMode); document.querySelectorAll('.pbq-source-item').forEach(s => s.style.outline=''); clickSelectMode = null; }
+}
+
+function assignToZone(zone, val) {
+  const old = zone.dataset.current;
+  if (old) { const src = document.querySelector('.pbq-source-item[data-val="'+old+'"]'); if (src) src.classList.remove('used'); }
+  const src = document.querySelector('.pbq-source-item[data-val="'+val+'"]');
+  if (src) src.classList.add('used');
+  zone.dataset.current = val;
+  zone.classList.add('filled');
+  zone.childNodes[0].textContent = val;
+  const clear = zone.querySelector('.pbq-drop-clear');
+  if (clear) clear.style.display = 'block';
+}
+
+function clearDrop(e, clearBtn) {
+  e.stopPropagation();
+  const zone = clearBtn.parentElement;
+  const val = zone.dataset.current;
+  if (val) { const src = document.querySelector('.pbq-source-item[data-val="'+val+'"]'); if (src) src.classList.remove('used'); }
+  zone.dataset.current = '';
+  zone.classList.remove('filled');
+  zone.childNodes[0].textContent = 'Drop here';
+  clearBtn.style.display = 'none';
+}
+
+function checkPBQ(id) {
+  const zones = document.querySelectorAll('.pbq-drop-zone[data-pbq="'+id+'"]');
+  let correct = 0, total = zones.length;
+  zones.forEach(zone => {
+    const ans = zone.dataset.answer, cur = zone.dataset.current;
+    if (!cur) return;
+    zone.classList.add(cur === ans ? 'correct' : 'wrong');
+    if (cur === ans) correct++;
+  });
+  const result = document.getElementById('pbq-'+id+'-result');
+  result.className = correct === total && total > 0 ? 'pbq-result show correct' : 'pbq-result show partial';
+  result.textContent = correct === total && total > 0 ? '\u2713 PERFECT \u2014 All '+total+' matched correctly!' : correct+'/'+total+' correct \u2014 Review highlighted zones.';
+  document.querySelector('#pbq-'+id+' .pbq-check-btn').disabled = true;
+}
+
+function checkFirewall() {
+  const rules = [{id:'fw-rule-1',answer:'Allow'},{id:'fw-rule-2',answer:'Allow'},{id:'fw-rule-3',answer:'Block'}];
+  let correct = 0;
+  rules.forEach(r => {
+    const sel = document.getElementById(r.id);
+    if (sel.value === r.answer) { sel.classList.add('correct'); correct++; }
+    else if (sel.value) { sel.classList.add('wrong'); }
+    sel.disabled = true;
+  });
+  const result = document.getElementById('pbq-c5-result');
+  result.className = correct === 3 ? 'pbq-result show correct' : 'pbq-result show partial';
+  result.textContent = correct === 3 ? '\u2713 PERFECT \u2014 All 3 firewall rules configured correctly!' : correct+'/3 correct \u2014 Review highlighted rules.';
+  document.querySelector('#pbq-c5 .pbq-check-btn').disabled = true;
+}
+
+// ── Questions Data ──────────────────────────────────────────────────────────
 const questions = [
   {id:'C6',domain:'PM',explanation:'Data retention policies set the required duration for keeping records. A daily archive backup specifically for applicable records is the best way to meet a 7-year legal retention requirement.',type:'mc',
    text:'A finance company is legally required to maintain seven years of tax records for all of their customers. Which of the following would be the <strong>BEST</strong> way to implement this requirement?',
@@ -798,11 +1096,11 @@ const questions = [
    answer:[2]}
 ];
 
-// ─── State ──────────────────────────────────────────────────────
+
 const state = {
   current: 0,
-  userAnswers: new Array(questions.length).fill(null),
-  submitted: new Array(questions.length).fill(false),
+  userAnswers: [],
+  submitted: [],
   timerSeconds: 90 * 60,
   timerInterval: null,
   timerRunning: false
@@ -837,7 +1135,7 @@ function toggleTimer() {
 function buildGrid() {
   const grid = document.getElementById('qGrid');
   grid.innerHTML = '';
-  questions.forEach((q, i) => {
+  activeQuestions.forEach((q, i) => {
     const dot = document.createElement('div');
     dot.className = 'q-dot';
     dot.textContent = i + 1;
@@ -854,22 +1152,22 @@ function updateGrid() {
     if (i === state.current) dot.classList.add('active');
     if (state.submitted[i]) {
       const ua = state.userAnswers[i] || [];
-      dot.classList.add(arrEq(ua.slice().sort(), questions[i].answer.slice().sort()) ? 'correct' : 'wrong');
+      dot.classList.add(arrEq(ua.slice().sort(), activeQuestions[i].answer.slice().sort()) ? 'correct' : 'wrong');
     } else if (state.userAnswers[i] && state.userAnswers[i].length > 0) {
       dot.classList.add('answered');
     }
   });
   const answered = state.userAnswers.filter(a => a && a.length > 0).length;
-  document.getElementById('progressBar').style.width = `${(answered / questions.length) * 100}%`;
+  document.getElementById('progressBar').style.width = `${(answered / activeQuestions.length) * 100}%`;
 }
 
 function arrEq(a, b) { return a.length === b.length && a.every((v,i) => v === b[i]); }
 
 function renderQuestion(idx) {
-  const q = questions[idx];
+  const q = activeQuestions[idx];
   const ua = state.userAnswers[idx] || [];
   const submitted = state.submitted[idx];
-  const letters = ['A','B','C','D','E','F'];
+  const letters = ['A','B','C','D','E','F','G'];
   const isMulti = q.type === 'multi';
   const tag = isMulti ? `<span class="q-tag multi">MULTI-SELECT</span>` : `<span class="q-tag mc">MULTIPLE CHOICE</span>`;
 
@@ -905,10 +1203,10 @@ function renderQuestion(idx) {
     </div>`;
   }
 
-  const isLast = idx === questions.length - 1;
+  const isLast = idx === activeQuestions.length - 1;
   document.getElementById('questionContainer').innerHTML = `
     <div class="q-header">
-      <span class="q-num">QUESTION ${idx+1} OF ${questions.length} · ${q.id}</span>${tag}
+      <span class="q-num">QUESTION ${idx+1} OF ${activeQuestions.length} · ${q.id}</span>${tag}
     </div>
     <div class="question-card ${submitted?(arrEq((ua||[]).slice().sort(),q.answer.slice().sort())?'answered-correct':'answered-wrong'):''}">
       <div class="question-text">${q.text}</div>
@@ -929,7 +1227,7 @@ function renderQuestion(idx) {
 function selectOption(oi) {
   const idx = state.current;
   if (state.submitted[idx]) return;
-  const q = questions[idx];
+  const q = activeQuestions[idx];
   let ua = state.userAnswers[idx] ? [...state.userAnswers[idx]] : [];
   if (q.type === 'multi') {
     ua = ua.includes(oi) ? ua.filter(x => x !== oi) : [...ua, oi];
@@ -947,7 +1245,7 @@ function submitAnswer() {
 }
 
 function goTo(idx) {
-  if (idx < 0 || idx >= questions.length) return;
+  if (idx < 0 || idx >= activeQuestions.length) return;
   state.current = idx;
   renderQuestion(idx);
 }
@@ -959,7 +1257,7 @@ function updateScorePanel() {
   let correct = 0;
   state.submitted.forEach((s, i) => {
     if (!s) return;
-    if (arrEq((state.userAnswers[i]||[]).slice().sort(), questions[i].answer.slice().sort())) correct++;
+    if (arrEq((state.userAnswers[i]||[]).slice().sort(), activeQuestions[i].answer.slice().sort())) correct++;
   });
   document.getElementById('scoreBig').textContent = `${Math.round((correct/done)*100)}%`;
   document.getElementById('scoreCorrect').textContent = correct;
@@ -967,33 +1265,70 @@ function updateScorePanel() {
 }
 
 function startExam() {
+  if (examMode === 'random') {
+    // Shuffle and pick N questions
+    const pool = [...questions];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    activeQuestions = pool.slice(0, randCount);
+    const mins = Math.round(randCount * 1.2);
+    state.timerSeconds = mins * 60;
+    updateTimerDisplay();
+  } else {
+    activeQuestions = questions;
+    state.timerSeconds = 90 * 60;
+    updateTimerDisplay();
+  }
+  state.userAnswers = new Array(activeQuestions.length).fill(null);
+  state.submitted = new Array(activeQuestions.length).fill(false);
+  state.current = 0;
+
   document.getElementById('introSection').style.display = 'none';
-  document.getElementById('pbqSection').style.display = 'block';
+  if (examMode === 'full') {
+    document.getElementById('pbqSection').style.display = 'block';
+  } else {
+    document.getElementById('pbqSection').style.display = 'none';
+    document.getElementById('mcqSection').style.display = 'block';
+    buildGrid();
+    renderQuestion(0);
+  }
   document.getElementById('finishBtn').style.display = 'block';
   document.getElementById('backToIntroBtn').style.display = 'flex';
-  buildGrid();
   startTimer();
 }
 
 function goBackToIntro() {
+  // Stop timer
   if (state.timerInterval) clearInterval(state.timerInterval);
-  state.userAnswers = new Array(questions.length).fill(null);
-  state.submitted = new Array(questions.length).fill(false);
+  state.timerRunning = false;
+  // Reset state
+  state.userAnswers = [];
+  state.submitted = [];
   state.current = 0;
+  activeQuestions = [];
+  // Hide all sections, show intro
   document.getElementById('pbqSection').style.display = 'none';
   document.getElementById('mcqSection').style.display = 'none';
   document.getElementById('resultsSection').style.display = 'none';
   document.getElementById('introSection').style.display = 'block';
   document.getElementById('finishBtn').style.display = 'none';
   document.getElementById('backToIntroBtn').style.display = 'none';
-  state.timerSeconds = 90 * 60;
+  document.getElementById('timerBtn').style.display = 'inline-block';
+  // Reset timer display
+  const mins = examMode === 'random' ? Math.round(randCount * 1.2) : 90;
+  state.timerSeconds = mins * 60;
   updateTimerDisplay();
 }
 
 function showMCQ() {
   document.getElementById('pbqSection').style.display = 'none';
   document.getElementById('mcqSection').style.display = 'block';
+  state.userAnswers = new Array(activeQuestions.length).fill(null);
+  state.submitted = new Array(activeQuestions.length).fill(false);
   state.current = 0;
+  buildGrid();
   renderQuestion(0);
 }
 
@@ -1006,17 +1341,17 @@ function showResults() {
   document.getElementById('resultsSection').style.display = 'block';
 
   let correct = 0, wrong = 0, skipped = 0;
-  questions.forEach((q, i) => {
+  activeQuestions.forEach((q, i) => {
     if (!state.submitted[i] || !(state.userAnswers[i]||[]).length) { skipped++; return; }
     if (arrEq((state.userAnswers[i]||[]).slice().sort(), q.answer.slice().sort())) correct++;
     else wrong++;
   });
 
-  const pct = Math.round((correct / questions.length) * 100);
+  const pct = Math.round((correct / activeQuestions.length) * 100);
   const pass = pct >= 70;
   document.getElementById('finalScore').textContent = `${pct}%`;
   document.getElementById('finalScore').className = `final-score ${pass ? 'pass' : 'fail'}`;
-  document.getElementById('finalPct').textContent = `${correct}/${questions.length} Correct`;
+  document.getElementById('finalPct').textContent = `${correct}/${activeQuestions.length} Correct`;
   document.getElementById('passFailMsg').innerHTML = pass
     ? `<span style="color:var(--green)">✓ PASS — You met the 70% threshold!</span>`
     : `<span style="color:var(--red)">✗ BELOW PASSING — Review your weak areas and try again.</span>`;
@@ -1028,44 +1363,64 @@ function showResults() {
 }
 
 function renderDomainSummary() {
-  const el = document.getElementById('domainSummary');
-  if (!el) return;
   const domainMeta = {
-    GRC:'1.0 General Security Concepts',
-    TVM:'2.0 Threats, Vulnerabilities & Mitigations',
-    SecArch:'3.0 Security Architecture',
-    SecOps:'4.0 Security Operations',
-    PM:'5.0 Security Program Management & Oversight'
+    GRC:     '1.0 General Security Concepts',
+    TVM:     '2.0 Threats, Vulnerabilities & Mitigations',
+    SecArch: '3.0 Security Architecture',
+    SecOps:  '4.0 Security Operations',
+    PM:      '5.0 Security Program Management & Oversight'
   };
   const stats = {};
-  Object.keys(domainMeta).forEach(d => { stats[d] = {total:0,correct:0,wrong:0,skipped:0}; });
-  questions.forEach((q,i) => {
-    const d = q.domain; if (!stats[d]) return;
+  Object.keys(domainMeta).forEach(d => { stats[d] = {total:0, correct:0, wrong:0, skipped:0}; });
+
+  activeQuestions.forEach((q, i) => {
+    const d = q.domain;
+    if (!stats[d]) return;
     stats[d].total++;
-    if (!state.submitted[i] || !(state.userAnswers[i]||[]).length) stats[d].skipped++;
-    else if (arrEq((state.userAnswers[i]||[]).slice().sort(), q.answer.slice().sort())) stats[d].correct++;
-    else stats[d].wrong++;
+    if (!state.submitted[i] || !(state.userAnswers[i]||[]).length) {
+      stats[d].skipped++;
+    } else if (arrEq((state.userAnswers[i]||[]).slice().sort(), q.answer.slice().sort())) {
+      stats[d].correct++;
+    } else {
+      stats[d].wrong++;
+    }
   });
+
+  const answered = Object.values(stats).filter(s => s.total > 0);
+  if (!answered.length) return;
+
+  // Sort by pct desc
   const sorted = Object.entries(domainMeta)
-    .map(([key,name]) => ({key,name,...stats[key]}))
+    .map(([key, name]) => ({key, name, ...stats[key]}))
     .filter(d => d.total > 0)
-    .map(d => ({...d, pct: d.total ? Math.round((d.correct/d.total)*100) : 0}))
+    .map(d => ({ ...d, pct: d.total ? Math.round((d.correct / d.total) * 100) : 0 }))
     .sort((a,b) => b.pct - a.pct);
+
+  const maxPct = Math.max(...sorted.map(d => d.pct));
+  const minPct = Math.min(...sorted.map(d => d.pct));
+
   let html = '<h3>DOMAIN PERFORMANCE BREAKDOWN</h3>';
-  sorted.forEach(d => {
-    let badge='<span class="domain-badge badge-ok">DEVELOPING</span>', barColor='var(--yellow)';
-    if (d.pct >= 80) { badge='<span class="domain-badge badge-strong">STRENGTH</span>'; barColor='var(--green)'; }
-    else if (d.pct < 60) { badge='<span class="domain-badge badge-weak">NEEDS WORK</span>'; barColor='var(--red)'; }
+
+  sorted.forEach((d, i) => {
+    let badgeHtml = '';
+    let barColor = 'var(--yellow)';
+    if (d.pct >= 80) { badgeHtml = '<span class="domain-badge badge-strong">STRENGTH</span>'; barColor = 'var(--green)'; }
+    else if (d.pct < 60) { badgeHtml = '<span class="domain-badge badge-weak">NEEDS WORK</span>'; barColor = 'var(--red)'; }
+    else { badgeHtml = '<span class="domain-badge badge-ok">DEVELOPING</span>'; barColor = 'var(--yellow)'; }
+
     html += `<div class="domain-card">
       <div class="domain-card-header">
-        <span class="domain-card-name">${d.name}${badge}</span>
+        <span class="domain-card-name">${d.name}${badgeHtml}</span>
         <span class="domain-card-pct" style="color:${barColor}">${d.pct}%</span>
       </div>
-      <div class="domain-bar-track"><div class="domain-bar-fill" style="width:${d.pct}%;background:${barColor}"></div></div>
-      <div class="domain-detail">${d.correct}/${d.total} correct${d.skipped?' · '+d.skipped+' skipped':''}</div>
+      <div class="domain-bar-track">
+        <div class="domain-bar-fill" style="width:${d.pct}%;background:${barColor}"></div>
+      </div>
+      <div class="domain-detail">${d.correct}/${d.total} correct${d.skipped ? ' · ' + d.skipped + ' skipped' : ''}</div>
     </div>`;
   });
-  el.innerHTML = html;
+
+  document.getElementById('domainSummary').innerHTML = html;
 }
 
 function reviewAnswers() {
@@ -1076,7 +1431,6 @@ function reviewAnswers() {
   renderQuestion(0);
 }
 </script>
-
 <script>
 /* ── THEME TOGGLE ── */
 function toggleTheme() {
@@ -1104,6 +1458,5 @@ document.addEventListener('DOMContentLoaded', function() {
   applyTheme(t);
 });
 </script>
-
 </body>
 </html>
