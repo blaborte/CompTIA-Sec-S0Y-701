@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<script>
+(function(){
+  try {
+    var t = localStorage.getItem('bl-theme');
+    if (t === 'light' || t === 'dark') {
+      document.documentElement.setAttribute('data-theme', t);
+    }
+  } catch(e) {}
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentations | Security+ SY0-701</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --purple: #b47aff;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  [data-theme="light"] {
+    --bg:     #eef1f8;
+    --bg2:    #ffffff;
+    --bg3:    #dde2f0;
+    --border: #c4ccdf;
+    --accent: #006699;
+    --accent2:#cc4400;
+    --green:  #007a52;
+    --red:    #c0172e;
+    --yellow: #8a6200;
+    --purple: #6422aa;
+    --text:   #111827;
+    --muted:  #556080;
+  }
+
+  .theme-switching *, .theme-switching *::before, .theme-switching *::after {
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+                color 0.15s ease, box-shadow 0.2s ease !important;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.07em;
+    text-decoration: none;
+    transition: border-color 0.18s, color 0.18s;
+  }
+
+  .back-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.28rem 0.8rem 0.28rem 0.55rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: border-color 0.18s, color 0.18s, background 0.18s;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg2);
+  }
+
+  .theme-icon { font-size: 0.85rem; line-height: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 200px;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-icon {
+    font-size: 2.8rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .hero h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-sub {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-stats {
+    display: inline-flex;
+    gap: 2rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 2rem;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat-val {
+    font-family: var(--mono);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--accent);
+    display: block;
+  }
+
+  .hero-stat-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── MAIN ── */
+  main {
+    flex: 1;
+    padding: 2.5rem 2rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 0.25rem;
+  }
+
+  .filter-btn {
+    padding: 0.4rem 1rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: rgba(0, 212, 255, 0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .section-header:first-of-type {
+    margin-top: 0;
+  }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-count {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    background: var(--bg3);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .ppt-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ppt-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--card-accent, var(--accent));
+    opacity: 0.6;
+    transition: opacity 0.25s;
+  }
+
+  .ppt-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .ppt-card:hover::before {
+    opacity: 1;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .card-num {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card-domain-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+
+  .card-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid var(--card-accent, var(--accent));
+    border-radius: 6px;
+    color: var(--card-accent, var(--accent));
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .download-btn:hover {
+    background: rgba(0, 212, 255, 0.18);
+    transform: translateY(-1px);
+  }
+
+  .preview-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    justify-content: center;
+  }
+
+  .preview-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* Domain color themes */
+  .domain-threats    { --card-accent: #ff4757; }
+  .domain-crypto     { --card-accent: #b47aff; }
+  .domain-network    { --card-accent: #00d4ff; }
+  .domain-identity   { --card-accent: #00f5a0; }
+  .domain-governance { --card-accent: #ffd32a; }
+
+  .tag-threats    { color: #ff4757; border-color: rgba(255,71,87,0.35); background: rgba(255,71,87,0.08); }
+  .tag-crypto     { color: #b47aff; border-color: rgba(180,122,255,0.35); background: rgba(180,122,255,0.08); }
+  .tag-network    { color: #00d4ff; border-color: rgba(0,212,255,0.35); background: rgba(0,212,255,0.08); }
+  .tag-identity   { color: #00f5a0; border-color: rgba(0,245,160,0.35); background: rgba(0,245,160,0.08); }
+  .tag-governance { color: #ffd32a; border-color: rgba(255,211,42,0.35); background: rgba(255,211,42,0.08); }
+
+  /* ── NOTICE BANNER ── */
+  .notice-banner {
+    background: rgba(0, 212, 255, 0.06);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .notice-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .notice-text strong { color: var(--accent); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    display: none;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    header { padding: 0 1rem; }
+    .hero { padding: 2rem 1rem 1.75rem; }
+    .hero h1 { font-size: 1.7rem; }
+    main { padding: 1.5rem 1rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.25rem; padding: 0.75rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SECURITY+ <span>SY0-701</span> PRESENTATIONS</div>
+  <div class="header-right">
+    <a href="index.html" class="back-btn">← BACK</a>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark mode">
+      <span class="theme-icon" id="themeIcon">☀️</span>
+      <span id="themeLabel">LIGHT</span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-icon">📊</span>
+  <h1>Study Presentations</h1>
+  <p class="hero-sub">COMPTIA SECURITY+ SY0-701 · BL CYBERSECURITY SERIES</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-val" id="totalSlides">24</span>
+      <span class="hero-stat-label">Slide Decks</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-val">5</span>
+      <span class="hero-stat-label">Domains</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-val">.PPTX</span>
+      <span class="hero-stat-label">Format</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <div class="container">
+
+    <div class="notice-banner">
+      <span class="notice-icon">ℹ️</span>
+      <div class="notice-text">
+        <strong>How to use:</strong> Download any slide deck and open it in PowerPoint or Google Slides.
+        All presentations follow the BL dark cybersecurity theme — navy, cyan, and purple.
+        Use them alongside your practice tests and flashcards for full domain coverage.
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" data-filter="all">All Decks</button>
+      <button class="filter-btn" data-filter="threats">Threats &amp; Attacks</button>
+      <button class="filter-btn" data-filter="crypto">Cryptography &amp; PKI</button>
+      <button class="filter-btn" data-filter="network">Network Security</button>
+      <button class="filter-btn" data-filter="identity">Identity &amp; Access</button>
+      <button class="filter-btn" data-filter="governance">Governance &amp; Risk</button>
+    </div>
+
+    <!-- ─── SECTION: Threats & Attacks ─── -->
+    <div class="section-header" data-section="threats">
+      <span class="section-title">🔴 Threats &amp; Attacks</span>
+      <div class="section-line"></div>
+      <span class="section-count">7 decks</span>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+
+      <div class="ppt-card domain-threats" data-domain="threats">
+        <div class="card-top">
+          <span class="card-num">SEC-01</span>
+          <span class="card-domain-tag tag-threats">Threats</span>
+        </div>
+        <div class="card-title">Security Fundamentals</div>
+        <div class="card-desc">Core security concepts including the CIA Triad, AAA framework, security controls (preventive, detective, corrective), and foundational terminology every Security+ candidate must know.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 1 · 2 · 3 · 4 · 5</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-01-Security-Fundamentals.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-threats" data-domain="threats">
+        <div class="card-top">
+          <span class="card-num">SEC-02</span>
+          <span class="card-domain-tag tag-threats">Threats</span>
+        </div>
+        <div class="card-title">Threat Actors &amp; Motivations</div>
+        <div class="card-desc">Profiles of nation-state actors, cybercriminals, hacktivists, insiders, script kiddies, and APTs. Covers attributes, motivations, attack vectors, and indicators of compromise for each type.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 2</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-02-Threat-Actors.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-threats" data-domain="threats">
+        <div class="card-top">
+          <span class="card-num">SEC-03</span>
+          <span class="card-domain-tag tag-threats">Threats</span>
+        </div>
+        <div class="card-title">Malware Types &amp; Analysis</div>
+        <div class="card-desc">Complete breakdown of viruses, worms, trojans, ransomware, spyware, rootkits, keyloggers, and fileless malware. Includes infection vectors, behavioral indicators, and detection techniques.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 2</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-03-Malware-Types.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-threats" data-domain="threats">
+        <div class="card-top">
+          <span class="card-num">SEC-04</span>
+          <span class="card-domain-tag tag-threats">Threats</span>
+        </div>
+        <div class="card-title">Social Engineering Attacks</div>
+        <div class="card-desc">Phishing, spear phishing, whaling, vishing, smishing, pretexting, baiting, tailgating, and business email compromise. Includes psychological principles attackers exploit and countermeasures.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 2</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-04-Social-Engineering.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-threats" data-domain="threats">
+        <div class="card-top">
+          <span class="card-num">SEC-05</span>
+          <span class="card-domain-tag tag-threats">Threats</span>
+        </div>
+        <div class="card-title">Vulnerability Scanning &amp; CVSS</div>
+        <div class="card-desc">Active vs passive scanning, credentialed vs non-credentialed scans, CVSS scoring (base, temporal, environmental), vulnerability databases (CVE, NVD), and remediation prioritization strategies.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 4</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-05-Vulnerability-Scanning.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-threats" data-domain="threats">
+        <div class="card-top">
+          <span class="card-num">SEC-06</span>
+          <span class="card-domain-tag tag-threats">Threats</span>
+        </div>
+        <div class="card-title">Penetration Testing</div>
+        <div class="card-desc">Pen test types (black/white/grey box), phases (recon, scanning, exploitation, post-exploitation, reporting), tools (Metasploit, Nmap, Burp Suite), rules of engagement, and bug bounty programs.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 4</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-06-Penetration-Testing.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-threats" data-domain="threats">
+        <div class="card-top">
+          <span class="card-num">SEC-07</span>
+          <span class="card-domain-tag tag-threats">Threats</span>
+        </div>
+        <div class="card-title">Digital Forensics &amp; Incident Response</div>
+        <div class="card-desc">IR lifecycle (preparation, identification, containment, eradication, recovery, lessons learned), forensic procedures, chain of custody, evidence handling, and DFIR tools and methodologies.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 4</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-07-Digital-Forensics.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── SECTION: Cryptography & PKI ─── -->
+    <div class="section-header" data-section="crypto">
+      <span class="section-title">🟣 Cryptography &amp; PKI</span>
+      <div class="section-line"></div>
+      <span class="section-count">5 decks</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <div class="ppt-card domain-crypto" data-domain="crypto">
+        <div class="card-top">
+          <span class="card-num">SEC-08</span>
+          <span class="card-domain-tag tag-crypto">Cryptography</span>
+        </div>
+        <div class="card-title">Cryptography Fundamentals</div>
+        <div class="card-desc">Symmetric vs asymmetric encryption, hashing, digital signatures, key exchange (Diffie-Hellman), encryption algorithms (AES, RSA, ECC), and use cases for each cryptographic type.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 1</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-08-Cryptography-Fundamentals.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-crypto" data-domain="crypto">
+        <div class="card-top">
+          <span class="card-num">SEC-09</span>
+          <span class="card-domain-tag tag-crypto">Cryptography</span>
+        </div>
+        <div class="card-title">PKI &amp; Certificate Management</div>
+        <div class="card-desc">Public Key Infrastructure components: CAs, RAs, CRL, OCSP, certificate types (DV, OV, EV, wildcard), certificate lifecycle, trust hierarchies, pinning, and common PKI attack vectors.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 1</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-09-PKI-Certificates.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-crypto" data-domain="crypto">
+        <div class="card-top">
+          <span class="card-num">SEC-10</span>
+          <span class="card-domain-tag tag-crypto">Cryptography</span>
+        </div>
+        <div class="card-title">Hashing &amp; Integrity</div>
+        <div class="card-desc">Hash functions (MD5, SHA-1, SHA-256, SHA-3), salting, key stretching (PBKDF2, bcrypt), HMAC, digital signatures for integrity, collision attacks, and real-world integrity verification scenarios.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 1</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-10-Hashing-Integrity.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-crypto" data-domain="crypto">
+        <div class="card-top">
+          <span class="card-num">SEC-11</span>
+          <span class="card-domain-tag tag-crypto">Cryptography</span>
+        </div>
+        <div class="card-title">Application Security</div>
+        <div class="card-desc">OWASP Top 10, injection attacks, XSS, CSRF, buffer overflows, secure coding practices, input validation, SDLC security phases, SAST vs DAST tools, and DevSecOps integration.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 2 · 4</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-11-Application-Security.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-crypto" data-domain="crypto">
+        <div class="card-top">
+          <span class="card-num">SEC-12</span>
+          <span class="card-domain-tag tag-crypto">Cryptography</span>
+        </div>
+        <div class="card-title">Wireless &amp; Mobile Security</div>
+        <div class="card-desc">Wi-Fi security standards (WEP, WPA2, WPA3), 802.1X, EAP methods, wireless attacks (evil twin, deauth, KRACK), MDM/MAM, BYOD policies, and mobile application threats.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 3</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-12-Wireless-Mobile-Security.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── SECTION: Network Security ─── -->
+    <div class="section-header" data-section="network">
+      <span class="section-title">🔵 Network Security</span>
+      <div class="section-line"></div>
+      <span class="section-count">5 decks</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <div class="ppt-card domain-network" data-domain="network">
+        <div class="card-top">
+          <span class="card-num">SEC-13</span>
+          <span class="card-domain-tag tag-network">Network</span>
+        </div>
+        <div class="card-title">Network Security Basics</div>
+        <div class="card-desc">OSI model security implications, TCP/IP fundamentals, firewall types (packet filter, stateful, NGFW, WAF), network zones (DMZ, intranet), VLANs, and defense-in-depth network architecture.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 3</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-13-Network-Security-Basics.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-network" data-domain="network">
+        <div class="card-top">
+          <span class="card-num">SEC-14</span>
+          <span class="card-domain-tag tag-network">Network</span>
+        </div>
+        <div class="card-title">Network Protocols &amp; Ports</div>
+        <div class="card-desc">Critical Security+ protocols and their ports — DNS, DHCP, HTTP/S, FTP/SFTP, SSH, RDP, SMTP, LDAP/LDAPS, SNMP, Kerberos, RADIUS, TACACS+, and protocol-specific attack vulnerabilities.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 3</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-14-Network-Protocols-Ports.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-network" data-domain="network">
+        <div class="card-top">
+          <span class="card-num">SEC-15</span>
+          <span class="card-domain-tag tag-network">Network</span>
+        </div>
+        <div class="card-title">VPN &amp; Remote Access</div>
+        <div class="card-desc">VPN types (site-to-site, remote access, split tunnel vs full tunnel), IPSec (AH, ESP, IKE), SSL/TLS VPN, SSTP, L2TP, SD-WAN, zero-trust network access, and secure remote work architectures.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 3</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-15-VPN-Remote-Access.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-network" data-domain="network">
+        <div class="card-top">
+          <span class="card-num">SEC-16</span>
+          <span class="card-domain-tag tag-network">Network</span>
+        </div>
+        <div class="card-title">Cloud Security</div>
+        <div class="card-desc">Cloud service models (IaaS, PaaS, SaaS), deployment models (public, private, hybrid, community), shared responsibility matrix, CASB, cloud-native security controls, and serverless/container security.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 3</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-16-Cloud-Security.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-network" data-domain="network">
+        <div class="card-top">
+          <span class="card-num">SEC-17</span>
+          <span class="card-domain-tag tag-network">Network</span>
+        </div>
+        <div class="card-title">Monitoring &amp; SIEM</div>
+        <div class="card-desc">Security monitoring with SIEM, SOAR, log management, IDS vs IPS (signature-based vs anomaly-based), network traffic analysis, NetFlow, threat hunting, and alert triage processes.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 4</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-17-Monitoring-SIEM.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── SECTION: Identity & Access ─── -->
+    <div class="section-header" data-section="identity">
+      <span class="section-title">🟢 Identity &amp; Access Management</span>
+      <div class="section-line"></div>
+      <span class="section-count">4 decks</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <div class="ppt-card domain-identity" data-domain="identity">
+        <div class="card-top">
+          <span class="card-num">SEC-18</span>
+          <span class="card-domain-tag tag-identity">Identity</span>
+        </div>
+        <div class="card-title">Authentication &amp; Authorization</div>
+        <div class="card-desc">Authentication factors (something you know/have/are/somewhere), MFA, SSO, federation (SAML, OAuth, OIDC), directory services (LDAP, Active Directory), and authorization models (RBAC, ABAC, MAC, DAC).</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 5</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-18-Authentication-Authorization.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-identity" data-domain="identity">
+        <div class="card-top">
+          <span class="card-num">SEC-19</span>
+          <span class="card-domain-tag tag-identity">Identity</span>
+        </div>
+        <div class="card-title">Identity &amp; Access Management</div>
+        <div class="card-desc">IAM lifecycle (provisioning, de-provisioning), privileged access management (PAM), least privilege, separation of duties, identity governance, account types, password policies, and MFA implementations.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 5</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-19-IAM.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-identity" data-domain="identity">
+        <div class="card-top">
+          <span class="card-num">SEC-20</span>
+          <span class="card-domain-tag tag-identity">Identity</span>
+        </div>
+        <div class="card-title">Endpoint &amp; Host Security</div>
+        <div class="card-desc">Host hardening, OS security baselines, patch management, EDR vs AV, host-based firewalls and IPS, data loss prevention (DLP), application whitelisting/blacklisting, and secure boot mechanisms.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 3 · 4</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-20-Endpoint-Host-Security.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-identity" data-domain="identity">
+        <div class="card-top">
+          <span class="card-num">SEC-21</span>
+          <span class="card-domain-tag tag-identity">Identity</span>
+        </div>
+        <div class="card-title">Zero Trust Architecture</div>
+        <div class="card-desc">Zero trust principles (never trust, always verify), microsegmentation, identity-centric security, ZTNA vs VPN, software-defined perimeter, continuous verification, and zero-trust implementation frameworks.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 3 · 5</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-21-Zero-Trust.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── SECTION: Governance & Risk ─── -->
+    <div class="section-header" data-section="governance">
+      <span class="section-title">🟡 Governance, Risk &amp; Compliance</span>
+      <div class="section-line"></div>
+      <span class="section-count">3 decks</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <div class="ppt-card domain-governance" data-domain="governance">
+        <div class="card-top">
+          <span class="card-num">SEC-22</span>
+          <span class="card-domain-tag tag-governance">Governance</span>
+        </div>
+        <div class="card-title">Security Governance &amp; Policies</div>
+        <div class="card-desc">Security policies, standards, procedures, guidelines, security frameworks (NIST CSF, ISO 27001, CIS Controls), regulatory compliance (HIPAA, PCI-DSS, GDPR, SOX), and security program management.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 5</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-22-Security-Governance.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-governance" data-domain="governance">
+        <div class="card-top">
+          <span class="card-num">SEC-23</span>
+          <span class="card-domain-tag tag-governance">Governance</span>
+        </div>
+        <div class="card-title">Risk Management</div>
+        <div class="card-desc">Risk types (inherent, residual, control), risk analysis (qualitative vs quantitative), risk treatments (accept, avoid, mitigate, transfer), BIA, BCP, DRP, RTO/RPO, and third-party risk management.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 5</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-23-Risk-Management.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+      <div class="ppt-card domain-governance" data-domain="governance">
+        <div class="card-top">
+          <span class="card-num">SEC-24</span>
+          <span class="card-domain-tag tag-governance">Governance</span>
+        </div>
+        <div class="card-title">Data Privacy &amp; Protection</div>
+        <div class="card-desc">Data classification, data states (at rest, in transit, in use), data handling policies, DLP strategies, privacy regulations (GDPR, CCPA), data sovereignty, retention schedules, and secure data destruction methods.</div>
+        <div class="card-meta">
+          <span class="card-meta-item">📑 Domain 5</span>
+        </div>
+        <div class="card-actions">
+          <a href="slides/SEC-24-Data-Privacy-Protection.pptx" class="download-btn" download>⬇ Download PPTX</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="empty-state" id="emptyState">
+      No presentations found for that filter.
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>CompTIA Security+ SY0-701 · BL Cybersecurity Series · Presentations Library</p>
+  <p style="margin-top:0.5rem;font-size:0.8rem;">
+    <a href="index.html" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);">← Back to Study Hub</a>
+  </p>
+</footer>
+
+<script>
+/* ── Theme Toggle ── */
+function toggleTheme() {
+  var root = document.documentElement;
+  var current = root.getAttribute('data-theme') || 'dark';
+  var next = current === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  root.classList.add('theme-switching');
+  setTimeout(function(){ root.classList.remove('theme-switching'); }, 300);
+  try { localStorage.setItem('bl-theme', next); } catch(e) {}
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  var icon  = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  if (!icon || !label) return;
+  icon.textContent  = theme === 'light' ? '🌙' : '☀️';
+  label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+
+  /* ── Filter Logic ── */
+  var filterBtns = document.querySelectorAll('.filter-btn');
+  var allCards   = document.querySelectorAll('.ppt-card');
+  var allGrids   = document.querySelectorAll('.cards-grid');
+  var allSections = document.querySelectorAll('.section-header');
+  var emptyState = document.getElementById('emptyState');
+
+  filterBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      filterBtns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      var filter = btn.getAttribute('data-filter');
+
+      allCards.forEach(function(card) {
+        var domain = card.getAttribute('data-domain');
+        if (filter === 'all' || domain === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Show/hide section headers
+      allSections.forEach(function(sec) {
+        var secDomain = sec.getAttribute('data-section');
+        if (filter === 'all' || secDomain === filter) {
+          sec.style.display = '';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+
+      // Show/hide grids (hide grid if all cards inside are hidden)
+      allGrids.forEach(function(grid) {
+        var visible = grid.querySelectorAll('.ppt-card:not([style*="display: none"])');
+        grid.style.display = visible.length ? '' : 'none';
+      });
+
+      // Empty state
+      var anyVisible = document.querySelectorAll('.ppt-card:not([style*="display: none"])');
+      emptyState.style.display = anyVisible.length ? 'none' : 'block';
+    });
+  });
+});
+</script>
+
+</body>
+</html>
