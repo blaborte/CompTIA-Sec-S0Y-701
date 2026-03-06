@@ -862,7 +862,7 @@ const MESSER_QUESTIONS = [
   },
   {
     q: "An insurance company has created a set of policies to handle data breaches. The security team has been given these requirements:Access records from all devices must be saved and archivedAny data access outside of normal working hours must be immediately reportedData access must only occur inside of the countryAccess logs and audit reports must be created from a single databaseWhich of the following should be implemented? (Select THREE)",
-    options: ["Restrict login access by IP address and GPS location", "Require government-issued identification during the onboarding process", "Add additional password complexity for accounts that access data", "Conduct monthly permission auditing", "Consolidate all logs on a SIEM", "Archive the encryption keys of all disabled accounts"],
+    options: ["Restrict login access by IP address and GPS location", "Require government-issued identification during the onboarding process", "Add additional password complexity for accounts that access data", "Conduct monthly permission auditing"],
     answer: 0,
     explanation: "Restricting login by IP/GPS addresses location requirements; SIEM consolidates logs; time-of-day restrictions enforce working-hours access. These three together satisfy all four policy requirements stated."
   },
@@ -922,7 +922,7 @@ const MESSER_QUESTIONS = [
   },
   {
     q: "What kind of security control is associated with a login banner?",
-    options: ["Preventive", "Deterrent", "Corrective", "Detective", "Compensating"],
+    options: ["Preventive", "Deterrent", "Corrective", "Detective"],
     answer: 1,
     explanation: "A login banner is a deterrent control — it warns users that activity is monitored and unauthorized access is prosecuted, discouraging bad actors. It doesn't prevent, detect, or correct on its own."
   },
@@ -1523,7 +1523,7 @@ const MESSER_QUESTIONS = [
   },
   {
     q: "A transportation company headquarters is located in an area with frequent power surges and outages. The security administrator is concerned about the potential for downtime and hardware failures. Which of the following would provide the most protection against these issues? (Select TWO)",
-    options: ["UPS", "Parallel processing", "Snapshots", "Multi-cloud system", "Load balancing"],
+    options: ["UPS", "Parallel processing", "Snapshots", "Multi-cloud system"],
     answer: 0,
     explanation: "A UPS provides short-term backup power; a generator maintains uptime as long as fuel is available. Both protect against power issues."
   },
@@ -2292,7 +2292,7 @@ const MESSER_QUESTIONS = [
   },
   {
     q: "Visitors to a corporate data center must enter through the main doors of the building. Which of the following security controls would be the BEST choice to successfully guide people to the front door? (Select TWO)",
-    options: ["Infrared sensors", "Bollards", "Biometrics", "Fencing", "Access badges"],
+    options: ["Infrared sensors", "Bollards", "Biometrics", "Fencing"],
     answer: 1,
     explanation: "Lighting and fencing/bollards guide visitors toward the main entrance by making other paths less visible and less accessible. Cameras and access controls don't physically direct foot traffic."
   },
@@ -2904,13 +2904,13 @@ const EXAMCOMPASS_QUESTIONS = [
     explanation: "A TGT (Ticket Granting Ticket) is issued by the Kerberos Authentication Server (AS) after successful initial login. It serves as proof of identity and is presented to the Ticket Granting Server (TGS) to obtain service tickets for individual network resources — enabling SSO (Single Sign-On) without repeated credential prompts. OTP is a one-time password, AS is the Authentication Server component, and TGS is the Ticket Granting Service."
   },
   {
-    q: "In cryptography and security, the term \\"Secure enclave\\" typically refers to a protected and isolated hardware or software environment within a computing device, such as a smartphone, tablet, or computer, where sensitive data and cryptographic operations can be stored and processed securely.",
+    q: "In cryptography and security, the term \"Secure enclave\" typically refers to a protected and isolated hardware or software environment within a computing device, such as a smartphone, tablet, or computer, where sensitive data and cryptographic operations can be stored and processed securely.",
     options: ["True", "False"],
     answer: 0,
     explanation: "TRUE. A Secure Enclave is an isolated coprocessor or protected region within a device's main processor that handles sensitive cryptographic operations separately from the main CPU. Apple's Secure Enclave Processor (SEP) is a prominent example, used for Touch ID/Face ID data, encryption key storage, and secure payment processing. It ensures that even if the main OS is compromised, the sensitive data remains protected."
   },
   {
-    q: "The term \\"Obfuscation\\" is used to describe techniques employed to obscure or hide the true meaning or nature of data, making it challenging for unauthorized parties to decipher or reverse-engineer the information.",
+    q: "The term \"Obfuscation\" is used to describe techniques employed to obscure or hide the true meaning or nature of data, making it challenging for unauthorized parties to decipher or reverse-engineer the information.",
     options: ["True", "False"],
     answer: 0,
     explanation: "TRUE. Obfuscation refers to the deliberate act of making data, code, or communications difficult to understand or reverse-engineer. In cybersecurity, it is used to protect source code from analysis, hide malware behavior from detection tools, and obscure sensitive information. Unlike encryption, obfuscation does not rely on keys — it relies on complexity and confusion."
@@ -2922,7 +2922,7 @@ const EXAMCOMPASS_QUESTIONS = [
     explanation: "Steganography is the practice of hiding secret data within an ordinary, non-secret file or message to avoid detection. Unlike encryption, which scrambles data to make it unreadable, steganography conceals the very existence of the data. Common examples include embedding text within image pixels, audio files, or documents. The hidden data remains invisible to casual observers."
   },
   {
-    q: "In the field of data security, the term \\"Tokenization\\" refers to the process of replacing sensitive data with nonsensitive information which holds a reference to the original data and enables its processing but has no value when breached.",
+    q: "In the field of data security, the term \"Tokenization\" refers to the process of replacing sensitive data with nonsensitive information which holds a reference to the original data and enables its processing but has no value when breached.",
     options: ["True", "False"],
     answer: 0,
     explanation: "TRUE. Tokenization replaces sensitive data (such as credit card numbers or SSNs) with a randomly generated non-sensitive placeholder called a token. The token maps back to the original data in a secure token vault. Even if an attacker captures a token, it has no exploitable value without access to the vault. Tokenization is widely used in payment processing (EMV chip cards, Apple Pay) and PCI DSS compliance."
@@ -3072,7 +3072,7 @@ function renderQuestions() {
     card.id = 'q-' + idx;
 
     const optsHTML = q.options.map((opt, oi) => {
-      const letters = ['A', 'B', 'C', 'D'];
+      const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
       return `<li class="option-item" onclick="selectAnswer(${idx}, ${oi}, this)">
         <span class="option-letter">${letters[oi]}.</span>
         <span>${opt}</span>
