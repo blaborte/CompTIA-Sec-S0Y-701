@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Udemy Practice Test 1</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; line-height: 1.6; }
+
+  header {
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 0 2rem; position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; height: 60px;
+  }
+  .logo { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+  .logo span { color: var(--accent); }
+  
+  .home-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg2);
+    transform: translateY(-2px);
+  }
+
+  .timer-wrap { display: flex; align-items: center; gap: 1.5rem; }
+  #timer { font-family: var(--mono); font-size: 1.1rem; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; }
+  #timer.warn { color: var(--yellow); }
+  #timer.danger { color: var(--red); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .header-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.8rem;
+    cursor: pointer; letter-spacing: 0.08em; transition: all 0.2s; border-radius: 2px;
+  }
+  .header-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .header-btn.primary { border-color: var(--accent); color: var(--accent); }
+  .header-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  .progress-bar-wrap { height: 3px; background: var(--border); width: 100%; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); transition: width 0.4s ease; width: 0%; }
+
+  .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 63px); }
+
+  .sidebar {
+    background: var(--bg2); border-right: 1px solid var(--border); padding: 1.5rem 1rem;
+    position: sticky; top: 63px; height: calc(100vh - 63px); overflow-y: auto;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .sidebar-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; padding: 0 0.5rem; }
+  .q-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 1.5rem; }
+  .q-dot {
+    aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;
+    font-family: var(--mono); font-size: 0.55rem; display: flex; align-items: center;
+    justify-content: space-between; color: var(--muted); transition: all 0.15s; background: var(--bg3);
+  }
+  .q-dot:hover { border-color: var(--accent); color: var(--accent); }
+  .q-dot.answered { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .q-dot.correct { background: var(--green); border-color: var(--green); color: var(--bg); }
+  .q-dot.wrong { background: var(--red); border-color: var(--red); color: var(--bg); }
+  .q-dot.active { outline: 2px solid var(--yellow); outline-offset: 1px; }
+
+  .score-panel { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; display: none; }
+  .score-panel.visible { display: block; }
+  .score-big { font-family: var(--mono); font-size: 2rem; font-weight: 600; color: var(--accent); text-align: center; }
+  .score-label { font-size: 0.7rem; color: var(--muted); text-align: center; font-family: var(--mono); letter-spacing: 0.08em; margin-top: 0.25rem; }
+  .score-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem; }
+  .score-item { text-align: center; }
+  .score-item .val { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; }
+  .score-item .lbl { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); }
+  .score-item.c .val { color: var(--green); }
+  .score-item.w .val { color: var(--red); }
+
+  main { padding: 2rem 2.5rem; max-width: 840px; }
+
+  .intro-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 2.5rem; margin-bottom: 2rem; }
+  .intro-card h1 { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
+  .intro-card .subtitle { font-size: 0.8rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.08em; margin-bottom: 1.5rem; }
+  .intro-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .intro-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; text-align: center; }
+  .intro-stat .n { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--text); }
+  .intro-stat .l { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .start-btn { background: var(--accent); color: var(--bg); border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em; padding: 0.8rem 2rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .start-btn:hover { background: #00b8e0; transform: translateY(-1px); }
+
+  .q-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .q-num { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+  .q-tag { font-family: var(--mono); font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: 2px; letter-spacing: 0.08em; }
+  .q-tag.mc { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+  .q-tag.multi { background: rgba(255,107,43,0.1); color: var(--accent2); border: 1px solid rgba(255,107,43,0.2); }
+
+  .question-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 2rem; margin-bottom: 1.5rem; transition: border-color 0.3s; }
+  .question-card.answered-correct { border-color: rgba(0,245,160,0.3); }
+  .question-card.answered-wrong { border-color: rgba(255,71,87,0.3); }
+  .question-text { font-size: 0.95rem; line-height: 1.7; color: var(--text); margin-bottom: 1.5rem; }
+  .question-text strong { color: var(--accent); }
+
+  .code-block {
+    background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 3px; padding: 0.8rem 1rem; font-family: var(--mono); font-size: 0.75rem;
+    line-height: 1.6; color: #a0d8ef; margin: 1rem 0; white-space: pre-wrap; overflow-x: auto;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .option {
+    display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.8rem 1rem;
+    border-radius: 4px; border: 1px solid var(--border); cursor: pointer;
+    transition: all 0.15s; background: var(--bg2); font-size: 0.875rem;
+  }
+  .option:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .opt-letter { font-family: var(--mono); font-size: 0.7rem; font-weight: 600; color: var(--muted); min-width: 18px; padding-top: 1px; transition: color 0.15s; }
+  .option:hover .opt-letter { color: var(--accent); }
+  .option.selected { border-color: var(--accent); background: rgba(0,212,255,0.08); }
+  .option.selected .opt-letter { color: var(--accent); }
+  .option.correct { border-color: var(--green); background: rgba(0,245,160,0.08); }
+  .option.correct .opt-letter { color: var(--green); }
+  .option.wrong { border-color: var(--red); background: rgba(255,71,87,0.08); }
+  .option.wrong .opt-letter { color: var(--red); }
+  .option.disabled { cursor: default; pointer-events: none; }
+
+  .option .check-box { width: 16px; height: 16px; min-width: 16px; border: 1px solid var(--border); border-radius: 2px; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .option.selected .check-box { background: var(--accent); border-color: var(--accent); }
+  .option.correct .check-box { background: var(--green); border-color: var(--green); }
+  .option.wrong .check-box { background: var(--red); border-color: var(--red); }
+  .check-box svg { display: none; }
+  .option.selected .check-box svg { display: block; }
+
+  .feedback { display: none; margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px; font-size: 0.85rem; line-height: 1.6; }
+  .feedback.correct { background: rgba(0,245,160,0.07); border: 1px solid rgba(0,245,160,0.25); color: var(--green); }
+  .feedback.wrong { background: rgba(255,71,87,0.07); border: 1px solid rgba(255,71,87,0.25); color: #ff8a95; }
+  .feedback.visible { display: block; }
+  .feedback-icon { font-size: 1.1rem; margin-bottom: 0.3rem; }
+
+  .q-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
+  .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1.2rem; cursor: pointer; border-radius: 3px; letter-spacing: 0.06em; transition: all 0.2s; }
+  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .submit-btn { background: var(--accent2); border: none; color: white; font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.5rem 1.5rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .submit-btn:hover { background: #e55e22; transform: translateY(-1px); }
+  .submit-btn.finish { background: var(--green); color: var(--bg); }
+  .submit-btn.finish:hover { background: #00d488; }
+
+  .results-hero { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3rem 2.5rem; text-align: center; margin-bottom: 2rem; }
+  .results-hero h2 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 1rem; }
+  .final-score { font-family: var(--mono); font-size: 4rem; font-weight: 600; line-height: 1; margin-bottom: 0.5rem; }
+  .final-score.pass { color: var(--green); }
+  .final-score.fail { color: var(--red); }
+  .final-pct { font-family: var(--mono); font-size: 1.2rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .result-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; }
+  .result-stat .v { font-family: var(--mono); font-size: 1.8rem; font-weight: 600; }
+  .result-stat .l { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .result-stat.g .v { color: var(--green); }
+  .result-stat.r .v { color: var(--red); }
+  .result-stat.y .v { color: var(--yellow); }
+  .review-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; padding: 0.7rem 1.8rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; margin-top: 1.5rem; }
+  .review-btn:hover { background: var(--accent); color: var(--bg); }
+  .restart-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; padding: 0.7rem 1.8rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; margin-top: 1.5rem; margin-left: 0.75rem; }
+  .restart-btn:hover { border-color: var(--text); color: var(--text); }
+
+  .pbq-card { background: var(--bg3); border: 1px solid rgba(0,245,160,0.2); border-radius: 6px; padding: 2rem; margin-bottom: 2rem; }
+  .pbq-card h3 { font-family: var(--mono); font-size: 0.8rem; color: var(--green); letter-spacing: 0.1em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+
+  /* Interactive PBQ styles */
+  .pbq-interactive { margin-top: 1rem; }
+  .pbq-scenario { font-size:0.82rem; color:var(--text); margin-bottom:1rem; line-height:1.7; }
+  .pbq-match-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .pbq-column-title { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.5rem; }
+  .pbq-items { display:flex; flex-direction:column; gap:0.4rem; }
+  .pbq-source-item {
+    background:var(--bg2); border:1px solid var(--border); border-radius:3px;
+    padding:0.5rem 0.75rem; font-size:0.78rem; cursor:grab; user-select:none;
+    transition:all 0.15s; font-family:var(--mono); color:var(--text);
+  }
+  .pbq-source-item:hover { border-color:var(--accent); color:var(--accent); }
+  .pbq-source-item.dragging { opacity:0.4; }
+  .pbq-source-item.used { opacity:0.35; cursor:default; border-style:dashed; }
+  .pbq-target-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; }
+  .pbq-target-label { font-size:0.78rem; color:var(--text); flex:1 1 0; }
+  .pbq-drop-zone {
+    min-height:34px; min-width:140px; flex:0 0 160px;
+    background:var(--bg2); border:1px dashed var(--border); border-radius:3px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:0.7rem; color:var(--muted);
+    transition:all 0.15s; position:relative; cursor:pointer; padding:0.2rem 0.5rem;
+  }
+  .pbq-drop-zone.drag-over { border-color:var(--accent); background:rgba(0,212,255,0.06); }
+  .pbq-drop-zone.filled { border-style:solid; color:var(--text); }
+  .pbq-drop-zone.correct { border-color:var(--green)!important; background:rgba(0,245,160,0.08)!important; color:var(--green)!important; }
+  .pbq-drop-zone.wrong { border-color:var(--red)!important; background:rgba(255,71,87,0.08)!important; color:var(--red)!important; }
+  .pbq-drop-clear { position:absolute; right:4px; top:50%; transform:translateY(-50%); font-size:0.7rem; color:var(--muted); cursor:pointer; padding:0 3px; }
+  .pbq-drop-clear:hover { color:var(--red); }
+  .pbq-check-btn { background:var(--accent2); border:none; color:white; font-family:var(--mono); font-size:0.72rem; font-weight:600; letter-spacing:0.08em; padding:0.5rem 1.4rem; cursor:pointer; border-radius:3px; transition:all 0.2s; margin-top:0.75rem; }
+  .pbq-check-btn:hover { background:#e55e22; }
+  .pbq-check-btn:disabled { opacity:0.5; cursor:default; }
+  .pbq-result { margin-top:0.75rem; padding:0.75rem 1rem; border-radius:3px; font-family:var(--mono); font-size:0.75rem; display:none; }
+  .pbq-result.show { display:block; }
+  .pbq-result.correct { background:rgba(0,245,160,0.07); border:1px solid rgba(0,245,160,0.3); color:var(--green); }
+  .pbq-result.partial { background:rgba(255,211,42,0.07); border:1px solid rgba(255,211,42,0.3); color:var(--yellow); }
+
+  /* Firewall table PBQ */
+  .pbq-fw-table { width:100%; border-collapse:collapse; font-size:0.78rem; margin-bottom:1rem; }
+  .pbq-fw-table th { background:var(--bg2); border:1px solid var(--border); padding:0.5rem 0.75rem; font-family:var(--mono); font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; text-align:left; }
+  .pbq-fw-table td { border:1px solid var(--border); padding:0.4rem 0.6rem; vertical-align:middle; }
+  .pbq-fw-select { background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:0.72rem; padding:0.3rem 0.5rem; border-radius:3px; cursor:pointer; width:100%; }
+  .pbq-fw-select:focus { outline:none; border-color:var(--accent); }
+  .pbq-fw-select.correct { border-color:var(--green); color:var(--green); }
+  .pbq-fw-select.wrong { border-color:var(--red); color:var(--red); }
+
+  /* Mode selector */
+  .mode-selector { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
+  .mode-card {
+    background:var(--bg2); border:2px solid var(--border); border-radius:6px; padding:1.25rem;
+    cursor:pointer; transition:all 0.2s; text-align:center;
+  }
+  .mode-card:hover { border-color:var(--accent); background:rgba(0,212,255,0.04); }
+  .mode-card.active { border-color:var(--accent); background:rgba(0,212,255,0.07); }
+  .mode-card-title { font-family:var(--mono); font-size:0.85rem; color:var(--text); margin-bottom:0.4rem; }
+  .mode-card-sub { font-size:0.72rem; color:var(--muted); }
+  .random-options { display:flex; gap:0.75rem; justify-content:center; margin-top:1rem; flex-wrap:wrap; }
+  .rand-btn { background:var(--bg2); border:1px solid var(--border); color:var(--muted); font-family:var(--mono); font-size:0.78rem; padding:0.5rem 1.2rem; cursor:pointer; border-radius:3px; transition:all 0.2s; }
+  .rand-btn:hover, .rand-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(0,212,255,0.06); }
+  .rand-mode-section { display:none; margin-top:1rem; }
+  .rand-mode-section.show { display:block; }
+
+  @media(max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    main { padding: 1.5rem; }
+    .intro-stats { grid-template-columns: 1fr 1fr; }
+    .results-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Explanation box */
+  .explanation-box {
+    margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px;
+    background: rgba(123,47,190,0.08); border: 1px solid rgba(123,47,190,0.3);
+    font-size: 0.83rem; line-height: 1.7; color: var(--text);
+  }
+  .explanation-box .expl-label {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+    color: #a06fdb; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;
+  }
+
+  /* Domain summary */
+  .domain-section { margin-top: 2rem; }
+  .domain-section h3 {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+  .domain-card {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 5px;
+    padding: 1rem 1.2rem; margin-bottom: 0.6rem;
+  }
+  .domain-card-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;
+  }
+  .domain-card-name { font-size: 0.82rem; color: var(--text); font-weight: 500; }
+  .domain-card-pct {
+    font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
+  }
+  .domain-bar-track {
+    height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .domain-bar-fill {
+    height: 100%; border-radius: 3px; transition: width 0.6s ease;
+  }
+  .domain-badge {
+    font-family: var(--mono); font-size: 0.6rem; padding: 0.15rem 0.5rem;
+    border-radius: 2px; margin-left: 0.5rem; letter-spacing: 0.06em;
+  }
+  .badge-strong { background: rgba(0,245,160,0.12); color: var(--green); border: 1px solid rgba(0,245,160,0.25); }
+  .badge-weak { background: rgba(255,71,87,0.12); color: var(--red); border: 1px solid rgba(255,71,87,0.25); }
+  .badge-ok { background: rgba(255,211,42,0.12); color: var(--yellow); border: 1px solid rgba(255,211,42,0.25); }
+  .domain-detail { font-size: 0.72rem; color: var(--muted); font-family: var(--mono); margin-top: 0.3rem; }
+
+
+  /* ─────────────────────────────────────────
+     LIGHT MODE VARIABLES
+  ───────────────────────────────────────── */
+  [data-theme="light"] {
+    --bg:     #eef1f8;
+    --bg2:    #ffffff;
+    --bg3:    #dde2f0;
+    --bg4:    #cdd5e8;
+    --border: #c4ccdf;
+    --accent: #006699;
+    --accent2:#cc4400;
+    --green:  #007a52;
+    --red:    #c0172e;
+    --yellow: #8a6200;
+    --orange: #b84800;
+    --purple: #6422aa;
+    --pink:   #a8005e;
+    --teal:   #007a72;
+    --text:   #111827;
+    --muted:  #556080;
+    --font:   'IBM Plex Sans', sans-serif;
+    --mono:   'IBM Plex Mono', monospace;
+  }
+
+  /* smooth transitions on theme switch */
+  *, *::before, *::after {
+    transition: background-color 0.22s ease, border-color 0.2s ease, color 0.18s ease !important;
+  }
+  /* except layout/transform properties */
+  .xp-fill, .progress-fill, .pbq-progress-fill,
+  .cat-toggle-arrow, .expand-arrow, .timer-wrap span {
+    transition: none !important;
+  }
+
+  /* ─────────────────────────────────────────
+     THEME TOGGLE BUTTON
+  ───────────────────────────────────────── */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.26rem 0.75rem 0.26rem 0.5rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    color: var(--muted);
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg2);
+  }
+  .theme-icon { font-size: 0.82rem; line-height: 1; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PROFESSOR MESSER / <span>SY0-701</span> / UDEMY PRACTICE TEST 1</div>
+  <div class="timer-wrap">
+    <span id="timer">90:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+    <div style="display:flex;gap:0.5rem;align-items:center;">
+    <button class="home-btn" onclick="goBackToIntro()" id="backToIntroBtn" style="display:none">
+      <span>←</span>
+      <span>Back</span>
+    </button>
+    <a href="index.html" class="home-btn">
+      <span>⌂</span>
+      <span>Home</span>
+    </a>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+  </header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">QUESTIONS</div>
+    <div class="q-grid" id="qGrid"></div>
+    <div class="score-panel" id="scorePanel">
+      <div class="score-big" id="scoreBig">–</div>
+      <div class="score-label">SCORE</div>
+      <div class="score-breakdown">
+        <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+        <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- Intro -->
+    <div id="introSection">
+      <div class="intro-card">
+        <h1>UDEMY PRACTICE TEST 1</h1>
+        <div class="subtitle">CompTIA Security+ SY0-701 · Professor Messer</div>
+        <div class="intro-stats">
+          <div class="intro-stat"><div class="n" id="statQ">105</div><div class="l">QUESTIONS</div></div>
+          <div class="intro-stat"><div class="n" id="statT">90</div><div class="l">MINUTES</div></div>
+          <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+        <div class="mode-selector">
+          <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+            <div class="mode-card-title">📋 FULL EXAM</div>
+            <div class="mode-card-sub">All 90 questions · 90 min timer · PBQ + MCQ</div>
+          </div>
+          <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+            <div class="mode-card-title">🎲 RANDOM QUIZ</div>
+            <div class="mode-card-sub">Pick 10, 20, or 30 randomized questions</div>
+          </div>
+        </div>
+        <div class="rand-mode-section" id="randModeSection">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+          <div class="random-options">
+            <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+            <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+            <button class="rand-btn" id="randBtn30" onclick="setRandCount(30)">30 Questions</button>
+          </div>
+        </div>
+        <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;" id="modeDescription">
+          This exam emulates the format and difficulty of the actual Security+ exam. Questions B1–B5 are interactive performance-based questions. Questions B6–B105 are graded multiple-choice.<br><br>
+          <strong style="color:var(--text)">Tip:</strong> Set a 90-minute timer to simulate real exam conditions.
+        </p>
+        <button class="start-btn" onclick="startExam()">START EXAM →</button>
+      </div>
+    </div>
+
+    <!-- PBQ -->
+    <div id="pbqSection" style="display:none">
+      <div class="pbq-card">
+        <h3>⚡ PERFORMANCE-BASED QUESTIONS (B1–B5)</h3>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets or click to assign. Submit each question to check your work.</p>
+
+        <!-- B1: Match Cryptography Concepts -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.5rem;" id="pbq-a1">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">B1 — MATCH CRYPTOGRAPHY CONCEPTS</div>
+          <div class="pbq-scenario">Drag each cryptographic term to its correct description.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">CRYPTO TERMS</div>
+                <div class="pbq-items" id="a1-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Hashing">Hashing</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Salting">Salting</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Perfect Forward Secrecy">Perfect Forward Secrecy</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Block Cipher">Block Cipher</div>
+                  <div class="pbq-source-item" draggable="true" data-val="S/MIME">S/MIME</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DESCRIPTIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Verifies file integrity using a fixed-length output</div>
+                    <div class="pbq-drop-zone" data-answer="Hashing" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Adds random data to each password before hashing to defeat rainbow tables</div>
+                    <div class="pbq-drop-zone" data-answer="Salting" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Ensures a compromised private key cannot decrypt past session data</div>
+                    <div class="pbq-drop-zone" data-answer="Perfect Forward Secrecy" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Operates on fixed-length groups of bits (e.g., 128-bit AES)</div>
+                    <div class="pbq-drop-zone" data-answer="Block Cipher" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Standard for email encryption and digital signatures</div>
+                    <div class="pbq-drop-zone" data-answer="S/MIME" data-pbq="a1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a1')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a1-result"></div>
+          </div>
+        </div>
+
+        <!-- B2: Match Social Engineering Attacks -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a2">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">B2 — MATCH SOCIAL ENGINEERING ATTACK TYPES</div>
+          <div class="pbq-scenario">Match each attack scenario to the correct social engineering method.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">ATTACK TYPES</div>
+                <div class="pbq-items" id="a2-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Vishing">Vishing</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Smishing">Smishing</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Spear Phishing">Spear Phishing</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Whaling">Whaling</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">SCENARIOS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">A fake call from "IT support" asking for your password</div>
+                    <div class="pbq-drop-zone" data-answer="Vishing" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Text message claiming to be HR asking to verify credentials</div>
+                    <div class="pbq-drop-zone" data-answer="Smishing" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Personalized email targeting a specific employee using their name and role</div>
+                    <div class="pbq-drop-zone" data-answer="Spear Phishing" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Email targeting the CEO demanding urgent wire transfer</div>
+                    <div class="pbq-drop-zone" data-answer="Whaling" data-pbq="a2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a2')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a2-result"></div>
+          </div>
+        </div>
+
+        <!-- B3: Match Backup Types -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a3">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">B3 — BACKUP &amp; RECOVERY CONCEPTS</div>
+          <div class="pbq-scenario">Match each backup/recovery term to its correct definition.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">TERMS</div>
+                <div class="pbq-items" id="a3-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="RPO">RPO</div>
+                  <div class="pbq-source-item" draggable="true" data-val="RTO">RTO</div>
+                  <div class="pbq-source-item" draggable="true" data-val="MTTR">MTTR</div>
+                  <div class="pbq-source-item" draggable="true" data-val="MTBF">MTBF</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DEFINITIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Maximum acceptable data loss measured in time</div>
+                    <div class="pbq-drop-zone" data-answer="RPO" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Maximum acceptable downtime before restoring a service</div>
+                    <div class="pbq-drop-zone" data-answer="RTO" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Average time required to troubleshoot and restore failed equipment</div>
+                    <div class="pbq-drop-zone" data-answer="MTTR" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Average elapsed time between hardware failures</div>
+                    <div class="pbq-drop-zone" data-answer="MTBF" data-pbq="a3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a3')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a3-result"></div>
+          </div>
+        </div>
+
+        <!-- B4: MDM/Cloud Deployment Models -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a4">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">B4 — DEVICE DEPLOYMENT MODELS</div>
+          <div class="pbq-scenario">Match each mobile/device deployment model to its correct description.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">MODELS</div>
+                <div class="pbq-items" id="a4-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="BYOD">BYOD</div>
+                  <div class="pbq-source-item" draggable="true" data-val="COPE">COPE</div>
+                  <div class="pbq-source-item" draggable="true" data-val="CYOD">CYOD</div>
+                  <div class="pbq-source-item" draggable="true" data-val="VDI">VDI</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DESCRIPTIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Employees use personal devices; company has limited control</div>
+                    <div class="pbq-drop-zone" data-answer="BYOD" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Company owns the device; personal use permitted</div>
+                    <div class="pbq-drop-zone" data-answer="COPE" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Employee selects from approved company-provided device list</div>
+                    <div class="pbq-drop-zone" data-answer="CYOD" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">User connects to a centralized virtual desktop environment</div>
+                    <div class="pbq-drop-zone" data-answer="VDI" data-pbq="a4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('a4')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a4-result"></div>
+          </div>
+        </div>
+
+        <!-- B5: Firewall Rules -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-a5">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">B5 — FIREWALL RULES CONFIGURATION</div>
+          <div class="pbq-scenario">For each firewall rule, select whether to <strong style="color:var(--green)">Allow</strong> or <strong style="color:var(--red)">Block</strong> the traffic.</div>
+          <div class="pbq-interactive">
+            <table class="pbq-fw-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>SOURCE</th><th>DESTINATION</th><th>PROTO</th><th>PORT</th><th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">1</td>
+                  <td>External Host</td><td>Web Server</td><td>TCP</td><td>443</td>
+                  <td><select class="pbq-fw-select" id="fw-rule-1" data-answer="Allow">
+                    <option value="">-- Select --</option>
+                    <option>Allow</option><option>Block</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">2</td>
+                  <td>External Host</td><td>Internal DB</td><td>TCP</td><td>3306</td>
+                  <td><select class="pbq-fw-select" id="fw-rule-2" data-answer="Block">
+                    <option value="">-- Select --</option>
+                    <option>Allow</option><option>Block</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">3</td>
+                  <td>Admin Workstation</td><td>All Servers</td><td>TCP</td><td>22</td>
+                  <td><select class="pbq-fw-select" id="fw-rule-3" data-answer="Allow">
+                    <option value="">-- Select --</option>
+                    <option>Allow</option><option>Block</option>
+                  </select></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="pbq-check-btn" onclick="checkFirewall()">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-a5-result"></div>
+          </div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:1rem;">
+        <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE →</button>
+      </div>
+    </div>
+
+    <!-- MCQ -->
+    <div id="mcqSection" style="display:none">
+      <div id="questionContainer"></div>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" style="display:none">
+      <div class="results-hero">
+        <h2>EXAM COMPLETE — UDEMY PRACTICE TEST 1</h2>
+        <div class="final-score" id="finalScore">0</div>
+        <div class="final-pct" id="finalPct">0/85 Correct</div>
+        <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+        <div class="results-grid">
+          <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+          <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+          <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+        </div>
+        <div>
+          <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+          <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+        </div>
+      </div>
+      <div class="domain-section" id="domainSummary"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ─── Mode & Random Quiz State ───────────────────────────────────────────────
+let examMode = 'full'; // 'full' | 'random'
+let randCount = 10;
+let activeQuestions = []; // the subset used in current exam
+
+function setMode(mode) {
+  examMode = mode;
+  document.getElementById('modeFullCard').classList.toggle('active', mode === 'full');
+  document.getElementById('modeRandCard').classList.toggle('active', mode === 'random');
+  const randSection = document.getElementById('randModeSection');
+  randSection.classList.toggle('show', mode === 'random');
+  if (mode === 'full') {
+    document.getElementById('statQ').textContent = '105';
+    document.getElementById('statT').textContent = '90';
+    document.getElementById('modeDescription').innerHTML = 'This exam emulates the format and difficulty of the actual Security+ exam. Questions B1–B5 are interactive performance-based questions. Questions B6–B105 are graded multiple-choice.<br><br><strong style="color:var(--text)">Tip:</strong> Set a 90-minute timer to simulate real exam conditions.';
+  } else {
+    updateRandDescription();
+  }
+}
+
+function setRandCount(n) {
+  randCount = n;
+  ['10','20','30'].forEach(x => document.getElementById('randBtn'+x).classList.remove('active'));
+  document.getElementById('randBtn'+n).classList.add('active');
+  updateRandDescription();
+}
+
+function updateRandDescription() {
+  document.getElementById('statQ').textContent = randCount;
+  document.getElementById('statT').textContent = Math.round(randCount * 1.2);
+  document.getElementById('modeDescription').innerHTML = `<strong style="color:var(--text)">${randCount} randomly selected questions</strong> from the full 85-question MCQ pool. Questions are shuffled on every attempt — no two quizzes are alike.<br><br><strong style="color:var(--text)">Tip:</strong> Great for quick review or targeted practice.`;
+}
+
+// ─── PBQ Drag & Drop ─────────────────────────────────────────────────────────
+let draggedValue = null;
+let draggedEl = null;
+let clickSelectMode = null; // currently selected source for click-assign
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDragDrop();
+});
+
+function shuffleSourceItems() {
+  ['a1-sources','a2-sources','a3-sources','a4-sources'].forEach(id => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const items = [...container.children];
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      container.appendChild(items[j]);
+      items.splice(j, 1);
+    }
+  });
+}
+
+function initDragDrop() {
+  shuffleSourceItems();
+
+  document.querySelectorAll('.pbq-source-item').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      draggedValue = el.dataset.val;
+      draggedEl = el;
+      setTimeout(() => el.classList.add('dragging'), 0);
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      draggedEl = null;
+    });
+    el.addEventListener('click', () => handleSourceClick(el));
+  });
+
+  document.querySelectorAll('.pbq-drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      if (draggedValue) assignToZone(zone, draggedValue);
+    });
+  });
+}
+
+function handleSourceClick(el) {
+  if (el.classList.contains('used')) return;
+  const pbq = el.closest('[id^="pbq-a"]').id.replace('pbq-','');
+  // deselect all in same group
+  document.querySelectorAll(`#pbq-${pbq} .pbq-source-item`).forEach(s => s.style.outline='');
+  if (clickSelectMode === el.dataset.val) {
+    clickSelectMode = null;
+  } else {
+    clickSelectMode = el.dataset.val;
+    el.style.outline = '2px solid var(--accent)';
+  }
+}
+
+function handleDropZoneClick(zone) {
+  if (zone.classList.contains('correct') || zone.classList.contains('wrong')) return;
+  if (clickSelectMode) {
+    assignToZone(zone, clickSelectMode);
+    // clear outline on source
+    document.querySelectorAll('.pbq-source-item').forEach(s => s.style.outline='');
+    clickSelectMode = null;
+  }
+}
+
+function assignToZone(zone, val) {
+  // if zone already filled, return old value to sources
+  const old = zone.dataset.current;
+  if (old) {
+    const src = document.querySelector(`.pbq-source-item[data-val="${old}"]`);
+    if (src) src.classList.remove('used');
+  }
+  // mark source as used
+  const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`);
+  if (src) src.classList.add('used');
+  zone.dataset.current = val;
+  const clear = zone.querySelector('.pbq-drop-clear');
+  zone.classList.add('filled');
+  zone.childNodes[0].textContent = val;
+  if (clear) clear.style.display = 'block';
+}
+
+function clearDrop(e, clearBtn) {
+  e.stopPropagation();
+  const zone = clearBtn.parentElement;
+  const val = zone.dataset.current;
+  if (val) {
+    const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`);
+    if (src) src.classList.remove('used');
+  }
+  zone.dataset.current = '';
+  zone.classList.remove('filled');
+  zone.childNodes[0].textContent = 'Drop here';
+  clearBtn.style.display = 'none';
+}
+
+function checkPBQ(id) {
+  const zones = document.querySelectorAll(`.pbq-drop-zone[data-pbq="${id}"]`);
+  let correct = 0, total = zones.length;
+  zones.forEach(zone => {
+    const ans = zone.dataset.answer;
+    const cur = zone.dataset.current;
+    if (!cur) return;
+    if (cur === ans) { zone.classList.add('correct'); correct++; }
+    else { zone.classList.add('wrong'); }
+  });
+  const result = document.getElementById(`pbq-${id}-result`);
+  result.classList.add('show');
+  if (correct === total && total > 0) {
+    result.className = 'pbq-result show correct';
+    result.textContent = `✓ PERFECT — All ${total} matched correctly!`;
+  } else {
+    result.className = 'pbq-result show partial';
+    result.textContent = `${correct}/${total} correct — Review highlighted zones and try again.`;
+  }
+  // disable check button
+  document.querySelector(`#pbq-${id} .pbq-check-btn`).disabled = true;
+}
+
+function checkFirewall() {
+  const rules = [
+    { id:'fw-rule-1', answer:'Block' },
+    { id:'fw-rule-2', answer:'Allow' },
+    { id:'fw-rule-3', answer:'Allow' }
+  ];
+  let correct = 0;
+  rules.forEach(r => {
+    const sel = document.getElementById(r.id);
+    if (sel.value === r.answer) { sel.classList.add('correct'); correct++; }
+    else if (sel.value) { sel.classList.add('wrong'); }
+    sel.disabled = true;
+  });
+  const result = document.getElementById('pbq-a5-result');
+  result.classList.add('show');
+  if (correct === 3) {
+    result.className = 'pbq-result show correct';
+    result.textContent = '✓ PERFECT — All 3 firewall rules configured correctly!';
+  } else {
+    result.className = 'pbq-result show partial';
+    result.textContent = `${correct}/3 correct — Review highlighted rules.`;
+  }
+  document.querySelector('#pbq-a5 .pbq-check-btn').disabled = true;
+}
+
+// ─── Questions data ──────────────────────────────────────────────────────────
+const questions = [
+  {id:'B6',domain:'SecArch',explanation:'Privacy is the primary concern when using drones for perimeter monitoring, as drones can capture sensitive information and potentially violate privacy laws and regulations. GPS spoofing, weather, and cloud storage are secondary concerns.',type:'mc',text:'A company uses a drone for precise perimeter and boundary monitoring. Which of the following should be <strong>MOST</strong> concerning to the company?',options:['Weather events','GPS spoofing','Cloud storage of telemetry data','Privacy'],answer:[3]},
+  {id:'B7',domain:'GRC',explanation:'Perfect forward secrecy generates a unique session key for each session, so even if a private key is later compromised, past communications remain encrypted and cannot be decrypted.',type:'mc',text:'If a current private key is compromised, which of the following would ensure it cannot be used to decrypt all historical data?',options:['Elliptic-curve cryptography','Homomorphic encryption','Key stretching','Perfect forward secrecy'],answer:[3]},
+  {id:'B8',domain:'SecOps',explanation:'User behavior analytics identifies patterns and anomalies in user activity, making it ideal for assessing which administrator accounts were impacted by a brute-force and geographic login attack.',type:'mc',text:'During an investigation, the incident response team discovers multiple administrator accounts were suspected of being compromised, with brute-force attacks followed by suspicious logins from unfamiliar geographic locations. Which of the following data sources would be <strong>BEST</strong> to assess impacted accounts?',options:['User behavior analytics','Bandwidth monitors','Protocol analyzer output','Dump files'],answer:[0]},
+  {id:'B9',domain:'PM',explanation:'MTTR (Mean Time To Restore) measures the average time required to troubleshoot and restore failed equipment. RPO is data loss tolerance; RTO is max acceptable downtime; MTBF measures time between failures.',type:'mc',text:'Which of the following describes a maintenance metric that measures the average time required to troubleshoot and restore failed equipment?',options:['RPO','MTTR','RTO','MTBF'],answer:[1]},
+  {id:'B10',domain:'SecArch',explanation:'NAT preserves public IP addresses on the core router by translating them. TLSv1.3 (not TLSv2) provides strongest in-transit encryption — but among the listed options TLSv2 represents TLS for transport encryption. NAT and TLS together satisfy both requirements.',type:'multi',text:'A security analyst is hardening a network infrastructure with these requirements:<br><br>• Preserve the use of public IP addresses assigned to equipment on the core router<br>• Enable "in transport" encryption protection to the web server with the strongest ciphers.<br><br>Which of the following should the analyst implement? <strong>(Select TWO)</strong>',options:['Enable AES encryption on the web server','Enable 3DES encryption on the web server','Configure VLANs on the core router','Configure NAT on the core router','Configure BGP on the core router','Enable TLSv2 encryption on the web server'],answer:[3,5]},
+  {id:'B11',domain:'SecOps',explanation:'Running a vulnerability scan during a suspected security incident is part of the Identification phase — determining the nature and scope of the incident by identifying missing patches and vulnerabilities.',type:'mc',text:'A security analyst is running a vulnerability scan to check for missing patches during a suspected security incident. During which of the following phases of the response process is this activity <strong>MOST</strong> likely occurring?',options:['Identification','Recovery','Preparation','Containment'],answer:[0]},
+  {id:'B12',domain:'SecOps',explanation:'The unexpected activity during emergency maintenance generated traffic that matched multiple SIEM correlation rules simultaneously, causing multiple alerts. The alerts were not attacks — they were legitimate maintenance actions triggering rule matches.',type:'mc',text:'After an unplanned emergency maintenance activity following a hardware incident, multiple alerts were generated on the SIEM. Which of the following <strong>BEST</strong> explains what happened?',options:['Multiple alerts were generated due to an attack occurring at the same time','The SIEM was unable to correlate the rules, triggering the alert','An error in the correlation rules triggered multiple alerts','The unexpected traffic correlated against multiple rules, generating multiple alerts'],answer:[3]},
+  {id:'B13',domain:'TVM',explanation:'Latest software eliminates known vulnerabilities, endpoint security protects workstations from malware, and a screened subnet isolates the web server to prevent lateral movement — the three most direct mitigations for ransomware via a web-facing server.',type:'multi',text:'A small company experienced a ransomware attack. The company has one web-facing server with all ports forwarded, uses older third-party website software, and assets were never patched. Which of the following should be done to prevent such an attack from happening again? <strong>(Select THREE)</strong>',options:['Use the latest version of software','Install DLP software to prevent data loss','Install a SIEM device','Implement MDM','Install an endpoint security solution','Implement a screened subnet for the web server'],answer:[0,4,5]},
+  {id:'B14',domain:'TVM',explanation:'Bug bounty programs reward security researchers for responsibly disclosing vulnerabilities. Penetration testing is contracted work; code review is internal; wardriving targets WiFi networks.',type:'mc',text:'Which of the following <strong>BEST</strong> describes a technique that compensates researchers for finding vulnerabilities?',options:['Code review','Wardriving','Penetration testing','Bug bounty'],answer:[3]},
+  {id:'B15',domain:'PM',explanation:'A BIA (Business Impact Analysis) must be completed before implementing a BCP, as it identifies critical business functions and the impact of disruptions that the plan must address.',type:'mc',text:'Which of the following must be in place before implementing a BCP?',options:['NDA','SLA','BIA','AUP'],answer:[2]},
+  {id:'B16',domain:'SecArch',explanation:'A jump server (bastion host) acts as an intermediary requiring MFA at the jump server level, enforcing MFA access to older servers that cannot natively support it.',type:'mc',text:'A security engineer needs to build a solution so that certain critical servers — which are older and unable to support MFA directly — must be accessed using MFA per regulatory requirements. Which of the following will the engineer <strong>MOST</strong> likely use?',options:['A forward proxy','A stateful firewall','A jump server','A port tap'],answer:[2]},
+  {id:'B17',domain:'SecOps',explanation:'Running a vulnerability scan is the final step before promoting a system to production, ensuring no security weaknesses remain that could be exploited after deployment.',type:'mc',text:'A systems engineer is building a new system for production. Which of the following is the <strong>FINAL</strong> step to be performed prior to promoting to production?',options:['Disable unneeded services','Run a vulnerability scan','Install the latest security patches','Encrypt all disks'],answer:[1]},
+  {id:'B18',domain:'SecOps',explanation:'Firewall rules blocking traffic from a specific country\'s IP address block is the most direct way to address a high volume of connections from that network range.',type:'mc',text:'A systems analyst determines the source of a high number of connections to a web server were initiated by ten different IP addresses belonging to a network block in a specific country. Which of the following techniques will the analyst <strong>MOST</strong> likely implement?',options:['SIEM','Content filter','DLP','Firewall rules'],answer:[3]},
+  {id:'B19',domain:'TVM',explanation:'Card skimming involves capturing magnetic stripe data from a credit or debit card at an ATM or POS terminal, allowing attackers to make fraudulent transactions using the stolen data.',type:'mc',text:'A store receives reports that shoppers\' credit card information is being stolen. The same shoppers also withdrew money from an ATM in that store, and attackers are using the stolen card info for online purchases. Which of the following attacks is the <strong>MOST</strong> probable cause?',options:['Identity theft','RFID cloning','Shoulder surfing','Card skimming'],answer:[3]},
+  {id:'B20',domain:'SecOps',explanation:'Configuring MDM with Full Disk Encryption (FDE) protects company data if a device is lost, without enabling a lock screen that feels intrusive to employees concerned about personal data access.',type:'mc',text:'A company wants to use MDM for employee-owned devices, but employees are concerned about the loss of personal data. Which of the following should the IT department implement to protect company data while addressing employees\' concerns?',options:['Perform a factory reset on the phone before installing company applications','Enable the remote-wiping option in the MDM software','Configure MDM for FDE without enabling the lock screen','Configure MDM software to enforce the use of PINs to access the phone'],answer:[2]},
+  {id:'B21',domain:'SecOps',explanation:'Issuing a general email warning alerts all employees to the smishing attempt. Adding a smishing exercise to annual training prepares employees to recognize and resist similar attacks in the future.',type:'multi',text:'Several employees received a fraudulent text message claiming to be from the CEO asking them to buy gift cards. Which of the following are the <strong>BEST</strong> responses? <strong>(Choose TWO)</strong>',options:['Cancel current employee recognition gift cards','Implement mobile device management','Issue a general email warning to the company','Have the CEO change phone numbers','Add a smishing exercise to the annual company training','Conduct a forensic investigation on the CEO\'s phone'],answer:[2,4]},
+  {id:'B22',domain:'TVM',explanation:'Spear phishing is a targeted email attack customized to a specific individual. The email targets the CIO specifically with a threat to encrypt the database, making it spear phishing. Whaling targets C-suite but this scenario fits spear phishing\'s targeted email definition.',type:'mc',text:'A Chief Information Officer receives an email stating a database will be encrypted within 24 hours unless a payment of $20,000 is made. This <strong>BEST</strong> describes a scenario related to:',options:['Vishing','Smishing','Spear phishing','Whaling'],answer:[2]},
+  {id:'B23',domain:'GRC',explanation:'Risk tolerance is the level of risk an organization is willing to accept — reviewing it tells a technician the total risk capacity when assessing a cloud-first strategy.',type:'mc',text:'Which of the following would be <strong>BEST</strong> for a technician to review to determine the total risk an organization can bear when assessing a "cloud-first" adoption strategy?',options:['Risk register','Risk matrix','Risk tolerance','Risk appetite'],answer:[2]},
+  {id:'B24',domain:'SecOps',explanation:'Geofencing allows mobile devices to be tracked by location and enables remote wipe triggers if a device leaves a defined area, satisfying both tracking and encryption requirements.',type:'mc',text:'A security analyst must enforce policies to harden an MDM infrastructure: ensure mobile devices can be tracked and wiped, and confirm mobile devices are encrypted. Which of the following should the analyst enable on all devices?',options:['Biometric authentication','Geofencing','Geotagging','Geolocation'],answer:[1]},
+  {id:'B25',domain:'SecArch',explanation:'ACLs (Access Control Lists) are used to control traffic flow between network segments by defining rules based on IP addresses, protocols, and ports.',type:'mc',text:'After segmenting the network, the network manager wants to control the traffic between the segments. Which of the following should the manager use?',options:['An ACL','A DMZ','A VLAN','A VPN'],answer:[0]},
+  {id:'B26',domain:'SecOps',explanation:'Telnet transmits data — including usernames and passwords — in plaintext, making it highly insecure. A security analyst reviewing pcap data would see cleartext credentials coming from Telnet sessions.',type:'mc',text:'While reviewing pcap data, a network security analyst is able to locate plaintext usernames and passwords being sent from workstations to network switches. Which of the following is the analyst <strong>MOST</strong> likely observing?',options:['A Telnet session','SFTP traffic','SNMP traps','An SSH connection'],answer:[0]},
+  {id:'B27',domain:'GRC',explanation:'NIST 800-53 provides a catalog of security and privacy controls specifically for United States federal information systems.',type:'mc',text:'Which of the following provides a catalog of security and privacy controls related to United States federal information systems?',options:['GDPR','NIST 800-53','PCI DSS','ISO 27000'],answer:[1]},
+  {id:'B28',domain:'GRC',explanation:'Salting adds a unique random value to each password before hashing, making each hash unique and preventing attackers from using precomputed rainbow tables to crack passwords.',type:'mc',text:'A security administrator is working on a solution to protect passwords stored in a database against rainbow table attacks. Which of the following should the administrator consider?',options:['Hashing','Steganography','Salting','Lightweight cryptography'],answer:[2]},
+  {id:'B29',domain:'SecArch',explanation:'Configuring the guest wireless network on a separate VLAN isolates visitors from the internal network, preventing unauthorized access to company resources while still enabling internet access.',type:'mc',text:'A company is planning to install a guest wireless network for visitors. The WAPs are configured to cover only conference rooms. Which of the following would <strong>BEST</strong> protect the company\'s internal wireless network?',options:['Decrease the power levels of the access points for the guest wireless network','Configure the guest wireless network to be on a separate VLAN from the company\'s internal wireless network','Enable WPA2 using 802.1X for logging on to the guest wireless network','Change the password for the guest wireless network every month'],answer:[1]},
+  {id:'B30',domain:'GRC',explanation:'Hashing generates a unique fixed-size output from a file. By comparing the hash value of the downloaded file with the trusted website\'s checksum, a security analyst can confirm the file was not altered.',type:'mc',text:'Which of the following <strong>BEST</strong> describes the method a security analyst would use to confirm a file downloaded from a trusted security website is not altered in transit or corrupted using a verified checksum?',options:['Salting','Integrity','Digital signature','Hashing'],answer:[3]},
+  {id:'B31',domain:'SecArch',explanation:'An agentless monitor allows network monitoring without installing agents on every device, simplifying deployment and providing visibility into performance and security across the network.',type:'mc',text:'A network engineer and a security engineer are discussing ways to monitor network operations. Which of the following is the <strong>BEST</strong> method?',options:['Establish a continuous ping','Disable Telnet and force SSH','Enable SNMPv3 with passwords','Utilize an agentless monitor'],answer:[3]},
+  {id:'B32',domain:'SecOps',explanation:'The Test environment is used to assess the execution of component parts at both hardware and software levels and to measure performance characteristics before deployment.',type:'mc',text:'Which of the following environments would <strong>MOST</strong> likely be used to assess the execution of component parts of a system at both the hardware and software levels and to measure performance characteristics?',options:['Development','Production','Staging','Test'],answer:[3]},
+  {id:'B33',domain:'GRC',explanation:'Open authentication (OAuth) enables access to multiple sites using one set of credentials. Federation allows seamless identity sharing between organizations. Together they satisfy the scenario\'s requirements.',type:'multi',text:'During onboarding, an employee creates a password for an intranet account (10 characters, numbers, letters, two special characters). The company will then grant access to other company-owned websites based on the intranet profile. Which of the following access management concepts is the company <strong>MOST</strong> likely using? <strong>(Select TWO)</strong>',options:['Open authentication','Identity proofing','Default password changes','Password complexity','Federation','Password manager'],answer:[0,4]},
+  {id:'B34',domain:'PM',explanation:'A communications plan outlines how the organization will notify affected parties about a data breach — what information to share, through which channels, and how to communicate effectively.',type:'mc',text:'A security researcher has alerted an organization that its sensitive user data was found for sale on a website. Which of the following should the organization use to inform the affected parties?',options:['An incident response plan','A business continuity plan','A disaster recovery plan','A communications plan'],answer:[3]},
+  {id:'B35',domain:'SecOps',explanation:'Application whitelisting controls which programs are allowed to run on a system. A newly installed application not added to the whitelist will be blocked from executing, causing it not to respond.',type:'mc',text:'A desktop support technician recently installed a new document-scanning software program on a computer. However, when the end user tried to launch the program, it did not respond. Which of the following is <strong>MOST</strong> likely the cause?',options:['The software was not added to the application whitelist','The system was isolated from the network due to infected software','The system was quarantined for missing software updates','A new firewall rule is needed to access the application'],answer:[0]},
+  {id:'B36',domain:'TVM',explanation:'Password spraying involves trying a few commonly used passwords against multiple usernames from the same source IP to avoid account lockouts — exactly what the logs show here.',type:'mc',text:'A security analyst reviews authentication logs and notices multiple authentication failures from different usernames all sharing the same source IP address. Which of the following password attacks is <strong>MOST</strong> likely happening?',options:['Rainbow table','Dictionary','Brute-force','Spraying'],answer:[3]},
+  {id:'B37',domain:'TVM',explanation:'Bluesnarfing involves gaining unauthorized access to a Bluetooth-enabled device by exploiting Bluetooth vulnerabilities — tricking the user into pairing with the attacker\'s device to facilitate unauthorized data access.',type:'mc',text:'An employee received multiple messages on a mobile device instructing the employee to pair the device to an unknown device. Which of the following <strong>BEST</strong> describes what a malicious person might be doing?',options:['Bluesnarfing','Evil twin','Rogue access point','Jamming'],answer:[0]},
+  {id:'B38',domain:'SecArch',explanation:'A WAF inspecting SSL traffic needs a decryption certificate to decrypt SSL before it can inspect the traffic for malicious content.',type:'mc',text:'A security engineer is installing a WAF to protect the company\'s website from malicious web requests over SSL. Which of the following is needed to meet the objective?',options:['Load-balanced servers','A spill-tunnel VPN','A decryption certificate','A reverse proxy'],answer:[2]},
+  {id:'B39',domain:'SecOps',explanation:'Continuous integration is the practice where developers regularly merge code into a central repository where it is automatically built and tested multiple times per day.',type:'mc',text:'Developers are writing code and merging it into shared repositories several times a day, where it is tested automatically. Which of the following concepts does this <strong>BEST</strong> represent?',options:['Stored procedures','Continuous integration','Functional testing','Elasticity'],answer:[1]},
+  {id:'B40',domain:'SecArch',explanation:'Attack surface must be minimized to reduce vulnerabilities. Ease of recovery ensures high availability can be maintained after failures. These are the two primary HA design considerations.',type:'multi',text:'Which of the following must be considered when designing a high-availability network? <strong>(Choose TWO)</strong>',options:['Responsiveness','Physical isolation','Extensible authentication','Attack surface','Ability to patch','Ease of recovery'],answer:[3,5]},
+  {id:'B41',domain:'SecOps',explanation:'Awareness training educates users to recognize and avoid phishing emails, addressing the human factor that allows phishing to bypass technical email filters.',type:'mc',text:'A security administrator has discovered that workstations are becoming infected with malware via phishing emails that bypass current email-filtering technology. No internal controls currently exist to evaluate URL safety. Which of the following would be <strong>BEST</strong> to implement?',options:['HIDS','IPS','A jump server','Forward proxy','Awareness training'],answer:[4]},
+  {id:'B42',domain:'TVM',explanation:'DNS hijacking reroutes DNS queries to a malicious server, allowing attackers to redirect HTTPS to HTTP and intercept traffic — explaining both the delays and protocol downgrades observed.',type:'mc',text:'At a CISO convention, attendees start noticing delays in the connection, and HTTPS site requests are reverting to HTTP. Which of the following <strong>BEST</strong> describes what is happening?',options:['SSL/TLS downgrade','Birthday collision on the certificate key','Brute force to the access point','DNS hijacking to reroute traffic'],answer:[3]},
+  {id:'B43',domain:'SecOps',explanation:'The command uses a hashed password with the -H flag to authenticate via SMB without knowing the plaintext password — a classic Pass the Hash attack.',type:'mc',text:'During a forensic investigation, a security analyst discovered the following command was run on a compromised host:<div class="code-block">crackmapexec smb 192.168.10.232 -u localadmin -H 0A3CE8D07A46E5C51070F03593E0A5E6</div>Which of the following attacks occurred?',options:['Pass the hash','Buffer overflow','SQL injection','Replay attack'],answer:[0]},
+  {id:'B44',domain:'SecOps',explanation:'A Next-generation SWG (Secure Web Gateway) provides URL filtering and malware protection for outbound traffic, enforcing consistent policies on company devices both inside and outside the office.',type:'mc',text:'The CISO has decided to outsource outbound Internet URL categorization and filtering to an outside company, and wants the same protections to apply even when laptops or mobile devices are away from the home office. Which of the following should the CISO choose?',options:['Web-application firewall','NGFW','CASB','Next-generation SWG'],answer:[3]},
+  {id:'B45',domain:'SecArch',explanation:'An HSM (Hardware Security Module) is a dedicated network appliance designed to securely store and manage cryptographic keys in an enterprise environment.',type:'mc',text:'An enterprise needs to keep cryptographic keys in a safe manner. Which of the following network appliances can achieve this goal?',options:['HSM','TPM','DLP','CASB'],answer:[0]},
+  {id:'B46',domain:'GRC',explanation:'The certificate *.comptia.org contains a wildcard at the secondary subdomain level and is valid from April 10, 2021 to April 8, 2022 — approximately one year — satisfying both the annual rotation and wildcard requirements.',type:'mc',text:'As part of the building process for a web application, the compliance team requires all PKI certificates are rotated annually and can only contain wildcards at the secondary subdomain level. Which of the following certificate properties will meet these requirements?',options:['HTTPS://*.app1.comptia.org, Valid from April 10 00:00:00 2021 - April 8 12:00:00 2022','HTTPS://app1.comptia.org, Valid from April 10 00:00:00 2021 - April 8 12:00:00 2022','HTTPS://*.comptia.org, Valid from April 10 00:00:00 2021 - April 8 12:00:00 2022','HTTPS://*.comptia.org, Valid from April 10 00:00:00 2021 - April 8 12:00:00 2023'],answer:[2]},
+  {id:'B47',domain:'GRC',explanation:'An annual privacy notice informs customers how their personal information is collected, used, and shared — which matches the notification Ann received about PII sharing with partners and affiliates.',type:'mc',text:'Ann, a customer, received a notification from her mortgage company stating her PII may be shared with partners, affiliates, and associates to maintain day-to-day business operations. Which of the following documents did Ann receive?',options:['A non-disclosure agreement','An annual privacy notice','A privileged-user agreement','A memorandum of understanding'],answer:[1]},
+  {id:'B48',domain:'SecOps',explanation:'SCP relies on SSH for secure file transfers. Turning off SSH entirely (instead of just modifying the sshd configuration to restrict remote logins) would block all SCP functionality.',type:'mc',text:'A new security engineer disabled remote logins to the NAS. Users can no longer use SCP to transfer files, even though data is still viewable from their PCs. What is the <strong>MOST</strong> likely cause?',options:['SSH was turned off instead of modifying the configuration file','Network services are no longer running on the NAS','TFTP was disabled on the local hosts','Remote login was disabled in the networkd.config instead of using the sshd.conf'],answer:[0]},
+  {id:'B49',domain:'PM',explanation:'A supply chain attack occurs when a threat actor exploits a third-party vendor or partner with weaker security standards to gain access to the target organization\'s systems or data.',type:'mc',text:'A company recently experienced a major breach where customer credit card data was exfiltrated through a dedicated business partner connection to a vendor not held to the same security standards. Which of the following is the <strong>MOST</strong> likely source of the breach?',options:['Side channel','Malware','Cryptographic downgrade','Supply chain'],answer:[3]},
+  {id:'B50',domain:'SecArch',explanation:'Installing generators provides backup power to maintain operations during outages. Constructing the secondary site in a geographically disperse location mitigates risks from regional disasters affecting both sites simultaneously.',type:'multi',text:'A security team is providing input on the design of a secondary data center. Which of the following should the security team recommend? <strong>(Select TWO)</strong>',options:['Deploying load balancers at the primary site','Installing generators','Using differential backups at the secondary site','Constructing the secondary site in a geographically disperse location','Configuring replication of the web servers to offline storage','Implementing hot and cold aisles at the secondary site'],answer:[1,3]},
+  {id:'B51',domain:'SecArch',explanation:'NFC (Near Field Communication) requires devices to be within a few centimeters of each other, making it the closest-proximity wireless data transfer technology available.',type:'mc',text:'A company would like to set up a secure way to transfer data between users via their mobile phones. The company\'s top priority is utilizing technology that requires users to be in as close proximity as possible. Which of the following connection methods would <strong>BEST</strong> fulfill this need?',options:['Wi-Fi','Cellular','NFC','Bluetooth'],answer:[2]},
+  {id:'B52',domain:'SecArch',explanation:'Firmware is software embedded in hardware devices that controls their operation and needs to be updated regularly to address vulnerabilities and security issues.',type:'mc',text:'Which of the following describes software on network hardware that needs to be updated on a routine basis to help address possible vulnerabilities?',options:['Application programming interface','Encryption strength','Firmware','Vendor management'],answer:[2]},
+  {id:'B53',domain:'SecOps',explanation:'Crosscut shredders physically destroy documents, making it impossible for attackers to reconstruct sensitive information retrieved from dumpster diving.',type:'mc',text:'A company installed several crosscut shredders as part of increased information security practices targeting data leakage risks. Which of the following will this practice reduce?',options:['Dumpster diving','Credential harvesting','Shoulder surfing','Information elicitation'],answer:[0]},
+  {id:'B54',domain:'TVM',explanation:'The input "admin\' or 1=1--" is a classic SQL injection payload designed to manipulate authentication queries so they always return true, bypassing login.',type:'mc',text:'A security analyst was deploying a new website and found a connection attempting to authenticate on the site\'s portal with the following input in the username field:<div class="code-block">admin\' or 1=1--</div>Which of the following <strong>BEST</strong> explains this type of attack?',options:['Code to execute a race condition on the server','Execution of a stored XSS on the website','SQLi on the field to bypass authentication','DLL injection to hijack administrator services'],answer:[2]},
+  {id:'B55',domain:'SecOps',explanation:'SOAR (Security Orchestration, Automation, and Response) platforms are specifically designed to integrate incident response workflows with automated decision points and actions based on predefined playbooks.',type:'mc',text:'An organization wants to integrate its incident response processes into a workflow with automated decision points and actions based on predefined playbooks. Which of the following should the organization implement?',options:['CASB','SIEM','SOAR','EDR'],answer:[2]},
+  {id:'B56',domain:'SecOps',explanation:'DLP (Data Loss Prevention) solutions monitor, detect, and block unauthorized data transfers, preventing employees from stealing data when accessing network shares on company-issued laptops.',type:'mc',text:'A Chief Information Officer is concerned about employees using company-issued laptops to steal data when accessing network shares. Which of the following should the company implement?',options:['HIDS','EDR','CASB','UEFI','DLP'],answer:[4]},
+  {id:'B57',domain:'SecOps',explanation:'CYOD (Choose Your Own Device) lets employees select from a pre-approved list of devices, balancing employee flexibility with company control and security over company data and infrastructure.',type:'mc',text:'A company would like to provide flexibility for employees on device preference while limiting the number of different hardware types to support. Which of the following deployment models will provide the needed flexibility with the <strong>GREATEST</strong> amount of control and security over company data?',options:['CYOD','VDI','COPE','BYOD'],answer:[0]},
+  {id:'B58',domain:'SecArch',explanation:'S/MIME (Secure/Multipurpose Internet Mail Extensions) is the standard for email encryption and digital signatures, meeting both security requirements specified by the CISO.',type:'mc',text:'A security architect is implementing a new email architecture. The CISO would like the new architecture to support email encryption as well as provide for digital signatures. Which of the following should the architect implement?',options:['IMAP','HTTPS','S/MIME','POP'],answer:[2]},
+  {id:'B59',domain:'TVM',explanation:'The web server log shows GET requests with UNION ALL SELECT attempting to extract usernames, passwords, and emails from the wp_users table — a classic CSRF attack targeting a banking application.',type:'mc',text:'A security analyst reviewing web server logs notices a particular account attempting to transfer large amounts of money via GET requests modifying account numbers and amounts. Which of the following types of attacks is most likely being conducted?',options:['CSRF','SQLi','API','Spear phishing'],answer:[0]},
+  {id:'B60',domain:'SecOps',explanation:'DLP (Data Loss Prevention) technologies actively monitor and control data transfers on the network to detect and prevent transmission of specific file types.',type:'mc',text:'Which of the following technologies is used to actively monitor for specific file types being transmitted on the network?',options:['Tcpreplay','Honeynets','Data loss prevention','File integrity monitoring'],answer:[2]},
+  {id:'B61',domain:'GRC',explanation:'SMS-based authentication is the least secure MFA method because SMS messages can be intercepted through SIM swapping attacks and other forms of SMS interception.',type:'mc',text:'Which of the following authentication methods is considered to be the <strong>LEAST</strong> secure?',options:['Token key','SMS','TOTP','HOTP'],answer:[1]},
+  {id:'B62',domain:'SecOps',explanation:'Emulating the malware in a heavily monitored DMZ provides a controlled environment for observing callback traffic while reducing lateral spread risk and minimizing adversary awareness of changes.',type:'mc',text:'A company\'s CIRT needs to observe network-based transactions between a callback domain and malware running on an enterprise PC. Which of the following techniques would be <strong>BEST</strong> to enable this while reducing lateral spread risk and adversary awareness?',options:['Create and apply microsegmentation rules','Physically move the PC to a separate Internet point of presence','Emulate the malware in a heavily monitored DMZ segment','Apply network blacklisting rules for the adversary domain'],answer:[2]},
+  {id:'B63',domain:'SecOps',explanation:'Hovering over the sender\'s email address reveals the actual underlying address, which is the simplest way to detect a spoofed or phishing email without taking potentially risky actions.',type:'mc',text:'A help desk technician receives an email from the CIO asking for documents. The technician knows the CIO is on vacation. Which of the following should the technician do to validate the authenticity of the email?',options:['Forward the email to the CIO and ask if the CIO sent it','Hover the mouse over the CIO\'s email address to verify the email address','Check the metadata in the email header in reverse order','Look at the "From" line in the email header and verify it matches the CIO\'s email address'],answer:[1]},
+  {id:'B64',domain:'SecArch',explanation:'An unknown Raspberry Pi connected to an Ethernet port creating an unauthorized wireless signal is a rogue access point — providing unauthorized wireless access to the network.',type:'mc',text:'After a WiFi scan of a local office, an unknown wireless signal was identified. An unknown Raspberry Pi device was found connected to an Ethernet port using a single connection. Which of the following <strong>BEST</strong> describes the purpose of this device?',options:['IoT sensor','Evil twin','Rogue access point','On-path attack'],answer:[2]},
+  {id:'B65',domain:'GRC',explanation:'Homomorphic encryption allows computations to be performed on encrypted data without decrypting it, keeping the cloud provider from accessing the plaintext while still allowing data manipulation — despite computational overhead.',type:'mc',text:'A financial institution would like to store customer data in a cloud but still allow the data to be accessed and manipulated while encrypted, preventing the cloud service provider from deciphering the data. The institution is not concerned about computational overheads. Which of the following cryptographic techniques would <strong>BEST</strong> meet the requirement?',options:['Ephemeral','Symmetric','Asymmetric','Homomorphic'],answer:[3]},
+  {id:'B66',domain:'SecArch',explanation:'A biometric scanner verifies identity using unique physical characteristics, ensuring that only the authorized user is physically present when gaining access to a secured area.',type:'mc',text:'Which of the following is a physical security control that ensures only the authorized user is present when gaining access to a secured area?',options:['A biometric scanner','A PIN pad','A PKI token','A smart card reader'],answer:[0]},
+  {id:'B67',domain:'SecOps',explanation:'Geofencing grants logical access based on physical location and proximity — creating virtual boundaries that trigger access permissions based on where the user physically is.',type:'mc',text:'The CISO wants to pilot a new adaptive, user-based authentication method that includes granting logical access based on physical location and proximity. Which of the following is the <strong>BEST</strong> solution?',options:['Geofencing','Self-sovereign identification','PKI certificates','SSO'],answer:[0]},
+  {id:'B68',domain:'TVM',explanation:'A RAT (Remote Access Trojan) communicates with external IP addresses during off-hours to avoid detection while allowing attackers to remotely control compromised hosts.',type:'mc',text:'A security analyst is investigating multiple hosts communicating with external IP addresses between 2:00 a.m. and 4:00 a.m. The malware has evaded traditional antivirus software. Which of the following types of malware is most likely infecting the hosts?',options:['A RAT','Ransomware','A Worm','Polymorphic'],answer:[0]},
+  {id:'B69',domain:'PM',explanation:'An SLA (Service Level Agreement) outlines the exact requirements and commitments made by a cloud service provider regarding availability metrics and performance.',type:'mc',text:'An organization would like to remediate the risk associated with its cloud service provider not meeting its advertised 99.999% availability metrics. Which of the following should the organization consult for the exact requirements?',options:['BPA','NDA','MOU','SLA'],answer:[3]},
+  {id:'B70',domain:'GRC',explanation:'Project information for a critical government system would be classified as Confidential (sensitive, authorized personnel only) and Restricted (highly sensitive with strict access controls).',type:'multi',text:'A company is developing a critical system for the government and storing project information on a fileshare. Which of the following describes how this data will most likely be classified? <strong>(Select TWO)</strong>',options:['Operational','Urgent','Confidential','Restricted','Public','Private'],answer:[2,3]},
+  {id:'B71',domain:'GRC',explanation:'A Privileged Access Management (PAM) system provides credential check-in/checkout, ability to use but not know passwords, automated password changes, and access logging — meeting all four requirements.',type:'mc',text:'An organization needs to implement more stringent controls over administrator/root credentials and service accounts, including: check-in/checkout of credentials, ability to use but not know the password, automated password changes, and logging of access. Which of the following solutions would meet the requirements?',options:['A privileged access management system','Secure Enclave','An OpenID Connect authentication system','OAuth 2.0'],answer:[0]},
+  {id:'B72',domain:'TVM',explanation:'Input sanitization validates and cleanses user input, preventing attackers from injecting SQL or other malicious code that could reveal service account names or other sensitive information.',type:'mc',text:'A company was compromised, and a security analyst discovered an attacker was able to get access to a service account. Which of the following <strong>MOST</strong> likely would have prevented the attacker from learning the service account name?',options:['Input sanitization','Race condition testing','Proper error handling','Forward web server logs to a SIEM'],answer:[0]},
+  {id:'B73',domain:'SecArch',explanation:'IaC (Infrastructure as Code) manages and provisions computing infrastructure through machine-readable scripts and automation, which matches the scenario of virtual networking through automation and scripted route provisioning.',type:'mc',text:'A company reduced the area utilized in its datacenter by creating virtual networking through automation and provisioning routes and rules through scripting. Which of the following does this example describe?',options:['MSSP','IaC','Containers','SaaS'],answer:[1]},
+  {id:'B74',domain:'SecOps',explanation:'Changing default settings on a PC (such as disabling Autorun/Autoplay) helps prevent malicious files on plug-and-play storage devices from executing automatically.',type:'mc',text:'A new plug-and-play storage device was installed on a PC in the corporate environment. Which of the following safeguards will <strong>BEST</strong> help to protect the PC from malicious files on the storage device?',options:['Encrypt the disk on the storage device','Change the default settings on the PC','Plug the storage device in to the UPS','Define the PC firewall rules to limit access'],answer:[1]},
+  {id:'B75',domain:'SecOps',explanation:'The White team acts as a referee during a penetration-testing exercise, overseeing the entire process and ensuring rules and guidelines are followed by both Red and Blue teams.',type:'mc',text:'Which of the following <strong>BEST</strong> describes the team that acts as a referee during a penetration-testing exercise?',options:['White team','Blue team','Red team','Green team'],answer:[0]},
+  {id:'B76',domain:'TVM',explanation:'Credential stuffing uses stolen account credentials from a data breach to gain unauthorized access. The manager reused passwords across sites, one site was breached, and the account was then accessed from a foreign IP.',type:'mc',text:'A customer reported fraudulent banking details on invoices. Investigation reveals: the accounts payable manager reused the same password across multiple external websites and corporate account; one website recently had a data breach; and the manager\'s corporate email was accessed from a foreign country. Which of the following attacks <strong>MOST</strong> likely compromised the manager\'s account?',options:['Dictionary','Password spraying','Credential stuffing','Remote access Trojan','Brute-force'],answer:[2]},
+  {id:'B77',domain:'GRC',explanation:'Password history prevents users from reusing old passwords. Geofencing restricts access based on geographic location, preventing unauthorized logins from hostile foreign nations.',type:'multi',text:'An employee\'s account was compromised. Investigation shows the employee avoided changing passwords by reusing a previous password, and the account was accessed from a hostile foreign nation. Which of the following can be implemented to prevent these issues? <strong>(Select TWO)</strong>',options:['Geotagging','Password lockout','Password history','Password complexity','Geographic dispersal','Geofencing'],answer:[2,5]},
+  {id:'B78',domain:'TVM',explanation:'Smishing uses SMS/text messages to deceive individuals into providing sensitive information. Phishing involves impersonating a trusted entity to trick individuals — both apply since the text impersonates the payroll department.',type:'multi',text:'An employee receives a text message that appears to have been sent by the payroll department asking for credential verification. Which of the following social engineering techniques are being attempted? <strong>(Choose TWO)</strong>',options:['Impersonation','Vishing','Smishing','Phishing','Misinformation','Typosquatting'],answer:[2,3]},
+  {id:'B79',domain:'SecArch',explanation:'DNSSEC provides authentication and integrity for DNS responses, preventing DNS spoofing attacks that redirect website traffic to malicious servers to harvest credentials.',type:'mc',text:'A company recently experienced an attack during which its main website was directed to the attacker\'s web server, allowing the attacker to harvest credentials. Which of the following should the company implement to prevent this?',options:['IPSec','SSL/TLS','DNSSEC','S/MIME'],answer:[2]},
+  {id:'B80',domain:'SecOps',explanation:'A phishing campaign simulates phishing emails and monitors user responses, directly testing a user\'s ability to recognize email-based attacks and providing targeted awareness training.',type:'mc',text:'A security administrator wants to implement a program that tests a user\'s ability to recognize attacks over the organization\'s email system. Which of the following would be <strong>BEST</strong> suited for this task?',options:['Gamification','Annual information security training','Phishing campaign','Social media analysis'],answer:[2]},
+  {id:'B81',domain:'SecOps',explanation:'The Staging environment hosts the current version configurations and code, compares user-story responses and workflow, and uses a modified version of actual data for final testing before production.',type:'mc',text:'Which of the following environments typically hosts the current version configurations and code, compares user-story responses and workflow, and uses a modified version of actual data for testing?',options:['Development','Production','Test','Staging'],answer:[3]},
+  {id:'B82',domain:'SecOps',explanation:'The Development environment uses dummy data, is typically installed locally on a developer\'s system, and can be directly assessed and modified easily with each build.',type:'mc',text:'Which of the following environments utilizes dummy data and is <strong>MOST</strong> likely to be installed locally on a system that allows it to be assessed directly and modified easily with each build?',options:['Staging','Production','Test','Development'],answer:[3]},
+  {id:'B83',domain:'TVM',explanation:'Vishing (voice phishing) involves using phone calls to deceive individuals into providing sensitive financial information or performing actions that lead to financial loss.',type:'mc',text:'A bad actor tries to persuade someone to provide financial information over the phone in order to gain access to funds. Which of the following types of attacks does this scenario describe?',options:['Phishing','Whaling','Vishing','Spear phishing'],answer:[2]},
+  {id:'B84',domain:'TVM',explanation:'The log shows "UNION ALL SELECT user_login, user_pass, user_email from wp_users" — a SQL injection attack attempting to extract user credentials from the WordPress database.',type:'mc',text:'A security analyst reviews web server logs and notices the following line:<div class="code-block">104.35.45.53 [22/May/2020:07:00:58 +0100] "GET . UNION ALL SELECT user_login, user_pass, user_email from wp_users-- HTTP/1.1" 200 1072</div>Which of the following vulnerabilities is the attacker trying to exploit?',options:['SQLi','XSS','CSRF','SSRF'],answer:[0]},
+  {id:'B85',domain:'SecOps',explanation:'Quarantining the host from other parts of the network is the most immediate response to prevent malware from spreading to other systems while preserving the infected host for analysis.',type:'mc',text:'A security analyst is responding to an alert from the SIEM. The alert states that malware was discovered on a host and was not automatically deleted. Which of the following would be <strong>BEST</strong> for the analyst to perform?',options:['Quarantine the host from other parts of the network','Implement a network-wide scan for other instances of the malware','Add a deny-all rule to that host in the network ACL','Revoke the client\'s network access certificates'],answer:[0]},
+  {id:'B86',domain:'PM',explanation:'Full backups followed by incremental backups is the best strategy to minimize restores — only the last full backup and the most recent incremental backup are needed for recovery.',type:'mc',text:'A company wants to modify its backup strategy to minimize the number of backups that would need to be restored in case of data loss. Which of the following would be the <strong>BEST</strong> backup strategy?',options:['Incremental backups followed by differential backups','Full backup followed by different backups','Full backups followed by incremental backups','Incremental backups followed by delta backups','Delta backups followed by differential backups'],answer:[2]},
+  {id:'B87',domain:'SecArch',explanation:'Badge access requires authorized credentials to enter the facility. An access control vestibule adds multiple layers of verification before access is granted, together ensuring only authorized personnel can enter.',type:'multi',text:'Which of the following would be the best ways to ensure only authorized personnel can access a secure facility? <strong>(Select TWO)</strong>',options:['Fencing','Sensor','Sign-in sheet','Badge access','Access control vestibule','Video surveillance'],answer:[3,4]},
+  {id:'B88',domain:'GRC',explanation:'The NIST Risk Management Framework (RMF) is a structured process involving categorizing the system, selecting controls, implementing controls, assessing effectiveness, and authorizing the system — exactly the steps the CISO is following.',type:'mc',text:'A CISO is evaluating the dangers involved in deploying a new ERP system. The CISO categorizes the system, selects the controls, implements the controls, and then assesses the success of the controls before authorizing the system. Which of the following is the CISO using?',options:['The Diamond Model of Intrusion Analysis','CIS Critical Security Controls','NIST Risk Management Framework','ISO 27002'],answer:[2]},
+  {id:'B89',domain:'SecArch',explanation:'WPS (Wi-Fi Protected Setup) allows users to connect to a wireless network via push-button or PIN without needing to remember or enter the Wi-Fi password.',type:'mc',text:'A network analyst is setting up a wireless access point for a home office. Users need to connect to the access point securely but do not want to have to remember passwords. Which of the following should the network analyst enable?',options:['WPS','Captive portal','802.1X','MAC address filtering'],answer:[0]},
+  {id:'B90',domain:'TVM',explanation:'Privilege escalation occurs when an attacker gains unauthorized elevated access, such as installing malicious software and initiating a new remote session after obtaining credentials through phishing.',type:'mc',text:'After a phishing scam obtained user credentials, a red team was able to craft a payload to deploy on a server, allowing the installation of malicious software that initiates a new remote session. Which of the following types of attacks has occurred?',options:['Privilege escalation','Session replay','Application programming interface','Directory traversal'],answer:[0]},
+  {id:'B91',domain:'SecOps',explanation:'Reviewing email event logs reveals the timing of report submissions, any attachments sent, and whether emails were backdated or manipulated — providing concrete evidence of fraudulent submission.',type:'mc',text:'A project manager claimed to have previously sent reports via email, but then quickly generated and backdated reports before submitting them in a new email thread. Which of the following actions <strong>MOST</strong> likely supports an investigation for fraudulent submission?',options:['Establish chain of custody','Inspect the file metadata','Reference the data retention policy','Review the email event logs'],answer:[3]},
+  {id:'B92',domain:'GRC',explanation:'Multifactor authentication adds an extra layer of security that remains effective even if credentials are stolen, making it the most effective control for preventing unauthorized logins via credential theft.',type:'mc',text:'A global company is experiencing unauthorized logging due to credential theft and brute-force attacks. The company is considering a third-party identity provider. Which of the following would be the <strong>BEST</strong> control for the company to require from prospective vendors?',options:['A banned password list','Multifactor authentication','A complex password policy','IP restrictions'],answer:[1]},
+  {id:'B93',domain:'SecArch',explanation:'A wildcard certificate (*.companysite.com) covers all subdomains with a single certificate, providing both convenience and cost-effectiveness for securing multiple subdomains.',type:'mc',text:'A retail company registered the following URLs: www.companysite.com; shop.companysite.com; about-us.companysite.com; contact-us.companysite.com; secure-logon.companysite.com. Which of the following should the company use to secure its website if concerned with convenience and cost?',options:['A code-signing certificate','A self-signed certificate','A root certificate','A wildcard certificate','An extended validation certificate'],answer:[3]},
+  {id:'B94',domain:'SecOps',explanation:'The SIEM logging alerts about malicious activity blocked by antivirus and web content filters is a detective control — monitoring and detecting security events that have already occurred.',type:'mc',text:'A company is implementing a new SIEM to log and send alerts whenever malicious activity is blocked by its antivirus and web content filters. Which of the following is the primary use case for this scenario?',options:['Implementation of deterrent controls','Implementation of corrective controls','Implementation of detective controls','Implementation of preventive controls'],answer:[2]},
+  {id:'B95',domain:'SecArch',explanation:'Lack of vendor support is the primary risk with legacy software — without support, the software no longer receives security updates, patches, or bug fixes, leaving the system increasingly vulnerable.',type:'mc',text:'A company is required to continue using legacy software to support a critical service. Which of the following <strong>BEST</strong> explains a risk of this practice?',options:['Default system configuration','Unsecure protocols','Lack of vendor support','Weak encryption'],answer:[2]},
+  {id:'B96',domain:'SecArch',explanation:'IaaS (Infrastructure as a Service) provides a la carte cloud services — businesses select and pay for specific services like cloud backups, VM elasticity, and secure networking.',type:'mc',text:'A business is looking for a cloud service provider that offers a la carte services, including cloud backups, VM elasticity, and secure networking. Which of the following cloud service provider types should the business engage?',options:['PaaS','IaaS','SaaS','XaaS'],answer:[1]},
+  {id:'B97',domain:'GRC',explanation:'Block ciphers operate on fixed-length blocks of data (typically 64 or 128 bits) and encrypt or decrypt the entire block at once — distinguishing them from stream ciphers.',type:'mc',text:'Which of the following is a cryptographic concept that operates on a fixed length of bits?',options:['Salting','Key stretching','Hashing','Block cipher'],answer:[3]},
+  {id:'B98',domain:'SecOps',explanation:'After identifying and disabling affected switches, the next step is to initiate the organization\'s incident response plan to investigate, mitigate, and formally resolve the issue.',type:'mc',text:'The help desk has received calls from users in multiple locations unable to access core network services. The network team has identified and turned off the network switches using remote commands. Which of the following actions should the network team take <strong>NEXT</strong>?',options:['Disconnect all external network connections from the firewall','Send response teams to the network switch locations to perform updates','Initiate the organization\'s incident response plan','Turn on all the network switches using the centralized management software'],answer:[2]},
+  {id:'B99',domain:'TVM',explanation:'The Diamond Model of Intrusion Analysis is used by security researchers to track adversaries based on their capabilities, infrastructure, and victims to understand TTPs (tactics, techniques, procedures).',type:'mc',text:'A security researcher is tracking an adversary by noting its attacks and techniques based on its capabilities, infrastructure, and victims. Which of the following is the researcher <strong>MOST</strong> likely using?',options:['The Diamond Model of Intrusion Analysis','The Cyber Kill Chain','The incident response process','The MITRE CVE database'],answer:[0]},
+  {id:'B100',domain:'GRC',explanation:'A SOC 2 Type 2 report provides detailed information about a vendor\'s security controls and their effectiveness over time, enabling a security assessment without requiring direct audit access.',type:'mc',text:'A security manager needs to assess the security posture of one of the organization\'s vendors. The contract does not allow for auditing of the vendor\'s security controls. Which of the following should the manager request to complete the assessment?',options:['A SOC 2 Type 2 report','A business partnership agreement','A memorandum of understanding','A service-level agreement'],answer:[0]},
+  {id:'B101',domain:'GRC',explanation:'Hash substitution involves replacing the hash value of a document, allowing alterations to be made to the content without invalidating the digital signature — the author notices changes but cannot validate an integrity issue.',type:'mc',text:'An attacker replaces a digitally signed document with another version that goes unnoticed. Upon reviewing the document\'s contents, the author notices additional verbiage that was not originally in the document but cannot validate an integrity issue. Which of the following attacks was used?',options:['Phishing','Collision','Cryptomalware','Hash substitution'],answer:[3]},
+  {id:'B102',domain:'SecArch',explanation:'High availability ensures network services remain continuously accessible, maintaining both performance and security through redundancy and failover capabilities during the cloud transition.',type:'mc',text:'A company acquired several other small companies and is transitioning network services to the cloud. The company wants to make sure that performance and security remain intact. Which of the following <strong>BEST</strong> meets both requirements?',options:['Integration and auditing','High availability','Segmentation','Application security'],answer:[1]},
+  {id:'B103',domain:'SecOps',explanation:'A simulation creates a realistic scenario requiring real-time decision-making under pressure — providing the closest experience to an actual incident response compared to tabletops, walk-throughs, or lessons learned.',type:'mc',text:'Which of the following would produce the closest experience of responding to an actual incident response scenario?',options:['Lessons learned','Tabletop','Walk-through','Simulation'],answer:[3]},
+  {id:'B104',domain:'GRC',explanation:'Retina scanning is considered one of the most accurate biometric authentication methods, capturing unique blood vessel patterns in the retina that are extremely difficult to forge or replicate.',type:'mc',text:'Which of the following biometric authentication methods is the <strong>MOST</strong> accurate?',options:['Signature','Retina','Gait','Voice'],answer:[1]},
+  {id:'B105',domain:'GRC',explanation:'An automated monthly attestation process ensures supervisors regularly review and approve access, with automatic removal if approval is denied — keeping appropriate access while removing unneeded access in a reasonable timeframe.',type:'mc',text:'During an annual audit, access exceptions for USB storage devices showed that some users did not create tickets for requests and access had not been removed when no longer needed. Which of the following should the company do to ensure appropriate access is not disrupted but unneeded access is removed in a reasonable time frame?',options:['Create an automated, monthly attestation process that removes access if a supervisor denies approval','Implement a ticketing system that tracks each request and generates reports listing active USB storage users','Perform a quarterly audit of all user accounts that have been granted access','Remove access for all employees and only allow new access with supervisor approval'],answer:[0]}
+];
+
+const state = {
+  current: 0,
+  userAnswers: [],
+  submitted: [],
+  timerSeconds: 90 * 60,
+  timerInterval: null,
+  timerRunning: false
+};
+
+function startTimer() {
+  state.timerRunning = true;
+  state.timerInterval = setInterval(() => {
+    state.timerSeconds--;
+    updateTimerDisplay();
+    if (state.timerSeconds <= 0) { clearInterval(state.timerInterval); showResults(); }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer');
+  const m = Math.floor(state.timerSeconds / 60);
+  const s = state.timerSeconds % 60;
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = state.timerSeconds < 60 ? 'danger' : state.timerSeconds < 300 ? 'warn' : '';
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timerBtn');
+  if (state.timerRunning) {
+    clearInterval(state.timerInterval);
+    state.timerRunning = false;
+    btn.textContent = 'RESUME';
+  } else { startTimer(); btn.textContent = 'PAUSE'; }
+}
+
+function buildGrid() {
+  const grid = document.getElementById('qGrid');
+  grid.innerHTML = '';
+  activeQuestions.forEach((q, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'q-dot';
+    dot.textContent = i + 1;
+    dot.dataset.idx = i;
+    dot.title = q.id;
+    dot.onclick = () => goTo(i);
+    grid.appendChild(dot);
+  });
+}
+
+function updateGrid() {
+  document.querySelectorAll('.q-dot').forEach((dot, i) => {
+    dot.className = 'q-dot';
+    if (i === state.current) dot.classList.add('active');
+    if (state.submitted[i]) {
+      const ua = state.userAnswers[i] || [];
+      dot.classList.add(arrEq(ua.slice().sort(), activeQuestions[i].answer.slice().sort()) ? 'correct' : 'wrong');
+    } else if (state.userAnswers[i] && state.userAnswers[i].length > 0) {
+      dot.classList.add('answered');
+    }
+  });
+  const answered = state.userAnswers.filter(a => a && a.length > 0).length;
+  document.getElementById('progressBar').style.width = `${(answered / activeQuestions.length) * 100}%`;
+}
+
+function arrEq(a, b) { return a.length === b.length && a.every((v,i) => v === b[i]); }
+
+function renderQuestion(idx) {
+  const q = activeQuestions[idx];
+  const ua = state.userAnswers[idx] || [];
+  const submitted = state.submitted[idx];
+  const letters = ['A','B','C','D','E','F','G'];
+  const isMulti = q.type === 'multi';
+  const tag = isMulti ? `<span class="q-tag multi">MULTI-SELECT</span>` : `<span class="q-tag mc">MULTIPLE CHOICE</span>`;
+
+  let optHTML = q.options.map((opt, oi) => {
+    let cls = 'option';
+    if (submitted) {
+      cls += ' disabled';
+      if (q.answer.includes(oi)) cls += ' correct';
+      else if (ua.includes(oi)) cls += ' wrong';
+    } else if (ua.includes(oi)) cls += ' selected';
+
+    if (isMulti) {
+      return `<div class="${cls}" onclick="selectOption(${oi})">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" stroke="#0b0e17" stroke-width="2" fill="none"/></svg></div>
+        <span class="opt-letter">${letters[oi]}.</span><span>${opt}</span></div>`;
+    }
+    return `<div class="${cls}" onclick="selectOption(${oi})">
+      <span class="opt-letter">${letters[oi]}.</span><span>${opt}</span></div>`;
+  }).join('');
+
+  let feedbackHTML = '';
+  if (submitted) {
+    const correct = arrEq((ua||[]).slice().sort(), q.answer.slice().sort());
+    const correctLetters = q.answer.map(i => letters[i]).join(', ');
+    const domainLabel = {GRC:'General Security Concepts',TVM:'Threats, Vulnerabilities & Mitigations',SecArch:'Security Architecture',SecOps:'Security Operations',PM:'Security Program Management'}[q.domain] || q.domain;
+    feedbackHTML = `<div class="feedback ${correct?'correct':'wrong'} visible">
+      <div class="feedback-icon">${correct ? '✓ CORRECT' : '✗ INCORRECT'}</div>
+      ${correct ? 'Well done!' : `The correct answer is: <strong>${correctLetters}</strong>`}
+    </div>
+    <div class="explanation-box">
+      <div class="expl-label">💡 EXPLANATION &nbsp;·&nbsp; <span style="color:var(--accent)">${domainLabel}</span></div>
+      ${q.explanation || ''}
+    </div>`;
+  }
+
+  const isLast = idx === activeQuestions.length - 1;
+  document.getElementById('questionContainer').innerHTML = `
+    <div class="q-header">
+      <span class="q-num">QUESTION ${idx+1} OF ${activeQuestions.length} · ${q.id}</span>${tag}
+    </div>
+    <div class="question-card ${submitted?(arrEq((ua||[]).slice().sort(),q.answer.slice().sort())?'answered-correct':'answered-wrong'):''}">
+      <div class="question-text">${q.text}</div>
+      <div class="options">${optHTML}</div>
+      ${feedbackHTML}
+    </div>
+    <div class="q-footer">
+      <button class="nav-btn" onclick="goTo(${idx-1})" ${idx===0?'disabled':''}>← PREV</button>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        ${!submitted ? `<button class="submit-btn" onclick="submitAnswer()">CHECK ANSWER</button>` : ''}
+        ${!isLast ? `<button class="nav-btn" onclick="goTo(${idx+1})" style="border-color:var(--accent);color:var(--accent);${!submitted?'opacity:0.45;':''}">NEXT →</button>` : ''}
+        ${submitted && isLast ? `<button class="submit-btn finish" onclick="showResults()">VIEW RESULTS</button>` : ''}
+      </div>
+    </div>`;
+  updateGrid();
+}
+
+function selectOption(oi) {
+  const idx = state.current;
+  if (state.submitted[idx]) return;
+  const q = activeQuestions[idx];
+  let ua = state.userAnswers[idx] ? [...state.userAnswers[idx]] : [];
+  if (q.type === 'multi') {
+    ua = ua.includes(oi) ? ua.filter(x => x !== oi) : [...ua, oi];
+  } else { ua = [oi]; }
+  state.userAnswers[idx] = ua;
+  renderQuestion(idx);
+}
+
+function submitAnswer() {
+  const idx = state.current;
+  if (!state.userAnswers[idx] || state.userAnswers[idx].length === 0) state.userAnswers[idx] = [];
+  state.submitted[idx] = true;
+  updateScorePanel();
+  renderQuestion(idx);
+}
+
+function goTo(idx) {
+  if (idx < 0 || idx >= activeQuestions.length) return;
+  state.current = idx;
+  renderQuestion(idx);
+}
+
+function updateScorePanel() {
+  const done = state.submitted.filter(Boolean).length;
+  if (!done) { document.getElementById('scorePanel').classList.remove('visible'); return; }
+  document.getElementById('scorePanel').classList.add('visible');
+  let correct = 0;
+  state.submitted.forEach((s, i) => {
+    if (!s) return;
+    if (arrEq((state.userAnswers[i]||[]).slice().sort(), activeQuestions[i].answer.slice().sort())) correct++;
+  });
+  document.getElementById('scoreBig').textContent = `${Math.round((correct/done)*100)}%`;
+  document.getElementById('scoreCorrect').textContent = correct;
+  document.getElementById('scoreWrong').textContent = done - correct;
+}
+
+function startExam() {
+  if (examMode === 'random') {
+    // Shuffle and pick N questions
+    const pool = [...questions];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    activeQuestions = pool.slice(0, randCount);
+    const mins = Math.round(randCount * 1.2);
+    state.timerSeconds = mins * 60;
+    updateTimerDisplay();
+  } else {
+    activeQuestions = questions;
+    state.timerSeconds = 90 * 60;
+    updateTimerDisplay();
+  }
+  state.userAnswers = new Array(activeQuestions.length).fill(null);
+  state.submitted = new Array(activeQuestions.length).fill(false);
+  state.current = 0;
+
+  document.getElementById('introSection').style.display = 'none';
+  if (examMode === 'full') {
+    document.getElementById('pbqSection').style.display = 'block';
+  } else {
+    document.getElementById('pbqSection').style.display = 'none';
+    document.getElementById('mcqSection').style.display = 'block';
+    buildGrid();
+    renderQuestion(0);
+  }
+  document.getElementById('finishBtn').style.display = 'block';
+  document.getElementById('backToIntroBtn').style.display = 'flex';
+  startTimer();
+}
+
+function goBackToIntro() {
+  // Stop timer
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  state.timerRunning = false;
+  // Reset state
+  state.userAnswers = [];
+  state.submitted = [];
+  state.current = 0;
+  activeQuestions = [];
+  // Hide all sections, show intro
+  document.getElementById('pbqSection').style.display = 'none';
+  document.getElementById('mcqSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('introSection').style.display = 'block';
+  document.getElementById('finishBtn').style.display = 'none';
+  document.getElementById('backToIntroBtn').style.display = 'none';
+  document.getElementById('timerBtn').style.display = 'inline-block';
+  // Reset timer display
+  const mins = examMode === 'random' ? Math.round(randCount * 1.2) : 90;
+  state.timerSeconds = mins * 60;
+  updateTimerDisplay();
+}
+
+function showMCQ() {
+  document.getElementById('pbqSection').style.display = 'none';
+  document.getElementById('mcqSection').style.display = 'block';
+  state.userAnswers = new Array(activeQuestions.length).fill(null);
+  state.submitted = new Array(activeQuestions.length).fill(false);
+  state.current = 0;
+  buildGrid();
+  renderQuestion(0);
+}
+
+function showResults() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  document.getElementById('timerBtn').style.display = 'none';
+  document.getElementById('finishBtn').style.display = 'none';
+  document.getElementById('pbqSection').style.display = 'none';
+  document.getElementById('mcqSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+
+  let correct = 0, wrong = 0, skipped = 0;
+  activeQuestions.forEach((q, i) => {
+    if (!state.submitted[i] || !(state.userAnswers[i]||[]).length) { skipped++; return; }
+    if (arrEq((state.userAnswers[i]||[]).slice().sort(), q.answer.slice().sort())) correct++;
+    else wrong++;
+  });
+
+  const pct = Math.round((correct / activeQuestions.length) * 100);
+  const pass = pct >= 70;
+  document.getElementById('finalScore').textContent = `${pct}%`;
+  document.getElementById('finalScore').className = `final-score ${pass ? 'pass' : 'fail'}`;
+  document.getElementById('finalPct').textContent = `${correct}/${activeQuestions.length} Correct`;
+  document.getElementById('passFailMsg').innerHTML = pass
+    ? `<span style="color:var(--green)">✓ PASS — You met the 70% threshold!</span>`
+    : `<span style="color:var(--red)">✗ BELOW PASSING — Review your weak areas and try again.</span>`;
+  document.getElementById('resCorrect').textContent = correct;
+  document.getElementById('resWrong').textContent = wrong;
+  document.getElementById('resSkipped').textContent = skipped;
+  renderDomainSummary();
+  updateGrid();
+}
+
+function renderDomainSummary() {
+  const domainMeta = {
+    GRC:     '1.0 General Security Concepts',
+    TVM:     '2.0 Threats, Vulnerabilities & Mitigations',
+    SecArch: '3.0 Security Architecture',
+    SecOps:  '4.0 Security Operations',
+    PM:      '5.0 Security Program Management & Oversight'
+  };
+  const stats = {};
+  Object.keys(domainMeta).forEach(d => { stats[d] = {total:0, correct:0, wrong:0, skipped:0}; });
+
+  activeQuestions.forEach((q, i) => {
+    const d = q.domain;
+    if (!stats[d]) return;
+    stats[d].total++;
+    if (!state.submitted[i] || !(state.userAnswers[i]||[]).length) {
+      stats[d].skipped++;
+    } else if (arrEq((state.userAnswers[i]||[]).slice().sort(), q.answer.slice().sort())) {
+      stats[d].correct++;
+    } else {
+      stats[d].wrong++;
+    }
+  });
+
+  const answered = Object.values(stats).filter(s => s.total > 0);
+  if (!answered.length) return;
+
+  // Sort by pct desc
+  const sorted = Object.entries(domainMeta)
+    .map(([key, name]) => ({key, name, ...stats[key]}))
+    .filter(d => d.total > 0)
+    .map(d => ({ ...d, pct: d.total ? Math.round((d.correct / d.total) * 100) : 0 }))
+    .sort((a,b) => b.pct - a.pct);
+
+  const maxPct = Math.max(...sorted.map(d => d.pct));
+  const minPct = Math.min(...sorted.map(d => d.pct));
+
+  let html = '<h3>DOMAIN PERFORMANCE BREAKDOWN</h3>';
+
+  sorted.forEach((d, i) => {
+    let badgeHtml = '';
+    let barColor = 'var(--yellow)';
+    if (d.pct >= 80) { badgeHtml = '<span class="domain-badge badge-strong">STRENGTH</span>'; barColor = 'var(--green)'; }
+    else if (d.pct < 60) { badgeHtml = '<span class="domain-badge badge-weak">NEEDS WORK</span>'; barColor = 'var(--red)'; }
+    else { badgeHtml = '<span class="domain-badge badge-ok">DEVELOPING</span>'; barColor = 'var(--yellow)'; }
+
+    html += `<div class="domain-card">
+      <div class="domain-card-header">
+        <span class="domain-card-name">${d.name}${badgeHtml}</span>
+        <span class="domain-card-pct" style="color:${barColor}">${d.pct}%</span>
+      </div>
+      <div class="domain-bar-track">
+        <div class="domain-bar-fill" style="width:${d.pct}%;background:${barColor}"></div>
+      </div>
+      <div class="domain-detail">${d.correct}/${d.total} correct${d.skipped ? ' · ' + d.skipped + ' skipped' : ''}</div>
+    </div>`;
+  });
+
+  document.getElementById('domainSummary').innerHTML = html;
+}
+
+function reviewAnswers() {
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('mcqSection').style.display = 'block';
+  document.getElementById('timerBtn').style.display = 'none';
+  state.current = 0;
+  renderQuestion(0);
+}
+</script>
+
+<script>
+/* ── THEME TOGGLE ── */
+function toggleTheme() {
+  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem('bl-theme', next); } catch(e) {}
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  var icon  = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  if (!icon || !label) return;
+  icon.textContent  = theme === 'light' ? '🌙' : '☀️';
+  label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
+}
+(function() {
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', t);
+})();
+document.addEventListener('DOMContentLoaded', function() {
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  applyTheme(t);
+});
+</script>
+
+</body>
+</html>
