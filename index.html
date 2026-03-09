@@ -840,6 +840,251 @@
     border-top: 1px solid var(--border);
   }
 
+  /* ── CYBER PERIODIC TABLE (embedded) ── */
+  .pt-section {
+    margin-bottom: 2rem;
+  }
+
+  .pt-section-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .pt-section-header h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.4rem;
+  }
+
+  .pt-section-header p {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+
+  .pt-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .pt-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9.5px;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .pt-legend-dot {
+    width: 9px; height: 9px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .pt-scroll-wrap {
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .pt-grid-embed {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(60px, 68px));
+    gap: 3px;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  .pt-el {
+    position: relative;
+    aspect-ratio: 1;
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 4px 3px 3px;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s, z-index 0s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    background: var(--bg2);
+    z-index: 1;
+  }
+
+  .pt-el::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+    transition: opacity 0.18s;
+    background: currentColor;
+  }
+
+  .pt-el:hover {
+    transform: scale(1.18) translateY(-4px);
+    z-index: 100;
+    box-shadow: 0 0 18px -2px currentColor, 0 6px 24px rgba(0,0,0,0.4);
+  }
+
+  .pt-el:hover::before { opacity: 0.16; }
+
+  .pt-el-num {
+    font-family: var(--mono);
+    font-size: 8px;
+    opacity: 0.6;
+    line-height: 1;
+  }
+
+  .pt-el-sym {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 17px;
+    text-align: center;
+    line-height: 1;
+    text-shadow: 0 0 8px currentColor;
+  }
+
+  .pt-el-name {
+    font-size: 7px;
+    text-align: center;
+    line-height: 1.2;
+    opacity: 0.8;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    color: var(--text);
+  }
+
+  .pt-el-cat {
+    font-family: var(--mono);
+    font-size: 5.5px;
+    text-align: right;
+    opacity: 0.5;
+    letter-spacing: 0.3px;
+    line-height: 1;
+  }
+
+  .pt-spacer { aspect-ratio: 1; }
+
+  .pt-sep-label {
+    grid-column: 1 / -1;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    padding-left: 4px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  /* Tooltip modal */
+  .pt-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9000;
+    display: none;
+    backdrop-filter: blur(3px);
+  }
+  .pt-overlay.active { display: block; }
+
+  .pt-tooltip {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: min(430px, 92vw);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    z-index: 9001;
+    display: none;
+    box-shadow: 0 0 60px -10px currentColor;
+  }
+
+  .pt-tooltip.active { display: block; animation: ptPop 0.2s ease; }
+
+  @keyframes ptPop {
+    from { opacity:0; transform: translate(-50%,-50%) scale(0.92); }
+    to   { opacity:1; transform: translate(-50%,-50%) scale(1); }
+  }
+
+  .pt-tt-hdr {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .pt-tt-sym {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 1;
+    min-width: 66px;
+    text-align: center;
+    text-shadow: 0 0 16px currentColor;
+  }
+
+  .pt-tt-meta { flex: 1; }
+
+  .pt-tt-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .pt-tt-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .pt-tt-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1.2px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid;
+    opacity: 0.85;
+  }
+
+  .pt-tt-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    opacity: 0.85;
+  }
+
+  .pt-tt-close {
+    position: absolute;
+    top: 12px; right: 14px;
+    font-family: var(--mono);
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.45;
+    background: none; border: none;
+    color: var(--text);
+    transition: opacity 0.15s;
+  }
+  .pt-tt-close:hover { opacity: 1; }
+
   /* Achievement Notification */
   .achievement-notification {
     position: fixed;
@@ -1127,6 +1372,7 @@
         <button class="nav-tab" data-tab="challenges">Challenges</button>
         <button class="nav-tab" data-tab="share">Share Progress</button>
         <button class="nav-tab" data-tab="achievements">Achievements</button>
+        <button class="nav-tab" data-tab="periodictable" id="ptTab">⚛ Periodic Table</button>
       </div>
 
       <!-- Overview Tab -->
@@ -1232,6 +1478,13 @@
             <div class="exam-arrow">VIEW SLIDES →</div>
           </a>
 
+          <a href="#" class="exam-card" onclick="switchToPeriodicTable(event)">
+            <div class="exam-progress">118 Elements</div>
+            <div class="exam-label">Visual Reference</div>
+            <div class="exam-title">Cyber Periodic Table</div>
+            <div class="exam-desc">Interactive periodic table of cybersecurity — 118 elements spanning Threats, Attacks, Defense, Cryptography, Networking, Auth & IAM, Malware, Tools, Governance, and Cloud/OT.</div>
+            <div class="exam-arrow">EXPLORE TABLE →</div>
+          </a>
 
         </div>
 
@@ -1335,6 +1588,20 @@
           </div>
         </div>
       </div>
+      <!-- Periodic Table Tab -->
+      <div class="tab-content" id="periodictable-tab">
+        <div class="pt-section">
+          <div class="pt-section-header">
+            <h2>⚛ Cybersecurity Periodic Table</h2>
+            <p>// 118 ELEMENTS OF DIGITAL DEFENSE — CLICK ANY ELEMENT FOR DETAILS //</p>
+          </div>
+          <div class="pt-legend" id="ptLegend"></div>
+          <div class="pt-scroll-wrap">
+            <div class="pt-grid-embed" id="ptGridEmbed"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -1342,6 +1609,21 @@
     <p>CompTIA Security+ SY0-701 Professor Messer's Practice Exams</p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem;"><a href="disclaimer.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent);">Disclaimer & Legal Notice</a></p>
   </footer>
+
+  <!-- Periodic Table Overlay & Tooltip -->
+  <div class="pt-overlay" id="ptOverlay"></div>
+  <div class="pt-tooltip" id="ptTooltip">
+    <button class="pt-tt-close" id="ptTtClose">✕</button>
+    <div class="pt-tt-hdr">
+      <div class="pt-tt-sym" id="ptTtSym"></div>
+      <div class="pt-tt-meta">
+        <div class="pt-tt-num" id="ptTtNum"></div>
+        <div class="pt-tt-name" id="ptTtName"></div>
+        <span class="pt-tt-badge" id="ptTtCat"></span>
+      </div>
+    </div>
+    <div class="pt-tt-desc" id="ptTtDesc"></div>
+  </div>
 
   <!-- Achievement Notification -->
   <div class="achievement-notification" id="achievementNotification">
@@ -1392,6 +1674,244 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src="gamification-social.js" defer></script>
+
+<!-- Periodic Table Script -->
+<script>
+function switchToPeriodicTable(e) {
+  e.preventDefault();
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelector('[data-tab="periodictable"]').classList.add('active');
+  document.getElementById('periodictable-tab').classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+(function(){
+const CATS = {
+  threats:    { label:'THREATS',      color:'#7B2FBE' },
+  attacks:    { label:'ATTACKS',      color:'#FF4757' },
+  defense:    { label:'DEFENSE',      color:'#2ED573' },
+  crypto:     { label:'CRYPTOGRAPHY', color:'#00D4FF' },
+  network:    { label:'NETWORKING',   color:'#FF6B35' },
+  auth:       { label:'AUTH & IAM',   color:'#FFD700' },
+  malware:    { label:'MALWARE',      color:'#FF6B9D' },
+  tools:      { label:'TOOLS',        color:'#1DE9B6' },
+  governance: { label:'GOVERNANCE',   color:'#9d4fe8' },
+  cloud:      { label:'CLOUD & OT',   color:'#4FC3F7' },
+};
+
+const ELS = [
+  {n:1,s:'Ph',name:'Phishing',cat:'attacks',d:'Deceptive attempts to steal credentials or data by impersonating legitimate entities via email, SMS, or voice.'},
+  null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
+  {n:2,s:'Fw',name:'Firewall',cat:'defense',d:'A network security device or software that monitors and filters traffic based on defined rules. First line of perimeter defense.'},
+  {n:3,s:'Ma',name:'Malware',cat:'malware',d:'Malicious software designed to disrupt, damage, or gain unauthorized access. Umbrella term for viruses, worms, trojans, ransomware, and more.'},
+  {n:4,s:'Ra',name:'Ransomware',cat:'malware',d:'Malware that encrypts victim files and demands payment for decryption. Modern variants also exfiltrate data for double extortion.'},
+  null,null,null,null,null,null,null,null,
+  {n:5,s:'Id',name:'IDS/IPS',cat:'defense',d:'Intrusion Detection/Prevention Systems monitor network traffic for suspicious activity. IDS alerts; IPS actively blocks malicious traffic.'},
+  {n:6,s:'Ep',name:'Endpoint Sec',cat:'defense',d:'Security solutions protecting individual devices from threats. Includes antivirus, EDR, and host-based firewalls.'},
+  {n:7,s:'Vu',name:'Vulnerability',cat:'threats',d:'A weakness in a system exploitable by a threat actor to gain unauthorized access or cause harm. Tracked via CVE identifiers.'},
+  {n:8,s:'Ex',name:'Exploit',cat:'attacks',d:'Code or technique that takes advantage of a vulnerability to cause unintended behavior, enabling unauthorized access.'},
+  {n:9,s:'Xp',name:'XSS',cat:'attacks',d:'Cross-Site Scripting injects malicious scripts into web pages viewed by users, hijacking sessions or redirecting victims.'},
+  {n:10,s:'Sq',name:'SQL Injection',cat:'attacks',d:'Attack inserting malicious SQL code into queries, allowing attackers to view, modify, or delete database content.'},
+  {n:11,s:'Tr',name:'Trojan',cat:'malware',d:'Malware disguised as legitimate software. Unlike viruses, it does not self-replicate but opens backdoors for attackers.'},
+  {n:12,s:'Sp',name:'Spyware',cat:'malware',d:'Secretly monitors user activity, collecting credentials, keystrokes, and personal data without consent.'},
+  null,null,null,null,null,null,null,null,
+  {n:13,s:'Ze',name:'Zero-Day',cat:'threats',d:'A vulnerability unknown to the vendor with no available patch. Highly valuable to attackers; exploited before defenders can respond.'},
+  {n:14,s:'Cm',name:'CVSS',cat:'threats',d:'Common Vulnerability Scoring System. Standardized framework rating the severity of vulnerabilities on a 0–10 scale.'},
+  {n:15,s:'Cv',name:'CVE',cat:'threats',d:'Common Vulnerabilities and Exposures. Unique identifiers for publicly known cybersecurity vulnerabilities, maintained by MITRE.'},
+  {n:16,s:'Ap',name:'APT',cat:'threats',d:'Advanced Persistent Threat — stealthy, long-term attacks by well-resourced adversaries (often nation-states) targeting high-value networks.'},
+  {n:17,s:'Ti',name:'Threat Intel',cat:'threats',d:'Evidence-based knowledge about existing or emerging threats, helping organizations prioritize defenses and predict attacker behavior.'},
+  {n:18,s:'At',name:'MITRE ATT&CK',cat:'threats',d:'Globally accessible knowledge base of adversary tactics and techniques based on real-world observations. Gold standard for threat modeling.'},
+  {n:19,s:'Sm',name:'SIEM',cat:'tools',d:'Security Information and Event Management. Aggregates log data to detect threats and support incident response.'},
+  {n:20,s:'So',name:'SOAR',cat:'tools',d:'Security Orchestration, Automation and Response. Automates repetitive security tasks for faster incident handling.'},
+  {n:21,s:'Ed',name:'EDR',cat:'tools',d:'Endpoint Detection and Response. Continuously monitors endpoints to detect and respond to advanced threats in real time.'},
+  {n:22,s:'Xr',name:'XDR',cat:'tools',d:'Extended Detection and Response. Integrates data across endpoints, networks, email, and cloud for unified threat detection.'},
+  {n:23,s:'Nd',name:'NDR',cat:'tools',d:'Network Detection and Response. Analyzes network traffic for anomalies and threats across east-west and north-south flows.'},
+  {n:24,s:'Va',name:'Vuln Scanner',cat:'tools',d:'Automated tools (Nessus, Qualys, OpenVAS) that probe systems for known vulnerabilities and misconfigurations.'},
+  {n:25,s:'Pt',name:'Pen Testing',cat:'tools',d:'Authorized simulated cyberattacks to identify exploitable vulnerabilities before real attackers do.'},
+  {n:26,s:'Nk',name:'Nmap',cat:'tools',d:'Network Mapper — open-source tool for network discovery and security auditing. Discovers hosts, ports, services, and OS fingerprints.'},
+  {n:27,s:'Mt',name:'Metasploit',cat:'tools',d:'Leading penetration testing framework providing exploit modules, payloads, and auxiliary tools for ethical hacking.'},
+  {n:28,s:'Ws',name:'Wireshark',cat:'tools',d:'Industry-standard packet analyzer for network troubleshooting and forensic investigation of captured traffic.'},
+  {n:29,s:'Bq',name:'Burp Suite',cat:'tools',d:'Integrated platform for web application security testing. Intercepts, modifies, and replays HTTP traffic to find vulnerabilities.'},
+  {n:30,s:'Hc',name:'Hashcat',cat:'tools',d:"World's fastest password recovery utility using GPU acceleration. Used in pen tests to crack password hashes."},
+  {n:31,s:'Ae',name:'AES',cat:'crypto',d:'Advanced Encryption Standard. Symmetric block cipher with 128/192/256-bit keys. Global standard for secure data encryption.'},
+  {n:32,s:'Rs',name:'RSA',cat:'crypto',d:'Asymmetric cryptographic algorithm using public-private key pairs. Widely used for secure key exchange and digital signatures.'},
+  {n:33,s:'Sh',name:'SHA-256',cat:'crypto',d:'Secure Hash Algorithm producing a 256-bit digest. Cryptographic standard for data integrity verification and blockchain.'},
+  {n:34,s:'Tl',name:'TLS/SSL',cat:'crypto',d:'Transport Layer Security encrypts data in transit, authenticating servers. Foundation of HTTPS and secure communications.'},
+  {n:35,s:'Pk',name:'PKI',cat:'crypto',d:'Public Key Infrastructure. Framework for creating, managing, and revoking digital certificates.'},
+  {n:36,s:'Hx',name:'HSM',cat:'crypto',d:'Hardware Security Module. Physical device that safeguards cryptographic keys and accelerates crypto operations.'},
+  {n:37,s:'Mf',name:'MFA',cat:'auth',d:'Multi-Factor Authentication. Requires two or more verification factors to significantly reduce unauthorized access risk.'},
+  {n:38,s:'Za',name:'Zero Trust',cat:'defense',d:'"Never trust, always verify." Security model requiring strict identity verification for every user and device.'},
+  {n:39,s:'Ia',name:'IAM',cat:'auth',d:'Identity and Access Management. Framework ensuring the right people have appropriate access to technology resources.'},
+  {n:40,s:'Sa',name:'SAML',cat:'auth',d:'Security Assertion Markup Language. XML-based protocol enabling Single Sign-On (SSO) by exchanging authentication data between providers.'},
+  {n:41,s:'Oa',name:'OAuth 2.0',cat:'auth',d:'Open authorization framework allowing apps to access user data without sharing passwords. Foundation of modern API authentication.'},
+  {n:42,s:'Ld',name:'LDAP',cat:'auth',d:'Lightweight Directory Access Protocol. Accesses distributed directory information, often used with Active Directory.'},
+  {n:43,s:'Ad',name:'Active Directory',cat:'auth',d:"Microsoft's directory service for Windows domain networks, managing users, computers, and policies. High-value attack target."},
+  {n:44,s:'Rb',name:'RBAC',cat:'auth',d:'Role-Based Access Control. Assigns permissions based on organizational roles, implementing least privilege at scale.'},
+  {n:45,s:'Pa',name:'PAM',cat:'auth',d:'Privileged Access Management. Controls, monitors, and protects highly privileged accounts that pose the greatest risk if compromised.'},
+  {n:46,s:'Ss',name:'SSO',cat:'auth',d:'Single Sign-On. Authenticates once to access multiple systems, reducing password fatigue and attack surface.'},
+  {n:47,s:'Ji',name:'JIT Access',cat:'auth',d:'Just-in-Time provisioning grants temporary elevated privileges only when needed, reducing standing access risk.'},
+  {n:48,s:'Bi',name:'Biometrics',cat:'auth',d:'Authentication using unique biological characteristics (fingerprints, facial recognition, iris). Strong factor that cannot be shared.'},
+  {n:49,s:'Vn',name:'VPN',cat:'network',d:'Virtual Private Network. Creates an encrypted tunnel over public networks, securing remote access and hiding traffic.'},
+  {n:50,s:'Sd',name:'SD-WAN',cat:'network',d:'Software-Defined Wide Area Network. Centralizes WAN management with security features, improving visibility and control.'},
+  {n:51,s:'Zt',name:'ZTNA',cat:'network',d:'Zero Trust Network Access. Replaces VPN with identity-aware, application-level access without exposing the network.'},
+  {n:52,s:'Dn',name:'DNS Security',cat:'network',d:'Protects DNS from cache poisoning, DGA malware, and DNS tunneling. DNSSEC adds cryptographic signatures.'},
+  {n:53,s:'Dm',name:'DDoS',cat:'attacks',d:'Distributed Denial of Service. Overwhelms target systems with massive traffic from multiple sources, causing outages.'},
+  {n:54,s:'Bn',name:'Botnet',cat:'malware',d:'Network of compromised devices controlled by a threat actor to launch attacks, send spam, or mine cryptocurrency.'},
+  {n:55,s:'Ir',name:'Incident Resp.',cat:'defense',d:'Structured approach to handling breaches. Phases: Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned.'},
+  {n:56,s:'Df',name:'Digital Forensics',cat:'tools',d:'Scientifically examining digital evidence to reconstruct events after a security incident. Preserves chain of custody.'},
+  null,null,null,null,null,null,null,null,null,null,null,null,null,null,
+  {n:57,s:'Hb',name:'Honeypot',cat:'defense',d:'Decoy systems designed to attract and trap attackers, gathering TTPs intelligence while diverting from real assets.'},
+  {n:58,s:'Th',name:'Threat Hunting',cat:'defense',d:'Proactive search for hidden threats that evaded automated detection. Analyst-led investigation using hypotheses.'},
+  {n:59,s:'Rp',name:'Red Team',cat:'tools',d:"Adversarial group that simulates real-world attacks to test an organization's detection and response capabilities."},
+  {n:60,s:'Bl',name:'Blue Team',cat:'defense',d:'Defensive security team responsible for protecting the organization. Monitors, detects, and responds to threats.'},
+  {n:61,s:'Pp',name:'Purple Team',cat:'defense',d:'Collaborative exercise combining red and blue team efforts to improve detection and response through shared knowledge.'},
+  {n:62,s:'Os',name:'OSINT',cat:'tools',d:'Open Source Intelligence. Collecting and analyzing publicly available information for threat intelligence and investigations.'},
+  {n:63,s:'Se',name:'Social Eng.',cat:'attacks',d:'Psychological manipulation of people into performing actions or revealing confidential information. Exploits human trust.'},
+  {n:64,s:'Is',name:'Insider Threat',cat:'threats',d:'Security risk from current or former employees, contractors, or partners who misuse their authorized access.'},
+  {n:65,s:'Sc',name:'Supply Chain',cat:'threats',d:'Attacks targeting less-secure supply chain elements (software updates, hardware, vendors) to compromise downstream targets.'},
+  {n:66,s:'Ai',name:'AI/ML Security',cat:'threats',d:'Security implications of AI: adversarial attacks, model poisoning, and using ML for both offensive and defensive security.'},
+  {n:67,s:'Ot',name:'OT Security',cat:'cloud',d:'Operational Technology Security protects industrial control systems (ICS/SCADA) managing critical infrastructure.'},
+  {n:68,s:'Io',name:'IoT Security',cat:'cloud',d:'Securing Internet of Things devices. Challenges include weak defaults, unpatched firmware, and massive attack surface.'},
+  {n:69,s:'Cl',name:'Cloud Security',cat:'cloud',d:'Protecting data, applications, and infrastructure in cloud environments. Shared responsibility model defines provider vs. customer duties.'},
+  {n:70,s:'Cs',name:'CASB',cat:'cloud',d:'Cloud Access Security Broker. Enforces security policies between users and cloud services, providing visibility and threat protection.'},
+  {n:71,s:'Cw',name:'CWPP',cat:'cloud',d:'Cloud Workload Protection Platform. Secures workloads across VMs, containers, and serverless environments.'},
+  {n:72,s:'Gv',name:'Governance',cat:'governance',d:"Policies, standards, and frameworks establishing accountability and direction for an organization's cybersecurity program."},
+  {n:73,s:'Rk',name:'Risk Mgmt.',cat:'governance',d:'Identifying, assessing, and prioritizing risks followed by efforts to minimize, monitor, and control incident probability.'},
+  null,null,null,null,null,null,null,null,null,null,null,null,null,null,
+  {n:74,s:'Nf',name:'NIST CSF',cat:'governance',d:'NIST Cybersecurity Framework. Five functions: Identify, Protect, Detect, Respond, Recover. Widely adopted globally.'},
+  {n:75,s:'Gi',name:'NIST SP 800',cat:'governance',d:'NIST Special Publications providing guidance on access control, incident handling, cryptography, and more.'},
+  {n:76,s:'Iz',name:'ISO 27001',cat:'governance',d:'International standard for Information Security Management Systems (ISMS). Requirements for establishing and improving information security.'},
+  {n:77,s:'Gc',name:'GDPR',cat:'governance',d:'General Data Protection Regulation. EU law governing data privacy. Imposes strict requirements on data processing and breach notification.'},
+  {n:78,s:'Hi',name:'HIPAA',cat:'governance',d:'Health Insurance Portability and Accountability Act. US law protecting sensitive patient health information.'},
+  {n:79,s:'Pc',name:'PCI-DSS',cat:'governance',d:'Payment Card Industry Data Security Standard. Requirements for organizations handling cardholder data to prevent fraud.'},
+  {n:80,s:'Cm',name:'CMMC',cat:'governance',d:'Cybersecurity Maturity Model Certification. DoD framework requiring defense contractors to meet specific cybersecurity standards.'},
+  {n:81,s:'S2',name:'SOC 2',cat:'governance',d:'Auditing standard covering security, availability, processing integrity, confidentiality, and privacy for service organizations.'},
+  {n:82,s:'Au',name:'Audit & Comp.',cat:'governance',d:'Systematic examination of security controls to verify compliance with policies and regulations. Essential for due diligence.'},
+  {n:83,s:'Bc',name:'BCP/DR',cat:'defense',d:'Business Continuity Planning and Disaster Recovery. Ensuring critical systems can withstand and recover from disruptive events.'},
+  {n:84,s:'Dp',name:'Data Privacy',cat:'governance',d:'Practices governing proper collection, storage, use, and sharing of personal data in accordance with applicable laws.'},
+  {n:85,s:'Cy',name:'Cyber Insurance',cat:'governance',d:'Insurance protecting organizations from losses due to cyberattacks, breaches, and other cyber incidents.'},
+  {n:86,s:'Eg',name:'Ethics',cat:'governance',d:'Professional obligations of cybersecurity practitioners: responsible disclosure, privacy considerations, and legal compliance.'},
+  // Lanthanide row
+  null,null,
+  {n:87,s:'Bg',name:'BGP',cat:'network',d:'Border Gateway Protocol. The routing protocol of the internet, managing how packets route between autonomous systems.'},
+  {n:88,s:'Tn',name:'TCP/IP',cat:'network',d:'Foundational protocol suite of the internet. TCP ensures reliable delivery; IP handles addressing and routing across networks.'},
+  {n:89,s:'Ht',name:'HTTP/S',cat:'network',d:'HyperText Transfer Protocol (Secure). Application-layer protocol for web communication. HTTPS adds TLS encryption.'},
+  {n:90,s:'Dh',name:'DHCP',cat:'network',d:'Dynamic Host Configuration Protocol. Automatically assigns IP addresses and network configuration to devices on a network.'},
+  {n:91,s:'Np',name:'NTP',cat:'network',d:'Network Time Protocol. Synchronizes clocks across networked devices — critical for log correlation and certificate validation.'},
+  {n:92,s:'Sn',name:'SNMP',cat:'network',d:'Simple Network Management Protocol. Monitors network devices; older versions (v1/v2) have serious security vulnerabilities.'},
+  {n:93,s:'Vl',name:'VLAN',cat:'network',d:'Virtual Local Area Network. Logically segments network traffic for improved security and performance.'},
+  {n:94,s:'Sx',name:'SASE',cat:'cloud',d:'Secure Access Service Edge. Cloud-delivered framework combining network security with WAN capabilities for distributed workforces.'},
+  {n:95,s:'Wf',name:'WAF',cat:'defense',d:'Web Application Firewall. Filters HTTP traffic to protect web applications from OWASP Top 10 and other web-layer attacks.'},
+  {n:96,s:'Nz',name:'NAC',cat:'network',d:'Network Access Control. Enforces security policies on devices attempting to access the network before granting access.'},
+  {n:97,s:'Mc',name:'Microsegment.',cat:'network',d:'Divides the network into small zones with granular controls, limiting lateral movement after a breach.'},
+  {n:98,s:'Pr',name:'Proxy',cat:'network',d:'Intermediary server between users and internet. Forward proxies hide clients; reverse proxies protect servers.'},
+  {n:99,s:'Ct',name:'Containers',cat:'cloud',d:'Lightweight virtualization (Docker, Kubernetes) with unique security considerations including image scanning and runtime protection.'},
+  {n:100,s:'Dv',name:'DevSecOps',cat:'defense',d:'"Shift left" approach integrating security testing early in the software development lifecycle.'},
+  {n:101,s:'Sb',name:'SBOM',cat:'defense',d:'Software Bill of Materials. Formal record of software components. Critical for managing supply chain risk.'},
+  {n:102,s:'St',name:'Static Analysis',cat:'tools',d:'SAST tools analyze source code for security vulnerabilities without executing the program.'},
+  // Actinide row
+  null,null,
+  {n:103,s:'Qk',name:'Quantum Crypto',cat:'crypto',d:'Post-quantum cryptography algorithms designed to resist attacks from quantum computers that could break RSA and ECC.'},
+  {n:104,s:'Bk',name:'Blockchain',cat:'crypto',d:'Distributed ledger technology providing immutable record-keeping via cryptographic hashing. Used in certificate transparency.'},
+  {n:105,s:'Km',name:'Key Mgmt.',cat:'crypto',d:'Generating, distributing, storing, and revoking cryptographic keys throughout their lifecycle.'},
+  {n:106,s:'Hm',name:'HMAC',cat:'crypto',d:'Hash-based Message Authentication Code. Verifies data integrity and authenticity using a hash function with a secret key.'},
+  {n:107,s:'Ec',name:'ECC',cat:'crypto',d:'Elliptic Curve Cryptography. Strong security with shorter key lengths than RSA, ideal for resource-constrained environments.'},
+  {n:108,s:'Cf',name:'Code Signing',cat:'crypto',d:"Digital signatures applied to software to verify publisher identity and ensure code hasn't been tampered with."},
+  {n:109,s:'Cp',name:'Cert. Pinning',cat:'crypto',d:'Associates a host with its expected X.509 certificate, preventing MITM attacks using fraudulent but CA-signed certs.'},
+  {n:110,s:'Sl',name:'Salting',cat:'crypto',d:'Adding random data to passwords before hashing to prevent rainbow table attacks.'},
+  {n:111,s:'Ks',name:'Key Stretching',cat:'crypto',d:'Techniques (PBKDF2, bcrypt, Argon2) making brute-force expensive by deliberately slowing key derivation.'},
+  {n:112,s:'Sk',name:'Secret Mgmt.',cat:'tools',d:'Tools like HashiCorp Vault and AWS Secrets Manager for securely storing and controlling access to secrets and API keys.'},
+  {n:113,s:'Dw',name:'Dark Web Intel',cat:'threats',d:'Monitoring dark web forums for leaked credentials, stolen data, and threat actor discussions to gain early warning of attacks.'},
+  {n:114,s:'Kv',name:'CISA KEV',cat:'threats',d:'CISA Known Exploited Vulnerabilities catalog. Authoritative source of CVEs actively exploited in the wild.'},
+  {n:115,s:'Tt',name:'TTPs',cat:'threats',d:'Tactics, Techniques, and Procedures. Describes how threat actors operate, enabling defenders to anticipate and respond to attacks.'},
+  {n:116,s:'Ic',name:'IOC',cat:'threats',d:'Indicators of Compromise. Artifacts (IPs, hashes, domains) evidencing a breach. Shared via STIX/TAXII threat feeds.'},
+  {n:117,s:'Kc',name:'Kill Chain',cat:'threats',d:'Lockheed Martin model describing attack stages: Reconnaissance, Weaponization, Delivery, Exploitation, Installation, C2, Actions.'},
+  {n:118,s:'C2',name:'C2/C&C',cat:'malware',d:'Command and Control. Infrastructure attackers use to communicate with compromised systems and exfiltrate data.'},
+];
+
+function buildPT() {
+  var leg = document.getElementById('ptLegend');
+  if (!leg) return;
+  Object.keys(CATS).forEach(function(k){
+    var c = CATS[k];
+    var d = document.createElement('div');
+    d.className = 'pt-legend-item';
+    d.innerHTML = '<div class="pt-legend-dot" style="background:'+c.color+'"></div>'+c.label;
+    leg.appendChild(d);
+  });
+
+  var grid = document.getElementById('ptGridEmbed');
+  if (!grid) return;
+
+  var idx = 0;
+  function addEl(el) {
+    if (!el) {
+      var sp = document.createElement('div');
+      sp.className = 'pt-spacer';
+      grid.appendChild(sp);
+      return;
+    }
+    var cat = CATS[el.cat];
+    var div = document.createElement('div');
+    div.className = 'pt-el';
+    div.style.color = cat.color;
+    div.style.borderColor = cat.color + '55';
+    div.innerHTML =
+      '<div class="pt-el-num">'+el.n+'</div>'+
+      '<div class="pt-el-sym">'+el.s+'</div>'+
+      '<div class="pt-el-name">'+el.name+'</div>'+
+      '<div class="pt-el-cat">'+el.cat.slice(0,4).toUpperCase()+'</div>';
+    div.addEventListener('click', function(){ showPTTooltip(el, cat); });
+    grid.appendChild(div);
+  }
+
+  // 7 main rows × 18 cols = 126 slots
+  for (var r = 0; r < 7; r++) {
+    for (var c = 0; c < 18; c++) { addEl(ELS[idx]); idx++; }
+  }
+  // Separator label
+  var sep = document.createElement('div');
+  sep.className = 'pt-sep-label';
+  sep.textContent = '── LANTHANIDES & ACTINIDES ──────────────────────';
+  grid.appendChild(sep);
+  // 2 extra rows × 18 cols
+  for (var r2 = 0; r2 < 2; r2++) {
+    addEl(null); addEl(null);
+    for (var c2 = 0; c2 < 15; c2++) { addEl(ELS[idx]); idx++; }
+    addEl(null);
+  }
+}
+
+function showPTTooltip(el, cat) {
+  document.getElementById('ptTtSym').textContent = el.s;
+  document.getElementById('ptTtSym').style.color = cat.color;
+  document.getElementById('ptTtNum').textContent = 'ELEMENT #'+el.n;
+  document.getElementById('ptTtName').textContent = el.name;
+  var badge = document.getElementById('ptTtCat');
+  badge.textContent = cat.label;
+  badge.style.color = cat.color;
+  badge.style.borderColor = cat.color + '88';
+  document.getElementById('ptTtDesc').textContent = el.d;
+  var tt = document.getElementById('ptTooltip');
+  tt.style.borderColor = cat.color + '88';
+  tt.style.boxShadow = '0 0 50px -10px '+cat.color;
+  tt.classList.add('active');
+  document.getElementById('ptOverlay').classList.add('active');
+}
+
+document.getElementById('ptTtClose').addEventListener('click', function(){
+  document.getElementById('ptTooltip').classList.remove('active');
+  document.getElementById('ptOverlay').classList.remove('active');
+});
+document.getElementById('ptOverlay').addEventListener('click', function(){
+  document.getElementById('ptTooltip').classList.remove('active');
+  document.getElementById('ptOverlay').classList.remove('active');
+});
+
+buildPT();
+})();
+</script>
 
 <!-- AI FLOATING BUBBLE — paste before 
 
