@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Security+ SY0-701 | ExamCompass Practice Test 3</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security+ SY0-701 | ExamCompass Practice Test 3</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+
   :root {
     --bg: #0b0e17;
     --bg2: #111520;
@@ -577,33 +578,216 @@
   .theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
   .theme-icon { font-size: 0.82rem; line-height: 1; }
 
-</style>
+
+
+  /* ── REVIEW SCREEN ── */
+  .review-screen {
+    display: none;
+    padding: 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .review-screen.show { display: block; }
+
+  .review-header {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .review-q {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .review-q.r-correct { border-color: rgba(0,245,160,0.3); }
+  .review-q.r-incorrect { border-color: rgba(255,71,87,0.3); }
+  .review-q.r-unanswered { border-color: rgba(255,211,42,0.3); }
+
+  .review-q-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .review-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+  .review-badge.correct { background: rgba(0,245,160,0.15); color: var(--green); border: 1px solid rgba(0,245,160,0.3); }
+  .review-badge.incorrect { background: rgba(255,71,87,0.15); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
+  .review-badge.unanswered { background: rgba(255,211,42,0.15); color: var(--yellow); border: 1px solid rgba(255,211,42,0.3); }
+
+  .review-q-text {
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .review-answers { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+
+  .review-answer {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    background: var(--bg3);
+  }
+  .review-answer.r-correct-ans {
+    background: rgba(0,245,160,0.08);
+    border-color: rgba(0,245,160,0.35);
+    color: var(--green);
+  }
+  .review-answer.r-wrong-ans {
+    background: rgba(255,71,87,0.08);
+    border-color: rgba(255,71,87,0.35);
+    color: var(--red);
+  }
+  .review-answer.r-correct-missed {
+    background: rgba(0,212,255,0.06);
+    border-color: rgba(0,212,255,0.25);
+    color: var(--accent);
+  }
+
+  .review-ans-icon {
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .review-explanation {
+    background: var(--bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 5px 5px 0;
+    padding: 0.8rem 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .review-expl-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+  }
+
+  .review-back-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.8rem 1.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    margin-bottom: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .review-back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── CHECK ANSWER state ── */
+  .answer.correct {
+    background: rgba(0,245,160,0.12) !important;
+    border-color: rgba(0,245,160,0.5) !important;
+  }
+  .answer.incorrect {
+    background: rgba(255,71,87,0.12) !important;
+    border-color: rgba(255,71,87,0.5) !important;
+  }
+  .answer.correct .answer-indicator.check { opacity: 1; color: var(--green); }
+  .answer.incorrect .answer-indicator.cross { opacity: 1; color: var(--red); }
+  .answer.correct-missed {
+    background: rgba(0,212,255,0.07) !important;
+    border-color: rgba(0,212,255,0.3) !important;
+  }
+  .answer.correct-missed .answer-indicator.check { opacity:1; color: var(--accent); }
+
+  .check-btn {
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .check-btn:hover { background: rgba(0,212,255,0.2); }
+  .check-btn:disabled { opacity: 0.4; cursor: default; }
+
+  /* ── Back to Results btn ── */
+  .back-to-results {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .back-to-results:hover { border-color: var(--accent); color: var(--accent); }
+
+  </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-    <span>BL</span> // SECURITY+ SY0-701 — PRACTICE TEST 3
+    <span>BL</span> // EXAMCOMPASS / PRACTICE TEST 3
   </div>
   <div class="timer-wrap">
     <span id="timer">90:00</span>
     <button class="header-btn primary" id="timerBtn" onclick="toggleTimer()">PAUSE</button>
+    <button class="header-btn" onclick="showResults()" id="finishBtn">FINISH</button>
   </div>
-  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
+  <a href="index.html" class="home-btn">
+    <span>←</span>
+    <span>Home</span>
+  </a>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+    <span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span>
+  </button>
 </header>
 
 <main>
   <aside class="sidebar">
     <div class="sidebar-title">// Question Navigator</div>
     <div class="q-grid" id="questionGrid"></div>
-
     <div class="legend">
       <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Answered</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Correct</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Incorrect</div>
       <div class="legend-item"><div class="legend-dot" style="outline:2px solid var(--yellow);outline-offset:1px;background:var(--bg3)"></div> Current</div>
     </div>
-
     <div class="score-panel" id="scorePanel">
       <div class="score-big" id="scoreBig">--</div>
       <div class="score-label">FINAL SCORE</div>
@@ -612,9 +796,10 @@
 
   <div class="content">
     <div class="question-container" id="questionContainer"></div>
+
     <div class="results-screen" id="results">
       <div class="results-header">
-        <div class="results-title">// Test Complete — Practice Test 3</div>
+        <div class="results-title">// Test Complete — ExamCompass Practice Test 3</div>
         <div class="results-score" id="resultsScore">--</div>
       </div>
       <div class="results-grid">
@@ -627,14 +812,25 @@
           <div class="result-card-label">Incorrect</div>
         </div>
         <div class="result-card">
-          <div class="result-card-value" style="color:var(--accent)" id="percentageScore">0%</div>
-          <div class="result-card-label">Percentage</div>
+          <div class="result-card-value" style="color:var(--accent)" id="unansweredCount">0</div>
+          <div class="result-card-label">Unanswered</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-value" style="color:var(--yellow)" id="percentageScore">0%</div>
+          <div class="result-card-label">Score</div>
         </div>
       </div>
       <div class="results-actions">
         <button class="result-btn primary" onclick="reviewAnswers()">Review Answers</button>
-        <button class="result-btn" onclick="restartTest()">Restart Test</button>
+        <button class="result-btn" onclick="restartTest()">Restart</button>
+        <a href="index.html" class="result-btn">← Home</a>
       </div>
+    </div>
+
+    <div class="review-screen" id="reviewScreen">
+      <button class="review-back-btn" onclick="backToResults()">← Back to Results</button>
+      <div class="review-header">// REVIEW — EXAMCOMPASS PRACTICE TEST 3 — All Questions with Answers &amp; Explanations</div>
+      <div id="reviewContent"></div>
     </div>
   </div>
 </main>
@@ -849,10 +1045,11 @@
   let timeRemaining = 90 * 60;
   let isPaused = false;
   let testFinished = false;
+  let checkedQuestions = new Set();
 
   function initTest() {
     renderQuestionGrid();
-    showQuestion(currentQuestion);
+    showQuestion(0);
     startTimer();
   }
 
@@ -863,7 +1060,12 @@
       const dot = document.createElement('div');
       dot.className = 'q-dot';
       dot.textContent = index + 1;
-      dot.onclick = () => showQuestion(index);
+      dot.onclick = () => {
+        // If in review mode, go back to question view first
+        document.getElementById('reviewScreen').classList.remove('show');
+        document.getElementById('questionContainer').style.display = 'block';
+        showQuestion(index);
+      };
       if (userAnswers[index] !== null) dot.classList.add('answered');
       if (index === currentQuestion) dot.classList.add('active');
       if (testFinished) {
@@ -881,25 +1083,32 @@
     currentQuestion = index;
     const q = questions[index];
     const container = document.getElementById('questionContainer');
-    
     const isMultiple = q.type === 'multiple';
     const inputType = isMultiple ? 'checkbox' : 'radio';
-    
+    const isChecked = checkedQuestions.has(index);
+
     let html = `
       <div class="question-header">
         <div class="question-number">Question ${index + 1} of ${questions.length}</div>
+        ${testFinished ? '' : `<button class="back-to-results" onclick="showResultsFromReview()" style="display:${testFinished ? 'inline-flex' : 'none'}">← Results</button>`}
       </div>
       <div class="question-text">
         ${q.text}
-        ${isMultiple ? '<div class="multi-select-note">⚠ Select multiple answers</div>' : ''}
+        ${isMultiple ? '<div class="multi-select-note">⚠ Select all that apply</div>' : ''}
       </div>
       <div class="answers">
     `;
-    
+
     q.answers.forEach((answer, i) => {
       const isSelected = userAnswers[index] && userAnswers[index].includes(i);
       let classes = 'answer';
       if (isSelected) classes += ' selected';
+      if (isChecked || testFinished) {
+        const userAns = userAnswers[index] || [];
+        if (q.correct.includes(i) && userAns.includes(i)) classes += ' correct';
+        else if (!q.correct.includes(i) && userAns.includes(i)) classes += ' incorrect';
+        else if (q.correct.includes(i) && !userAns.includes(i)) classes += ' correct-missed';
+      }
       html += `
         <div class="${classes}" onclick="selectAnswer(${i})" id="answer-${i}">
           <input type="${inputType}" name="q${index}" ${isSelected ? 'checked' : ''}>
@@ -909,31 +1118,32 @@
         </div>
       `;
     });
-    
+
+    const explShow = (isChecked || testFinished) ? ' show' : '';
     html += `
       </div>
-      <div class="explanation" id="explanation">
+      <div class="explanation${explShow}" id="explanation">
         <div class="explanation-title">// Explanation</div>
         <div class="explanation-text">${q.explanation}</div>
       </div>
       <div class="navigation">
-        <button class="check-btn" onclick="checkAnswer()">Check Answer</button>
-        <button class="nav-btn" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Previous</button>
+        ${testFinished ? `<button class="back-to-results" onclick="showResultsFromReview()">← Results</button>` : `<button class="check-btn" onclick="checkAnswer()" ${isChecked ? 'disabled' : ''}>Check Answer</button>`}
+        <button class="nav-btn" onclick="previousQuestion()" ${index === 0 ? 'disabled' : ''}>← Prev</button>
         <button class="nav-btn primary" onclick="nextQuestion()">${index === questions.length - 1 ? 'Finish Test' : 'Next →'}</button>
       </div>
     `;
-    
+
     container.innerHTML = html;
     renderQuestionGrid();
   }
 
   function selectAnswer(index) {
-    if (testFinished) return;
+    if (testFinished || checkedQuestions.has(currentQuestion)) return;
     const q = questions[currentQuestion];
     const answers = document.querySelectorAll('.answer');
     const answer = answers[index];
     const input = answer.querySelector('input');
-    
+
     if (q.type === 'single') {
       userAnswers[currentQuestion] = [index];
       answers.forEach(a => { a.classList.remove('selected'); a.querySelector('input').checked = false; });
@@ -956,16 +1166,9 @@
   }
 
   function checkAnswer() {
-    const q = questions[currentQuestion];
-    const answers = document.querySelectorAll('.answer');
-    answers.forEach((ans, j) => {
-      if (q.correct.includes(j)) {
-        ans.classList.add('correct');
-      } else if (userAnswers[currentQuestion] && userAnswers[currentQuestion].includes(j)) {
-        ans.classList.add('incorrect');
-      }
-    });
-    document.getElementById('explanation').classList.add('show');
+    if (checkedQuestions.has(currentQuestion)) return;
+    checkedQuestions.add(currentQuestion);
+    showQuestion(currentQuestion); // re-render with correct/incorrect highlights
   }
 
   function previousQuestion() {
@@ -984,39 +1187,100 @@
     clearInterval(timerInterval);
     testFinished = true;
 
-    let correct = 0;
-    let incorrect = 0;
-
+    let correct = 0, incorrect = 0, unanswered = 0;
     questions.forEach((q, i) => {
       const userAns = userAnswers[i] || [];
+      if (userAns.length === 0) { unanswered++; return; }
       const isCorrect = userAns.length === q.correct.length && userAns.every(a => q.correct.includes(a));
-      if (isCorrect) correct++;
-      else if (userAns.length > 0) incorrect++;
+      if (isCorrect) correct++; else incorrect++;
     });
 
     const percentage = Math.round((correct / questions.length) * 100);
-
     document.getElementById('resultsScore').textContent = percentage + '%';
     document.getElementById('correctCount').textContent = correct;
     document.getElementById('incorrectCount').textContent = incorrect;
+    document.getElementById('unansweredCount').textContent = unanswered;
     document.getElementById('percentageScore').textContent = percentage + '%';
-
     document.getElementById('questionContainer').style.display = 'none';
     document.getElementById('results').classList.add('show');
     document.getElementById('scorePanel').classList.add('visible');
     document.getElementById('scoreBig').textContent = percentage + '%';
-
     renderQuestionGrid();
+  }
+
+  function showResultsFromReview() {
+    document.getElementById('questionContainer').style.display = 'none';
+    document.getElementById('reviewScreen').classList.remove('show');
+    document.getElementById('results').classList.add('show');
   }
 
   function reviewAnswers() {
     document.getElementById('results').classList.remove('show');
-    document.getElementById('questionContainer').style.display = 'block';
-    showQuestion(0);
+    document.getElementById('questionContainer').style.display = 'none';
+    document.getElementById('reviewScreen').classList.add('show');
+    buildReview();
+  }
+
+  function backToResults() {
+    document.getElementById('reviewScreen').classList.remove('show');
+    document.getElementById('results').classList.add('show');
+  }
+
+  function buildReview() {
+    const container = document.getElementById('reviewContent');
+    let html = '';
+
+    questions.forEach((q, i) => {
+      const userAns = userAnswers[i] || [];
+      const isCorrect = userAns.length > 0 && userAns.length === q.correct.length && userAns.every(a => q.correct.includes(a));
+      const isUnanswered = userAns.length === 0;
+
+      let statusClass = isUnanswered ? 'r-unanswered' : (isCorrect ? 'r-correct' : 'r-incorrect');
+      let badgeClass = isUnanswered ? 'unanswered' : (isCorrect ? 'correct' : 'incorrect');
+      let badgeText = isUnanswered ? 'UNANSWERED' : (isCorrect ? '✓ CORRECT' : '✗ INCORRECT');
+
+      html += `
+        <div class="review-q ${statusClass}">
+          <div class="review-q-num">
+            Q${i + 1} / ${q.type === 'multiple' ? 'MULTI-SELECT' : 'SINGLE'}
+            <span class="review-badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <div class="review-q-text">${q.text}</div>
+          <div class="review-answers">
+      `;
+
+      q.answers.forEach((ans, j) => {
+        const isCorrectAns = q.correct.includes(j);
+        const isUserAns = userAns.includes(j);
+        let cls = '';
+        let icon = '○';
+        if (isCorrectAns && isUserAns) { cls = 'r-correct-ans'; icon = '✓'; }
+        else if (!isCorrectAns && isUserAns) { cls = 'r-wrong-ans'; icon = '✗'; }
+        else if (isCorrectAns && !isUserAns) { cls = 'r-correct-missed'; icon = '→'; }
+        html += `
+          <div class="review-answer ${cls}">
+            <span class="review-ans-icon">${icon}</span>
+            <span>${ans}</span>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+          <div class="review-explanation">
+            <div class="review-expl-label">// EXPLANATION</div>
+            ${q.explanation}
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
   }
 
   function restartTest() {
     userAnswers = Array(questions.length).fill(null);
+    checkedQuestions = new Set();
     currentQuestion = 0;
     testFinished = false;
     timeRemaining = 90 * 60;
@@ -1024,6 +1288,7 @@
     document.getElementById('timerBtn').textContent = 'PAUSE';
     document.getElementById('scorePanel').classList.remove('visible');
     document.getElementById('results').classList.remove('show');
+    document.getElementById('reviewScreen').classList.remove('show');
     document.getElementById('questionContainer').style.display = 'block';
     initTest();
   }
@@ -1037,9 +1302,7 @@
         const seconds = timeRemaining % 60;
         document.getElementById('timer').textContent =
           `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        if (timeRemaining <= 300) {
-          document.getElementById('timer').style.color = 'var(--red)';
-        }
+        if (timeRemaining <= 300) document.getElementById('timer').style.color = 'var(--red)';
         if (timeRemaining <= 0) showResults();
       }
     }, 1000);
