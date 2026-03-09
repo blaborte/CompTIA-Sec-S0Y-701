@@ -383,7 +383,7 @@
       <span>←</span>
       <span>Back</span>
     </button>
-    <a href="Practice-tests.html" class="home-btn">
+    <a href="index.html" class="home-btn">
       <span>⌂</span>
       <span>Home</span>
     </a>
@@ -1176,6 +1176,12 @@ function startExam() {
 }
 
 function goBackToIntro() {
+  const mcq = document.getElementById("mcqSection");
+  const res = document.getElementById("resultsSection");
+  if ((!mcq || mcq.style.display === "none") && (!res || res.style.display === "none")) {
+    window.location.href = "Practice-tests.html";
+    return;
+  }
   // Stop timer
   if (state.timerInterval) clearInterval(state.timerInterval);
   state.timerRunning = false;
