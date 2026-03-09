@@ -252,7 +252,7 @@
     <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
   </div>
   <div style="display:flex;gap:0.5rem;align-items:center;">
-    <button class="home-btn" onclick="goBackToIntro()" id="backToIntroBtn" style="display:none">
+    <button class="home-btn" onclick="goBackToIntro()" id="backToIntroBtn">
       <span>←</span><span>Back</span>
     </button>
     <a href="index.html" class="home-btn"><span>⌂</span><span>Home</span></a>
@@ -574,7 +574,7 @@ function startExam() {
   document.getElementById('introSection').style.display = 'none';
   document.getElementById('mcqSection').style.display = 'block';
   document.getElementById('finishBtn').style.display = 'block';
-  document.getElementById('backToIntroBtn').style.display = 'flex';
+  // backToIntroBtn always visible
   buildGrid();
   renderQuestion(0);
   startTimer();
@@ -591,7 +591,7 @@ function goBackToIntro() {
   document.getElementById('resultsSection').style.display = 'none';
   document.getElementById('introSection').style.display = 'block';
   document.getElementById('finishBtn').style.display = 'none';
-  document.getElementById('backToIntroBtn').style.display = 'none';
+  // backToIntroBtn always visible
   document.getElementById('timerBtn').style.display = 'inline-block';
   const mins = examMode === 'random' ? Math.round(randCount * 1.2) : 90;
   state.timerSeconds = mins * 60;
