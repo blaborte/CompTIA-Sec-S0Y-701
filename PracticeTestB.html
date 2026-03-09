@@ -377,7 +377,7 @@
     <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
   </div>
   <div style="display:flex;gap:0.5rem;align-items:center;">
-    <button class="home-btn" onclick="goBackToIntro()" id="backToIntroBtn" style="display:none">
+    <button class="home-btn" onclick="goBackToIntro()" id="backToIntroBtn">
       <span>&#8592;</span><span>Back</span>
     </button>
     <a href="index.html" class="home-btn"><span>&#8962;</span><span>Home</span></a>
@@ -1048,7 +1048,7 @@ function goBackToIntro() {
   document.getElementById('resultsSection').style.display = 'none';
   document.getElementById('introSection').style.display = 'block';
   document.getElementById('finishBtn').style.display = 'none';
-  document.getElementById('backToIntroBtn').style.display = 'none';
+  document.getElementById('backToIntroBtn').style.display = 'flex';
   document.getElementById('timerBtn').style.display = 'inline-block';
   // Reset timer display
   const mins = examMode === 'random' ? Math.round(randCount * 1.2) : 90;
