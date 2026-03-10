@@ -297,11 +297,12 @@
     background: rgba(255, 71, 87, 0.1);
   }
 
-  .answer input[type="checkbox"],
-  .answer input[type="radio"] {
-    width: 20px;
-    height: 20px;
+  .answer input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
     cursor: pointer;
+    flex-shrink: 0;
   }
 
   .answer-text {
@@ -310,24 +311,19 @@
   }
 
   .answer-indicator {
-    font-size: 1.2rem;
-    display: none;
+    font-size: 1.1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
   }
 
-  .answer.correct .answer-indicator.check {
-    display: block;
-    color: var(--green);
-  }
-
-  .answer.incorrect .answer-indicator.cross {
-    display: block;
-    color: var(--red);
-  }
+  .answer.correct .check { opacity: 1; color: var(--green); }
+  .answer.incorrect .cross { opacity: 1; color: var(--red); }
 
   .explanation {
     background: var(--bg3);
-    border-left: 4px solid var(--accent);
-    border-radius: 6px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 2rem;
     display: none;
@@ -339,7 +335,7 @@
 
   .explanation-title {
     font-family: var(--mono);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -347,115 +343,188 @@
   }
 
   .explanation-text {
+    font-size: 0.95rem;
     color: var(--text);
-    line-height: 1.7;
+    line-height: 1.8;
   }
 
   .navigation {
     display: flex;
-    justify-content: space-between;
     gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
   }
 
   .nav-btn {
-    padding: 0.75rem 2rem;
-    border: 1px solid var(--border);
     background: var(--bg3);
+    border: 1px solid var(--border);
     color: var(--text);
-    font-family: var(--font);
-    font-size: 0.95rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 6px;
     cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
     transition: all 0.3s ease;
   }
 
-  .nav-btn:hover {
+  .nav-btn:hover:not(:disabled) {
     border-color: var(--accent);
+    color: var(--accent);
     transform: translateY(-2px);
   }
 
+  .nav-btn.primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
   .nav-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 
-  .nav-btn.primary {
-    background: linear-gradient(135deg, var(--accent), var(--green));
-    border: none;
-    color: var(--bg);
-    font-weight: 600;
+  .check-btn {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    margin-right: auto;
   }
 
-  .results {
-    text-align: center;
+  .check-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  /* Results Screen */
+  .results-screen {
     display: none;
+    max-width: 900px;
+    margin: 0 auto;
   }
 
-  .results.show {
+  .results-screen.show {
     display: block;
   }
 
+  .results-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
   .results-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, var(--accent), var(--green));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
   }
 
   .results-score {
-    font-size: 4rem;
     font-family: var(--mono);
-    font-weight: 700;
+    font-size: 5rem;
+    font-weight: 600;
     color: var(--accent);
-    margin-bottom: 1rem;
+    line-height: 1;
   }
 
   .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin: 3rem 0;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 
   .result-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 2rem;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
   }
 
-  .result-value {
-    font-size: 2.5rem;
+  .result-card-value {
     font-family: var(--mono);
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: 600;
     margin-bottom: 0.5rem;
   }
 
-  .result-card:nth-child(1) .result-value { color: var(--green); }
-  .result-card:nth-child(2) .result-value { color: var(--red); }
-  .result-card:nth-child(3) .result-value { color: var(--yellow); }
-
-  .result-label {
-    font-size: 0.85rem;
+  .result-card-label {
+    font-size: 0.8rem;
     color: var(--muted);
-    text-transform: uppercase;
     font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
-  @media (max-width: 968px) {
-    .sidebar {
-      display: none;
-    }
+  .results-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
 
-    main {
-      flex-direction: column;
-    }
+  .result-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.9rem 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
 
-    .content {
-      padding: 1rem;
-    }
+  .result-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .result-btn.primary {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Legend */
+  .legend {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .results-grid { grid-template-columns: 1fr; }
+    .results-score { font-size: 3.5rem; }
   }
 
   /* ── LIGHT MODE ── */
@@ -700,10 +769,16 @@
     <button class="header-btn primary" id="timerBtn" onclick="toggleTimer()">PAUSE</button>
     <button class="header-btn" onclick="showResults()" id="finishBtn">FINISH</button>
   </div>
-  <a href="index.html" class="home-btn">
-    <span>←</span>
-    <span>Home</span>
-  </a>
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <a href="Practice-tests.html" class="home-btn">
+      <span>←</span>
+      <span>Back</span>
+    </a>
+    <a href="index.html" class="home-btn">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+  </div>
   <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">
     <span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span>
   </button>
@@ -754,7 +829,8 @@
       <div class="results-actions">
         <button class="result-btn primary" onclick="reviewAnswers()">Review Answers</button>
         <button class="result-btn" onclick="restartTest()">Restart</button>
-        <a href="index.html" class="result-btn">← Home</a>
+        <a href="Practice-tests.html" class="result-btn">← Back</a>
+        <a href="index.html" class="result-btn">🏠 Home</a>
       </div>
     </div>
 

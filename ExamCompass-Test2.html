@@ -518,10 +518,16 @@
       <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
       <button class="header-btn primary" onclick="showResults()" id="finishBtn">FINISH</button>
     </div>
-    <a href="index.html" class="home-btn">
-      <span>←</span>
-      <span>Home</span>
-    </a>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <a href="Practice-tests.html" class="home-btn">
+        <span>←</span>
+        <span>Back</span>
+      </a>
+      <a href="index.html" class="home-btn">
+        <span>🏠</span>
+        <span>Home</span>
+      </a>
+    </div>
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
   </header>
 
@@ -557,7 +563,8 @@
         <div class="navigation">
           <button class="nav-btn" onclick="reviewAnswers()">Review Answers</button>
           <button class="nav-btn primary" onclick="location.reload()">Retake Test</button>
-          <button class="nav-btn" onclick="location.href='index.html'">Back to Home</button>
+          <button class="nav-btn" onclick="location.href='Practice-tests.html'">← Back</button>
+          <button class="nav-btn" onclick="location.href='index.html'">🏠 Home</button>
         </div>
       </div>
     </div>
