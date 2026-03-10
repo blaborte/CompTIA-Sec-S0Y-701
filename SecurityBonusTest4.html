@@ -701,11 +701,14 @@ function applyTheme(theme) {
   const label = document.getElementById('themeLabel');
   if (icon) icon.textContent = theme === 'light' ? '🌙' : '☀️';
   if (label) label.textContent = theme === 'light' ? 'DARK' : 'LIGHT';
+  try { localStorage.setItem('bl-theme', theme); } catch(e) {}
 }
-
-// Initialize with dark theme
-applyTheme('dark');
-
+(function() {
+  let t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', t);
+  document.addEventListener('DOMContentLoaded', () => applyTheme(t));
+})();
 </script>
 </body>
 </html>
