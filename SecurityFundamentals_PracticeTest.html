@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 1: Security Fundamentals</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #111520;
+    --bg3: #181d2e;
+    --border: #1f2740;
+    --accent: #00d4ff;
+    --accent2: #ff6b2b;
+    --green: #00f5a0;
+    --red: #ff4757;
+    --yellow: #ffd32a;
+    --text: #d0d8f0;
+    --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; line-height: 1.6; }
+
+  header {
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 0 2rem; position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; height: 60px;
+  }
+  .logo { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+  .logo span { color: var(--accent); }
+
+  .home-btn {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none;
+    font-family: var(--mono); font-size: 0.8rem; transition: all 0.3s ease;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .home-btn:hover { border-color: var(--accent); background: var(--bg2); transform: translateY(-2px); }
+
+  .timer-wrap { display: flex; align-items: center; gap: 1.5rem; }
+  #timer { font-family: var(--mono); font-size: 1.1rem; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; }
+  #timer.warn { color: var(--yellow); }
+  #timer.danger { color: var(--red); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .header-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.8rem;
+    cursor: pointer; letter-spacing: 0.08em; transition: all 0.2s; border-radius: 2px;
+  }
+  .header-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .header-btn.primary { border-color: var(--accent); color: var(--accent); }
+  .header-btn.primary:hover { background: var(--accent); color: var(--bg); }
+
+  .progress-bar-wrap { height: 3px; background: var(--border); width: 100%; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); transition: width 0.4s ease; width: 0%; }
+
+  .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 63px); }
+
+  .sidebar {
+    background: var(--bg2); border-right: 1px solid var(--border); padding: 1.5rem 1rem;
+    position: sticky; top: 63px; height: calc(100vh - 63px); overflow-y: auto;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .sidebar-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; padding: 0 0.5rem; }
+  .q-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 1.5rem; }
+  .q-dot {
+    aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--border); cursor: pointer;
+    font-family: var(--mono); font-size: 0.55rem; display: flex; align-items: center;
+    justify-content: center; color: var(--muted); transition: all 0.15s; background: var(--bg3);
+  }
+  .q-dot:hover { border-color: var(--accent); color: var(--accent); }
+  .q-dot.answered { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .q-dot.correct { background: var(--green); border-color: var(--green); color: var(--bg); }
+  .q-dot.wrong { background: var(--red); border-color: var(--red); color: var(--bg); }
+  .q-dot.active { outline: 2px solid var(--yellow); outline-offset: 1px; }
+
+  .score-panel { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; display: none; }
+  .score-panel.visible { display: block; }
+  .score-big { font-family: var(--mono); font-size: 2rem; font-weight: 600; color: var(--accent); text-align: center; }
+  .score-label { font-size: 0.7rem; color: var(--muted); text-align: center; font-family: var(--mono); letter-spacing: 0.08em; margin-top: 0.25rem; }
+  .score-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem; }
+  .score-item { text-align: center; }
+  .score-item .val { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; }
+  .score-item .lbl { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); }
+  .score-item.c .val { color: var(--green); }
+  .score-item.w .val { color: var(--red); }
+
+  main { padding: 2rem 2.5rem; max-width: 840px; }
+
+  .intro-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 2.5rem; margin-bottom: 2rem; }
+  .intro-card h1 { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
+  .intro-card .subtitle { font-size: 0.8rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.08em; margin-bottom: 1.5rem; }
+  .intro-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .intro-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; text-align: center; }
+  .intro-stat .n { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--text); }
+  .intro-stat .l { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .start-btn { background: var(--accent); color: var(--bg); border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em; padding: 0.8rem 2rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .start-btn:hover { background: #00b8e0; transform: translateY(-1px); }
+
+  .mode-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .mode-card {
+    background: var(--bg2); border: 2px solid var(--border); border-radius: 6px; padding: 1.25rem;
+    cursor: pointer; transition: all 0.2s; text-align: center;
+  }
+  .mode-card:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .mode-card.active { border-color: var(--accent); background: rgba(0,212,255,0.07); }
+  .mode-card-title { font-family: var(--mono); font-size: 0.85rem; color: var(--text); margin-bottom: 0.4rem; }
+  .mode-card-sub { font-size: 0.72rem; color: var(--muted); }
+  .random-options { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+  .rand-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.78rem; padding: 0.5rem 1.2rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .rand-btn:hover, .rand-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.06); }
+  .rand-mode-section { display: none; margin-top: 1rem; }
+  .rand-mode-section.show { display: block; }
+
+  .q-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .q-num { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+  .q-tag { font-family: var(--mono); font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: 2px; letter-spacing: 0.08em; }
+  .q-tag.mc { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+  .q-tag.multi { background: rgba(255,107,43,0.1); color: var(--accent2); border: 1px solid rgba(255,107,43,0.2); }
+
+  .question-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 2rem; margin-bottom: 1.5rem; transition: border-color 0.3s; }
+  .question-card.answered-correct { border-color: rgba(0,245,160,0.3); }
+  .question-card.answered-wrong { border-color: rgba(255,71,87,0.3); }
+  .question-text { font-size: 0.95rem; line-height: 1.7; color: var(--text); margin-bottom: 1.5rem; }
+  .question-text strong { color: var(--accent); }
+
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .option {
+    display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.8rem 1rem;
+    border-radius: 4px; border: 1px solid var(--border); cursor: pointer;
+    transition: all 0.15s; background: var(--bg2); font-size: 0.875rem;
+  }
+  .option:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .opt-letter { font-family: var(--mono); font-size: 0.7rem; font-weight: 600; color: var(--muted); min-width: 18px; padding-top: 1px; transition: color 0.15s; }
+  .option:hover .opt-letter { color: var(--accent); }
+  .option.selected { border-color: var(--accent); background: rgba(0,212,255,0.08); }
+  .option.selected .opt-letter { color: var(--accent); }
+  .option.correct { border-color: var(--green); background: rgba(0,245,160,0.08); }
+  .option.correct .opt-letter { color: var(--green); }
+  .option.wrong { border-color: var(--red); background: rgba(255,71,87,0.08); }
+  .option.wrong .opt-letter { color: var(--red); }
+  .option.disabled { cursor: default; pointer-events: none; }
+
+  .option .check-box { width: 16px; height: 16px; min-width: 16px; border: 1px solid var(--border); border-radius: 2px; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .option.selected .check-box { background: var(--accent); border-color: var(--accent); }
+  .option.correct .check-box { background: var(--green); border-color: var(--green); }
+  .option.wrong .check-box { background: var(--red); border-color: var(--red); }
+  .check-box svg { display: none; }
+  .option.selected .check-box svg { display: block; }
+
+  .feedback { display: none; margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px; font-size: 0.85rem; line-height: 1.6; }
+  .feedback.correct { background: rgba(0,245,160,0.07); border: 1px solid rgba(0,245,160,0.25); color: var(--green); }
+  .feedback.wrong { background: rgba(255,71,87,0.07); border: 1px solid rgba(255,71,87,0.25); color: #ff8a95; }
+  .feedback.visible { display: block; }
+  .feedback-icon { font-size: 1.1rem; margin-bottom: 0.3rem; }
+
+  .explanation-box {
+    margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px;
+    background: rgba(123,47,190,0.08); border: 1px solid rgba(123,47,190,0.3);
+    font-size: 0.83rem; line-height: 1.7; color: var(--text);
+  }
+  .explanation-box .expl-label {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+    color: #a06fdb; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;
+  }
+
+  .q-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
+  .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1.2rem; cursor: pointer; border-radius: 3px; letter-spacing: 0.06em; transition: all 0.2s; }
+  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .submit-btn { background: var(--accent2); border: none; color: white; font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.5rem 1.5rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .submit-btn:hover { background: #e55e22; transform: translateY(-1px); }
+  .submit-btn.finish { background: var(--green); color: var(--bg); }
+  .submit-btn.finish:hover { background: #00d488; }
+
+  .results-hero { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3rem 2.5rem; text-align: center; margin-bottom: 2rem; }
+  .results-hero h2 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 1rem; }
+  .final-score { font-family: var(--mono); font-size: 4rem; font-weight: 600; line-height: 1; margin-bottom: 0.5rem; }
+  .final-score.pass { color: var(--green); }
+  .final-score.fail { color: var(--red); }
+  .final-pct { font-family: var(--mono); font-size: 1.2rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .result-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; }
+  .result-stat .v { font-family: var(--mono); font-size: 1.8rem; font-weight: 600; }
+  .result-stat .l { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .result-stat.g .v { color: var(--green); }
+  .result-stat.r .v { color: var(--red); }
+  .result-stat.y .v { color: var(--yellow); }
+  .review-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; padding: 0.7rem 1.8rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; margin-top: 1.5rem; }
+  .review-btn:hover { background: var(--accent); color: var(--bg); }
+  .restart-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; padding: 0.7rem 1.8rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; margin-top: 1.5rem; margin-left: 0.75rem; }
+  .restart-btn:hover { border-color: var(--text); color: var(--text); }
+
+  .pbq-card { background: var(--bg3); border: 1px solid rgba(0,245,160,0.2); border-radius: 6px; padding: 2rem; margin-bottom: 2rem; }
+  .pbq-card h3 { font-family: var(--mono); font-size: 0.8rem; color: var(--green); letter-spacing: 0.1em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+  .pbq-interactive { margin-top: 1rem; }
+  .pbq-scenario { font-size:0.82rem; color:var(--text); margin-bottom:1rem; line-height:1.7; }
+  .pbq-match-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .pbq-column-title { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.5rem; }
+  .pbq-items { display:flex; flex-direction:column; gap:0.4rem; }
+  .pbq-source-item {
+    background:var(--bg2); border:1px solid var(--border); border-radius:3px;
+    padding:0.5rem 0.75rem; font-size:0.78rem; cursor:grab; user-select:none;
+    transition:all 0.15s; font-family:var(--mono); color:var(--text);
+  }
+  .pbq-source-item:hover { border-color:var(--accent); color:var(--accent); }
+  .pbq-source-item.dragging { opacity:0.4; }
+  .pbq-source-item.used { opacity:0.35; cursor:default; border-style:dashed; }
+  .pbq-target-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; }
+  .pbq-target-label { font-size:0.78rem; color:var(--text); flex:1 1 0; }
+  .pbq-drop-zone {
+    min-height:34px; min-width:140px; flex:0 0 160px;
+    background:var(--bg2); border:1px dashed var(--border); border-radius:3px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:0.7rem; color:var(--muted);
+    transition:all 0.15s; position:relative; cursor:pointer; padding:0.2rem 0.5rem;
+  }
+  .pbq-drop-zone.drag-over { border-color:var(--accent); background:rgba(0,212,255,0.06); }
+  .pbq-drop-zone.filled { border-style:solid; color:var(--text); }
+  .pbq-drop-zone.correct { border-color:var(--green)!important; background:rgba(0,245,160,0.08)!important; color:var(--green)!important; }
+  .pbq-drop-zone.wrong { border-color:var(--red)!important; background:rgba(255,71,87,0.08)!important; color:var(--red)!important; }
+  .pbq-drop-clear { position:absolute; right:4px; top:50%; transform:translateY(-50%); font-size:0.7rem; color:var(--muted); cursor:pointer; padding:0 3px; }
+  .pbq-drop-clear:hover { color:var(--red); }
+  .pbq-check-btn { background:var(--accent2); border:none; color:white; font-family:var(--mono); font-size:0.72rem; font-weight:600; letter-spacing:0.08em; padding:0.5rem 1.4rem; cursor:pointer; border-radius:3px; transition:all 0.2s; margin-top:0.75rem; }
+  .pbq-check-btn:hover { background:#e55e22; }
+  .pbq-check-btn:disabled { opacity:0.5; cursor:default; }
+  .pbq-result { margin-top:0.75rem; padding:0.75rem 1rem; border-radius:3px; font-family:var(--mono); font-size:0.75rem; display:none; }
+  .pbq-result.show { display:block; }
+  .pbq-result.correct { background:rgba(0,245,160,0.07); border:1px solid rgba(0,245,160,0.3); color:var(--green); }
+  .pbq-result.partial { background:rgba(255,211,42,0.07); border:1px solid rgba(255,211,42,0.3); color:var(--yellow); }
+
+  .pbq-fw-table { width:100%; border-collapse:collapse; font-size:0.78rem; margin-bottom:1rem; }
+  .pbq-fw-table th { background:var(--bg2); border:1px solid var(--border); padding:0.5rem 0.75rem; font-family:var(--mono); font-size:0.65rem; color:var(--muted); letter-spacing:0.06em; text-align:left; }
+  .pbq-fw-table td { border:1px solid var(--border); padding:0.4rem 0.6rem; vertical-align:middle; }
+  .pbq-fw-select { background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:0.72rem; padding:0.3rem 0.5rem; border-radius:3px; cursor:pointer; width:100%; }
+  .pbq-fw-select:focus { outline:none; border-color:var(--accent); }
+  .pbq-fw-select.correct { border-color:var(--green); color:var(--green); }
+  .pbq-fw-select.wrong { border-color:var(--red); color:var(--red); }
+
+  .domain-section { margin-top: 2rem; }
+  .domain-section h3 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; }
+  .domain-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; padding: 1rem 1.2rem; margin-bottom: 0.6rem; }
+  .domain-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+  .domain-card-name { font-size: 0.82rem; color: var(--text); font-weight: 500; }
+  .domain-card-pct { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; }
+  .domain-bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .domain-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+
+  [data-theme="light"] {
+    --bg: #eef1f8; --bg2: #ffffff; --bg3: #dde2f0; --border: #c4ccdf;
+    --accent: #006699; --accent2: #cc4400; --green: #007a52; --red: #c0172e;
+    --yellow: #8a6200; --text: #111827; --muted: #556080;
+  }
+  *, *::before, *::after { transition: background-color 0.22s ease, border-color 0.2s ease, color 0.18s ease !important; }
+
+  .theme-toggle {
+    display: flex; align-items: center; gap: 0.35rem;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 50px;
+    padding: 0.26rem 0.75rem 0.26rem 0.5rem; cursor: pointer;
+    font-family: var(--mono); font-size: 0.66rem; color: var(--muted);
+    letter-spacing: 0.07em; white-space: nowrap; flex-shrink: 0;
+  }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
+  .theme-icon { font-size: 0.82rem; line-height: 1; }
+
+  @media(max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    main { padding: 1.5rem; }
+    .intro-stats { grid-template-columns: 1fr 1fr; }
+    .results-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 1: SECURITY FUNDAMENTALS</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;">
+    <a href="Practice-tests.html" class="home-btn" id="backToIntroBtn"><span>←</span><span>Back</span></a>
+    <a href="index.html" class="home-btn"><span>⌂</span><span>Home</span></a>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">QUESTIONS</div>
+    <div class="q-grid" id="qGrid"></div>
+    <div class="score-panel" id="scorePanel">
+      <div class="score-big" id="scoreBig">–</div>
+      <div class="score-label">SCORE</div>
+      <div class="score-breakdown">
+        <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+        <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- Intro -->
+    <div id="introSection">
+      <div class="intro-card">
+        <h1>SECTION 1: SECURITY FUNDAMENTALS</h1>
+        <div class="subtitle">CompTIA Security+ SY0-701 · BL Study Materials</div>
+        <div class="intro-stats">
+          <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+          <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+          <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+        <div class="mode-selector">
+          <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+            <div class="mode-card-title">📋 FULL EXAM</div>
+            <div class="mode-card-sub">All 35 questions · 45 min timer · PBQ + MCQ</div>
+          </div>
+          <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+            <div class="mode-card-title">🎲 RANDOM QUIZ</div>
+            <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+          </div>
+        </div>
+        <div class="rand-mode-section" id="randModeSection">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+          <div class="random-options">
+            <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+            <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+            <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+          </div>
+        </div>
+        <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;" id="modeDescription">
+          This quiz covers <strong style="color:var(--text)">Section 1: Security Fundamentals</strong> — CIA & DAD Triads, Control Types, Access Control Models, Zero Trust, Physical Security, and Data Protection. Questions SF1–SF5 are interactive performance-based questions. Questions SF6–SF35 are multiple-choice.<br><br>
+          <strong style="color:var(--text)">Tip:</strong> Review the Section 1 slides before attempting for best results.
+        </p>
+        <button class="start-btn" onclick="startExam()">START EXAM →</button>
+      </div>
+    </div>
+
+    <!-- PBQ -->
+    <div id="pbqSection" style="display:none">
+      <div class="pbq-card">
+        <h3>⚡ PERFORMANCE-BASED QUESTIONS (SF1–SF5)</h3>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets or click to assign. Submit each question to check your work.</p>
+
+        <!-- SF1: CIA Triad Match -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.5rem;" id="pbq-sf1">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">SF1 — CIA TRIAD: MATCH EACH PROPERTY</div>
+          <div class="pbq-scenario">Drag each CIA property to its correct definition.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">CIA PROPERTIES</div>
+                <div class="pbq-items" id="sf1-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Confidentiality">Confidentiality</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Integrity">Integrity</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Availability">Availability</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DEFINITIONS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Only authorized users can access data</div>
+                    <div class="pbq-drop-zone" data-answer="Confidentiality" data-pbq="sf1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Data is accurate and has not been tampered with</div>
+                    <div class="pbq-drop-zone" data-answer="Integrity" data-pbq="sf1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Systems and data are accessible when needed</div>
+                    <div class="pbq-drop-zone" data-answer="Availability" data-pbq="sf1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('sf1')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-sf1-result"></div>
+          </div>
+        </div>
+
+        <!-- SF2: DAD Triad to CIA mapping -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-sf2">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">SF2 — DAD TRIAD: MATCH THREAT TO CIA PROPERTY IT ATTACKS</div>
+          <div class="pbq-scenario">Each DAD threat is the attacker's version of a CIA property. Match each DAD threat to the CIA property it undermines.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">DAD THREATS</div>
+                <div class="pbq-items" id="sf2-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Disclosure">Disclosure</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Alteration">Alteration</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Denial">Denial</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">CIA PROPERTY ATTACKED</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Attacks: Confidentiality</div>
+                    <div class="pbq-drop-zone" data-answer="Disclosure" data-pbq="sf2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Attacks: Integrity</div>
+                    <div class="pbq-drop-zone" data-answer="Alteration" data-pbq="sf2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Attacks: Availability</div>
+                    <div class="pbq-drop-zone" data-answer="Denial" data-pbq="sf2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('sf2')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-sf2-result"></div>
+          </div>
+        </div>
+
+        <!-- SF3: Control Type Classification -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-sf3">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">SF3 — SECURITY CONTROL TYPES</div>
+          <div class="pbq-scenario">Classify each security control into its correct type category.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">CONTROL TYPES</div>
+                <div class="pbq-items" id="sf3-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Deterrent">Deterrent</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Detective">Detective</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Corrective">Corrective</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Physical">Physical</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Technical">Technical</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">EXAMPLES</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Warning signs / CCTV cameras visible to visitors</div>
+                    <div class="pbq-drop-zone" data-answer="Deterrent" data-pbq="sf3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">SIEM alert triggered by failed login attempts</div>
+                    <div class="pbq-drop-zone" data-answer="Detective" data-pbq="sf3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Restoring from backups after ransomware attack</div>
+                    <div class="pbq-drop-zone" data-answer="Corrective" data-pbq="sf3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Mantrap / airlock at the data center entrance</div>
+                    <div class="pbq-drop-zone" data-answer="Physical" data-pbq="sf3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Firewall blocking inbound port 23 (Telnet)</div>
+                    <div class="pbq-drop-zone" data-answer="Technical" data-pbq="sf3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('sf3')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-sf3-result"></div>
+          </div>
+        </div>
+
+        <!-- SF4: Access Control Models -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-sf4">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">SF4 — ACCESS CONTROL MODELS</div>
+          <div class="pbq-scenario">Match each scenario to the access control model it describes.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">ACCESS CONTROL MODELS</div>
+                <div class="pbq-items" id="sf4-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="DAC">DAC</div>
+                  <div class="pbq-source-item" draggable="true" data-val="MAC">MAC</div>
+                  <div class="pbq-source-item" draggable="true" data-val="RBAC">RBAC</div>
+                  <div class="pbq-source-item" draggable="true" data-val="ABAC">ABAC</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">SCENARIOS</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">A file owner right-clicks and grants coworker read access via NTFS</div>
+                    <div class="pbq-drop-zone" data-answer="DAC" data-pbq="sf4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">A Top Secret file cannot be accessed by anyone without TS clearance — even the author</div>
+                    <div class="pbq-drop-zone" data-answer="MAC" data-pbq="sf4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">All HR Managers automatically get payroll system access when assigned to the HR Manager role</div>
+                    <div class="pbq-drop-zone" data-answer="RBAC" data-pbq="sf4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Access granted only if user is in Finance, device is corporate-managed, and time is 9AM–5PM</div>
+                    <div class="pbq-drop-zone" data-answer="ABAC" data-pbq="sf4" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('sf4')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-sf4-result"></div>
+          </div>
+        </div>
+
+        <!-- SF5: Data States -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-sf5">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">SF5 — DATA PROTECTION: MATCH ATTACK TO DATA STATE</div>
+          <div class="pbq-scenario">For each attack scenario, select which data state it primarily targets.</div>
+          <div class="pbq-interactive">
+            <table class="pbq-fw-table">
+              <thead>
+                <tr><th>#</th><th>ATTACK SCENARIO</th><th>DATA STATE</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">1</td>
+                  <td>Attacker uses packet sniffing to capture credentials transmitted over an unencrypted network</td>
+                  <td><select class="pbq-fw-select" id="ds-rule-1" data-answer="In Transit">
+                    <option value="">-- Select --</option>
+                    <option>At Rest</option><option>In Transit</option><option>In Use</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">2</td>
+                  <td>Thief steals an unencrypted hard drive from a decommissioned server</td>
+                  <td><select class="pbq-fw-select" id="ds-rule-2" data-answer="At Rest">
+                    <option value="">-- Select --</option>
+                    <option>At Rest</option><option>In Transit</option><option>In Use</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">3</td>
+                  <td>Attacker performs a cold boot attack to extract encryption keys from RAM</td>
+                  <td><select class="pbq-fw-select" id="ds-rule-3" data-answer="In Use">
+                    <option value="">-- Select --</option>
+                    <option>At Rest</option><option>In Transit</option><option>In Use</option>
+                  </select></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="pbq-check-btn" onclick="checkDataStates()">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-sf5-result"></div>
+          </div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:1rem;">
+        <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE →</button>
+      </div>
+    </div>
+
+    <!-- MCQ -->
+    <div id="mcqSection" style="display:none">
+      <div id="questionContainer"></div>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" style="display:none">
+      <div class="results-hero">
+        <h2>EXAM COMPLETE — SECTION 1: SECURITY FUNDAMENTALS</h2>
+        <div class="final-score" id="finalScore">0</div>
+        <div class="final-pct" id="finalPct">0/30 Correct</div>
+        <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+        <div class="results-grid">
+          <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+          <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+          <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+        </div>
+        <div>
+          <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+          <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+        </div>
+      </div>
+      <div class="domain-section" id="domainSummary"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ─── Mode State ───────────────────────────────────────────────────────────────
+let examMode = 'full';
+let randCount = 10;
+let activeQuestions = [];
+
+function setMode(mode) {
+  examMode = mode;
+  document.getElementById('modeFullCard').classList.toggle('active', mode === 'full');
+  document.getElementById('modeRandCard').classList.toggle('active', mode === 'random');
+  document.getElementById('randModeSection').classList.toggle('show', mode === 'random');
+  if (mode === 'full') {
+    document.getElementById('statQ').textContent = '35';
+    document.getElementById('statT').textContent = '45';
+    document.getElementById('modeDescription').innerHTML = 'This quiz covers <strong style="color:var(--text)">Section 1: Security Fundamentals</strong> — CIA & DAD Triads, Control Types, Access Control Models, Zero Trust, Physical Security, and Data Protection. Questions SF1–SF5 are interactive performance-based questions. Questions SF6–SF35 are multiple-choice.<br><br><strong style="color:var(--text)">Tip:</strong> Review the Section 1 slides before attempting for best results.';
+  } else { updateRandDescription(); }
+}
+
+function setRandCount(n) {
+  randCount = n;
+  ['10','15','20'].forEach(x => document.getElementById('randBtn'+x).classList.remove('active'));
+  document.getElementById('randBtn'+n).classList.add('active');
+  updateRandDescription();
+}
+
+function updateRandDescription() {
+  document.getElementById('statQ').textContent = randCount;
+  document.getElementById('statT').textContent = Math.round(randCount * 1.5);
+  document.getElementById('modeDescription').innerHTML = `<strong style="color:var(--text)">${randCount} randomly selected questions</strong> from the 30-question MCQ pool. Questions are shuffled on every attempt.<br><br><strong style="color:var(--text)">Tip:</strong> Great for quick review of Security Fundamentals concepts.`;
+}
+
+// ─── PBQ Drag & Drop ─────────────────────────────────────────────────────────
+let draggedValue = null;
+let draggedEl = null;
+let clickSelectMode = null;
+
+document.addEventListener('DOMContentLoaded', () => { initDragDrop(); });
+
+function shuffleSourceItems() {
+  ['sf1-sources','sf2-sources','sf3-sources','sf4-sources'].forEach(id => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const items = [...container.children];
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      container.appendChild(items[j]);
+      items.splice(j, 1);
+    }
+  });
+}
+
+function initDragDrop() {
+  shuffleSourceItems();
+  document.querySelectorAll('.pbq-source-item').forEach(el => {
+    el.addEventListener('dragstart', e => { draggedValue = el.dataset.val; draggedEl = el; setTimeout(() => el.classList.add('dragging'), 0); });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); draggedEl = null; });
+    el.addEventListener('click', () => handleSourceClick(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); if (draggedValue) assignToZone(zone, draggedValue); });
+  });
+}
+
+function handleSourceClick(el) {
+  if (el.classList.contains('used')) return;
+  const pbq = el.closest('[id^="pbq-sf"]').id.replace('pbq-','');
+  document.querySelectorAll(`#pbq-${pbq} .pbq-source-item`).forEach(s => s.style.outline='');
+  if (clickSelectMode === el.dataset.val) { clickSelectMode = null; }
+  else { clickSelectMode = el.dataset.val; el.style.outline = '2px solid var(--accent)'; }
+}
+
+function handleDropZoneClick(zone) {
+  if (zone.classList.contains('correct') || zone.classList.contains('wrong')) return;
+  if (clickSelectMode) {
+    assignToZone(zone, clickSelectMode);
+    document.querySelectorAll('.pbq-source-item').forEach(s => s.style.outline='');
+    clickSelectMode = null;
+  }
+}
+
+function assignToZone(zone, val) {
+  const old = zone.dataset.current;
+  if (old) { const src = document.querySelector(`.pbq-source-item[data-val="${old}"]`); if (src) src.classList.remove('used'); }
+  const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`);
+  if (src) src.classList.add('used');
+  zone.dataset.current = val;
+  zone.classList.add('filled');
+  zone.childNodes[0].textContent = val;
+  const clear = zone.querySelector('.pbq-drop-clear');
+  if (clear) clear.style.display = 'block';
+}
+
+function clearDrop(e, clearBtn) {
+  e.stopPropagation();
+  const zone = clearBtn.parentElement;
+  const val = zone.dataset.current;
+  if (val) { const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`); if (src) src.classList.remove('used'); }
+  zone.dataset.current = '';
+  zone.classList.remove('filled');
+  zone.childNodes[0].textContent = 'Drop here';
+  clearBtn.style.display = 'none';
+}
+
+function checkPBQ(id) {
+  const zones = document.querySelectorAll(`.pbq-drop-zone[data-pbq="${id}"]`);
+  let correct = 0, total = zones.length;
+  zones.forEach(zone => {
+    const ans = zone.dataset.answer, cur = zone.dataset.current;
+    if (!cur) return;
+    if (cur === ans) { zone.classList.add('correct'); correct++; } else { zone.classList.add('wrong'); }
+  });
+  const result = document.getElementById(`pbq-${id}-result`);
+  result.classList.add('show');
+  if (correct === total && total > 0) { result.className = 'pbq-result show correct'; result.textContent = `✓ PERFECT — All ${total} matched correctly!`; }
+  else { result.className = 'pbq-result show partial'; result.textContent = `${correct}/${total} correct — Review highlighted zones and try again.`; }
+  document.querySelector(`#pbq-${id} .pbq-check-btn`).disabled = true;
+}
+
+function checkDataStates() {
+  const rules = [
+    { id:'ds-rule-1', answer:'In Transit' },
+    { id:'ds-rule-2', answer:'At Rest' },
+    { id:'ds-rule-3', answer:'In Use' }
+  ];
+  let correct = 0;
+  rules.forEach(r => {
+    const sel = document.getElementById(r.id);
+    if (sel.value === r.answer) { sel.classList.add('correct'); correct++; }
+    else if (sel.value) { sel.classList.add('wrong'); }
+    sel.disabled = true;
+  });
+  const result = document.getElementById('pbq-sf5-result');
+  result.classList.add('show');
+  if (correct === 3) { result.className = 'pbq-result show correct'; result.textContent = '✓ PERFECT — All 3 data states correctly identified!'; }
+  else { result.className = 'pbq-result show partial'; result.textContent = `${correct}/3 correct — Review highlighted scenarios.`; }
+  document.querySelector('#pbq-sf5 .pbq-check-btn').disabled = true;
+}
+
+// ─── Questions ───────────────────────────────────────────────────────────────
+const questions = [
+  {id:'SF6',domain:'CIA',explanation:'Hashing (e.g., SHA-256) and digital signatures protect Integrity — they verify that data has not been altered. Encryption protects Confidentiality; redundancy protects Availability.',type:'mc',text:'A bank uses SHA-256 hashing to verify that financial transaction records have not been modified during storage. Which CIA property does this control primarily address?',options:['Confidentiality','Availability','Integrity','Non-repudiation'],answer:[2]},
+
+  {id:'SF7',domain:'CIA',explanation:'AES encryption ensures only authorized parties with the decryption key can read the data — this is Confidentiality. Integrity uses hashing; Availability uses redundancy.',type:'mc',text:'A healthcare organization encrypts all patient records using AES-256. Which of the following CIA properties is <strong>BEST</strong> addressed by this control?',options:['Integrity','Availability','Confidentiality','Accountability'],answer:[2]},
+
+  {id:'SF8',domain:'CIA',explanation:'DDoS attacks flood a service with traffic making it unavailable — this directly attacks Availability, the "A" in CIA. Confidentiality and Integrity are unaffected by a DDoS attack.',type:'mc',text:'An attacker launches a distributed denial-of-service attack that takes a company\'s e-commerce site offline for four hours during peak shopping hours. Which CIA property is <strong>MOST</strong> directly violated?',options:['Confidentiality','Integrity','Authentication','Availability'],answer:[3]},
+
+  {id:'SF9',domain:'DAD',explanation:'An attacker intercepting unencrypted Wi-Fi traffic to read credentials is Disclosure — the DAD equivalent that attacks Confidentiality. Alteration modifies data; Denial blocks access.',type:'mc',text:'An attacker sits in a coffee shop and intercepts unencrypted Wi-Fi traffic, reading a user\'s login credentials as they are transmitted. Which DAD threat does this represent?',options:['Alteration','Denial','Disclosure','Disruption'],answer:[2]},
+
+  {id:'SF10',domain:'DAD',explanation:'Modifying financial records during transmission is Alteration — the DAD threat that attacks data Integrity. Man-in-the-Middle attacks are the classic vector for Alteration attacks.',type:'mc',text:'During a man-in-the-middle attack, an attacker intercepts and modifies a wire transfer amount from $100 to $10,000 before it reaches the bank\'s server. Which DAD threat is this?',options:['Disclosure','Denial','Alteration','Deception'],answer:[2]},
+
+  {id:'SF11',domain:'DAD',explanation:'Ransomware encrypts files making systems unavailable — this is Denial, the DAD threat that attacks Availability. It does not inherently disclose or alter data.',type:'mc',text:'Ransomware encrypts all files on a company\'s servers, making critical systems unavailable to users. Which DAD threat does this represent?',options:['Disclosure','Alteration','Defacement','Denial'],answer:[3]},
+
+  {id:'SF12',domain:'Controls',explanation:'Least privilege means users receive only the minimum access required for their specific job — nothing more. This prevents privilege creep and limits blast radius if an account is compromised.',type:'mc',text:'A new accountant is given access only to the accounting software and shared finance drive — nothing else. Which security principle does this demonstrate?',options:['Defense in Depth','Zero Trust','Least Privilege','Separation of Duties'],answer:[2]},
+
+  {id:'SF13',domain:'Controls',explanation:'Separation of duties means no single person controls an entire sensitive process. Requiring two employees for wire transfers prevents fraud by ensuring no solo actor can complete the transaction.',type:'mc',text:'A company requires that two employees must both approve any wire transfer over $50,000. Which security principle does this demonstrate?',options:['Least Privilege','Defense in Depth','Separation of Duties','Just-in-Time Access'],answer:[2]},
+
+  {id:'SF14',domain:'Controls',explanation:'Defense in Depth uses multiple overlapping security layers so that if one layer fails, others remain. No single point of failure — it is the "layered security" concept.',type:'mc',text:'An organization implements perimeter firewalls, host-based IDS, application-level WAFs, and data encryption simultaneously. Which security principle does this represent?',options:['Least Privilege','Defense in Depth','Zero Trust','Gap Analysis'],answer:[1]},
+
+  {id:'SF15',domain:'Controls',explanation:'A Gap Analysis compares the current security posture against a desired target state (a framework or regulation) and produces a remediation plan. It does not actively prevent attacks — it identifies what needs to be fixed.',type:'mc',text:'A security team compares their current security controls against the NIST Cybersecurity Framework and produces a remediation plan with prioritized findings. Which process does this describe?',options:['Penetration Testing','Gap Analysis','Vulnerability Scanning','Risk Transfer'],answer:[1]},
+
+  {id:'SF16',domain:'Controls',explanation:'A CCTV camera is both Deterrent (visible cameras discourage attackers) AND Detective (footage records incidents for later review). Multiple control types can apply to one control.',type:'mc',text:'A CCTV camera mounted at a building entrance is visible to all who enter. Which TWO control types does this camera represent? <strong>(Select TWO)</strong>',options:['Deterrent','Corrective','Detective','Preventive','Managerial'],answer:[0,2]},
+
+  {id:'SF17',domain:'Controls',explanation:'Restoring from backups after an attack is Corrective — it fixes the system after an incident has occurred. Preventive stops incidents before they happen; Detective identifies them during/after.',type:'mc',text:'After a ransomware infection, a systems administrator restores all encrypted files from clean offline backups. Which security control type does this action represent?',options:['Deterrent','Preventive','Detective','Corrective'],answer:[3]},
+
+  {id:'SF18',domain:'Controls',explanation:'An Acceptable Use Policy (AUP) is a Directive control — it guides user behavior through rules and documentation without using technical enforcement. It tells users what they can and cannot do.',type:'mc',text:'A company creates a written policy stating that employees may not use corporate laptops to access social media during work hours. Which security control type is this?',options:['Technical','Operational','Deterrent','Directive'],answer:[3]},
+
+  {id:'SF19',domain:'Controls',explanation:'Security awareness training is an Operational control — it is carried out by people as part of day-to-day procedures. Managerial controls govern oversight; Technical controls are hardware/software.',type:'mc',text:'A company runs monthly phishing simulation campaigns and provides security awareness training to all staff. Which control type category does this represent?',options:['Technical','Managerial','Directive','Operational'],answer:[3]},
+
+  {id:'SF20',domain:'Controls',explanation:'An annual risk assessment is a Managerial control — it provides administrative oversight and governance. It is carried out by management, not technology, and not day-to-day operations.',type:'mc',text:'A CISO commissions an annual third-party risk assessment of all information systems. Which type of security control is this?',options:['Technical','Operational','Managerial','Physical'],answer:[2]},
+
+  {id:'SF21',domain:'AccessControl',explanation:'DAC (Discretionary Access Control) allows the data OWNER to control permissions — as seen in Windows NTFS where you right-click → Properties → Sharing. The owner decides who gets what access.',type:'mc',text:'An employee right-clicks a folder on a shared network drive, navigates to Properties, and grants a colleague read-only access. Which access control model does this demonstrate?',options:['MAC','RBAC','DAC','ABAC'],answer:[2]},
+
+  {id:'SF22',domain:'AccessControl',explanation:'MAC (Mandatory Access Control) is enforced by the SYSTEM based on classification labels and user clearance levels. The owner cannot override it — access is determined by the system, not the individual.',type:'mc',text:'A government system automatically prevents a document labeled "Top Secret" from being viewed by users without Top Secret clearance — even if the document creator attempts to share it. Which access control model is this?',options:['DAC','RBAC','ABAC','MAC'],answer:[3]},
+
+  {id:'SF23',domain:'AccessControl',explanation:'RBAC assigns permissions to ROLES, not individuals. All users in the "Finance Manager" role automatically inherit the same set of access rights. This is the most practical model for enterprises.',type:'mc',text:'An IT administrator assigns permissions to the "Finance Manager" role in Active Directory. All users with that role automatically receive access to the payroll system. Which access control model is this?',options:['DAC','MAC','ABAC','RBAC'],answer:[3]},
+
+  {id:'SF24',domain:'AccessControl',explanation:'Rule-based access control uses administrator-defined RULES that apply universally — such as firewall ACLs blocking specific ports regardless of who the user is. This is distinct from RBAC (role-based).',type:'mc',text:'A firewall is configured with a rule that blocks all inbound TCP traffic on port 23 (Telnet) for every user and system, regardless of role or identity. Which access control model does this describe?',options:['RBAC','ABAC','DAC','Rule-Based'],answer:[3]},
+
+  {id:'SF25',domain:'AccessControl',explanation:'rwxr-xr-- breaks down as: Owner=rwx (7), Group=r-x (5), Others=r-- (4) → chmod 754. Read=4, Write=2, Execute=1.',type:'mc',text:'A Linux file has the permission string <strong>rwxr-xr--</strong>. Which chmod command correctly sets these permissions?',options:['chmod 775','chmod 764','chmod 754','chmod 744'],answer:[2]},
+
+  {id:'SF26',domain:'PhySec',explanation:'A mantrap (access control vestibule) is a two-door entry system that traps individuals between doors for credential verification, preventing tailgating. It is the best control for verifying one person at a time enters.',type:'mc',text:'A security administrator wants to prevent tailgating at a data center entrance by verifying one person enters at a time. Which physical security control <strong>BEST</strong> addresses this?',options:['CCTV Cameras','Biometric Scanner','Mantrap / Vestibule','Bollards'],answer:[2]},
+
+  {id:'SF27',domain:'PhySec',explanation:'A Faraday cage blocks electromagnetic signals (RF, WiFi, cellular). It is used to prevent RF attacks like remote device hacking and also prevents signals from leaking out of a sensitive facility.',type:'mc',text:'A government facility needs to prevent wireless communication devices from being used inside a secure room and stop electromagnetic signals from leaking out. Which physical security control should be implemented?',options:['Air Gap','Mantrap','USB Data Blocker','Faraday Cage'],answer:[3]},
+
+  {id:'SF28',domain:'PhySec',explanation:'An air-gapped network has no physical or wireless connection to the internet or external networks. This is the most secure form of network isolation, used for critical OT/SCADA systems.',type:'mc',text:'A nuclear power plant\'s control network is physically isolated with no internet connection or external network links. Which physical security concept does this describe?',options:['VLAN Segmentation','Mantrap','Air Gap','Micro-Segmentation'],answer:[2]},
+
+  {id:'SF29',domain:'PhySec',explanation:'A USB data blocker (also called a USB condom) allows charging while blocking data pins — directly preventing juice jacking attacks where a malicious charging station steals data or installs malware.',type:'mc',text:'An executive traveling internationally uses a small device plugged between their phone and a public USB charging station to charge safely. Which device is this?',options:['Faraday Cage','Kensington Lock','Air Gap Adapter','USB Data Blocker'],answer:[3]},
+
+  {id:'SF30',domain:'ZeroTrust',explanation:'Zero Trust\'s core principle is "never trust, always verify." Every user, device, and system must be authenticated and authorized for every access request, regardless of network location.',type:'mc',text:'An organization implements a security model where every access request — including those from inside the corporate network — must be verified before being granted. Which security model is this?',options:['Defense in Depth','Least Privilege','Zero Trust','RBAC'],answer:[2]},
+
+  {id:'SF31',domain:'ZeroTrust',explanation:'The Policy Enforcement Point (PEP) is the gatekeeper in Zero Trust — it applies access decisions made by the Policy Engine by allowing or blocking traffic. It executes decisions but does not make them.',type:'mc',text:'In a Zero Trust Architecture, which component serves as the gatekeeper that enforces access decisions by allowing or blocking actual network traffic?',options:['Policy Engine','Policy Administrator','Control Plane','Policy Enforcement Point'],answer:[3]},
+
+  {id:'SF32',domain:'ZeroTrust',explanation:'Micro-segmentation divides the network into small isolated zones to limit lateral movement — if an attacker breaches one zone, they cannot freely move to others. This is a key Zero Trust component.',type:'mc',text:'A company divides its internal network into small isolated segments so that a breach in the HR network cannot spread to the finance network. Which Zero Trust technique is this?',options:['Adaptive Identity','Implicit Trust Zones','Micro-Segmentation','Continuous Verification'],answer:[2]},
+
+  {id:'SF33',domain:'DataProtect',explanation:'Data at rest (stored data) is best protected by AES-256 full disk encryption. BitLocker and FileVault are common FDE implementations. TLS protects data in transit, not at rest.',type:'mc',text:'A laptop containing sensitive employee records is stolen from a car. The attacker cannot access the data because the hard drive is encrypted. Which protection method was used for this <strong>data at rest</strong>?',options:['TLS/SSL Encryption','VPN Tunnel','AES-256 Full Disk Encryption','IPsec'],answer:[2]},
+
+  {id:'SF34',domain:'DataProtect',explanation:'TLS (Transport Layer Security) encrypts data in transit — specifically HTTPS web traffic. It prevents man-in-the-middle eavesdropping on data moving between client and server.',type:'mc',text:'A company requires all web traffic to use HTTPS to protect customer data as it travels between browsers and the company\'s servers. Which protocol protects this <strong>data in transit</strong>?',options:['AES-256','BitLocker','TLS/SSL','Intel SGX'],answer:[2]},
+
+  {id:'SF35',domain:'DataProtect',explanation:'DLP (Data Loss Prevention) monitors data in motion for policy violations — it detects and blocks unauthorized transmission of sensitive data via email, USB, web upload, or print.',type:'mc',text:'A security system alerts a compliance officer that an employee attempted to email a spreadsheet containing credit card numbers to a personal Gmail account. Which technology generated this alert?',options:['IDS','SIEM','Firewall','DLP'],answer:[3]},
+];
+
+// ─── State ────────────────────────────────────────────────────────────────────
+const state = {
+  current: 0,
+  userAnswers: [],
+  submitted: [],
+  timerSeconds: 45 * 60,
+  timerInterval: null,
+  timerRunning: false
+};
+
+function startTimer() {
+  state.timerRunning = true;
+  state.timerInterval = setInterval(() => {
+    state.timerSeconds--;
+    updateTimerDisplay();
+    if (state.timerSeconds <= 0) { clearInterval(state.timerInterval); showResults(); }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer');
+  const m = Math.floor(state.timerSeconds / 60);
+  const s = state.timerSeconds % 60;
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = state.timerSeconds < 60 ? 'danger' : state.timerSeconds < 300 ? 'warn' : '';
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timerBtn');
+  if (state.timerRunning) {
+    clearInterval(state.timerInterval); state.timerRunning = false; btn.textContent = 'RESUME';
+  } else {
+    startTimer(); btn.textContent = 'PAUSE';
+  }
+}
+
+function startExam() {
+  document.getElementById('introSection').style.display = 'none';
+  if (examMode === 'full') {
+    activeQuestions = [...questions];
+    document.getElementById('pbqSection').style.display = 'block';
+    document.getElementById('finishBtn').style.display = 'inline-block';
+    document.getElementById('backToIntroBtn').style.display = 'none';
+    startTimer();
+  } else {
+    const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    activeQuestions = shuffled.slice(0, randCount);
+    state.timerSeconds = randCount * 90;
+    initMCQ();
+    document.getElementById('mcqSection').style.display = 'block';
+    document.getElementById('finishBtn').style.display = 'inline-block';
+    document.getElementById('backToIntroBtn').style.display = 'none';
+    startTimer();
+  }
+}
+
+function goBackToIntro() {
+  clearInterval(state.timerInterval);
+  state.timerRunning = false;
+  document.getElementById('pbqSection').style.display = 'none';
+  document.getElementById('mcqSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('introSection').style.display = 'block';
+  document.getElementById('finishBtn').style.display = 'none';
+  document.getElementById('backToIntroBtn').style.display = 'flex';
+  state.current = 0; state.userAnswers = []; state.submitted = [];
+  state.timerSeconds = 45 * 60; updateTimerDisplay();
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('scorePanel').classList.remove('visible');
+  document.getElementById('qGrid').innerHTML = '';
+}
+
+function showMCQ() {
+  document.getElementById('pbqSection').style.display = 'none';
+  activeQuestions = [...questions];
+  initMCQ();
+  document.getElementById('mcqSection').style.display = 'block';
+}
+
+function initMCQ() {
+  state.userAnswers = activeQuestions.map(() => []);
+  state.submitted = activeQuestions.map(() => false);
+  buildGrid();
+  renderQuestion(0);
+}
+
+function buildGrid() {
+  const grid = document.getElementById('qGrid');
+  grid.innerHTML = '';
+  activeQuestions.forEach((q, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'q-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.onclick = () => renderQuestion(i);
+    dot.id = `dot-${i}`;
+    grid.appendChild(dot);
+  });
+}
+
+function updateGrid(idx) {
+  activeQuestions.forEach((_, i) => {
+    const dot = document.getElementById(`dot-${i}`);
+    if (!dot) return;
+    dot.classList.remove('active','answered','correct','wrong');
+    if (i === idx) dot.classList.add('active');
+    else if (state.submitted[i]) {
+      const q = activeQuestions[i];
+      const ua = state.userAnswers[i];
+      const correct = q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a));
+      dot.classList.add(correct ? 'correct' : 'wrong');
+    } else if (state.userAnswers[i].length > 0) { dot.classList.add('answered'); }
+  });
+}
+
+function renderQuestion(idx) {
+  state.current = idx;
+  updateGrid(idx);
+  const q = activeQuestions[idx];
+  const isMulti = q.type === 'multi';
+  const submitted = state.submitted[idx];
+  const ua = state.userAnswers[idx];
+
+  const letters = ['A','B','C','D','E','F'];
+  let optHTML = q.options.map((opt, i) => {
+    let cls = 'option';
+    if (submitted) {
+      cls += ' disabled';
+      if (q.answer.includes(i)) cls += ' correct';
+      else if (ua.includes(i)) cls += ' wrong';
+    } else if (ua.includes(i)) cls += ' selected';
+    return `<div class="${cls}" onclick="selectOption(${idx},${i})">
+      <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="opt-letter">${letters[i]}</span>
+      <span>${opt}</span>
+    </div>`;
+  }).join('');
+
+  let feedbackHTML = '';
+  if (submitted) {
+    const correct = q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a));
+    feedbackHTML = `<div class="feedback ${correct ? 'correct' : 'wrong'} visible">
+      <div class="feedback-icon">${correct ? '✓' : '✗'}</div>
+      ${correct ? 'Correct!' : `Incorrect. Correct answer: ${q.answer.map(a => letters[a]).join(', ')}.`}
+    </div>
+    <div class="explanation-box">
+      <div class="expl-label">📖 EXPLANATION</div>
+      ${q.explanation}
+    </div>`;
+  }
+
+  const isLast = idx === activeQuestions.length - 1;
+  const submitLabel = submitted ? (isLast ? 'FINISH' : 'NEXT →') : 'SUBMIT';
+  const submitCls = submitted && isLast ? 'submit-btn finish' : 'submit-btn';
+
+  document.getElementById('questionContainer').innerHTML = `
+    <div class="q-header">
+      <span class="q-num">QUESTION ${idx + 1} OF ${activeQuestions.length} · ${q.id}</span>
+      <span class="q-tag ${isMulti ? 'multi' : 'mc'}">${isMulti ? 'MULTI SELECT' : 'MULTIPLE CHOICE'}</span>
+    </div>
+    <div class="question-card ${submitted ? (q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a)) ? 'answered-correct' : 'answered-wrong') : ''}">
+      <div class="question-text">${q.text}</div>
+      <div class="options">${optHTML}</div>
+      ${feedbackHTML}
+    </div>
+    <div class="q-footer">
+      <button class="nav-btn" onclick="renderQuestion(${idx-1})" ${idx === 0 ? 'disabled' : ''}>← PREV</button>
+      <button class="${submitCls}" onclick="handleSubmit(${idx})">${submitLabel}</button>
+      <button class="nav-btn" onclick="renderQuestion(${idx+1})" ${idx === activeQuestions.length - 1 ? 'disabled' : ''}>NEXT →</button>
+    </div>`;
+
+  const pct = ((idx + 1) / activeQuestions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function selectOption(qIdx, optIdx) {
+  if (state.submitted[qIdx]) return;
+  const q = activeQuestions[qIdx];
+  const ua = state.userAnswers[qIdx];
+  if (q.type === 'multi') {
+    const pos = ua.indexOf(optIdx);
+    if (pos === -1) ua.push(optIdx); else ua.splice(pos, 1);
+  } else {
+    state.userAnswers[qIdx] = [optIdx];
+  }
+  renderQuestion(qIdx);
+}
+
+function handleSubmit(idx) {
+  if (!state.submitted[idx]) {
+    if (state.userAnswers[idx].length === 0) return;
+    state.submitted[idx] = true;
+    updateScore();
+    renderQuestion(idx);
+  } else {
+    if (idx === activeQuestions.length - 1) { showResults(); }
+    else { renderQuestion(idx + 1); }
+  }
+}
+
+function updateScore() {
+  let correct = 0, wrong = 0;
+  activeQuestions.forEach((q, i) => {
+    if (!state.submitted[i]) return;
+    const ua = state.userAnswers[i];
+    if (q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a))) correct++;
+    else wrong++;
+  });
+  document.getElementById('scoreBig').textContent = correct;
+  document.getElementById('scoreCorrect').textContent = correct;
+  document.getElementById('scoreWrong').textContent = wrong;
+  document.getElementById('scorePanel').classList.add('visible');
+}
+
+function showResults() {
+  clearInterval(state.timerInterval);
+  document.getElementById('mcqSection').style.display = 'none';
+  document.getElementById('pbqSection').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('finishBtn').style.display = 'none';
+
+  let correct = 0, wrong = 0, skipped = 0;
+  activeQuestions.forEach((q, i) => {
+    if (!state.submitted[i]) { skipped++; return; }
+    const ua = state.userAnswers[i];
+    if (q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a))) correct++;
+    else wrong++;
+  });
+  const total = activeQuestions.length;
+  const pct = Math.round((correct / total) * 100);
+  const pass = pct >= 70;
+
+  document.getElementById('finalScore').textContent = pct + '%';
+  document.getElementById('finalScore').className = 'final-score ' + (pass ? 'pass' : 'fail');
+  document.getElementById('finalPct').textContent = `${correct}/${total} Correct`;
+  document.getElementById('passFailMsg').textContent = pass ? '✓ PASS — Well done!' : '✗ FAIL — Keep studying!';
+  document.getElementById('passFailMsg').style.color = pass ? 'var(--green)' : 'var(--red)';
+  document.getElementById('resCorrect').textContent = correct;
+  document.getElementById('resWrong').textContent = wrong;
+  document.getElementById('resSkipped').textContent = skipped;
+
+  // Domain breakdown
+  const domains = {};
+  activeQuestions.forEach((q, i) => {
+    if (!domains[q.domain]) domains[q.domain] = { correct: 0, total: 0 };
+    domains[q.domain].total++;
+    if (state.submitted[i]) {
+      const ua = state.userAnswers[i];
+      if (q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a))) domains[q.domain].correct++;
+    }
+  });
+  const domainNames = { CIA:'CIA Triad', DAD:'DAD Triad', Controls:'Security Controls', AccessControl:'Access Control Models', PhySec:'Physical Security', ZeroTrust:'Zero Trust', DataProtect:'Data Protection' };
+  const colors = { CIA:'#00d4ff', DAD:'#ff6b2b', Controls:'#00f5a0', AccessControl:'#7b2fbe', PhySec:'#ffd32a', ZeroTrust:'#ff4757', DataProtect:'#00d4ff' };
+
+  let dHTML = '<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(domains).forEach(([key, val]) => {
+    const p = Math.round((val.correct / val.total) * 100);
+    const color = colors[key] || 'var(--accent)';
+    dHTML += `<div class="domain-card">
+      <div class="domain-card-header">
+        <span class="domain-card-name">${domainNames[key] || key}</span>
+        <span class="domain-card-pct" style="color:${color}">${p}%</span>
+      </div>
+      <div class="domain-bar-track"><div class="domain-bar-fill" style="width:${p}%;background:${color}"></div></div>
+      <div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">${val.correct}/${val.total} correct</div>
+    </div>`;
+  });
+  dHTML += '</div>';
+  document.getElementById('domainSummary').innerHTML = dHTML;
+}
+
+function reviewAnswers() {
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('mcqSection').style.display = 'block';
+  document.getElementById('finishBtn').style.display = 'inline-block';
+  renderQuestion(0);
+}
+
+// ─── Theme Toggle ─────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const body = document.body;
+  const isDark = !body.hasAttribute('data-theme');
+  if (isDark) {
+    body.setAttribute('data-theme', 'light');
+    document.getElementById('themeIcon').textContent = '🌙';
+    document.getElementById('themeLabel').textContent = 'DARK';
+  } else {
+    body.removeAttribute('data-theme');
+    document.getElementById('themeIcon').textContent = '☀️';
+    document.getElementById('themeLabel').textContent = 'LIGHT';
+  }
+}
+</script>
+</body>
+</html>
