@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 4: Social Engineering &amp; Password Attacks</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e17;--bg2:#111520;--bg3:#181d2e;--border:#1f2740;--accent:#00d4ff;--accent2:#ff6b2b;--green:#00f5a0;--red:#ff4757;--yellow:#ffd32a;--text:#d0d8f0;--muted:#5a6a8a;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.6;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
+.logo{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logo span{color:var(--accent);}
+.home-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.45rem 0.85rem;border-radius:6px;text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:all 0.3s;display:flex;align-items:center;gap:0.4rem;white-space:nowrap;}
+.home-btn:hover{border-color:var(--accent);background:var(--bg2);}
+.timer-wrap{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+#timer{font-family:var(--mono);font-size:1.05rem;color:var(--accent);font-weight:600;letter-spacing:0.05em;}
+#timer.warn{color:var(--yellow);}
+#timer.danger{color:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.68rem;padding:0.3rem 0.75rem;cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;border-radius:2px;}
+.header-btn:hover{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary:hover{background:var(--accent);color:var(--bg);}
+.progress-bar-wrap{height:3px;background:var(--border);}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width 0.4s ease;width:0%;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 63px);}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:63px;height:calc(100vh - 63px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sidebar-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;padding:0 0.5rem;}
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:1.5rem;}
+.q-dot{aspect-ratio:1;border-radius:3px;border:1px solid var(--border);cursor:pointer;font-family:var(--mono);font-size:0.55rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.15s;background:var(--bg3);}
+.q-dot:hover{border-color:var(--accent);color:var(--accent);}
+.q-dot.answered{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.q-dot.correct{background:var(--green);border-color:var(--green);color:var(--bg);}
+.q-dot.wrong{background:var(--red);border-color:var(--red);color:var(--bg);}
+.q-dot.active{outline:2px solid var(--yellow);outline-offset:1px;}
+.score-panel{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;display:none;}
+.score-panel.visible{display:block;}
+.score-big{font-family:var(--mono);font-size:2rem;font-weight:600;color:var(--accent);text-align:center;}
+.score-label{font-size:0.7rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:0.08em;margin-top:0.25rem;}
+.score-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:1rem;}
+.score-item{text-align:center;}
+.score-item .val{font-family:var(--mono);font-size:1.1rem;font-weight:600;}
+.score-item .lbl{font-size:0.65rem;color:var(--muted);font-family:var(--mono);}
+.score-item.c .val{color:var(--green);}
+.score-item.w .val{color:var(--red);}
+main{padding:2rem 2.5rem;max-width:840px;}
+.intro-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2.5rem;margin-bottom:2rem;}
+.intro-card h1{font-family:var(--mono);font-size:1.25rem;font-weight:600;color:var(--accent);margin-bottom:0.5rem;}
+.intro-card .subtitle{font-size:0.8rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.08em;margin-bottom:1.5rem;}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.intro-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;text-align:center;}
+.intro-stat .n{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--text);}
+.intro-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.start-btn{background:var(--accent);color:var(--bg);border:none;font-family:var(--mono);font-size:0.85rem;font-weight:600;letter-spacing:0.1em;padding:0.8rem 2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.start-btn:hover{background:#00b8e0;transform:translateY(-1px);}
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.mode-card{background:var(--bg2);border:2px solid var(--border);border-radius:6px;padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mode-card:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.mode-card.active{border-color:var(--accent);background:rgba(0,212,255,0.07);}
+.mode-card-title{font-family:var(--mono);font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;}
+.mode-card-sub{font-size:0.72rem;color:var(--muted);}
+.random-options{display:flex;gap:0.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.rand-btn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.78rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.rand-btn:hover,.rand-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+.rand-mode-section{display:none;margin-top:1rem;}
+.rand-mode-section.show{display:block;}
+.q-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.q-num{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
+.q-tag{font-family:var(--mono);font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.08em;}
+.q-tag.mc{background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.2);}
+.q-tag.multi{background:rgba(255,107,43,0.1);color:var(--accent2);border:1px solid rgba(255,107,43,0.2);}
+.question-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
+.question-card.answered-correct{border-color:rgba(0,245,160,0.3);}
+.question-card.answered-wrong{border-color:rgba(255,71,87,0.3);}
+.question-text{font-size:0.95rem;line-height:1.7;color:var(--text);margin-bottom:1.5rem;}
+.question-text strong{color:var(--accent);}
+.options{display:flex;flex-direction:column;gap:0.6rem;}
+.option{display:flex;align-items:flex-start;gap:0.75rem;padding:0.8rem 1rem;border-radius:4px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:var(--bg2);font-size:0.875rem;}
+.option:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.opt-letter{font-family:var(--mono);font-size:0.7rem;font-weight:600;color:var(--muted);min-width:18px;padding-top:1px;transition:color 0.15s;}
+.option:hover .opt-letter{color:var(--accent);}
+.option.selected{border-color:var(--accent);background:rgba(0,212,255,0.08);}
+.option.selected .opt-letter{color:var(--accent);}
+.option.correct{border-color:var(--green);background:rgba(0,245,160,0.08);}
+.option.correct .opt-letter{color:var(--green);}
+.option.wrong{border-color:var(--red);background:rgba(255,71,87,0.08);}
+.option.wrong .opt-letter{color:var(--red);}
+.option.disabled{cursor:default;pointer-events:none;}
+.option .check-box{width:16px;height:16px;min-width:16px;border:1px solid var(--border);border-radius:50%;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.option.multi-opt .check-box{border-radius:3px;}
+.option.selected .check-box{background:var(--accent);border-color:var(--accent);}
+.option.correct .check-box{background:var(--green);border-color:var(--green);}
+.option.wrong .check-box{background:var(--red);border-color:var(--red);}
+.check-box svg{display:none;}
+.option.selected .check-box svg,.option.correct .check-box svg,.option.wrong .check-box svg{display:block;}
+.multi-counter{font-family:var(--mono);font-size:0.7rem;color:var(--accent2);margin-bottom:0.75rem;letter-spacing:0.05em;}
+.multi-counter.done{color:var(--green);}
+.feedback{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:0.85rem;line-height:1.6;}
+.feedback.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.25);color:var(--green);}
+.feedback.wrong{background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.25);color:#ff8a95;}
+.feedback.visible{display:block;}
+.explanation-box{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;background:rgba(123,47,190,0.08);border:1px solid rgba(123,47,190,0.3);font-size:0.83rem;line-height:1.7;color:var(--text);}
+.explanation-box .expl-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:#a06fdb;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.q-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.5rem;}
+.nav-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.72rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;letter-spacing:0.06em;transition:all 0.2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:0.25;cursor:default;}
+.submit-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.5rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.submit-btn:hover{background:#e55e22;transform:translateY(-1px);}
+.submit-btn.finish{background:var(--green);color:var(--bg);}
+.submit-btn.finish:hover{background:#00d488;}
+.results-hero{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3rem 2.5rem;text-align:center;margin-bottom:2rem;}
+.results-hero h2{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;color:var(--muted);margin-bottom:1rem;}
+.final-score{font-family:var(--mono);font-size:4rem;font-weight:600;line-height:1;margin-bottom:0.5rem;}
+.final-score.pass{color:var(--green);}
+.final-score.fail{color:var(--red);}
+.final-pct{font-family:var(--mono);font-size:1.2rem;color:var(--muted);margin-bottom:1.5rem;}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.result-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;}
+.result-stat .v{font-family:var(--mono);font-size:1.8rem;font-weight:600;}
+.result-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.result-stat.g .v{color:var(--green);}
+.result-stat.r .v{color:var(--red);}
+.result-stat.y .v{color:var(--yellow);}
+.review-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;}
+.review-btn:hover{background:var(--accent);color:var(--bg);}
+.restart-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;margin-left:0.75rem;}
+.restart-btn:hover{border-color:var(--text);color:var(--text);}
+.pbq-card{background:var(--bg3);border:1px solid rgba(0,245,160,0.2);border-radius:6px;padding:2rem;margin-bottom:2rem;}
+.pbq-card h3{font-family:var(--mono);font-size:0.8rem;color:var(--green);letter-spacing:0.1em;margin-bottom:1.5rem;}
+.pbq-scenario{font-size:0.82rem;color:var(--text);margin-bottom:1rem;line-height:1.7;}
+.pbq-match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.pbq-col-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;}
+.pbq-items{display:flex;flex-direction:column;gap:0.4rem;}
+.pbq-source-item{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.45rem 0.7rem;font-size:0.76rem;cursor:grab;user-select:none;transition:all 0.15s;font-family:var(--mono);color:var(--text);}
+.pbq-source-item:hover{border-color:var(--accent);color:var(--accent);}
+.pbq-source-item.dragging{opacity:0.4;}
+.pbq-source-item.used{opacity:0.35;cursor:default;border-style:dashed;}
+.pbq-target-row{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.4rem;}
+.pbq-target-label{font-size:0.78rem;color:var(--text);flex:1 1 0;padding-top:0.4rem;}
+.pbq-drop-zone{min-height:34px;min-width:120px;flex:0 0 145px;background:var(--bg2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.68rem;color:var(--muted);transition:all 0.15s;position:relative;cursor:pointer;padding:0.2rem 0.4rem;text-align:center;}
+.pbq-drop-zone.drag-over{border-color:var(--accent);background:rgba(0,212,255,0.06);}
+.pbq-drop-zone.filled{border-style:solid;color:var(--text);}
+.pbq-drop-zone.correct{border-color:var(--green)!important;background:rgba(0,245,160,0.08)!important;color:var(--green)!important;}
+.pbq-drop-zone.wrong{border-color:var(--red)!important;background:rgba(255,71,87,0.08)!important;color:var(--red)!important;}
+.pbq-drop-clear{position:absolute;right:3px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--muted);cursor:pointer;padding:0 2px;}
+.pbq-drop-clear:hover{color:var(--red);}
+.pbq-check-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.4rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:0.75rem;}
+.pbq-check-btn:hover{background:#e55e22;}
+.pbq-check-btn:disabled{opacity:0.5;cursor:default;}
+.pbq-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:3px;font-family:var(--mono);font-size:0.75rem;display:none;}
+.pbq-result.show{display:block;}
+.pbq-result.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.3);color:var(--green);}
+.pbq-result.partial{background:rgba(255,211,42,0.07);border:1px solid rgba(255,211,42,0.3);color:var(--yellow);}
+.pbq-fw-table{width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:1rem;}
+.pbq-fw-table th{background:var(--bg2);border:1px solid var(--border);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-align:left;}
+.pbq-fw-table td{border:1px solid var(--border);padding:0.4rem 0.6rem;vertical-align:middle;font-size:0.78rem;}
+.pbq-fw-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.72rem;padding:0.3rem 0.5rem;border-radius:3px;cursor:pointer;width:100%;}
+.pbq-fw-select:focus{outline:none;border-color:var(--accent);}
+.pbq-fw-select.correct{border-color:var(--green);color:var(--green);}
+.pbq-fw-select.wrong{border-color:var(--red);color:var(--red);}
+.pbq-sec{border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;}
+.pbq-sec:first-child{border-top:none;padding-top:0;margin-top:0;}
+.pbq-sec-title{font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;}
+.domain-section{margin-top:2rem;}
+.domain-section h3{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;}
+.domain-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:1rem 1.2rem;margin-bottom:0.6rem;}
+.domain-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+.domain-card-name{font-size:0.82rem;color:var(--text);font-weight:500;}
+.domain-card-pct{font-family:var(--mono);font-size:0.85rem;font-weight:600;}
+.domain-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.domain-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+[data-theme="light"]{--bg:#eef1f8;--bg2:#ffffff;--bg3:#dde2f0;--border:#c4ccdf;--accent:#006699;--accent2:#cc4400;--green:#007a52;--red:#c0172e;--yellow:#8a6200;--text:#111827;--muted:#556080;}
+*,*::before,*::after{transition:background-color 0.22s ease,border-color 0.2s ease,color 0.18s ease!important;}
+.theme-toggle{display:flex;align-items:center;gap:0.35rem;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:0.26rem 0.75rem 0.26rem 0.5rem;cursor:pointer;font-family:var(--mono);font-size:0.66rem;color:var(--muted);letter-spacing:0.07em;white-space:nowrap;flex-shrink:0;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.theme-icon{font-size:0.82rem;line-height:1;}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}main{padding:1.5rem;}.intro-stats,.results-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 4: SOCIAL ENGINEERING &amp; PASSWORD ATTACKS</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+    <a href="Practice-tests.html" class="home-btn">&#8592; Back</a>
+    <a href="index.html" class="home-btn">&#8962; Home</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">&#9728;&#65039;</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-title">QUESTIONS</div>
+  <div class="q-grid" id="qGrid"></div>
+  <div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">&ndash;</div>
+    <div class="score-label">SCORE</div>
+    <div class="score-breakdown">
+      <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+      <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+    </div>
+  </div>
+</aside>
+<main>
+
+<!-- INTRO -->
+<div id="introSection">
+<div class="intro-card">
+  <h1>SECTION 4: SOCIAL ENGINEERING &amp; PASSWORD ATTACKS</h1>
+  <div class="subtitle">CompTIA Security+ SY0-701 &middot; BL Study Materials</div>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+    <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+    <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+  </div>
+  <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+  <div class="mode-selector">
+    <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+      <div class="mode-card-title">&#128203; FULL EXAM</div>
+      <div class="mode-card-sub">All 35 questions &middot; 45 min timer &middot; PBQ + MCQ</div>
+    </div>
+    <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+      <div class="mode-card-title">&#127922; RANDOM QUIZ</div>
+      <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+    </div>
+  </div>
+  <div class="rand-mode-section" id="randModeSection">
+    <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+    <div class="random-options">
+      <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+      <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+      <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+    </div>
+  </div>
+  <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;" id="modeDescription">
+    This quiz covers <strong style="color:var(--text)">Section 4: Social Engineering &amp; Password Attacks</strong> &mdash; Phishing variants (Phishing, Spear Phishing, Whaling, Vishing, SMiShing, SPIM), Pretexting &amp; Baiting, 6 Influence Principles, Influence Campaigns, Physical Tactics (Tailgating, Piggybacking, Dumpster Diving, Pharming, Watering Hole, Typosquatting), and Password Attacks (Dictionary, Brute-Force, Hybrid, Stuffing, Spraying).<br><br>
+    <strong style="color:var(--text)">Tip:</strong> The Tailgating vs Piggybacking and Password Spraying vs Credential Stuffing distinctions are classic exam traps.
+  </p>
+  <button class="start-btn" onclick="startExam()">START EXAM &#8594;</button>
+</div>
+</div>
+
+<!-- PBQ -->
+<div id="pbqSection" style="display:none">
+<div class="pbq-card">
+  <h3>&#9889; PERFORMANCE-BASED QUESTIONS (SE4-1 &ndash; SE4-5)</h3>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets, or click a source then click a target to assign.</p>
+
+  <!-- SE4-1: Phishing Variants -->
+  <div class="pbq-sec" id="pbq-q1">
+    <div class="pbq-sec-title">SE4-1 &mdash; PHISHING VARIANTS: MATCH TECHNIQUE TO DESCRIPTION</div>
+    <div class="pbq-scenario">Drag each social engineering technique to its correct description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">TECHNIQUE</div>
+        <div class="pbq-items" id="q1-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Phishing">Phishing</div>
+          <div class="pbq-source-item" draggable="true" data-val="Spear Phishing">Spear Phishing</div>
+          <div class="pbq-source-item" draggable="true" data-val="Whaling">Whaling</div>
+          <div class="pbq-source-item" draggable="true" data-val="Vishing">Vishing</div>
+          <div class="pbq-source-item" draggable="true" data-val="SMiShing">SMiShing</div>
+          <div class="pbq-source-item" draggable="true" data-val="SPIM">SPIM</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Mass email impersonating a trusted entity to steal credentials or deliver malware</div><div class="pbq-drop-zone" data-answer="Phishing" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Targeted phishing using personal info (colleagues, job role, recent events) about the specific victim</div><div class="pbq-drop-zone" data-answer="Spear Phishing" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Spear phishing targeting C-suite executives; also called CEO Fraud or Business Email Compromise (BEC)</div><div class="pbq-drop-zone" data-answer="Whaling" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Voice phishing over phone calls; impersonates IT support, IRS, bank, or tech support</div><div class="pbq-drop-zone" data-answer="Vishing" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Phishing delivered via SMS text message; lures include fake package delivery or bank fraud alerts</div><div class="pbq-drop-zone" data-answer="SMiShing" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Spam over Instant Messaging platforms (Slack, Teams) delivering malware or credential-harvesting links</div><div class="pbq-drop-zone" data-answer="SPIM" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q1')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q1-result"></div>
+  </div>
+
+  <!-- SE4-2: Influence Principles -->
+  <div class="pbq-sec" id="pbq-q2">
+    <div class="pbq-sec-title">SE4-2 &mdash; INFLUENCE PRINCIPLES: MATCH PRINCIPLE TO EXAMPLE</div>
+    <div class="pbq-scenario">Match each of Cialdini's influence principles (as used by attackers) to the example that demonstrates it.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">PRINCIPLE</div>
+        <div class="pbq-items" id="q2-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Authority">Authority</div>
+          <div class="pbq-source-item" draggable="true" data-val="Intimidation">Intimidation</div>
+          <div class="pbq-source-item" draggable="true" data-val="Urgency">Urgency</div>
+          <div class="pbq-source-item" draggable="true" data-val="Scarcity">Scarcity</div>
+          <div class="pbq-source-item" draggable="true" data-val="Familiarity">Familiarity</div>
+          <div class="pbq-source-item" draggable="true" data-val="Consensus">Consensus</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">EXAMPLE</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">"I'm the CTO. Reset this employee's password immediately and send it to me."</div><div class="pbq-drop-zone" data-answer="Authority" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">"Your account will be permanently suspended and reported to your manager if you don't comply right now."</div><div class="pbq-drop-zone" data-answer="Intimidation" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">"Act NOW &mdash; you have 10 minutes before your system is locked and you lose all your data."</div><div class="pbq-drop-zone" data-answer="Urgency" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">"Only you have access to this data &mdash; no one else can fix this critical issue."</div><div class="pbq-drop-zone" data-answer="Scarcity" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">"Hi, your manager Dave said you'd be able to help me get access to the server room."</div><div class="pbq-drop-zone" data-answer="Familiarity" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">"Everyone else on your team has already reset their credentials through this portal &mdash; you're the last one."</div><div class="pbq-drop-zone" data-answer="Consensus" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q2')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q2-result"></div>
+  </div>
+
+  <!-- SE4-3: Physical tactics table -->
+  <div class="pbq-sec" id="pbq-q3">
+    <div class="pbq-sec-title">SE4-3 &mdash; PHYSICAL &amp; RELATED TACTICS: IDENTIFY EACH ATTACK</div>
+    <div class="pbq-scenario">For each scenario, select the physical or related attack tactic being described.</div>
+    <table class="pbq-fw-table">
+      <thead><tr><th>#</th><th>SCENARIO</th><th>ATTACK TACTIC</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">1</td><td>An attacker walks closely behind an employee who badges through a secure door. The employee holds the door open as a courtesy without checking who is behind them.</td><td><select class="pbq-fw-select" id="pt-1" data-answer="Tailgating"><option value="">-- Select --</option><option>Tailgating</option><option>Piggybacking</option><option>Dumpster Diving</option><option>Watering Hole</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">2</td><td>A security researcher rummages through a company's trash bins and finds sticky notes with passwords, an org chart, and a printed internal report.</td><td><select class="pbq-fw-select" id="pt-2" data-answer="Dumpster Diving"><option value="">-- Select --</option><option>Tailgating</option><option>Piggybacking</option><option>Dumpster Diving</option><option>Pharming</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">3</td><td>A user types "www.paypal.com" correctly in their browser but is redirected to a convincing fake login page. No link was clicked &mdash; the DNS cache was poisoned.</td><td><select class="pbq-fw-select" id="pt-3" data-answer="Pharming"><option value="">-- Select --</option><option>Typosquatting</option><option>Pharming</option><option>Watering Hole</option><option>Credential Harvesting</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">4</td><td>Attackers discover that a group of ICS engineers all visit a niche industrial control forum. They compromise the forum's website and serve malware to all visitors.</td><td><select class="pbq-fw-select" id="pt-4" data-answer="Watering Hole"><option value="">-- Select --</option><option>Pharming</option><option>Spear Phishing</option><option>Watering Hole</option><option>Pretexting</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">5</td><td>A threat actor registers the domain "arnazon.com" to capture users who mistype Amazon's URL in their browser.</td><td><select class="pbq-fw-select" id="pt-5" data-answer="Typosquatting"><option value="">-- Select --</option><option>Pharming</option><option>Typosquatting</option><option>Watering Hole</option><option>Credential Harvesting</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="pbq-check-btn" onclick="chkPhysical()">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q3-result"></div>
+  </div>
+
+  <!-- SE4-4: Password attacks match -->
+  <div class="pbq-sec" id="pbq-q4">
+    <div class="pbq-sec-title">SE4-4 &mdash; PASSWORD ATTACKS: MATCH ATTACK TO DESCRIPTION</div>
+    <div class="pbq-scenario">Drag each password attack type to its defining description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ATTACK TYPE</div>
+        <div class="pbq-items" id="q4-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Dictionary">Dictionary</div>
+          <div class="pbq-source-item" draggable="true" data-val="Brute-Force">Brute-Force</div>
+          <div class="pbq-source-item" draggable="true" data-val="Hybrid">Hybrid</div>
+          <div class="pbq-source-item" draggable="true" data-val="Credential Stuffing">Credential Stuffing</div>
+          <div class="pbq-source-item" draggable="true" data-val="Password Spraying">Password Spraying</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Uses a wordlist of common passwords, words, and known patterns; fast against weak/predictable passwords</div><div class="pbq-drop-zone" data-answer="Dictionary" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Systematically tries EVERY possible character combination; guaranteed to succeed but extremely slow for long passwords</div><div class="pbq-drop-zone" data-answer="Brute-Force" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Combines dictionary words with brute-force variations; e.g., "password" &rarr; "P@ssw0rd!", "Password1!"</div><div class="pbq-drop-zone" data-answer="Hybrid" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Uses leaked username+password pairs from prior breaches to exploit password reuse across multiple sites</div><div class="pbq-drop-zone" data-answer="Credential Stuffing" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Tries a SMALL set of common passwords against MANY accounts to stay below account lockout thresholds</div><div class="pbq-drop-zone" data-answer="Password Spraying" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q4')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q4-result"></div>
+  </div>
+
+  <!-- SE4-5: Online vs Offline + Weak vs Strong -->
+  <div class="pbq-sec" id="pbq-q5">
+    <div class="pbq-sec-title">SE4-5 &mdash; PASSWORD POLICY: WEAK VS STRONG IMPLEMENTATION</div>
+    <div class="pbq-scenario">Classify each password implementation as Weak or Strong.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">CLASSIFICATION</div>
+        <div class="pbq-items" id="q5-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Weak">Weak</div>
+          <div class="pbq-source-item" draggable="true" data-val="Strong">Strong</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">IMPLEMENTATION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Storing passwords using MD5 hashing with no salt</div><div class="pbq-drop-zone" data-answer="Weak" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Using bcrypt or Argon2 with unique salts to hash stored passwords</div><div class="pbq-drop-zone" data-answer="Strong" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Using "Summer2024!" as a password &mdash; a predictable seasonal pattern covered by all wordlists</div><div class="pbq-drop-zone" data-answer="Weak" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">14+ character passphrase such as "CorrectHorseBatteryStaple" generated by a password manager</div><div class="pbq-drop-zone" data-answer="Strong" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">No account lockout policy &mdash; unlimited login attempts permitted on the web portal</div><div class="pbq-drop-zone" data-answer="Weak" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Enforcing MFA (TOTP or hardware key) on all accounts in addition to a strong password</div><div class="pbq-drop-zone" data-answer="Strong" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q5')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q5-result"></div>
+  </div>
+
+</div>
+<div style="text-align:center;margin-top:1rem;">
+  <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE &#8594;</button>
+</div>
+</div>
+
+<!-- MCQ -->
+<div id="mcqSection" style="display:none"><div id="questionContainer"></div></div>
+
+<!-- RESULTS -->
+<div id="resultsSection" style="display:none">
+<div class="results-hero">
+  <h2>EXAM COMPLETE &mdash; SECTION 4: SOCIAL ENGINEERING &amp; PASSWORD ATTACKS</h2>
+  <div class="final-score" id="finalScore">0</div>
+  <div class="final-pct" id="finalPct">0/30 Correct</div>
+  <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+  <div class="results-grid">
+    <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+    <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+    <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+  </div>
+  <div>
+    <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+    <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+  </div>
+</div>
+<div class="domain-section" id="domainSummary"></div>
+</div>
+
+</main>
+</div>
+<script>
+let examMode='full',randCount=10,activeQuestions=[];
+function setMode(m){examMode=m;document.getElementById('modeFullCard').classList.toggle('active',m==='full');document.getElementById('modeRandCard').classList.toggle('active',m==='random');document.getElementById('randModeSection').classList.toggle('show',m==='random');if(m==='full'){document.getElementById('statQ').textContent='35';document.getElementById('statT').textContent='45';}else updateRandDescription();}
+function setRandCount(n){randCount=n;['10','15','20'].forEach(x=>document.getElementById('randBtn'+x).classList.remove('active'));document.getElementById('randBtn'+n).classList.add('active');updateRandDescription();}
+function updateRandDescription(){document.getElementById('statQ').textContent=randCount;document.getElementById('statT').textContent=Math.round(randCount*1.5);}
+
+// PBQ engine
+let dragVal=null,clickSel=null;
+document.addEventListener('DOMContentLoaded',()=>{shuffleSources();initDrag();});
+function shuffleSources(){['q1-sources','q2-sources','q4-sources','q5-sources'].forEach(id=>{const c=document.getElementById(id);if(!c)return;const it=[...c.children];for(let i=it.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));c.appendChild(it[j]);it.splice(j,1);}});}
+function initDrag(){
+  document.querySelectorAll('.pbq-source-item').forEach(el=>{
+    el.addEventListener('dragstart',()=>{dragVal=el.dataset.val;setTimeout(()=>el.classList.add('dragging'),0);});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>clickSource(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragVal)assignZone(z,dragVal);});
+  });
+}
+function clickSource(el){if(el.classList.contains('used'))return;const pbqEl=el.closest('[id^="pbq-q"]');if(!pbqEl)return;const id=pbqEl.id.replace('pbq-','');document.querySelectorAll('#pbq-'+id+' .pbq-source-item').forEach(s=>s.style.outline='');if(clickSel===el.dataset.val){clickSel=null;}else{clickSel=el.dataset.val;el.style.outline='2px solid var(--accent)';}}
+function hdz(z){if(z.classList.contains('correct')||z.classList.contains('wrong'))return;if(clickSel){assignZone(z,clickSel);document.querySelectorAll('.pbq-source-item').forEach(s=>s.style.outline='');clickSel=null;}}
+function assignZone(z,val){const old=z.dataset.current;if(old){const s=document.querySelector('.pbq-source-item[data-val="'+old+'"]');if(s)s.classList.remove('used');}const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.add('used');z.dataset.current=val;z.classList.add('filled');z.childNodes[0].textContent=val;const c=z.querySelector('.pbq-drop-clear');if(c)c.style.display='block';}
+function clrDrop(e,btn){e.stopPropagation();const z=btn.parentElement,val=z.dataset.current;if(val){const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.remove('used');}z.dataset.current='';z.classList.remove('filled');z.childNodes[0].textContent='Drop here';btn.style.display='none';}
+function chkPBQ(id){const zones=document.querySelectorAll('.pbq-drop-zone[data-pbq="'+id+'"]');let ok=0,tot=zones.length;zones.forEach(z=>{const a=z.dataset.answer,c=z.dataset.current;if(!c)return;if(c===a){z.classList.add('correct');ok++;}else z.classList.add('wrong');});const r=document.getElementById('pbq-'+id+'-result');r.classList.add('show');if(ok===tot&&tot>0){r.className='pbq-result show correct';r.textContent='\u2713 PERFECT \u2014 All '+tot+' matched correctly!';}else{r.className='pbq-result show partial';r.textContent=ok+'/'+tot+' correct \u2014 Review highlighted zones.';}document.querySelector('#pbq-'+id+' .pbq-check-btn').disabled=true;}
+function chkPhysical(){const rules=[{id:'pt-1',a:'Tailgating'},{id:'pt-2',a:'Dumpster Diving'},{id:'pt-3',a:'Pharming'},{id:'pt-4',a:'Watering Hole'},{id:'pt-5',a:'Typosquatting'}];let ok=0;rules.forEach(r=>{const s=document.getElementById(r.id);if(s.value===r.a){s.classList.add('correct');ok++;}else if(s.value)s.classList.add('wrong');s.disabled=true;});const res=document.getElementById('pbq-q3-result');res.classList.add('show');if(ok===5){res.className='pbq-result show correct';res.textContent='\u2713 PERFECT \u2014 All 5 tactics identified correctly!';}else{res.className='pbq-result show partial';res.textContent=ok+'/5 correct \u2014 Review physical and related attack tactics.';}document.querySelector('#pbq-q3 .pbq-check-btn').disabled=true;}
+
+// Questions
+const questions=[
+// Social Engineering Techniques
+{id:'SE4-6',domain:'SETechniques',type:'mc',
+text:'A cybercriminal sends an email to a company\'s CEO pretending to be the CFO, requesting an urgent wire transfer of $250,000 to a new overseas vendor account. Which social engineering technique is this?',
+options:['Phishing','Whaling / BEC (Business Email Compromise)','Vishing','Pretexting'],
+answer:[1],
+explanation:'Whaling targets C-suite executives specifically. When it results in fraudulent financial transfers, it is also called Business Email Compromise (BEC) or CEO Fraud. Regular phishing is mass/untargeted; this attack is highly targeted at an executive for financial gain.'},
+
+{id:'SE4-7',domain:'SETechniques',type:'mc',
+text:'An attacker calls an employee posing as a Microsoft support technician and claims the employee\'s computer is sending error reports. The attacker requests remote access credentials to "fix the issue." This is:',
+options:['SMiShing','Pretexting / Vishing','SPIM','Watering Hole Attack'],
+answer:[1],
+explanation:'This combines two techniques: Vishing (voice phishing \u2014 using a phone call) and Pretexting (fabricating a scenario \u2014 the fake tech support context). The attacker impersonates IT support, which is the most common organizational social engineering attack. Policy: IT will never ask for your password over the phone.'},
+
+{id:'SE4-8',domain:'SETechniques',type:'mc',
+text:'An attacker sends a text message to thousands of users claiming "Your bank account has been locked. Click here to verify your identity." Which attack is this?',
+options:['Vishing','Phishing','SMiShing','SPIM'],
+answer:[2],
+explanation:'SMiShing (SMS Phishing) is phishing delivered via text message. Common lures include fake bank fraud alerts, package delivery notifications, and prize claims. Users are generally less cautious with SMS messages than email, making SMiShing effective. The defense is the same as phishing \u2014 do not click links in unsolicited texts.'},
+
+{id:'SE4-9',domain:'SETechniques',type:'mc',
+text:'Which of the following <strong>BEST</strong> distinguishes Spear Phishing from regular Phishing?',
+options:['Spear phishing uses phone calls; phishing uses email','Spear phishing is targeted at a specific individual using personal information; phishing is mass and untargeted','Spear phishing only targets executives; phishing targets all employees','Spear phishing installs malware; phishing only steals credentials'],
+answer:[1],
+explanation:'Spear phishing is personalized and targeted \u2014 the attacker researches the victim and references their colleagues, job role, current projects, or recent events to make the email appear credible. Generic phishing sends the same mass email to thousands of people. Spear phishing is much harder to detect because it feels relevant and personal.'},
+
+{id:'SE4-10',domain:'SETechniques',type:'mc',
+text:'A user receives a direct message on Microsoft Teams containing a link that appears to be a shared document. Clicking the link leads to a credential harvesting page. This is an example of:',
+options:['Vishing','SMiShing','SPIM (Spam over Instant Messaging)','Pharming'],
+answer:[2],
+explanation:'SPIM is Spam over Instant Messaging \u2014 delivering malware or credential-harvesting links via IM platforms like Slack, Teams, or Discord. Attackers exploit the fact that users often trust messages in IM platforms more than unsolicited emails. The attack vector is different (IM vs. email) but the goal is identical.'},
+
+{id:'SE4-11',domain:'SETechniques',type:'mc',
+text:'A fake website nearly identical to a bank\'s real login page captures credentials when victims are redirected there after clicking a phishing link. This is called:',
+options:['Typosquatting','Pharming','Credential Harvesting','Pretexting'],
+answer:[2],
+explanation:'Credential Harvesting uses fake login pages (clone sites) that capture real credentials when victims attempt to log in. Victims are typically directed there via phishing links. The captured credentials are then used for account takeover. Defense includes MFA, URL verification, and email filtering.'},
+
+{id:'SE4-12',domain:'SETechniques',type:'mc',
+text:'An attacker contacts an HR employee claiming to be an external IT auditor. They explain they are conducting a security review and need a list of all employee usernames to "verify directory sync." This is:',
+options:['Vishing','Whaling','Pretexting','Credential Harvesting'],
+answer:[2],
+explanation:'Pretexting involves fabricating a specific scenario (pretext) to manipulate a target into providing information. The attacker builds a fake identity and context (IT auditor conducting a review) to appear legitimate. Pretexting often involves posing as IT, vendors, auditors, or surveyors. It relies on building rapport before extracting information.'},
+
+// Influence Principles & Campaigns
+{id:'SE4-13',domain:'InfluencePrinciples',type:'mc',
+text:'An email states: "Your system has been compromised. If you don\'t reset your credentials through this link within the next 5 minutes, your account will be permanently deleted." Which influence principle is the attacker primarily exploiting?',
+options:['Scarcity','Consensus','Urgency','Authority'],
+answer:[2],
+explanation:'Urgency creates artificial time pressure that prevents the victim from thinking carefully or verifying the request. "Act NOW or lose access" forces hasty decisions. This is one of the most effective social engineering techniques because it bypasses the victim\'s rational decision-making process.'},
+
+{id:'SE4-14',domain:'InfluencePrinciples',type:'mc',
+text:'Social media posts and fake grassroots accounts push the same political narrative, giving the false impression of widespread organic public support for a fringe position. This influence campaign tactic is called:',
+options:['Propaganda','Astroturfing','Rumor Mongering','Fake News'],
+answer:[1],
+explanation:'Astroturfing is creating fake grassroots movements that appear to have organic public support. Bots and paid actors simulate real sentiment. The goal is to make a fringe or sponsored viewpoint appear mainstream. Named after AstroTurf (fake grass) \u2014 simulating the appearance of natural public support.'},
+
+{id:'SE4-15',domain:'InfluencePrinciples',type:'multi',
+text:'Which TWO of the following are influence principles that social engineers commonly exploit to manipulate victims? <strong>(Select TWO)</strong>',
+options:['Authority \u2014 claiming power or official status to gain compliance','Encryption \u2014 hiding communication to avoid detection','Consensus \u2014 claiming others have already complied to normalize the action','Segmentation \u2014 isolating network resources to limit damage','Hashing \u2014 ensuring data integrity'],
+answer:[0,2],
+explanation:'Authority exploits the human tendency to comply with figures of perceived power (CEO, IT director, IRS agent). Consensus exploits social proof \u2014 "everyone else already did this" makes the target feel that compliance is normal and safe. The other options (encryption, segmentation, hashing) are security controls, not influence principles.'},
+
+{id:'SE4-16',domain:'InfluencePrinciples',type:'mc',
+text:'An attacker harvests an employee\'s LinkedIn profile, Facebook posts, and company website bio before calling them. They mention the employee\'s recent project, their manager\'s name, and a company event. Which technique are they using to build trust?',
+options:['Urgency','Social Media Recon / OSINT for Pretexting','Astroturfing','Consensus'],
+answer:[1],
+explanation:'Social Media Recon (OSINT) is gathering publicly available personal details from LinkedIn, Facebook, Instagram, and other sources before executing a social engineering attack. The attacker uses this intelligence to craft a convincing pretext \u2014 referencing real details makes the scenario feel authentic and lowers the target\'s guard.'},
+
+// Physical Tactics
+{id:'SE4-17',domain:'PhysicalTactics',type:'mc',
+text:'What is the critical difference between tailgating and piggybacking?',
+options:['Tailgating uses a disguise; piggybacking does not','In tailgating the authorized person is unaware; in piggybacking the authorized person knowingly allows entry','Tailgating occurs indoors; piggybacking always occurs outdoors','Piggybacking requires hacking a badge reader; tailgating does not'],
+answer:[1],
+explanation:'TAILGATING: The authorized person is UNAWARE the attacker is following through \u2014 they hold the door as courtesy without realizing they shouldn\'t. PIGGYBACKING: The authorized person is AWARE and intentionally lets the attacker in (often due to deception \u2014 "I forgot my badge"). The key distinction is the authorized person\'s awareness and consent.'},
+
+{id:'SE4-18',domain:'PhysicalTactics',type:'mc',
+text:'A user carefully types "www.amazon.com" correctly in their browser but is redirected to a convincing fake Amazon login page. Investigation reveals the company\'s DNS resolver was compromised. This is:',
+options:['Typosquatting','Credential Harvesting','Pharming','Watering Hole Attack'],
+answer:[2],
+explanation:'Pharming redirects users to a fake site WITHOUT them clicking a phishing link. Methods include DNS cache poisoning (corrupting the DNS resolver so the correct domain resolves to the wrong IP) or hosts file modification. The key: even a perfectly typed correct URL can lead to a fake site. Defense: DNSSEC, HTTPS verification, anti-pharming software.'},
+
+{id:'SE4-19',domain:'PhysicalTactics',type:'mc',
+text:'A group of defense contractors regularly visits a niche aerospace engineering forum. Attackers compromise that forum\'s website and inject malware that silently installs on visitors\' machines. This is a:',
+options:['Pharming Attack','Supply Chain Attack','Watering Hole Attack','Spear Phishing Campaign'],
+answer:[2],
+explanation:'A Watering Hole attack compromises a website that the TARGET GROUP is known to visit regularly. Named after the predator strategy of waiting at a watering hole for prey. The attacker does not need to reach the targets directly \u2014 they compromise a trusted site the targets use. Defense: Zero trust, browser isolation, and threat intelligence feeds.'},
+
+{id:'SE4-20',domain:'PhysicalTactics',type:'mc',
+text:'Which of the following is the <strong>BEST</strong> defense against tailgating and piggybacking attacks at a secure facility?',
+options:['Stronger Wi-Fi passwords','Installing a mantrap (vestibule) requiring individual badge authentication','Deploying intrusion detection systems','Implementing full-disk encryption on employee laptops'],
+answer:[1],
+explanation:'A mantrap (also called a vestibule or airlock) is a physical security control with two doors \u2014 only one can open at a time, and entry requires individual badge authentication. This physically prevents both tailgating (accidental) and piggybacking (deliberate). IDS, encryption, and Wi-Fi security do not address physical access bypass.'},
+
+{id:'SE4-21',domain:'PhysicalTactics',type:'mc',
+text:'Which defense <strong>MOST</strong> directly prevents dumpster diving attacks from exposing sensitive organizational information?',
+options:['Network segmentation','Mandatory shredding policy and secure media destruction','Full-disk encryption','Employee security awareness training about phishing'],
+answer:[1],
+explanation:'Dumpster diving exploits physical trash to find sensitive documents (passwords on sticky notes, org charts, printed reports) and discarded hardware. The primary defense is a mandatory shredding policy for all sensitive documents and a secure media destruction process for old hardware. Encryption and network controls do not protect paper-based information in physical trash.'},
+
+// Password Attacks
+{id:'SE4-22',domain:'PasswordAttacks',type:'mc',
+text:'An attacker uses a file containing millions of previously breached email/password combinations and attempts to log into Netflix, Spotify, and banking portals with them. This attack is called:',
+options:['Password Spraying','Dictionary Attack','Credential Stuffing','Hybrid Attack'],
+answer:[2],
+explanation:'Credential Stuffing uses actual leaked username+password pairs from previous breaches to attempt logins on other services. It exploits password reuse \u2014 if a victim uses the same credentials everywhere, one breach exposes all accounts. It is automated using bots. Defense: Unique passwords per site (password manager), MFA, and breach monitoring (HaveIBeenPwned).'},
+
+{id:'SE4-23',domain:'PasswordAttacks',type:'mc',
+text:'An attacker tests the passwords "Summer2024!", "Welcome1", and "Password123!" against every user account in a company\'s Active Directory. They attempt each password with a 30-minute delay between rounds to avoid triggering lockout. This is:',
+options:['Brute-Force Attack','Credential Stuffing','Password Spraying','Hybrid Attack'],
+answer:[2],
+explanation:'Password Spraying tries a SMALL number of common passwords against MANY accounts while deliberately staying below the lockout threshold per account. This avoids the lockout that brute-forcing a single account would trigger. Defense: Account lockout policies, MFA, and blocking known-common passwords.'},
+
+{id:'SE4-24',domain:'PasswordAttacks',type:'mc',
+text:'A security researcher obtains a database of password hashes and uses Hashcat on a GPU cluster to try every possible combination of 8 or fewer characters. This is an:',
+options:['Online brute-force attack with rate limiting','Offline brute-force attack against the hash database','Dictionary attack using rockyou.txt','Password spraying campaign'],
+answer:[1],
+explanation:'This is an OFFLINE brute-force attack. Offline attacks operate against stolen hash databases \u2014 they are not constrained by rate limiting or account lockout because they don\'t interact with a live system. Modern GPU clusters can test billions of hashes per second. Defense: Strong hashing algorithms (bcrypt, Argon2) with unique salts, and long passwords (14+).'},
+
+{id:'SE4-25',domain:'PasswordAttacks',type:'mc',
+text:'What is the key difference between an online and an offline password attack?',
+options:['Online attacks are faster; offline attacks are slower','Online attacks target live portals and are limited by rate limiting and lockout; offline attacks crack stolen hashes with no such restrictions','Online attacks use wordlists; offline attacks try every combination','Online attacks require physical access; offline attacks are remote'],
+answer:[1],
+explanation:'Online attacks target live login portals and face practical limits: rate limiting, account lockout, CAPTCHAs. Offline attacks operate against a stolen credential database (hash file) on the attacker\'s own hardware \u2014 no lockout, no restrictions, just raw computing power. This is why hash algorithm strength and salting are critical for protecting stored credentials.'},
+
+{id:'SE4-26',domain:'PasswordAttacks',type:'mc',
+text:'A dictionary attack is run against a password hash and fails to crack it. The analyst then tries dictionary words combined with appended numbers, capitalization changes, and l33t speak substitutions (@ for a, 0 for o). This advanced technique is called:',
+options:['Credential Stuffing','Password Spraying','Hybrid Attack','Rainbow Table Attack'],
+answer:[2],
+explanation:'A Hybrid Attack combines dictionary words with brute-force variations: appending numbers (password1, password2024), capitalizing letters (Password), or substituting characters (P@ssw0rd!, passw0rd!). It targets users who follow predictable modification patterns \u2014 taking a common word and adding complexity. Defense: Passphrases and password managers that generate truly random passwords.'},
+
+{id:'SE4-27',domain:'PasswordAttacks',type:'multi',
+text:'Which TWO defenses are <strong>MOST</strong> effective against credential stuffing attacks specifically? <strong>(Select TWO)</strong>',
+options:['Multi-Factor Authentication (MFA) on all accounts','Using longer passwords (14+ characters)','Unique passwords for every account (via password manager)','Enforcing complexity requirements (symbols and numbers)','Disabling guest accounts'],
+answer:[0,2],
+explanation:'Credential stuffing exploits two things: (1) valid credentials from past breaches, and (2) password reuse. The defenses are: MFA \u2014 even with the correct stolen password, the attacker cannot log in without the second factor; and unique passwords per site \u2014 so a breach on one site does not expose other accounts. Complexity requirements and longer passwords help with cracking but not stuffing.'},
+
+{id:'SE4-28',domain:'PasswordPolicy',type:'mc',
+text:'Why is storing passwords using MD5 hashing considered a critical vulnerability?',
+options:['MD5 is not supported by modern operating systems','MD5 hashes can be cracked extremely quickly with modern GPU hardware, producing the original password in seconds for common passwords','MD5 increases login latency to unacceptable levels','MD5 hashes are stored in plaintext and are visible to any user'],
+answer:[1],
+explanation:'MD5 was never designed for password storage \u2014 it is a fast hashing algorithm, which is exactly wrong for passwords. Modern GPUs can compute billions of MD5 hashes per second, meaning short or common passwords are cracked near-instantly, especially without salting. The correct approach is bcrypt, Argon2, or PBKDF2 \u2014 algorithms specifically designed to be computationally expensive to slow offline cracking.'},
+
+{id:'SE4-29',domain:'PasswordPolicy',type:'mc',
+text:'An organization requires employees to use passwords like "Tr0ub4dor&3" (11 characters with symbols and numbers). A security expert argues that "CorrectHorseBatteryStaple" (25 characters, all lowercase words) is actually more secure. Why?',
+options:['The passphrase contains more special characters','Length provides significantly more entropy than complexity &mdash; a 25-character passphrase has far more possible combinations than an 11-character complex password','The passphrase is easier for password managers to store','Short complex passwords are only crackable via social engineering, not technical attacks'],
+answer:[1],
+explanation:'Password strength comes primarily from LENGTH, not complexity. A 25-character passphrase has astronomically more possible combinations than an 11-character complex password. "Tr0ub4dor&3" is also in many hybrid attack wordlists because predictable substitutions (@ for a, 0 for o, 3 for e) are well-known. Passphrases are both more secure and easier to remember.'},
+
+{id:'SE4-30',domain:'PasswordPolicy',type:'mc',
+text:'Which password storage implementation is considered <strong>MOST</strong> secure for protecting credentials if the database is stolen?',
+options:['SHA-1 hashing','MD5 hashing with a salt','Plaintext with AES-256 encryption','bcrypt or Argon2 with a unique salt per user'],
+answer:[3],
+explanation:'bcrypt and Argon2 are purpose-built password hashing algorithms designed to be computationally expensive \u2014 they intentionally slow down cracking to hundreds or thousands of attempts per second instead of billions. Adding a unique salt per user prevents rainbow table attacks and ensures that two users with the same password produce different hashes. SHA-1 and MD5 are too fast. Plaintext encryption is reversible.'},
+
+// Scenario-based
+{id:'SE4-31',domain:'SETechniques',type:'mc',
+text:'During a penetration test, a tester calls the IT help desk claiming to be a new remote employee who is locked out of their account. They provide a believable employee name and project, then convincingly ask for a password reset without being in the system. Which technique is this?',
+options:['Vishing','Pretexting','Whaling','Credential Stuffing'],
+answer:[1],
+explanation:'This is Pretexting combined with Vishing. The tester fabricates a scenario (pretexting: new remote employee, locked out) to manipulate the help desk into performing an unauthorized password reset. Impersonating IT or pretending to be an employee needing help is the most common social engineering vector against help desks. Policy: Always verify identity through official channels before resetting any credentials.'},
+
+{id:'SE4-32',domain:'PhysicalTactics',type:'mc',
+text:'A threat actor registers "paypa1.com" (using the number 1 instead of the letter l). Users who mistype PayPal\'s URL land on this malicious site and have their credentials stolen. This attack is:',
+options:['Pharming','Credential Harvesting','Typosquatting','Watering Hole'],
+answer:[2],
+explanation:'Typosquatting (also called URL hijacking) registers domains that are common misspellings or character substitutions of legitimate websites. Examples: goggle.com, arnazon.com, paypa1.com. Users who make typing errors land on the attacker\'s site. The site typically mimics the real site to steal credentials. Defense: Browser typo protection, phishing filters, and domain monitoring.'},
+
+{id:'SE4-33',domain:'InfluencePrinciples',type:'mc',
+text:'An attacker creates hundreds of fake social media accounts that all post enthusiastic support for a political candidate, making it appear that the candidate has massive grassroots backing when they actually have very little. This is:',
+options:['Misinformation','Astroturfing','Amplification','Smear Campaign'],
+answer:[1],
+explanation:'Astroturfing creates the false appearance of organic grassroots public support using bots and fake personas (sock puppets). It makes a fringe position appear mainstream. The goal is to influence real people\'s opinions by exploiting the consensus principle \u2014 "if so many people support this, maybe I should too." Named after AstroTurf artificial grass \u2014 it looks real but is fake.'},
+
+{id:'SE4-34',domain:'PasswordAttacks',type:'mc',
+text:'A security team notices that exactly 3 failed login attempts are being made against each of their 800 user accounts every day, but no accounts are triggering the 5-attempt lockout threshold. Which attack is <strong>MOST</strong> likely occurring?',
+options:['Brute-Force Attack','Credential Stuffing','Password Spraying','Hybrid Dictionary Attack'],
+answer:[2],
+explanation:'Password Spraying deliberately stays below the lockout threshold by attempting only a small number of passwords per account. The pattern \u2014 multiple accounts each receiving exactly the same small number of failed attempts \u2014 is the signature indicator of password spraying. Defense: Account lockout even at low thresholds, MFA, and unusual login pattern monitoring.'},
+
+{id:'SE4-35',domain:'SETechniques',type:'mc',
+text:'Which combination of controls provides the <strong>STRONGEST</strong> defense against the broadest range of social engineering and password attacks?',
+options:['Complex password requirements and security questions','Security awareness training alone','MFA + unique passwords via a password manager + account lockout + security awareness training','Longer passwords (14+) and annual phishing simulations'],
+answer:[2],
+explanation:'A layered defense-in-depth approach is most effective: MFA stops credential stuffing and phishing even if passwords are stolen; unique passwords via a password manager prevent reuse and enable complex credentials; account lockout stops online brute-force and spraying; and security awareness training helps users recognize social engineering. No single control addresses all attack types \u2014 layering is essential.'},
+];
+
+// State & engine
+const state={current:0,userAnswers:[],submitted:[],timerSeconds:45*60,timerInterval:null,timerRunning:false};
+function startTimer(){state.timerRunning=true;state.timerInterval=setInterval(()=>{state.timerSeconds--;updateTimer();if(state.timerSeconds<=0){clearInterval(state.timerInterval);showResults();}},1000);}
+function updateTimer(){const el=document.getElementById('timer'),m=Math.floor(state.timerSeconds/60),s=state.timerSeconds%60;el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');el.className=state.timerSeconds<60?'danger':state.timerSeconds<300?'warn':'';}
+function toggleTimer(){const btn=document.getElementById('timerBtn');if(state.timerRunning){clearInterval(state.timerInterval);state.timerRunning=false;btn.textContent='RESUME';}else{startTimer();btn.textContent='PAUSE';}}
+function startExam(){document.getElementById('introSection').style.display='none';if(examMode==='full'){activeQuestions=[...questions];document.getElementById('pbqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}else{const sh=[...questions].sort(()=>Math.random()-0.5);activeQuestions=sh.slice(0,randCount);state.timerSeconds=randCount*90;initMCQ();document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}}
+function showMCQ(){document.getElementById('pbqSection').style.display='none';activeQuestions=[...questions];initMCQ();document.getElementById('mcqSection').style.display='block';}
+function initMCQ(){state.userAnswers=activeQuestions.map(()=>[]);state.submitted=activeQuestions.map(()=>false);buildGrid();renderQ(0);}
+function buildGrid(){const g=document.getElementById('qGrid');g.innerHTML='';activeQuestions.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(i===0?' active':'');d.textContent=i+1;d.onclick=()=>renderQ(i);d.id='dot-'+i;g.appendChild(d);});}
+function updGrid(idx){activeQuestions.forEach((_,i)=>{const d=document.getElementById('dot-'+i);if(!d)return;d.classList.remove('active','answered','correct','wrong');if(i===idx)d.classList.add('active');else if(state.submitted[i]){const q=activeQuestions[i],ua=state.userAnswers[i];d.classList.add(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))?'correct':'wrong');}else if(state.userAnswers[i].length>0)d.classList.add('answered');});}
+function renderQ(idx){
+  state.current=idx;updGrid(idx);
+  const q=activeQuestions[idx],isM=q.type==='multi',sub=state.submitted[idx],ua=state.userAnswers[idx];
+  const L=['A','B','C','D','E'],req=q.answer.length,sel=ua.length;
+  let oH=q.options.map((o,i)=>{let c='option'+(isM?' multi-opt':'');if(sub){c+=' disabled';if(q.answer.includes(i))c+=' correct';else if(ua.includes(i))c+=' wrong';}else if(ua.includes(i))c+=' selected';return '<div class="'+c+'" data-oidx="'+i+'"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="opt-letter">'+L[i]+'</span><span>'+o+'</span></div>';}).join('');
+  let cH='';if(isM&&!sub){const d=sel>=req;cH='<div class="multi-counter '+(d?'done':'')+'"> '+(d?'&#10003;':'&#9744;')+' Select '+req+' answer'+(req>1?'s':'')+' &mdash; '+sel+' of '+req+' selected</div>';}
+  let fH='';if(sub){const ok=q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));fH='<div class="feedback '+(ok?'correct':'wrong')+' visible"><div class="feedback-icon">'+(ok?'&#10003;':'&#10007;')+'</div>'+(ok?'Correct!':'Incorrect. Correct answer'+(req>1?'s':'')+': '+q.answer.map(a=>L[a]).join(', ')+'.')+'</div><div class="explanation-box"><div class="expl-label">&#128218; EXPLANATION</div>'+q.explanation+'</div>';}
+  const isLast=idx===activeQuestions.length-1,canSub=!sub&&ua.length>0;
+  const sLbl=sub?(isLast?'FINISH':'NEXT &#8594;'):'SUBMIT',sCls=sub&&isLast?'submit-btn finish':'submit-btn';
+  const isAC=sub&&q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));
+  document.getElementById('questionContainer').innerHTML='<div class="q-header"><span class="q-num">QUESTION '+(idx+1)+' OF '+activeQuestions.length+' &middot; '+q.id+'</span><span class="q-tag '+(isM?'multi':'mc')+'">'+(isM?'MULTI SELECT ('+req+')':'MULTIPLE CHOICE')+'</span></div><div class="question-card '+(sub?(isAC?'answered-correct':'answered-wrong'):'')+'"><div class="question-text">'+q.text+'</div>'+cH+'<div class="options" id="optCont">'+oH+'</div>'+fH+'</div><div class="q-footer"><button class="nav-btn" onclick="renderQ('+(idx-1)+')" '+(idx===0?'disabled':'')+'>&#8592; PREV</button><button class="'+sCls+'" onclick="handleSub('+idx+')" '+(canSub||sub?'':'disabled style="opacity:0.4;cursor:default;"')+'>'+sLbl+'</button><button class="nav-btn" onclick="renderQ('+(idx+1)+')" '+(idx===activeQuestions.length-1?'disabled':'')+'>NEXT &#8594;</button></div>';
+  if(!sub)document.querySelectorAll('#optCont .option').forEach(el=>el.addEventListener('click',()=>selOpt(idx,parseInt(el.dataset.oidx))));
+  document.getElementById('progressBar').style.width=((idx+1)/activeQuestions.length*100)+'%';
+}
+function selOpt(qi,oi){if(state.submitted[qi])return;const q=activeQuestions[qi],ua=state.userAnswers[qi];if(q.type==='multi'){const p=ua.indexOf(oi);if(p===-1)ua.push(oi);else ua.splice(p,1);}else state.userAnswers[qi]=[oi];renderQ(qi);}
+function handleSub(idx){if(!state.submitted[idx]){if(!state.userAnswers[idx].length)return;state.submitted[idx]=true;updScore();renderQ(idx);}else{if(idx===activeQuestions.length-1)showResults();else renderQ(idx+1);}}
+function updScore(){let ok=0,bad=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i])return;const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});document.getElementById('scoreBig').textContent=ok;document.getElementById('scoreCorrect').textContent=ok;document.getElementById('scoreWrong').textContent=bad;document.getElementById('scorePanel').classList.add('visible');}
+function showResults(){
+  clearInterval(state.timerInterval);['mcqSection','pbqSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('resultsSection').style.display='block';document.getElementById('finishBtn').style.display='none';
+  let ok=0,bad=0,skip=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i]){skip++;return;}const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});
+  const tot=activeQuestions.length,pct=Math.round((ok/tot)*100),pass=pct>=70;
+  document.getElementById('finalScore').textContent=pct+'%';document.getElementById('finalScore').className='final-score '+(pass?'pass':'fail');document.getElementById('finalPct').textContent=ok+'/'+tot+' Correct';document.getElementById('passFailMsg').textContent=pass?'\u2713 PASS \u2014 Well done!':'\u2717 FAIL \u2014 Keep studying!';document.getElementById('passFailMsg').style.color=pass?'var(--green)':'var(--red)';document.getElementById('resCorrect').textContent=ok;document.getElementById('resWrong').textContent=bad;document.getElementById('resSkipped').textContent=skip;
+  const doms={};activeQuestions.forEach((q,i)=>{if(!doms[q.domain])doms[q.domain]={ok:0,tot:0};doms[q.domain].tot++;if(state.submitted[i]){const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))doms[q.domain].ok++;}});
+  const dN={SETechniques:'Social Engineering Techniques',InfluencePrinciples:'Influence Principles & Campaigns',PhysicalTactics:'Physical & Related Tactics',PasswordAttacks:'Password Attacks',PasswordPolicy:'Password Policy & Best Practices'};
+  const dC={SETechniques:'#00d4ff',InfluencePrinciples:'#ff6b2b',PhysicalTactics:'#ffd32a',PasswordAttacks:'#00f5a0',PasswordPolicy:'#7b2fbe'};
+  let html='<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(doms).forEach(([k,v])=>{const p=Math.round((v.ok/v.tot)*100),col=dC[k]||'var(--accent)';html+='<div class="domain-card"><div class="domain-card-header"><span class="domain-card-name">'+(dN[k]||k)+'</span><span class="domain-card-pct" style="color:'+col+'">'+p+'%</span></div><div class="domain-bar-track"><div class="domain-bar-fill" style="width:'+p+'%;background:'+col+'"></div></div><div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">'+v.ok+'/'+v.tot+' correct</div></div>';});
+  html+='</div>';document.getElementById('domainSummary').innerHTML=html;
+}
+function reviewAnswers(){document.getElementById('resultsSection').style.display='none';document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';renderQ(0);}
+function applyTheme(t){if(t==='light'){document.body.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='\uD83C\uDF19';document.getElementById('themeLabel').textContent='DARK';}else{document.body.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='\u2600\uFE0F';document.getElementById('themeLabel').textContent='LIGHT';}}
+function toggleTheme(){const n=document.body.hasAttribute('data-theme')?'dark':'light';applyTheme(n);try{localStorage.setItem('bl-theme',n);}catch(e){}}
+(function(){var t='dark';try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}applyTheme(t);})();
+</script>
+</body>
+</html>
