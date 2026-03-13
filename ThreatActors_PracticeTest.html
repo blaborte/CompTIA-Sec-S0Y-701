@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 2: Threat Actors & Info Sharing</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e17; --bg2: #111520; --bg3: #181d2e; --border: #1f2740;
+    --accent: #00d4ff; --accent2: #ff6b2b; --green: #00f5a0; --red: #ff4757;
+    --yellow: #ffd32a; --text: #d0d8f0; --muted: #5a6a8a;
+    --font: 'IBM Plex Sans', sans-serif; --mono: 'IBM Plex Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; line-height: 1.6; }
+
+  header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 2rem; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+  .logo span { color: var(--accent); }
+  .home-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-family: var(--mono); font-size: 0.8rem; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+  .home-btn:hover { border-color: var(--accent); background: var(--bg2); transform: translateY(-2px); }
+  .timer-wrap { display: flex; align-items: center; gap: 1.5rem; }
+  #timer { font-family: var(--mono); font-size: 1.1rem; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; }
+  #timer.warn { color: var(--yellow); }
+  #timer.danger { color: var(--red); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .header-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.8rem; cursor: pointer; letter-spacing: 0.08em; transition: all 0.2s; border-radius: 2px; }
+  .header-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .header-btn.primary { border-color: var(--accent); color: var(--accent); }
+  .header-btn.primary:hover { background: var(--accent); color: var(--bg); }
+  .progress-bar-wrap { height: 3px; background: var(--border); width: 100%; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); transition: width 0.4s ease; width: 0%; }
+  .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 63px); }
+  .sidebar { background: var(--bg2); border-right: 1px solid var(--border); padding: 1.5rem 1rem; position: sticky; top: 63px; height: calc(100vh - 63px); overflow-y: auto; }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .sidebar-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; padding: 0 0.5rem; }
+  .q-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 1.5rem; }
+  .q-dot { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--border); cursor: pointer; font-family: var(--mono); font-size: 0.55rem; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; background: var(--bg3); }
+  .q-dot:hover { border-color: var(--accent); color: var(--accent); }
+  .q-dot.answered { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .q-dot.correct { background: var(--green); border-color: var(--green); color: var(--bg); }
+  .q-dot.wrong { background: var(--red); border-color: var(--red); color: var(--bg); }
+  .q-dot.active { outline: 2px solid var(--yellow); outline-offset: 1px; }
+  .score-panel { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; display: none; }
+  .score-panel.visible { display: block; }
+  .score-big { font-family: var(--mono); font-size: 2rem; font-weight: 600; color: var(--accent); text-align: center; }
+  .score-label { font-size: 0.7rem; color: var(--muted); text-align: center; font-family: var(--mono); letter-spacing: 0.08em; margin-top: 0.25rem; }
+  .score-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem; }
+  .score-item { text-align: center; }
+  .score-item .val { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; }
+  .score-item .lbl { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); }
+  .score-item.c .val { color: var(--green); }
+  .score-item.w .val { color: var(--red); }
+  main { padding: 2rem 2.5rem; max-width: 840px; }
+  .intro-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 2.5rem; margin-bottom: 2rem; }
+  .intro-card h1 { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
+  .intro-card .subtitle { font-size: 0.8rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.08em; margin-bottom: 1.5rem; }
+  .intro-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .intro-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; text-align: center; }
+  .intro-stat .n { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--text); }
+  .intro-stat .l { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .start-btn { background: var(--accent); color: var(--bg); border: none; font-family: var(--mono); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em; padding: 0.8rem 2rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .start-btn:hover { background: #00b8e0; transform: translateY(-1px); }
+  .mode-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .mode-card { background: var(--bg2); border: 2px solid var(--border); border-radius: 6px; padding: 1.25rem; cursor: pointer; transition: all 0.2s; text-align: center; }
+  .mode-card:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .mode-card.active { border-color: var(--accent); background: rgba(0,212,255,0.07); }
+  .mode-card-title { font-family: var(--mono); font-size: 0.85rem; color: var(--text); margin-bottom: 0.4rem; }
+  .mode-card-sub { font-size: 0.72rem; color: var(--muted); }
+  .random-options { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+  .rand-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.78rem; padding: 0.5rem 1.2rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .rand-btn:hover, .rand-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.06); }
+  .rand-mode-section { display: none; margin-top: 1rem; }
+  .rand-mode-section.show { display: block; }
+  .q-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .q-num { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+  .q-tag { font-family: var(--mono); font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: 2px; letter-spacing: 0.08em; }
+  .q-tag.mc { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+  .q-tag.multi { background: rgba(255,107,43,0.1); color: var(--accent2); border: 1px solid rgba(255,107,43,0.2); }
+  .question-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 2rem; margin-bottom: 1.5rem; transition: border-color 0.3s; }
+  .question-card.answered-correct { border-color: rgba(0,245,160,0.3); }
+  .question-card.answered-wrong { border-color: rgba(255,71,87,0.3); }
+  .question-text { font-size: 0.95rem; line-height: 1.7; color: var(--text); margin-bottom: 1.5rem; }
+  .question-text strong { color: var(--accent); }
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .option { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.8rem 1rem; border-radius: 4px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; background: var(--bg2); font-size: 0.875rem; }
+  .option:hover { border-color: var(--accent); background: rgba(0,212,255,0.04); }
+  .opt-letter { font-family: var(--mono); font-size: 0.7rem; font-weight: 600; color: var(--muted); min-width: 18px; padding-top: 1px; transition: color 0.15s; }
+  .option:hover .opt-letter { color: var(--accent); }
+  .option.selected { border-color: var(--accent); background: rgba(0,212,255,0.08); }
+  .option.selected .opt-letter { color: var(--accent); }
+  .option.correct { border-color: var(--green); background: rgba(0,245,160,0.08); }
+  .option.correct .opt-letter { color: var(--green); }
+  .option.wrong { border-color: var(--red); background: rgba(255,71,87,0.08); }
+  .option.wrong .opt-letter { color: var(--red); }
+  .option.disabled { cursor: default; pointer-events: none; }
+  .option .check-box { width: 16px; height: 16px; min-width: 16px; border: 1px solid var(--border); border-radius: 50%; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .option.multi-opt .check-box { border-radius: 3px; }
+  .option.selected .check-box { background: var(--accent); border-color: var(--accent); }
+  .option.correct .check-box { background: var(--green); border-color: var(--green); }
+  .option.wrong .check-box { background: var(--red); border-color: var(--red); }
+  .check-box svg { display: none; }
+  .option.selected .check-box svg, .option.correct .check-box svg, .option.wrong .check-box svg { display: block; }
+  .multi-counter { font-family: var(--mono); font-size: 0.7rem; color: var(--accent2); margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+  .multi-counter.done { color: var(--green); }
+  .feedback { display: none; margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px; font-size: 0.85rem; line-height: 1.6; }
+  .feedback.correct { background: rgba(0,245,160,0.07); border: 1px solid rgba(0,245,160,0.25); color: var(--green); }
+  .feedback.wrong { background: rgba(255,71,87,0.07); border: 1px solid rgba(255,71,87,0.25); color: #ff8a95; }
+  .feedback.visible { display: block; }
+  .feedback-icon { font-size: 1.1rem; margin-bottom: 0.3rem; }
+  .explanation-box { margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px; background: rgba(123,47,190,0.08); border: 1px solid rgba(123,47,190,0.3); font-size: 0.83rem; line-height: 1.7; color: var(--text); }
+  .explanation-box .expl-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; color: #a06fdb; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+  .q-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
+  .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1.2rem; cursor: pointer; border-radius: 3px; letter-spacing: 0.06em; transition: all 0.2s; }
+  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .submit-btn { background: var(--accent2); border: none; color: white; font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.5rem 1.5rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .submit-btn:hover { background: #e55e22; transform: translateY(-1px); }
+  .submit-btn.finish { background: var(--green); color: var(--bg); }
+  .submit-btn.finish:hover { background: #00d488; }
+  .results-hero { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3rem 2.5rem; text-align: center; margin-bottom: 2rem; }
+  .results-hero h2 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 1rem; }
+  .final-score { font-family: var(--mono); font-size: 4rem; font-weight: 600; line-height: 1; margin-bottom: 0.5rem; }
+  .final-score.pass { color: var(--green); }
+  .final-score.fail { color: var(--red); }
+  .final-pct { font-family: var(--mono); font-size: 1.2rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .result-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1rem; }
+  .result-stat .v { font-family: var(--mono); font-size: 1.8rem; font-weight: 600; }
+  .result-stat .l { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .result-stat.g .v { color: var(--green); }
+  .result-stat.r .v { color: var(--red); }
+  .result-stat.y .v { color: var(--yellow); }
+  .review-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; padding: 0.7rem 1.8rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; margin-top: 1.5rem; }
+  .review-btn:hover { background: var(--accent); color: var(--bg); }
+  .restart-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.08em; padding: 0.7rem 1.8rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; margin-top: 1.5rem; margin-left: 0.75rem; }
+  .restart-btn:hover { border-color: var(--text); color: var(--text); }
+  .pbq-card { background: var(--bg3); border: 1px solid rgba(0,245,160,0.2); border-radius: 6px; padding: 2rem; margin-bottom: 2rem; }
+  .pbq-card h3 { font-family: var(--mono); font-size: 0.8rem; color: var(--green); letter-spacing: 0.1em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+  .pbq-interactive { margin-top: 1rem; }
+  .pbq-scenario { font-size: 0.82rem; color: var(--text); margin-bottom: 1rem; line-height: 1.7; }
+  .pbq-match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .pbq-column-title { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
+  .pbq-items { display: flex; flex-direction: column; gap: 0.4rem; }
+  .pbq-source-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.75rem; font-size: 0.78rem; cursor: grab; user-select: none; transition: all 0.15s; font-family: var(--mono); color: var(--text); }
+  .pbq-source-item:hover { border-color: var(--accent); color: var(--accent); }
+  .pbq-source-item.dragging { opacity: 0.4; }
+  .pbq-source-item.used { opacity: 0.35; cursor: default; border-style: dashed; }
+  .pbq-target-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+  .pbq-target-label { font-size: 0.78rem; color: var(--text); flex: 1 1 0; }
+  .pbq-drop-zone { min-height: 34px; min-width: 140px; flex: 0 0 160px; background: var(--bg2); border: 1px dashed var(--border); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); transition: all 0.15s; position: relative; cursor: pointer; padding: 0.2rem 0.5rem; }
+  .pbq-drop-zone.drag-over { border-color: var(--accent); background: rgba(0,212,255,0.06); }
+  .pbq-drop-zone.filled { border-style: solid; color: var(--text); }
+  .pbq-drop-zone.correct { border-color: var(--green)!important; background: rgba(0,245,160,0.08)!important; color: var(--green)!important; }
+  .pbq-drop-zone.wrong { border-color: var(--red)!important; background: rgba(255,71,87,0.08)!important; color: var(--red)!important; }
+  .pbq-drop-clear { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 0.7rem; color: var(--muted); cursor: pointer; padding: 0 3px; }
+  .pbq-drop-clear:hover { color: var(--red); }
+  .pbq-check-btn { background: var(--accent2); border: none; color: white; font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.5rem 1.4rem; cursor: pointer; border-radius: 3px; transition: all 0.2s; margin-top: 0.75rem; }
+  .pbq-check-btn:hover { background: #e55e22; }
+  .pbq-check-btn:disabled { opacity: 0.5; cursor: default; }
+  .pbq-result { margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 3px; font-family: var(--mono); font-size: 0.75rem; display: none; }
+  .pbq-result.show { display: block; }
+  .pbq-result.correct { background: rgba(0,245,160,0.07); border: 1px solid rgba(0,245,160,0.3); color: var(--green); }
+  .pbq-result.partial { background: rgba(255,211,42,0.07); border: 1px solid rgba(255,211,42,0.3); color: var(--yellow); }
+  .pbq-fw-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-bottom: 1rem; }
+  .pbq-fw-table th { background: var(--bg2); border: 1px solid var(--border); padding: 0.5rem 0.75rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.06em; text-align: left; }
+  .pbq-fw-table td { border: 1px solid var(--border); padding: 0.4rem 0.6rem; vertical-align: middle; }
+  .pbq-fw-select { background: var(--bg2); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0.5rem; border-radius: 3px; cursor: pointer; width: 100%; }
+  .pbq-fw-select:focus { outline: none; border-color: var(--accent); }
+  .pbq-fw-select.correct { border-color: var(--green); color: var(--green); }
+  .pbq-fw-select.wrong { border-color: var(--red); color: var(--red); }
+  .domain-section { margin-top: 2rem; }
+  .domain-section h3 { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1rem; }
+  .domain-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; padding: 1rem 1.2rem; margin-bottom: 0.6rem; }
+  .domain-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+  .domain-card-name { font-size: 0.82rem; color: var(--text); font-weight: 500; }
+  .domain-card-pct { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; }
+  .domain-bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .domain-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+
+  [data-theme="light"] {
+    --bg: #eef1f8; --bg2: #ffffff; --bg3: #dde2f0; --border: #c4ccdf;
+    --accent: #006699; --accent2: #cc4400; --green: #007a52; --red: #c0172e;
+    --yellow: #8a6200; --text: #111827; --muted: #556080;
+  }
+  *, *::before, *::after { transition: background-color 0.22s ease, border-color 0.2s ease, color 0.18s ease !important; }
+  .theme-toggle { display: flex; align-items: center; gap: 0.35rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 50px; padding: 0.26rem 0.75rem 0.26rem 0.5rem; cursor: pointer; font-family: var(--mono); font-size: 0.66rem; color: var(--muted); letter-spacing: 0.07em; white-space: nowrap; flex-shrink: 0; }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
+  .theme-icon { font-size: 0.82rem; line-height: 1; }
+  @media(max-width: 768px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } main { padding: 1.5rem; } .intro-stats { grid-template-columns: 1fr 1fr; } .results-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 2: THREAT ACTORS & INFO SHARING</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;">
+    <a href="Practice-tests.html" class="home-btn"><span>←</span><span>Back</span></a>
+    <a href="index.html" class="home-btn"><span>⌂</span><span>Home</span></a>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">☀️</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">QUESTIONS</div>
+    <div class="q-grid" id="qGrid"></div>
+    <div class="score-panel" id="scorePanel">
+      <div class="score-big" id="scoreBig">–</div>
+      <div class="score-label">SCORE</div>
+      <div class="score-breakdown">
+        <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+        <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- Intro -->
+    <div id="introSection">
+      <div class="intro-card">
+        <h1>SECTION 2: THREAT ACTORS & INFO SHARING</h1>
+        <div class="subtitle">CompTIA Security+ SY0-701 · BL Study Materials</div>
+        <div class="intro-stats">
+          <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+          <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+          <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+        <div class="mode-selector">
+          <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+            <div class="mode-card-title">📋 FULL EXAM</div>
+            <div class="mode-card-sub">All 35 questions · 45 min timer · PBQ + MCQ</div>
+          </div>
+          <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+            <div class="mode-card-title">🎲 RANDOM QUIZ</div>
+            <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+          </div>
+        </div>
+        <div class="rand-mode-section" id="randModeSection">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+          <div class="random-options">
+            <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+            <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+            <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+          </div>
+        </div>
+        <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;" id="modeDescription">
+          This quiz covers <strong style="color:var(--text)">Section 2: Threat Actors & Information Sharing</strong> — Hacker types, Threat actors & motivations, Threat vectors, OSINT sources, CVE/CVSS/MITRE ATT&CK, Intelligence quality, Confidence levels, and STIX & TAXII. Questions T2-1–T2-5 are interactive performance-based questions. Questions T2-6–T2-35 are multiple-choice.<br><br>
+          <strong style="color:var(--text)">Tip:</strong> Review the Section 2 slides before attempting for best results.
+        </p>
+        <button class="start-btn" onclick="startExam()">START EXAM →</button>
+      </div>
+    </div>
+
+    <!-- PBQ -->
+    <div id="pbqSection" style="display:none">
+      <div class="pbq-card">
+        <h3>⚡ PERFORMANCE-BASED QUESTIONS (T2-1 – T2-5)</h3>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets or click to assign. Submit each question to check your work.</p>
+
+        <!-- T2-1: Hacker Types -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:0.5rem;" id="pbq-t1">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">T2-1 — HACKER TYPES: MATCH HAT TO DESCRIPTION</div>
+          <div class="pbq-scenario">Drag each hacker type to its correct description.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">HACKER TYPE</div>
+                <div class="pbq-items" id="t1-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Black Hat">Black Hat</div>
+                  <div class="pbq-source-item" draggable="true" data-val="White Hat">White Hat</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Gray Hat">Gray Hat</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DESCRIPTION</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Malicious — attacks without authorization for personal gain; activities are illegal</div>
+                    <div class="pbq-drop-zone" data-answer="Black Hat" data-pbq="t1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Authorized ethical hacker — works under written permission (Rules of Engagement)</div>
+                    <div class="pbq-drop-zone" data-answer="White Hat" data-pbq="t1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">No authorization but not malicious — operates in a legal gray area; may demand payment before disclosing vulnerabilities</div>
+                    <div class="pbq-drop-zone" data-answer="Gray Hat" data-pbq="t1" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('t1')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-t1-result"></div>
+          </div>
+        </div>
+
+        <!-- T2-2: Threat Actors -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-t2">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">T2-2 — THREAT ACTORS: MATCH ACTOR TO MOTIVE/METHOD</div>
+          <div class="pbq-scenario">Match each threat actor to their primary motive or defining characteristic.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">THREAT ACTOR</div>
+                <div class="pbq-items" id="t2-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Script Kiddie">Script Kiddie</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Hacktivist">Hacktivist</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Nation-State">Nation-State</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Insider Threat">Insider Threat</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Criminal Syndicate">Criminal Syndicate</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">MOTIVE / CHARACTERISTIC</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Low-skill; uses pre-built tools without understanding them; motivated by notoriety</div>
+                    <div class="pbq-drop-zone" data-answer="Script Kiddie" data-pbq="t2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Ideologically motivated; uses DDoS and defacement to promote a cause</div>
+                    <div class="pbq-drop-zone" data-answer="Hacktivist" data-pbq="t2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Government-sponsored; uses APTs, zero-days, and long-term campaigns for espionage</div>
+                    <div class="pbq-drop-zone" data-answer="Nation-State" data-pbq="t2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Most dangerous — already inside the perimeter; can be malicious or accidental</div>
+                    <div class="pbq-drop-zone" data-answer="Insider Threat" data-pbq="t2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Organized crime focused on financial gain; uses ransomware, BEC, and fraud</div>
+                    <div class="pbq-drop-zone" data-answer="Criminal Syndicate" data-pbq="t2" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('t2')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-t2-result"></div>
+          </div>
+        </div>
+
+        <!-- T2-3: Threat Vectors -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-t3">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">T2-3 — THREAT VECTORS: MATCH ATTACK TO VECTOR</div>
+          <div class="pbq-scenario">Match each attack scenario to the threat vector it exploits.</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">THREAT VECTOR</div>
+                <div class="pbq-items" id="t3-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="Message-Based">Message-Based</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Supply Chain">Supply Chain</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Removable Device">Removable Device</div>
+                  <div class="pbq-source-item" draggable="true" data-val="Cloud">Cloud</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">ATTACK SCENARIO</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Attacker sends a malicious link via email to trick a user into entering credentials</div>
+                    <div class="pbq-drop-zone" data-answer="Message-Based" data-pbq="t3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Attackers compromise a software vendor's update server to push malware to all customers (e.g., SolarWinds)</div>
+                    <div class="pbq-drop-zone" data-answer="Supply Chain" data-pbq="t3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">A USB drive is left in a parking lot; an employee plugs it in and unknowingly installs malware</div>
+                    <div class="pbq-drop-zone" data-answer="Removable Device" data-pbq="t3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">A misconfigured S3 bucket exposes millions of customer records to the public internet</div>
+                    <div class="pbq-drop-zone" data-answer="Cloud" data-pbq="t3" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('t3')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-t3-result"></div>
+          </div>
+        </div>
+
+        <!-- T2-4: CVSS Ranges -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-t4">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">T2-4 — CVSS: CLASSIFY EACH SCORE INTO THE CORRECT SEVERITY</div>
+          <div class="pbq-scenario">For each CVSS score, select the correct severity rating.</div>
+          <div class="pbq-interactive">
+            <table class="pbq-fw-table">
+              <thead>
+                <tr><th>#</th><th>CVSS SCORE</th><th>SEVERITY RATING</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">1</td>
+                  <td>9.8 (e.g., Log4Shell / CVE-2021-44228)</td>
+                  <td><select class="pbq-fw-select" id="cvss-1" data-answer="Critical">
+                    <option value="">-- Select --</option>
+                    <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">2</td>
+                  <td>7.5</td>
+                  <td><select class="pbq-fw-select" id="cvss-2" data-answer="High">
+                    <option value="">-- Select --</option>
+                    <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">3</td>
+                  <td>5.3</td>
+                  <td><select class="pbq-fw-select" id="cvss-3" data-answer="Medium">
+                    <option value="">-- Select --</option>
+                    <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--mono);color:var(--muted)">4</td>
+                  <td>2.1</td>
+                  <td><select class="pbq-fw-select" id="cvss-4" data-answer="Low">
+                    <option value="">-- Select --</option>
+                    <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+                  </select></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="pbq-check-btn" onclick="checkCVSS()">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-t4-result"></div>
+          </div>
+        </div>
+
+        <!-- T2-5: STIX vs TAXII -->
+        <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;" id="pbq-t5">
+          <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;">T2-5 — STIX & TAXII: CLASSIFY EACH COMPONENT</div>
+          <div class="pbq-scenario">Classify each description as belonging to STIX (the format) or TAXII (the transport).</div>
+          <div class="pbq-interactive">
+            <div class="pbq-match-wrap">
+              <div>
+                <div class="pbq-column-title">STANDARD</div>
+                <div class="pbq-items" id="t5-sources">
+                  <div class="pbq-source-item" draggable="true" data-val="STIX">STIX</div>
+                  <div class="pbq-source-item" draggable="true" data-val="TAXII">TAXII</div>
+                </div>
+              </div>
+              <div>
+                <div class="pbq-column-title">DESCRIPTION</div>
+                <div class="pbq-items">
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Standardized JSON-based language for describing threat actors, malware, TTPs, and IOCs</div>
+                    <div class="pbq-drop-zone" data-answer="STIX" data-pbq="t5" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">HTTPS-based transport protocol that defines HOW threat intelligence is shared between systems</div>
+                    <div class="pbq-drop-zone" data-answer="TAXII" data-pbq="t5" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Defines objects including: Threat Actors, Attack Patterns, Malware, Vulnerabilities, Campaigns, and Relationships</div>
+                    <div class="pbq-drop-zone" data-answer="STIX" data-pbq="t5" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                  <div class="pbq-target-row">
+                    <div class="pbq-target-label">Uses Collections, Channels, API Roots, and Discovery endpoints to organize and publish intelligence</div>
+                    <div class="pbq-drop-zone" data-answer="TAXII" data-pbq="t5" onclick="handleDropZoneClick(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clearDrop(event,this)">✕</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="pbq-check-btn" onclick="checkPBQ('t5')">CHECK ANSWERS</button>
+            <div class="pbq-result" id="pbq-t5-result"></div>
+          </div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:1rem;">
+        <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE →</button>
+      </div>
+    </div>
+
+    <!-- MCQ -->
+    <div id="mcqSection" style="display:none">
+      <div id="questionContainer"></div>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" style="display:none">
+      <div class="results-hero">
+        <h2>EXAM COMPLETE — SECTION 2: THREAT ACTORS & INFO SHARING</h2>
+        <div class="final-score" id="finalScore">0</div>
+        <div class="final-pct" id="finalPct">0/30 Correct</div>
+        <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+        <div class="results-grid">
+          <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+          <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+          <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+        </div>
+        <div>
+          <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+          <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+        </div>
+      </div>
+      <div class="domain-section" id="domainSummary"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+let examMode = 'full', randCount = 10, activeQuestions = [];
+
+function setMode(mode) {
+  examMode = mode;
+  document.getElementById('modeFullCard').classList.toggle('active', mode === 'full');
+  document.getElementById('modeRandCard').classList.toggle('active', mode === 'random');
+  document.getElementById('randModeSection').classList.toggle('show', mode === 'random');
+  if (mode === 'full') {
+    document.getElementById('statQ').textContent = '35';
+    document.getElementById('statT').textContent = '45';
+    document.getElementById('modeDescription').innerHTML = 'This quiz covers <strong style="color:var(--text)">Section 2: Threat Actors & Information Sharing</strong> — Hacker types, Threat actors & motivations, Threat vectors, OSINT sources, CVE/CVSS/MITRE ATT&CK, Intelligence quality, Confidence levels, and STIX & TAXII.<br><br><strong style="color:var(--text)">Tip:</strong> Review the Section 2 slides before attempting for best results.';
+  } else { updateRandDescription(); }
+}
+function setRandCount(n) {
+  randCount = n;
+  ['10','15','20'].forEach(x => document.getElementById('randBtn'+x).classList.remove('active'));
+  document.getElementById('randBtn'+n).classList.add('active');
+  updateRandDescription();
+}
+function updateRandDescription() {
+  document.getElementById('statQ').textContent = randCount;
+  document.getElementById('statT').textContent = Math.round(randCount * 1.5);
+  document.getElementById('modeDescription').innerHTML = `<strong style="color:var(--text)">${randCount} randomly selected questions</strong> from the 30-question MCQ pool. Questions are shuffled on every attempt.<br><br><strong style="color:var(--text)">Tip:</strong> Great for quick review of Threat Actors concepts.`;
+}
+
+// ─── PBQ Drag & Drop ─────────────────────────────────────────────────────────
+let draggedValue = null, draggedEl = null, clickSelectMode = null;
+document.addEventListener('DOMContentLoaded', () => { initDragDrop(); });
+function shuffleSourceItems() {
+  ['t1-sources','t2-sources','t3-sources','t5-sources'].forEach(id => {
+    const c = document.getElementById(id); if (!c) return;
+    const items = [...c.children];
+    for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); c.appendChild(items[j]); items.splice(j,1); }
+  });
+}
+function initDragDrop() {
+  shuffleSourceItems();
+  document.querySelectorAll('.pbq-source-item').forEach(el => {
+    el.addEventListener('dragstart', e => { draggedValue = el.dataset.val; draggedEl = el; setTimeout(() => el.classList.add('dragging'), 0); });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); draggedEl = null; });
+    el.addEventListener('click', () => handleSourceClick(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); if (draggedValue) assignToZone(zone, draggedValue); });
+  });
+}
+function handleSourceClick(el) {
+  if (el.classList.contains('used')) return;
+  const pbq = el.closest('[id^="pbq-t"]').id.replace('pbq-','');
+  document.querySelectorAll(`#pbq-${pbq} .pbq-source-item`).forEach(s => s.style.outline='');
+  if (clickSelectMode === el.dataset.val) { clickSelectMode = null; }
+  else { clickSelectMode = el.dataset.val; el.style.outline = '2px solid var(--accent)'; }
+}
+function handleDropZoneClick(zone) {
+  if (zone.classList.contains('correct') || zone.classList.contains('wrong')) return;
+  if (clickSelectMode) { assignToZone(zone, clickSelectMode); document.querySelectorAll('.pbq-source-item').forEach(s => s.style.outline=''); clickSelectMode = null; }
+}
+function assignToZone(zone, val) {
+  const old = zone.dataset.current;
+  if (old) { const src = document.querySelector(`.pbq-source-item[data-val="${old}"]`); if (src) src.classList.remove('used'); }
+  const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`);
+  if (src) src.classList.add('used');
+  zone.dataset.current = val; zone.classList.add('filled');
+  zone.childNodes[0].textContent = val;
+  const clear = zone.querySelector('.pbq-drop-clear'); if (clear) clear.style.display = 'block';
+}
+function clearDrop(e, clearBtn) {
+  e.stopPropagation(); const zone = clearBtn.parentElement; const val = zone.dataset.current;
+  if (val) { const src = document.querySelector(`.pbq-source-item[data-val="${val}"]`); if (src) src.classList.remove('used'); }
+  zone.dataset.current = ''; zone.classList.remove('filled'); zone.childNodes[0].textContent = 'Drop here'; clearBtn.style.display = 'none';
+}
+function checkPBQ(id) {
+  const zones = document.querySelectorAll(`.pbq-drop-zone[data-pbq="${id}"]`);
+  let correct = 0, total = zones.length;
+  zones.forEach(zone => {
+    const ans = zone.dataset.answer, cur = zone.dataset.current; if (!cur) return;
+    if (cur === ans) { zone.classList.add('correct'); correct++; } else { zone.classList.add('wrong'); }
+  });
+  const result = document.getElementById(`pbq-${id}-result`); result.classList.add('show');
+  if (correct === total && total > 0) { result.className = 'pbq-result show correct'; result.textContent = `✓ PERFECT — All ${total} matched correctly!`; }
+  else { result.className = 'pbq-result show partial'; result.textContent = `${correct}/${total} correct — Review highlighted zones and try again.`; }
+  document.querySelector(`#pbq-${id} .pbq-check-btn`).disabled = true;
+}
+function checkCVSS() {
+  const rules = [{id:'cvss-1',answer:'Critical'},{id:'cvss-2',answer:'High'},{id:'cvss-3',answer:'Medium'},{id:'cvss-4',answer:'Low'}];
+  let correct = 0;
+  rules.forEach(r => {
+    const sel = document.getElementById(r.id);
+    if (sel.value === r.answer) { sel.classList.add('correct'); correct++; } else if (sel.value) { sel.classList.add('wrong'); }
+    sel.disabled = true;
+  });
+  const result = document.getElementById('pbq-t4-result'); result.classList.add('show');
+  if (correct === 4) { result.className = 'pbq-result show correct'; result.textContent = '✓ PERFECT — All 4 CVSS scores classified correctly!'; }
+  else { result.className = 'pbq-result show partial'; result.textContent = `${correct}/4 correct — Review the CVSS ranges: Critical 9–10 · High 7–8.9 · Medium 4–6.9 · Low 0.1–3.9`; }
+  document.querySelector('#pbq-t4 .pbq-check-btn').disabled = true;
+}
+
+// ─── Questions ───────────────────────────────────────────────────────────────
+const questions = [
+  {id:'T2-6',domain:'HackerTypes',explanation:'A White Hat hacker is an authorized ethical hacker who works under a written contract with Rules of Engagement. They report findings to improve security. Black Hats are unauthorized/malicious; Gray Hats are unauthorized but not malicious.',type:'mc',text:'A security consultant signs a written contract with a company and is given explicit permission to attempt to compromise their systems and report findings. Which type of hacker does this describe?',options:['Black Hat','Gray Hat','White Hat','Script Kiddie'],answer:[2]},
+
+  {id:'T2-7',domain:'HackerTypes',explanation:'A Gray Hat hacker attacks without authorization but without malicious intent. They may discover vulnerabilities and demand payment before providing details — operating in a legal gray area. This is not ethical (White Hat) because there is no authorization.',type:'mc',text:'A hacker discovers a critical vulnerability in a company\'s public web server without being asked to. They notify the company and demand $5,000 before providing details about the flaw. Which hacker type does this describe?',options:['White Hat','Black Hat','Gray Hat','Hacktivist'],answer:[2]},
+
+  {id:'T2-8',domain:'ThreatActors',explanation:'Nation-state actors are government-sponsored, highly resourced, and use APTs, zero-days, and long-term stealthy campaigns. Their primary motive is espionage, warfare, and infrastructure disruption — not financial gain.',type:'mc',text:'A security analyst discovers that attackers have maintained undetected access to a power grid\'s control systems for over 18 months, using zero-day exploits and custom malware. Which threat actor is <strong>MOST</strong> likely responsible?',options:['Criminal Syndicate','Script Kiddie','Hacktivist','Nation-State Actor'],answer:[3]},
+
+  {id:'T2-9',domain:'ThreatActors',explanation:'An Insider Threat is the most dangerous because they already have authorized access inside the perimeter, bypassing most perimeter defenses. They can be malicious (revenge/theft) or accidental (negligence).',type:'mc',text:'A company suffers a data breach in which a large database of customer records is exfiltrated. Investigation reveals the attacker had valid employee credentials, knew exactly where the data was stored, and bypassed all perimeter controls. Which threat actor type is <strong>MOST</strong> likely?',options:['Nation-State','Criminal Syndicate','Hacktivist','Insider Threat'],answer:[3]},
+
+  {id:'T2-10',domain:'ThreatActors',explanation:'Hacktivists are ideologically motivated attackers who use methods like DDoS and website defacement to promote political or social causes. Anonymous is the most well-known example.',type:'mc',text:'A government agency\'s website is taken offline by a DDoS attack and its homepage is replaced with a political protest message opposing a new surveillance law. Which threat actor is <strong>MOST</strong> likely responsible?',options:['Nation-State','Criminal Syndicate','Hacktivist','Competitor'],answer:[2]},
+
+  {id:'T2-11',domain:'ThreatActors',explanation:'Criminal Syndicates are organized crime groups focused entirely on financial gain. Ransomware, BEC (Business Email Compromise), banking trojans, and malware-as-a-service are their primary tools.',type:'mc',text:'An organization\'s finance department receives a fraudulent email appearing to be from the CEO, directing a $200,000 wire transfer to an overseas account. This is an example of which threat actor\'s preferred method?',options:['Hacktivist','Insider Threat','Nation-State','Criminal Syndicate'],answer:[3]},
+
+  {id:'T2-12',domain:'ThreatActors',explanation:'An APT (Advanced Persistent Threat) is a sophisticated, long-term, stealthy campaign — usually nation-state linked. The key characteristics are: targeted, patient, well-resourced, and focused on sustained access for intelligence gathering.',type:'mc',text:'Which of the following <strong>BEST</strong> describes an Advanced Persistent Threat (APT)?',options:['A quick automated scan that exploits known CVEs','A group of script kiddies launching coordinated DDoS attacks','A sophisticated, long-term stealthy campaign by a well-resourced actor targeting a specific organization','A criminal group deploying ransomware for financial gain'],answer:[2]},
+
+  {id:'T2-13',domain:'ThreatActors',explanation:'A competitor using cyber means to steal trade secrets, product roadmaps, or pricing strategies is corporate espionage. The motive is financial and competitive advantage, not ideological or destructive.',type:'mc',text:'A rival company hires a hacker to steal an organization\'s unreleased product designs and pricing strategy before a major product launch. Which threat actor category does this attacker fall under?',options:['Nation-State','Competitor','Hacktivist','Insider Threat'],answer:[1]},
+
+  {id:'T2-14',domain:'Motivations',explanation:'Ransomware encrypts files and demands payment — this is Blackmail. The attacker threatens to keep data encrypted (or publish it) unless paid. Ransomware is the most common form of cyber blackmail.',type:'mc',text:'Malware encrypts all files on a company\'s servers and displays a message demanding Bitcoin payment in exchange for the decryption key. Which attack motivation does this represent?',options:['Espionage','Data Exfiltration','Blackmail','Service Disruption'],answer:[2]},
+
+  {id:'T2-15',domain:'Motivations',explanation:'Long-term covert intelligence gathering without causing disruption is Espionage. The goal is to steal plans, communications, and strategic data quietly — not to disrupt operations or make money.',type:'mc',text:'A nation-state group silently monitors a defense contractor\'s email communications for two years, copying documents related to a new weapons program without disrupting operations. Which motivation does this represent?',options:['Service Disruption','Financial Gain','Blackmail','Espionage'],answer:[3]},
+
+  {id:'T2-16',domain:'Motivations',explanation:'NotPetya was destructive malware with no financial motive — it caused damage for its own sake (Disruption/Chaos). It was not ransomware because victims could not recover files even if they paid.',type:'mc',text:'The NotPetya malware wiped hard drives across thousands of organizations worldwide with no mechanism to recover files, even after a ransom was paid. Which attack motivation does this <strong>BEST</strong> represent?',options:['Financial Gain','Espionage','Disruption / Chaos','Data Exfiltration'],answer:[2]},
+
+  {id:'T2-17',domain:'ThreatVectors',explanation:'Supply chain attacks compromise a vendor or supplier to reach the ultimate target through the trusted relationship. SolarWinds is the classic example — attackers modified the vendor\'s software update to compromise thousands of customers.',type:'mc',text:'Attackers compromise the build process of a widely used IT management software vendor and inject malware into a legitimate software update, which is then automatically installed by 18,000 customers. Which threat vector does this represent?',options:['Message-Based','Removable Device','Cloud','Supply Chain'],answer:[3]},
+
+  {id:'T2-18',domain:'ThreatVectors',explanation:'Evil twin APs and MitM attacks on open Wi-Fi are wireless/wired network-based threat vectors. The attacker needs network proximity — this is a network-based attack, not a message or system vulnerability.',type:'mc',text:'An attacker sets up a rogue Wi-Fi access point with the same SSID as a hotel\'s legitimate network and intercepts all traffic from guests who connect to it. Which threat vector does this represent?',options:['Message-Based','Wired / Wireless','Supply Chain','Cloud'],answer:[1]},
+
+  {id:'T2-19',domain:'ThreatVectors',explanation:'Macro-enabled Office documents are a Files & Media threat vector. The malware is triggered when the user opens the file and enables the macro — a common initial access technique used in phishing campaigns.',type:'mc',text:'A user receives an email with an attached Word document. When opened, a prompt asks them to enable macros — doing so installs a remote access trojan. Which threat vector does this exploit?',options:['Systems','Message-Based','Files & Media','Removable Device'],answer:[2]},
+
+  {id:'T2-20',domain:'ThreatVectors',explanation:'An unpatched RDP (Remote Desktop Protocol) vulnerability is a Systems threat vector — it exploits an OS or application vulnerability on a directly accessible system. BlueKeep (CVE-2019-0708) is a well-known RDP exploit.',type:'mc',text:'An attacker scans the internet for Windows servers with Remote Desktop Protocol exposed and exploits an unpatched vulnerability to gain administrative access. Which threat vector is being exploited?',options:['Supply Chain','Message-Based','Cloud','Systems'],answer:[3]},
+
+  {id:'T2-21',domain:'OSINT',explanation:'CISA (Cybersecurity & Infrastructure Security Agency) is the U.S. government agency that publishes advisories, alerts, and the KEV (Known Exploited Vulnerabilities) catalog. It is a government-based OSINT source.',type:'mc',text:'A security analyst wants to find a government-maintained catalog of vulnerabilities actively being exploited in the wild to prioritize patching. Which resource should they consult?',options:['MISP Threat Sharing','Open Threat Exchange (OTX)','CISA KEV Catalog','Threatfeeds.io'],answer:[2]},
+
+  {id:'T2-22',domain:'OSINT',explanation:'MISP (Malware Information Sharing Platform) is an open-source threat intelligence platform that allows organizations to share and correlate IOCs with each other. It is community-based, not government.',type:'mc',text:'A financial services company wants to share Indicators of Compromise (IOCs) from a recent intrusion with other organizations in their sector using an open-source community platform. Which tool is <strong>BEST</strong> suited for this?',options:['CISA AIS','MISP Threat Sharing','DC3','Senki'],answer:[1]},
+
+  {id:'T2-23',domain:'OSINT',explanation:'CISA\'s AIS (Automated Indicator Sharing) program enables machine-speed bidirectional sharing of threat indicators between the government and private sector. It automates the sharing process — no human analysis required for each indicator.',type:'mc',text:'Which program enables automated, machine-speed bidirectional sharing of threat indicators between the U.S. government and private sector organizations?',options:['Open Threat Exchange','MISP','CISA AIS','TAXII Discovery'],answer:[2]},
+
+  {id:'T2-24',domain:'CVE_CVSS',explanation:'CVE (Common Vulnerabilities & Exposures) provides unique standardized IDs for known vulnerabilities in the format CVE-YEAR-NUMBER. This allows all security tools and teams to reference the same vulnerability consistently.',type:'mc',text:'A security tool references a specific vulnerability as "CVE-2021-44228." What does this identifier represent?',options:['A MITRE ATT&CK technique ID','A CVSS severity score category','A standardized unique ID for a known vulnerability','A TAXII collection name'],answer:[2]},
+
+  {id:'T2-25',domain:'CVE_CVSS',explanation:'CVSS scores range from 0–10. Critical = 9.0–10.0, High = 7.0–8.9, Medium = 4.0–6.9, Low = 0.1–3.9. A score of 8.1 falls in the High range (7.0–8.9).',type:'mc',text:'A vulnerability scanner reports a finding with a CVSS base score of 8.1. Which severity category does this fall under?',options:['Critical','High','Medium','Low'],answer:[1]},
+
+  {id:'T2-26',domain:'CVE_CVSS',explanation:'MITRE ATT&CK is a framework of adversary Tactics, Techniques, and Sub-techniques based on real-world attack data. It is used for threat hunting, detection engineering, and red/blue team exercises — not vulnerability scoring.',type:'mc',text:'A threat hunter wants to map observed attacker behavior to known adversary techniques used in real-world campaigns. Which framework is <strong>BEST</strong> suited for this purpose?',options:['CVE Database','CVSS','MITRE ATT&CK','STIX'],answer:[2]},
+
+  {id:'T2-27',domain:'CVE_CVSS',explanation:'CVSS factors include: Attack Vector, Attack Complexity, Privileges Required, User Interaction, Scope, Confidentiality impact, Integrity impact, and Availability impact. These determine the base score.',type:'mc',text:'Which of the following factors are used to calculate a CVSS base score? <strong>(Select TWO)</strong>',options:['Attack Vector','Organization revenue size','Number of affected users','User Interaction required','Vendor patch availability'],answer:[0,3]},
+
+  {id:'T2-28',domain:'IntelQuality',explanation:'The TAR framework evaluates threat intelligence on three dimensions: Timely (is the data still current?), Accurate (is it corroborated and reliable?), and Relevant (does it affect our organization?). Intelligence must meet all three to be actionable.',type:'mc',text:'A security team receives threat intelligence about a vulnerability in a software package. Before acting on it, they evaluate whether the threat is still active, whether the source has a reliable track record, and whether their organization uses that software. Which framework are they applying?',options:['CVE Triage','STIX Assessment','TAR (Timely, Accurate, Relevant)','CVSS Scoring'],answer:[2]},
+
+  {id:'T2-29',domain:'IntelQuality',explanation:'Intelligence about a threat in software your organization doesn\'t use fails the Relevance criterion of the TAR framework. Even if timely and accurate, irrelevant intelligence provides no actionable value.',type:'mc',text:'A threat intelligence feed reports a critical vulnerability in an Apache web server. After reviewing the alert, a security analyst confirms the company uses only IIS and has no Apache deployments. According to the TAR framework, which quality criterion does this intelligence fail?',options:['Timely','Accurate','Relevant','Confirmed'],answer:[2]},
+
+  {id:'T2-30',domain:'ConfidenceLevels',explanation:'A CVSS score of 90–100 means CONFIRMED — independent sources or direct analysis proves the threat is real. The malware sample analyzed in a lab with active C2 server confirmed is direct evidence. This is not just probable or possible.',type:'mc',text:'Analysts have obtained a malware sample, reverse-engineered it in their lab, and confirmed the C2 server is actively receiving connections. The intelligence assessment score would be in which confidence range?',options:['50–69 (Possible)','70–89 (Probable)','90–100 (Confirmed)','30–49 (Doubtful)'],answer:[2]},
+
+  {id:'T2-31',domain:'ConfidenceLevels',explanation:'A score of 70–89 is PROBABLE — based on logical inference from strong indicators (TTPs matching a known actor\'s previous campaigns) but without direct confirmation of this specific attack.',type:'mc',text:'Threat analysts observe attack techniques that closely match those used in previous campaigns attributed to a known nation-state group, but have not directly confirmed the same actor is responsible for the current intrusion. Which confidence level applies?',options:['Confirmed (90–100)','Probable (70–89)','Possible (50–69)','Doubtful (30–49)'],answer:[1]},
+
+  {id:'T2-32',domain:'ConfidenceLevels',explanation:'A score of 1 (Discredited) means the assessment has been confirmed INACCURATE through analysis or independent confirmation. Teams should discard and not act on discredited intelligence.',type:'mc',text:'A threat intelligence report claims an attacker group is planning to target the healthcare sector next month. Subsequent analysis by three independent researchers confirms the report was fabricated. What confidence level should be assigned?',options:['Doubtful (30–49)','Improbable (2–29)','Possible (50–69)','Discredited (1)'],answer:[3]},
+
+  {id:'T2-33',domain:'STIX_TAXII',explanation:'STIX (Structured Threat Information eXpression) is the standardized JSON-based language that defines WHAT threat intelligence looks like. TAXII is the transport protocol that handles HOW it is shared.',type:'mc',text:'A security platform uses a standardized JSON-based format to represent threat actors, malware samples, attack patterns, and indicators of compromise so that different tools can interpret the data consistently. Which standard is being used?',options:['TAXII','CVE','STIX','MITRE ATT&CK'],answer:[2]},
+
+  {id:'T2-34',domain:'STIX_TAXII',explanation:'TAXII uses an API Root as the entry point URL for a TAXII server. Organizations publish their API Root so clients know where to connect and what services are available.',type:'mc',text:'An organization wants to share threat intelligence with partners using TAXII. They need to publish a URL that clients can connect to in order to discover what services and intelligence collections are available. What is this entry point called?',options:['STIX Bundle','Discovery Endpoint / API Root','CVE Feed','MISP Channel'],answer:[1]},
+
+  {id:'T2-35',domain:'STIX_TAXII',explanation:'STIX and TAXII work together: STIX defines the format/language of threat intelligence objects, while TAXII provides the transport mechanism to share those STIX objects at machine speed over HTTPS.',type:'mc',text:'Which statement <strong>BEST</strong> describes the relationship between STIX and TAXII?',options:['STIX scores vulnerabilities; TAXII classifies threat actors','STIX is a network protocol; TAXII is a data format','STIX defines the format of threat intelligence; TAXII defines how it is transported and shared','STIX and TAXII are both vulnerability scoring systems'],answer:[2]},
+];
+
+// ─── State ────────────────────────────────────────────────────────────────────
+const state = { current: 0, userAnswers: [], submitted: [], timerSeconds: 45*60, timerInterval: null, timerRunning: false };
+
+function startTimer() {
+  state.timerRunning = true;
+  state.timerInterval = setInterval(() => { state.timerSeconds--; updateTimerDisplay(); if (state.timerSeconds <= 0) { clearInterval(state.timerInterval); showResults(); } }, 1000);
+}
+function updateTimerDisplay() {
+  const el = document.getElementById('timer');
+  const m = Math.floor(state.timerSeconds/60), s = state.timerSeconds%60;
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = state.timerSeconds < 60 ? 'danger' : state.timerSeconds < 300 ? 'warn' : '';
+}
+function toggleTimer() {
+  const btn = document.getElementById('timerBtn');
+  if (state.timerRunning) { clearInterval(state.timerInterval); state.timerRunning = false; btn.textContent = 'RESUME'; }
+  else { startTimer(); btn.textContent = 'PAUSE'; }
+}
+function startExam() {
+  document.getElementById('introSection').style.display = 'none';
+  if (examMode === 'full') {
+    activeQuestions = [...questions];
+    document.getElementById('pbqSection').style.display = 'block';
+    document.getElementById('finishBtn').style.display = 'inline-block';
+    startTimer();
+  } else {
+    const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    activeQuestions = shuffled.slice(0, randCount);
+    state.timerSeconds = randCount * 90;
+    initMCQ();
+    document.getElementById('mcqSection').style.display = 'block';
+    document.getElementById('finishBtn').style.display = 'inline-block';
+    startTimer();
+  }
+}
+function showMCQ() { document.getElementById('pbqSection').style.display = 'none'; activeQuestions = [...questions]; initMCQ(); document.getElementById('mcqSection').style.display = 'block'; }
+function initMCQ() { state.userAnswers = activeQuestions.map(() => []); state.submitted = activeQuestions.map(() => false); buildGrid(); renderQuestion(0); }
+function buildGrid() {
+  const grid = document.getElementById('qGrid'); grid.innerHTML = '';
+  activeQuestions.forEach((q, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'q-dot' + (i === 0 ? ' active' : ''); dot.textContent = i+1; dot.onclick = () => renderQuestion(i); dot.id = `dot-${i}`; grid.appendChild(dot);
+  });
+}
+function updateGrid(idx) {
+  activeQuestions.forEach((_, i) => {
+    const dot = document.getElementById(`dot-${i}`); if (!dot) return;
+    dot.classList.remove('active','answered','correct','wrong');
+    if (i === idx) dot.classList.add('active');
+    else if (state.submitted[i]) {
+      const q = activeQuestions[i], ua = state.userAnswers[i];
+      dot.classList.add(q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a)) ? 'correct' : 'wrong');
+    } else if (state.userAnswers[i].length > 0) dot.classList.add('answered');
+  });
+}
+function renderQuestion(idx) {
+  state.current = idx; updateGrid(idx);
+  const q = activeQuestions[idx], isMulti = q.type === 'multi', submitted = state.submitted[idx], ua = state.userAnswers[idx];
+  const letters = ['A','B','C','D','E','F'], required = q.answer.length, selectedCount = ua.length;
+  let optHTML = q.options.map((opt, i) => {
+    let cls = 'option' + (isMulti ? ' multi-opt' : '');
+    if (submitted) { cls += ' disabled'; if (q.answer.includes(i)) cls += ' correct'; else if (ua.includes(i)) cls += ' wrong'; }
+    else if (ua.includes(i)) cls += ' selected';
+    return `<div class="${cls}" data-oidx="${i}"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="opt-letter">${letters[i]}</span><span>${opt}</span></div>`;
+  }).join('');
+  let counterHTML = '';
+  if (isMulti && !submitted) { const done = selectedCount >= required; counterHTML = `<div class="multi-counter ${done?'done':''}">${done?'✓':'☐'} Select ${required} answer${required>1?'s':''} — ${selectedCount} of ${required} selected</div>`; }
+  let feedbackHTML = '';
+  if (submitted) {
+    const isCorrect = q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a));
+    feedbackHTML = `<div class="feedback ${isCorrect?'correct':'wrong'} visible"><div class="feedback-icon">${isCorrect?'✓':'✗'}</div>${isCorrect?'Correct!':`Incorrect. Correct answer${required>1?'s':''}: ${q.answer.map(a=>letters[a]).join(', ')}.`}</div><div class="explanation-box"><div class="expl-label">📖 EXPLANATION</div>${q.explanation}</div>`;
+  }
+  const isLast = idx === activeQuestions.length - 1, canSubmit = !submitted && ua.length > 0;
+  const submitLabel = submitted ? (isLast ? 'FINISH' : 'NEXT →') : 'SUBMIT';
+  const submitCls = submitted && isLast ? 'submit-btn finish' : 'submit-btn';
+  const isAnsweredCorrect = submitted && q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a));
+  document.getElementById('questionContainer').innerHTML = `
+    <div class="q-header"><span class="q-num">QUESTION ${idx+1} OF ${activeQuestions.length} · ${q.id}</span><span class="q-tag ${isMulti?'multi':'mc'}">${isMulti?`MULTI SELECT (${required})`:'MULTIPLE CHOICE'}</span></div>
+    <div class="question-card ${submitted?(isAnsweredCorrect?'answered-correct':'answered-wrong'):''}">
+      <div class="question-text">${q.text}</div>${counterHTML}
+      <div class="options" id="optionsContainer">${optHTML}</div>${feedbackHTML}
+    </div>
+    <div class="q-footer">
+      <button class="nav-btn" onclick="renderQuestion(${idx-1})" ${idx===0?'disabled':''}>← PREV</button>
+      <button class="${submitCls}" id="submitBtn" onclick="handleSubmit(${idx})" ${canSubmit||submitted?'':'disabled style="opacity:0.4;cursor:default;"'}>${submitLabel}</button>
+      <button class="nav-btn" onclick="renderQuestion(${idx+1})" ${idx===activeQuestions.length-1?'disabled':''}>NEXT →</button>
+    </div>`;
+  if (!submitted) { document.querySelectorAll('#optionsContainer .option').forEach(el => { el.addEventListener('click', () => selectOption(idx, parseInt(el.dataset.oidx))); }); }
+  document.getElementById('progressBar').style.width = ((idx+1)/activeQuestions.length*100)+'%';
+}
+function selectOption(qIdx, optIdx) {
+  if (state.submitted[qIdx]) return;
+  const q = activeQuestions[qIdx], ua = state.userAnswers[qIdx];
+  if (q.type === 'multi') { const pos = ua.indexOf(optIdx); if (pos===-1) ua.push(optIdx); else ua.splice(pos,1); }
+  else { state.userAnswers[qIdx] = [optIdx]; }
+  renderQuestion(qIdx);
+}
+function handleSubmit(idx) {
+  if (!state.submitted[idx]) { if (state.userAnswers[idx].length===0) return; state.submitted[idx]=true; updateScore(); renderQuestion(idx); }
+  else { if (idx===activeQuestions.length-1) showResults(); else renderQuestion(idx+1); }
+}
+function updateScore() {
+  let correct=0, wrong=0;
+  activeQuestions.forEach((q,i) => { if (!state.submitted[i]) return; const ua=state.userAnswers[i]; if (q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))) correct++; else wrong++; });
+  document.getElementById('scoreBig').textContent=correct; document.getElementById('scoreCorrect').textContent=correct; document.getElementById('scoreWrong').textContent=wrong; document.getElementById('scorePanel').classList.add('visible');
+}
+function showResults() {
+  clearInterval(state.timerInterval);
+  document.getElementById('mcqSection').style.display='none'; document.getElementById('pbqSection').style.display='none';
+  document.getElementById('resultsSection').style.display='block'; document.getElementById('finishBtn').style.display='none';
+  let correct=0, wrong=0, skipped=0;
+  activeQuestions.forEach((q,i) => { if (!state.submitted[i]) { skipped++; return; } const ua=state.userAnswers[i]; if (q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))) correct++; else wrong++; });
+  const total=activeQuestions.length, pct=Math.round((correct/total)*100), pass=pct>=70;
+  document.getElementById('finalScore').textContent=pct+'%'; document.getElementById('finalScore').className='final-score '+(pass?'pass':'fail');
+  document.getElementById('finalPct').textContent=`${correct}/${total} Correct`;
+  document.getElementById('passFailMsg').textContent=pass?'✓ PASS — Well done!':'✗ FAIL — Keep studying!';
+  document.getElementById('passFailMsg').style.color=pass?'var(--green)':'var(--red)';
+  document.getElementById('resCorrect').textContent=correct; document.getElementById('resWrong').textContent=wrong; document.getElementById('resSkipped').textContent=skipped;
+  const domains={};
+  activeQuestions.forEach((q,i) => { if (!domains[q.domain]) domains[q.domain]={correct:0,total:0}; domains[q.domain].total++; if (state.submitted[i]) { const ua=state.userAnswers[i]; if (q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))) domains[q.domain].correct++; } });
+  const domainNames={HackerTypes:'Hacker Types',ThreatActors:'Threat Actors',Motivations:'Attack Motivations',ThreatVectors:'Threat Vectors',OSINT:'OSINT & Threat Intel Sources',CVE_CVSS:'CVE / CVSS / MITRE ATT&CK',IntelQuality:'Intel Quality (TAR)',ConfidenceLevels:'Confidence Levels',STIX_TAXII:'STIX & TAXII'};
+  const colors={HackerTypes:'#00d4ff',ThreatActors:'#ff6b2b',Motivations:'#ffd32a',ThreatVectors:'#00f5a0',OSINT:'#7b2fbe',CVE_CVSS:'#00d4ff',IntelQuality:'#ff4757',ConfidenceLevels:'#ffd32a',STIX_TAXII:'#00f5a0'};
+  let dHTML='<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(domains).forEach(([key,val]) => { const p=Math.round((val.correct/val.total)*100), color=colors[key]||'var(--accent)'; dHTML+=`<div class="domain-card"><div class="domain-card-header"><span class="domain-card-name">${domainNames[key]||key}</span><span class="domain-card-pct" style="color:${color}">${p}%</span></div><div class="domain-bar-track"><div class="domain-bar-fill" style="width:${p}%;background:${color}"></div></div><div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">${val.correct}/${val.total} correct</div></div>`; });
+  dHTML+='</div>'; document.getElementById('domainSummary').innerHTML=dHTML;
+}
+function reviewAnswers() { document.getElementById('resultsSection').style.display='none'; document.getElementById('mcqSection').style.display='block'; document.getElementById('finishBtn').style.display='inline-block'; renderQuestion(0); }
+
+// ─── Theme ────────────────────────────────────────────────────────────────────
+function applyTheme(t) {
+  if (t==='light') { document.body.setAttribute('data-theme','light'); document.getElementById('themeIcon').textContent='🌙'; document.getElementById('themeLabel').textContent='DARK'; }
+  else { document.body.removeAttribute('data-theme'); document.getElementById('themeIcon').textContent='☀️'; document.getElementById('themeLabel').textContent='LIGHT'; }
+}
+function toggleTheme() { const next=document.body.hasAttribute('data-theme')?'dark':'light'; applyTheme(next); try{localStorage.setItem('bl-theme',next);}catch(e){} }
+(function(){ var t='dark'; try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){} applyTheme(t); })();
+</script>
+</body>
+</html>
