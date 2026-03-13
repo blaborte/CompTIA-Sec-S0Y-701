@@ -146,12 +146,15 @@
   .option.wrong .opt-letter { color: var(--red); }
   .option.disabled { cursor: default; pointer-events: none; }
 
-  .option .check-box { width: 16px; height: 16px; min-width: 16px; border: 1px solid var(--border); border-radius: 2px; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .option .check-box { width: 16px; height: 16px; min-width: 16px; border: 1px solid var(--border); border-radius: 50%; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .option.multi-opt .check-box { border-radius: 3px; }
   .option.selected .check-box { background: var(--accent); border-color: var(--accent); }
   .option.correct .check-box { background: var(--green); border-color: var(--green); }
   .option.wrong .check-box { background: var(--red); border-color: var(--red); }
   .check-box svg { display: none; }
-  .option.selected .check-box svg { display: block; }
+  .option.selected .check-box svg, .option.correct .check-box svg, .option.wrong .check-box svg { display: block; }
+  .multi-counter { font-family: var(--mono); font-size: 0.7rem; color: var(--accent2); margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+  .multi-counter.done { color: var(--green); }
 
   .feedback { display: none; margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 4px; font-size: 0.85rem; line-height: 1.6; }
   .feedback.correct { background: rgba(0,245,160,0.07); border: 1px solid rgba(0,245,160,0.25); color: var(--green); }
@@ -915,26 +918,37 @@ function renderQuestion(idx) {
   const ua = state.userAnswers[idx];
 
   const letters = ['A','B','C','D','E','F'];
+  const required = q.answer.length;
+  const selectedCount = ua.length;
+
   let optHTML = q.options.map((opt, i) => {
-    let cls = 'option';
+    let cls = 'option' + (isMulti ? ' multi-opt' : '');
     if (submitted) {
       cls += ' disabled';
       if (q.answer.includes(i)) cls += ' correct';
       else if (ua.includes(i)) cls += ' wrong';
     } else if (ua.includes(i)) cls += ' selected';
-    return `<div class="${cls}" onclick="selectOption(${idx},${i})">
+    return `<div class="${cls}" data-oidx="${i}">
       <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <span class="opt-letter">${letters[i]}</span>
       <span>${opt}</span>
     </div>`;
   }).join('');
 
+  let counterHTML = '';
+  if (isMulti && !submitted) {
+    const done = selectedCount >= required;
+    counterHTML = `<div class="multi-counter ${done ? 'done' : ''}">
+      ${done ? '✓' : '☐'} Select ${required} answer${required > 1 ? 's' : ''} — ${selectedCount} of ${required} selected
+    </div>`;
+  }
+
   let feedbackHTML = '';
   if (submitted) {
-    const correct = q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a));
-    feedbackHTML = `<div class="feedback ${correct ? 'correct' : 'wrong'} visible">
-      <div class="feedback-icon">${correct ? '✓' : '✗'}</div>
-      ${correct ? 'Correct!' : `Incorrect. Correct answer: ${q.answer.map(a => letters[a]).join(', ')}.`}
+    const isCorrect = q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a));
+    feedbackHTML = `<div class="feedback ${isCorrect ? 'correct' : 'wrong'} visible">
+      <div class="feedback-icon">${isCorrect ? '✓' : '✗'}</div>
+      ${isCorrect ? 'Correct!' : `Incorrect. Correct answer${required > 1 ? 's' : ''}: ${q.answer.map(a => letters[a]).join(', ')}.`}
     </div>
     <div class="explanation-box">
       <div class="expl-label">📖 EXPLANATION</div>
@@ -943,24 +957,36 @@ function renderQuestion(idx) {
   }
 
   const isLast = idx === activeQuestions.length - 1;
+  const canSubmit = !submitted && ua.length > 0;
   const submitLabel = submitted ? (isLast ? 'FINISH' : 'NEXT →') : 'SUBMIT';
   const submitCls = submitted && isLast ? 'submit-btn finish' : 'submit-btn';
+  const isAnsweredCorrect = submitted && q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a));
 
   document.getElementById('questionContainer').innerHTML = `
     <div class="q-header">
       <span class="q-num">QUESTION ${idx + 1} OF ${activeQuestions.length} · ${q.id}</span>
-      <span class="q-tag ${isMulti ? 'multi' : 'mc'}">${isMulti ? 'MULTI SELECT' : 'MULTIPLE CHOICE'}</span>
+      <span class="q-tag ${isMulti ? 'multi' : 'mc'}">${isMulti ? `MULTI SELECT (${required})` : 'MULTIPLE CHOICE'}</span>
     </div>
-    <div class="question-card ${submitted ? (q.answer.every(a => ua.includes(a)) && ua.every(a => q.answer.includes(a)) ? 'answered-correct' : 'answered-wrong') : ''}">
+    <div class="question-card ${submitted ? (isAnsweredCorrect ? 'answered-correct' : 'answered-wrong') : ''}">
       <div class="question-text">${q.text}</div>
-      <div class="options">${optHTML}</div>
+      ${counterHTML}
+      <div class="options" id="optionsContainer">${optHTML}</div>
       ${feedbackHTML}
     </div>
     <div class="q-footer">
       <button class="nav-btn" onclick="renderQuestion(${idx-1})" ${idx === 0 ? 'disabled' : ''}>← PREV</button>
-      <button class="${submitCls}" onclick="handleSubmit(${idx})">${submitLabel}</button>
+      <button class="${submitCls}" id="submitBtn" onclick="handleSubmit(${idx})" ${canSubmit || submitted ? '' : 'disabled style="opacity:0.4;cursor:default;"'}>${submitLabel}</button>
       <button class="nav-btn" onclick="renderQuestion(${idx+1})" ${idx === activeQuestions.length - 1 ? 'disabled' : ''}>NEXT →</button>
     </div>`;
+
+  // Attach click listeners to options via JS (avoids inline handler issues)
+  if (!submitted) {
+    document.querySelectorAll('#optionsContainer .option').forEach(el => {
+      el.addEventListener('click', () => {
+        selectOption(idx, parseInt(el.dataset.oidx));
+      });
+    });
+  }
 
   const pct = ((idx + 1) / activeQuestions.length) * 100;
   document.getElementById('progressBar').style.width = pct + '%';
