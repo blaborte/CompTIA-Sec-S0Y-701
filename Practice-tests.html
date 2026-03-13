@@ -494,28 +494,28 @@
 <script>
 /* ── THEME TOGGLE ── */
 function toggleTheme(){
-  var c=document.documentElement.getAttribute('data-theme')||'dark';
-  var n=c==='dark'?'light':'dark';
-  applyTheme(n);
-  try{localStorage.setItem('bl-theme',n);}catch(e){}
+  var current = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = current === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  try { localStorage.setItem('bl-theme', next); } catch(e) {}
 }
 function applyTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  var i=document.getElementById('themeIcon');
-  var l=document.getElementById('themeLabel');
-  if(!i||!l)return;
-  i.textContent=t==='light'?'🌙':'☀️';
-  l.textContent=t==='light'?'DARK':'LIGHT';
+  document.documentElement.setAttribute('data-theme', t);
+  var i = document.getElementById('themeIcon');
+  var l = document.getElementById('themeLabel');
+  if (!i || !l) return;
+  i.textContent = t === 'light' ? '🌙' : '☀️';
+  l.textContent = t === 'light' ? 'DARK' : 'LIGHT';
 }
 (function(){
-  var t='dark';
-  try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}
-  document.documentElement.setAttribute('data-theme',t);
+  var stored = null;
+  try { stored = localStorage.getItem('bl-theme'); } catch(e) {}
+  applyTheme(stored || 'dark');
 })();
-document.addEventListener('DOMContentLoaded',function(){
-  var t='dark';
-  try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}
-  applyTheme(t);
+document.addEventListener('DOMContentLoaded', function(){
+  var stored = null;
+  try { stored = localStorage.getItem('bl-theme'); } catch(e) {}
+  applyTheme(stored || 'dark');
 });
 </script>
 </body>

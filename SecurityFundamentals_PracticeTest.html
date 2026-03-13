@@ -1070,19 +1070,28 @@ function reviewAnswers() {
 }
 
 // ─── Theme Toggle ─────────────────────────────────────────────────────────────
-function toggleTheme() {
-  const body = document.body;
-  const isDark = !body.hasAttribute('data-theme');
-  if (isDark) {
-    body.setAttribute('data-theme', 'light');
+function applyTheme(t) {
+  if (t === 'light') {
+    document.body.setAttribute('data-theme', 'light');
     document.getElementById('themeIcon').textContent = '🌙';
     document.getElementById('themeLabel').textContent = 'DARK';
   } else {
-    body.removeAttribute('data-theme');
+    document.body.removeAttribute('data-theme');
     document.getElementById('themeIcon').textContent = '☀️';
     document.getElementById('themeLabel').textContent = 'LIGHT';
   }
 }
+function toggleTheme() {
+  const current = document.body.hasAttribute('data-theme') ? 'light' : 'dark';
+  const next = current === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  try { localStorage.setItem('bl-theme', next); } catch(e) {}
+}
+(function() {
+  var t = 'dark';
+  try { t = localStorage.getItem('bl-theme') || 'dark'; } catch(e) {}
+  applyTheme(t);
+})();
 </script>
 </body>
 </html>
