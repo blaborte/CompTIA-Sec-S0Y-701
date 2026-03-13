@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 6: Understanding CVSS</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e17;--bg2:#111520;--bg3:#181d2e;--border:#1f2740;--accent:#00d4ff;--accent2:#ff6b2b;--green:#00f5a0;--red:#ff4757;--yellow:#ffd32a;--text:#d0d8f0;--muted:#5a6a8a;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.6;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
+.logo{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logo span{color:var(--accent);}
+.home-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.45rem 0.85rem;border-radius:6px;text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:all 0.3s;display:flex;align-items:center;gap:0.4rem;white-space:nowrap;}
+.home-btn:hover{border-color:var(--accent);background:var(--bg2);}
+.timer-wrap{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+#timer{font-family:var(--mono);font-size:1.05rem;color:var(--accent);font-weight:600;letter-spacing:0.05em;}
+#timer.warn{color:var(--yellow);}
+#timer.danger{color:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.68rem;padding:0.3rem 0.75rem;cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;border-radius:2px;}
+.header-btn:hover{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary:hover{background:var(--accent);color:var(--bg);}
+.progress-bar-wrap{height:3px;background:var(--border);}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width 0.4s ease;width:0%;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 63px);}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:63px;height:calc(100vh - 63px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sidebar-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;padding:0 0.5rem;}
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:1.5rem;}
+.q-dot{aspect-ratio:1;border-radius:3px;border:1px solid var(--border);cursor:pointer;font-family:var(--mono);font-size:0.55rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.15s;background:var(--bg3);}
+.q-dot:hover{border-color:var(--accent);color:var(--accent);}
+.q-dot.answered{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.q-dot.correct{background:var(--green);border-color:var(--green);color:var(--bg);}
+.q-dot.wrong{background:var(--red);border-color:var(--red);color:var(--bg);}
+.q-dot.active{outline:2px solid var(--yellow);outline-offset:1px;}
+.score-panel{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;display:none;}
+.score-panel.visible{display:block;}
+.score-big{font-family:var(--mono);font-size:2rem;font-weight:600;color:var(--accent);text-align:center;}
+.score-label{font-size:0.7rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:0.08em;margin-top:0.25rem;}
+.score-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:1rem;}
+.score-item{text-align:center;}
+.score-item .val{font-family:var(--mono);font-size:1.1rem;font-weight:600;}
+.score-item .lbl{font-size:0.65rem;color:var(--muted);font-family:var(--mono);}
+.score-item.c .val{color:var(--green);}
+.score-item.w .val{color:var(--red);}
+main{padding:2rem 2.5rem;max-width:840px;}
+.intro-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2.5rem;margin-bottom:2rem;}
+.intro-card h1{font-family:var(--mono);font-size:1.25rem;font-weight:600;color:var(--accent);margin-bottom:0.5rem;}
+.intro-card .subtitle{font-size:0.8rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.08em;margin-bottom:1.5rem;}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.intro-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;text-align:center;}
+.intro-stat .n{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--text);}
+.intro-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.start-btn{background:var(--accent);color:var(--bg);border:none;font-family:var(--mono);font-size:0.85rem;font-weight:600;letter-spacing:0.1em;padding:0.8rem 2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.start-btn:hover{background:#00b8e0;transform:translateY(-1px);}
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.mode-card{background:var(--bg2);border:2px solid var(--border);border-radius:6px;padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mode-card:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.mode-card.active{border-color:var(--accent);background:rgba(0,212,255,0.07);}
+.mode-card-title{font-family:var(--mono);font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;}
+.mode-card-sub{font-size:0.72rem;color:var(--muted);}
+.random-options{display:flex;gap:0.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.rand-btn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.78rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.rand-btn:hover,.rand-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+.rand-mode-section{display:none;margin-top:1rem;}
+.rand-mode-section.show{display:block;}
+.q-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.q-num{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
+.q-tag{font-family:var(--mono);font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.08em;}
+.q-tag.mc{background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.2);}
+.q-tag.multi{background:rgba(255,107,43,0.1);color:var(--accent2);border:1px solid rgba(255,107,43,0.2);}
+.question-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
+.question-card.answered-correct{border-color:rgba(0,245,160,0.3);}
+.question-card.answered-wrong{border-color:rgba(255,71,87,0.3);}
+.question-text{font-size:0.95rem;line-height:1.7;color:var(--text);margin-bottom:1.5rem;}
+.question-text strong{color:var(--accent);}
+.options{display:flex;flex-direction:column;gap:0.6rem;}
+.option{display:flex;align-items:flex-start;gap:0.75rem;padding:0.8rem 1rem;border-radius:4px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:var(--bg2);font-size:0.875rem;}
+.option:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.opt-letter{font-family:var(--mono);font-size:0.7rem;font-weight:600;color:var(--muted);min-width:18px;padding-top:1px;transition:color 0.15s;}
+.option:hover .opt-letter{color:var(--accent);}
+.option.selected{border-color:var(--accent);background:rgba(0,212,255,0.08);}
+.option.selected .opt-letter{color:var(--accent);}
+.option.correct{border-color:var(--green);background:rgba(0,245,160,0.08);}
+.option.correct .opt-letter{color:var(--green);}
+.option.wrong{border-color:var(--red);background:rgba(255,71,87,0.08);}
+.option.wrong .opt-letter{color:var(--red);}
+.option.disabled{cursor:default;pointer-events:none;}
+.option .check-box{width:16px;height:16px;min-width:16px;border:1px solid var(--border);border-radius:50%;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.option.multi-opt .check-box{border-radius:3px;}
+.option.selected .check-box{background:var(--accent);border-color:var(--accent);}
+.option.correct .check-box{background:var(--green);border-color:var(--green);}
+.option.wrong .check-box{background:var(--red);border-color:var(--red);}
+.check-box svg{display:none;}
+.option.selected .check-box svg,.option.correct .check-box svg,.option.wrong .check-box svg{display:block;}
+.multi-counter{font-family:var(--mono);font-size:0.7rem;color:var(--accent2);margin-bottom:0.75rem;letter-spacing:0.05em;}
+.multi-counter.done{color:var(--green);}
+.feedback{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:0.85rem;line-height:1.6;}
+.feedback.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.25);color:var(--green);}
+.feedback.wrong{background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.25);color:#ff8a95;}
+.feedback.visible{display:block;}
+.explanation-box{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;background:rgba(123,47,190,0.08);border:1px solid rgba(123,47,190,0.3);font-size:0.83rem;line-height:1.7;color:var(--text);}
+.explanation-box .expl-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:#a06fdb;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.q-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.5rem;}
+.nav-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.72rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;letter-spacing:0.06em;transition:all 0.2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:0.25;cursor:default;}
+.submit-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.5rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.submit-btn:hover{background:#e55e22;transform:translateY(-1px);}
+.submit-btn.finish{background:var(--green);color:var(--bg);}
+.submit-btn.finish:hover{background:#00d488;}
+.results-hero{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3rem 2.5rem;text-align:center;margin-bottom:2rem;}
+.results-hero h2{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;color:var(--muted);margin-bottom:1rem;}
+.final-score{font-family:var(--mono);font-size:4rem;font-weight:600;line-height:1;margin-bottom:0.5rem;}
+.final-score.pass{color:var(--green);}
+.final-score.fail{color:var(--red);}
+.final-pct{font-family:var(--mono);font-size:1.2rem;color:var(--muted);margin-bottom:1.5rem;}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.result-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;}
+.result-stat .v{font-family:var(--mono);font-size:1.8rem;font-weight:600;}
+.result-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.result-stat.g .v{color:var(--green);}
+.result-stat.r .v{color:var(--red);}
+.result-stat.y .v{color:var(--yellow);}
+.review-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;}
+.review-btn:hover{background:var(--accent);color:var(--bg);}
+.restart-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;margin-left:0.75rem;}
+.restart-btn:hover{border-color:var(--text);color:var(--text);}
+.pbq-card{background:var(--bg3);border:1px solid rgba(0,245,160,0.2);border-radius:6px;padding:2rem;margin-bottom:2rem;}
+.pbq-card h3{font-family:var(--mono);font-size:0.8rem;color:var(--green);letter-spacing:0.1em;margin-bottom:1.5rem;}
+.pbq-scenario{font-size:0.82rem;color:var(--text);margin-bottom:1rem;line-height:1.7;}
+.pbq-match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.pbq-col-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;}
+.pbq-items{display:flex;flex-direction:column;gap:0.4rem;}
+.pbq-source-item{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.45rem 0.7rem;font-size:0.76rem;cursor:grab;user-select:none;transition:all 0.15s;font-family:var(--mono);color:var(--text);}
+.pbq-source-item:hover{border-color:var(--accent);color:var(--accent);}
+.pbq-source-item.dragging{opacity:0.4;}
+.pbq-source-item.used{opacity:0.35;cursor:default;border-style:dashed;}
+.pbq-target-row{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.4rem;}
+.pbq-target-label{font-size:0.78rem;color:var(--text);flex:1 1 0;padding-top:0.35rem;}
+.pbq-drop-zone{min-height:34px;min-width:110px;flex:0 0 140px;background:var(--bg2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.68rem;color:var(--muted);transition:all 0.15s;position:relative;cursor:pointer;padding:0.2rem 0.4rem;text-align:center;}
+.pbq-drop-zone.drag-over{border-color:var(--accent);background:rgba(0,212,255,0.06);}
+.pbq-drop-zone.filled{border-style:solid;color:var(--text);}
+.pbq-drop-zone.correct{border-color:var(--green)!important;background:rgba(0,245,160,0.08)!important;color:var(--green)!important;}
+.pbq-drop-zone.wrong{border-color:var(--red)!important;background:rgba(255,71,87,0.08)!important;color:var(--red)!important;}
+.pbq-drop-clear{position:absolute;right:3px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--muted);cursor:pointer;padding:0 2px;}
+.pbq-drop-clear:hover{color:var(--red);}
+.pbq-check-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.4rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:0.75rem;}
+.pbq-check-btn:hover{background:#e55e22;}
+.pbq-check-btn:disabled{opacity:0.5;cursor:default;}
+.pbq-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:3px;font-family:var(--mono);font-size:0.75rem;display:none;}
+.pbq-result.show{display:block;}
+.pbq-result.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.3);color:var(--green);}
+.pbq-result.partial{background:rgba(255,211,42,0.07);border:1px solid rgba(255,211,42,0.3);color:var(--yellow);}
+.pbq-fw-table{width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:1rem;}
+.pbq-fw-table th{background:var(--bg2);border:1px solid var(--border);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-align:left;}
+.pbq-fw-table td{border:1px solid var(--border);padding:0.4rem 0.6rem;vertical-align:middle;}
+.pbq-fw-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.72rem;padding:0.3rem 0.5rem;border-radius:3px;cursor:pointer;width:100%;}
+.pbq-fw-select:focus{outline:none;border-color:var(--accent);}
+.pbq-fw-select.correct{border-color:var(--green);color:var(--green);}
+.pbq-fw-select.wrong{border-color:var(--red);color:var(--red);}
+.pbq-sec{border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;}
+.pbq-sec:first-child{border-top:none;padding-top:0;margin-top:0;}
+.pbq-sec-title{font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;}
+.vector-box{background:var(--bg2);border:1px solid var(--accent);border-radius:4px;padding:0.75rem 1.25rem;font-family:var(--mono);font-size:0.88rem;color:var(--accent);letter-spacing:0.04em;margin-bottom:1rem;word-break:break-all;}
+.domain-section{margin-top:2rem;}
+.domain-section h3{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;}
+.domain-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:1rem 1.2rem;margin-bottom:0.6rem;}
+.domain-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+.domain-card-name{font-size:0.82rem;color:var(--text);font-weight:500;}
+.domain-card-pct{font-family:var(--mono);font-size:0.85rem;font-weight:600;}
+.domain-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.domain-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+[data-theme="light"]{--bg:#eef1f8;--bg2:#ffffff;--bg3:#dde2f0;--border:#c4ccdf;--accent:#006699;--accent2:#cc4400;--green:#007a52;--red:#c0172e;--yellow:#8a6200;--text:#111827;--muted:#556080;}
+*,*::before,*::after{transition:background-color 0.22s ease,border-color 0.2s ease,color 0.18s ease!important;}
+.theme-toggle{display:flex;align-items:center;gap:0.35rem;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:0.26rem 0.75rem 0.26rem 0.5rem;cursor:pointer;font-family:var(--mono);font-size:0.66rem;color:var(--muted);letter-spacing:0.07em;white-space:nowrap;flex-shrink:0;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.theme-icon{font-size:0.82rem;line-height:1;}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}main{padding:1.5rem;}.intro-stats,.results-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 6: UNDERSTANDING CVSS</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+    <a href="Practice-tests.html" class="home-btn">&#8592; Back</a>
+    <a href="index.html" class="home-btn">&#8962; Home</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">&#9728;&#65039;</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-title">QUESTIONS</div>
+  <div class="q-grid" id="qGrid"></div>
+  <div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">&ndash;</div>
+    <div class="score-label">SCORE</div>
+    <div class="score-breakdown">
+      <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+      <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+    </div>
+  </div>
+</aside>
+<main>
+
+<!-- INTRO -->
+<div id="introSection">
+<div class="intro-card">
+  <h1>SECTION 6: UNDERSTANDING CVSS</h1>
+  <div class="subtitle">CompTIA Security+ SY0-701 &middot; BL Study Materials</div>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+    <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+    <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+  </div>
+  <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+  <div class="mode-selector">
+    <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+      <div class="mode-card-title">&#128203; FULL EXAM</div>
+      <div class="mode-card-sub">All 35 questions &middot; 45 min timer &middot; PBQ + MCQ</div>
+    </div>
+    <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+      <div class="mode-card-title">&#127922; RANDOM QUIZ</div>
+      <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+    </div>
+  </div>
+  <div class="rand-mode-section" id="randModeSection">
+    <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+    <div class="random-options">
+      <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+      <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+      <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+    </div>
+  </div>
+  <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;">
+    This quiz covers <strong style="color:var(--text)">Section 6: Understanding CVSS</strong> &mdash; CVSS score ranges &amp; severity tiers, the 9 CVSS metrics (AV, AC, PR, UI, S, C, I, A), reading vector strings, Base/Temporal/Environmental score types, CVE &amp; NVD integration, real-world examples (Log4Shell, EternalBlue, Heartbleed), patch prioritization timelines, and the limitations of CVSS.<br><br>
+    <strong style="color:var(--text)">Tip:</strong> Know the exact score boundaries (9.0&ndash;10.0 Critical, 7.0&ndash;8.9 High, 4.0&ndash;6.9 Medium, 0.1&ndash;3.9 Low) and be able to decode a vector string component by component.
+  </p>
+  <button class="start-btn" onclick="startExam()">START EXAM &#8594;</button>
+</div>
+</div>
+
+<!-- PBQ -->
+<div id="pbqSection" style="display:none">
+<div class="pbq-card">
+  <h3>&#9889; PERFORMANCE-BASED QUESTIONS (CV6-1 &ndash; CV6-5)</h3>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets, or click a source item then click a target zone to assign.</p>
+
+  <!-- CV6-1: Score ranges to severity -->
+  <div class="pbq-sec" id="pbq-c1">
+    <div class="pbq-sec-title">CV6-1 &mdash; CVSS SEVERITY RATINGS: MATCH SCORE RANGE TO SEVERITY</div>
+    <div class="pbq-scenario">Drag each CVSS score range to its correct qualitative severity rating and required response timeframe.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">SCORE RANGE</div>
+        <div class="pbq-items" id="c1-sources">
+          <div class="pbq-source-item" draggable="true" data-val="0.0">0.0</div>
+          <div class="pbq-source-item" draggable="true" data-val="0.1 – 3.9">0.1 &ndash; 3.9</div>
+          <div class="pbq-source-item" draggable="true" data-val="4.0 – 6.9">4.0 &ndash; 6.9</div>
+          <div class="pbq-source-item" draggable="true" data-val="7.0 – 8.9">7.0 &ndash; 8.9</div>
+          <div class="pbq-source-item" draggable="true" data-val="9.0 – 10.0">9.0 &ndash; 10.0</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">SEVERITY &amp; RESPONSE</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label"><strong style="color:var(--red)">CRITICAL</strong> &mdash; Emergency patch within 24&ndash;72 hours; remote, no auth required, maximum impact</div><div class="pbq-drop-zone" data-answer="9.0 – 10.0" data-pbq="c1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label"><strong style="color:var(--accent2)">HIGH</strong> &mdash; Patch within 7&ndash;30 days; remotely exploitable with significant impact</div><div class="pbq-drop-zone" data-answer="7.0 – 8.9" data-pbq="c1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label"><strong style="color:var(--yellow)">MEDIUM</strong> &mdash; Schedule remediation within 30&ndash;90 days; requires specific conditions to exploit</div><div class="pbq-drop-zone" data-answer="4.0 – 6.9" data-pbq="c1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label"><strong style="color:var(--green)">LOW</strong> &mdash; Normal patch cycle; often requires physical access, high privileges, or unlikely conditions</div><div class="pbq-drop-zone" data-answer="0.1 – 3.9" data-pbq="c1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label"><strong style="color:var(--muted)">NONE</strong> &mdash; Informational finding; no exploit path; no urgent patching required</div><div class="pbq-drop-zone" data-answer="0.0" data-pbq="c1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('c1')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-c1-result"></div>
+  </div>
+
+  <!-- CV6-2: Attack Vector -->
+  <div class="pbq-sec" id="pbq-c2">
+    <div class="pbq-sec-title">CV6-2 &mdash; ATTACK VECTOR (AV): MATCH VALUE TO DESCRIPTION</div>
+    <div class="pbq-scenario">Drag each AV metric value to its correct description. Values are listed from highest severity (highest score) to lowest.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">AV VALUE</div>
+        <div class="pbq-items" id="c2-sources">
+          <div class="pbq-source-item" draggable="true" data-val="AV:N (Network)">AV:N (Network)</div>
+          <div class="pbq-source-item" draggable="true" data-val="AV:A (Adjacent)">AV:A (Adjacent)</div>
+          <div class="pbq-source-item" draggable="true" data-val="AV:L (Local)">AV:L (Local)</div>
+          <div class="pbq-source-item" draggable="true" data-val="AV:P (Physical)">AV:P (Physical)</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION &amp; EXAMPLES</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Exploitable remotely over the internet with no physical or local access needed (e.g., Log4Shell, XSS, SQLi, unauthenticated RCE) &mdash; Score: 0.85</div><div class="pbq-drop-zone" data-answer="AV:N (Network)" data-pbq="c2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Requires access to the same local network, broadcast domain, or collision domain (e.g., ARP poisoning, Wi-Fi exploits, DHCP starvation) &mdash; Score: 0.62</div><div class="pbq-drop-zone" data-answer="AV:A (Adjacent)" data-pbq="c2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker must be logged in locally or deliver exploit via a local method (e.g., privilege escalation, exploiting a local service) &mdash; Score: 0.55</div><div class="pbq-drop-zone" data-answer="AV:L (Local)" data-pbq="c2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Requires physical interaction with the target device (e.g., cold boot attack, malicious USB/evil maid, BIOS firmware tampering) &mdash; Score: 0.20</div><div class="pbq-drop-zone" data-answer="AV:P (Physical)" data-pbq="c2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('c2')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-c2-result"></div>
+  </div>
+
+  <!-- CV6-3: Decode a vector string via dropdown table -->
+  <div class="pbq-sec" id="pbq-c3">
+    <div class="pbq-sec-title">CV6-3 &mdash; VECTOR STRING DECODE: IDENTIFY EACH METRIC VALUE</div>
+    <div class="pbq-scenario">Read the CVSS vector string below and select the correct meaning for each metric component from the dropdowns.</div>
+    <div class="vector-box">CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:L/A:N</div>
+    <table class="pbq-fw-table">
+      <thead><tr><th>METRIC CODE</th><th>VALUE</th><th>MEANING</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">AV</td><td style="font-family:var(--mono)">N</td><td><select class="pbq-fw-select" id="vd-1" data-answer="Network — remotely exploitable over the internet"><option value="">-- Select --</option><option>Network — remotely exploitable over the internet</option><option>Adjacent — requires local network access</option><option>None — no attack vector defined</option><option>Physical — requires hardware access</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">AC</td><td style="font-family:var(--mono)">L</td><td><select class="pbq-fw-select" id="vd-2" data-answer="Low — no special conditions; exploit works reliably"><option value="">-- Select --</option><option>Low — no special conditions; exploit works reliably</option><option>High — requires specific timing or conditions</option><option>Low — requires local authentication</option><option>None — no complexity required</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">PR</td><td style="font-family:var(--mono)">N</td><td><select class="pbq-fw-select" id="vd-3" data-answer="None — no authentication required; anonymous attacker"><option value="">-- Select --</option><option>None — no authentication required; anonymous attacker</option><option>Low — standard user account required</option><option>High — admin/root required</option><option>Network — no privileges on network</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">UI</td><td style="font-family:var(--mono)">R</td><td><select class="pbq-fw-select" id="vd-4" data-answer="Required — victim must take an action (click link, open file)"><option value="">-- Select --</option><option>None — no user interaction needed</option><option>Required — victim must take an action (click link, open file)</option><option>Restricted — user cannot prevent exploitation</option><option>Remote — remote user is targeted</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">S</td><td style="font-family:var(--mono)">C</td><td><select class="pbq-fw-select" id="vd-5" data-answer="Changed — impact can spread beyond the vulnerable component"><option value="">-- Select --</option><option>Unchanged — impact contained to target only</option><option>Changed — impact can spread beyond the vulnerable component</option><option>Complete — fully changed scope</option><option>Contained — blast radius limited</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">C</td><td style="font-family:var(--mono)">H</td><td><select class="pbq-fw-select" id="vd-6" data-answer="High — total data disclosure; all confidential data exposed"><option value="">-- Select --</option><option>None — no confidentiality impact</option><option>Low — partial data disclosure, limited scope</option><option>High — total data disclosure; all confidential data exposed</option><option>High — data is hashed and unreadable</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">I</td><td style="font-family:var(--mono)">L</td><td><select class="pbq-fw-select" id="vd-7" data-answer="Low — attacker can modify some data but with limited scope"><option value="">-- Select --</option><option>None — no integrity impact</option><option>Low — attacker can modify some data but with limited scope</option><option>High — total loss of integrity; complete data manipulation</option><option>Low — data is logged but not altered</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--accent)">A</td><td style="font-family:var(--mono)">N</td><td><select class="pbq-fw-select" id="vd-8" data-answer="None — no availability impact; service remains fully operational"><option value="">-- Select --</option><option>None — no availability impact; service remains fully operational</option><option>Low — reduced performance or intermittent outages</option><option>High — full DoS; service completely unavailable</option><option>None — availability is not applicable</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="pbq-check-btn" onclick="chkVectorDecode()">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-c3-result"></div>
+  </div>
+
+  <!-- CV6-4: CIA Impact levels -->
+  <div class="pbq-sec" id="pbq-c4">
+    <div class="pbq-sec-title">CV6-4 &mdash; CIA IMPACT METRICS: MATCH LEVEL TO REAL-WORLD EXAMPLE</div>
+    <div class="pbq-scenario">Match each impact level (None / Low / High) for each CIA dimension to the example that best describes it.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">IMPACT LEVEL</div>
+        <div class="pbq-items" id="c4-sources">
+          <div class="pbq-source-item" draggable="true" data-val="C: High">C: High</div>
+          <div class="pbq-source-item" draggable="true" data-val="I: High">I: High</div>
+          <div class="pbq-source-item" draggable="true" data-val="A: High">A: High</div>
+          <div class="pbq-source-item" draggable="true" data-val="C: Low">C: Low</div>
+          <div class="pbq-source-item" draggable="true" data-val="I: None">I: None</div>
+          <div class="pbq-source-item" draggable="true" data-val="A: None">A: None</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">EXAMPLE / SCENARIO</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker dumps the entire database including all PII, credentials, and sensitive records — total data disclosure</div><div class="pbq-drop-zone" data-answer="C: High" data-pbq="c4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker injects malicious code into the application config, tampers with financial records, or drops malware — complete control over data modification</div><div class="pbq-drop-zone" data-answer="I: High" data-pbq="c4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Ransomware encrypts all files or a DDoS takes the service completely offline — full denial of service</div><div class="pbq-drop-zone" data-answer="A: High" data-pbq="c4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker can read non-sensitive log entries or see usernames but cannot access private account data — partial, limited disclosure</div><div class="pbq-drop-zone" data-answer="C: Low" data-pbq="c4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Vulnerability is read-only; attacker can only view data and cannot modify or alter any content in the system</div><div class="pbq-drop-zone" data-answer="I: None" data-pbq="c4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Exploitation has no effect on system availability; the targeted service continues to operate normally throughout</div><div class="pbq-drop-zone" data-answer="A: None" data-pbq="c4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('c4')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-c4-result"></div>
+  </div>
+
+  <!-- CV6-5: Scope Changed vs Unchanged examples -->
+  <div class="pbq-sec" id="pbq-c5">
+    <div class="pbq-sec-title">CV6-5 &mdash; SCOPE METRIC: CLASSIFY EACH SCENARIO AS UNCHANGED OR CHANGED</div>
+    <div class="pbq-scenario">For each exploitation scenario, determine whether the Scope is Unchanged (S:U) or Changed (S:C).</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">SCOPE VALUE</div>
+        <div class="pbq-items" id="c5-sources">
+          <div class="pbq-source-item" draggable="true" data-val="S:U (Unchanged)">S:U (Unchanged)</div>
+          <div class="pbq-source-item" draggable="true" data-val="S:C (Changed)">S:C (Changed)</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">SCENARIO</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">A SQL injection attack leaks data from a single database — the impact stays within that database's security authority</div><div class="pbq-drop-zone" data-answer="S:U (Unchanged)" data-pbq="c5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">A virtual machine escape allows the attacker to reach the host hypervisor and potentially other guest VMs</div><div class="pbq-drop-zone" data-answer="S:C (Changed)" data-pbq="c5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">A buffer overflow crashes a local service — only that service is affected; the rest of the system is unimpacted</div><div class="pbq-drop-zone" data-answer="S:U (Unchanged)" data-pbq="c5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">A browser sandbox escape allows malicious JavaScript to execute OS-level commands on the host machine</div><div class="pbq-drop-zone" data-answer="S:C (Changed)" data-pbq="c5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">A container breakout from Docker allows an attacker to access the underlying host OS and other containers</div><div class="pbq-drop-zone" data-answer="S:C (Changed)" data-pbq="c5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">A local privilege escalation on a single workstation grants admin rights — no other systems are affected</div><div class="pbq-drop-zone" data-answer="S:U (Unchanged)" data-pbq="c5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('c5')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-c5-result"></div>
+  </div>
+
+</div>
+<div style="text-align:center;margin-top:1rem;">
+  <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE &#8594;</button>
+</div>
+</div>
+
+<!-- MCQ -->
+<div id="mcqSection" style="display:none"><div id="questionContainer"></div></div>
+
+<!-- RESULTS -->
+<div id="resultsSection" style="display:none">
+<div class="results-hero">
+  <h2>EXAM COMPLETE &mdash; SECTION 6: UNDERSTANDING CVSS</h2>
+  <div class="final-score" id="finalScore">0</div>
+  <div class="final-pct" id="finalPct">0/30 Correct</div>
+  <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+  <div class="results-grid">
+    <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+    <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+    <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+  </div>
+  <div>
+    <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+    <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+  </div>
+</div>
+<div class="domain-section" id="domainSummary"></div>
+</div>
+
+</main>
+</div>
+
+<script>
+let examMode='full',randCount=10,activeQuestions=[];
+function setMode(m){examMode=m;document.getElementById('modeFullCard').classList.toggle('active',m==='full');document.getElementById('modeRandCard').classList.toggle('active',m==='random');document.getElementById('randModeSection').classList.toggle('show',m==='random');if(m==='full'){document.getElementById('statQ').textContent='35';document.getElementById('statT').textContent='45';}else updRandDesc();}
+function setRandCount(n){randCount=n;['10','15','20'].forEach(x=>document.getElementById('randBtn'+x).classList.remove('active'));document.getElementById('randBtn'+n).classList.add('active');updRandDesc();}
+function updRandDesc(){document.getElementById('statQ').textContent=randCount;document.getElementById('statT').textContent=Math.round(randCount*1.5);}
+
+let dragVal=null,clickSel=null;
+document.addEventListener('DOMContentLoaded',()=>{shuffleSrc();initDrag();});
+function shuffleSrc(){['c1-sources','c2-sources','c4-sources','c5-sources'].forEach(id=>{const c=document.getElementById(id);if(!c)return;const it=[...c.children];for(let i=it.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));c.appendChild(it[j]);it.splice(j,1);}});}
+function initDrag(){
+  document.querySelectorAll('.pbq-source-item').forEach(el=>{
+    el.addEventListener('dragstart',()=>{dragVal=el.dataset.val;setTimeout(()=>el.classList.add('dragging'),0);});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>clickSrc(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragVal)assignZ(z,dragVal);});
+  });
+}
+function clickSrc(el){if(el.classList.contains('used'))return;const p=el.closest('[id^="pbq-c"]');if(!p)return;const id=p.id.replace('pbq-','');document.querySelectorAll('#pbq-'+id+' .pbq-source-item').forEach(s=>s.style.outline='');if(clickSel===el.dataset.val){clickSel=null;}else{clickSel=el.dataset.val;el.style.outline='2px solid var(--accent)';}}
+function hdz(z){if(z.classList.contains('correct')||z.classList.contains('wrong'))return;if(clickSel){assignZ(z,clickSel);document.querySelectorAll('.pbq-source-item').forEach(s=>s.style.outline='');clickSel=null;}}
+function assignZ(z,val){const old=z.dataset.current;if(old){const s=document.querySelector('.pbq-source-item[data-val="'+old+'"]');if(s)s.classList.remove('used');}const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.add('used');z.dataset.current=val;z.classList.add('filled');z.childNodes[0].textContent=val;const c=z.querySelector('.pbq-drop-clear');if(c)c.style.display='block';}
+function clrDrop(e,btn){e.stopPropagation();const z=btn.parentElement,val=z.dataset.current;if(val){const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.remove('used');}z.dataset.current='';z.classList.remove('filled');z.childNodes[0].textContent='Drop here';btn.style.display='none';}
+function chkPBQ(id){const zones=document.querySelectorAll('.pbq-drop-zone[data-pbq="'+id+'"]');let ok=0,tot=zones.length;zones.forEach(z=>{const a=z.dataset.answer,c=z.dataset.current;if(!c)return;if(c===a){z.classList.add('correct');ok++;}else z.classList.add('wrong');});const r=document.getElementById('pbq-'+id+'-result');r.classList.add('show');if(ok===tot&&tot>0){r.className='pbq-result show correct';r.textContent='\u2713 PERFECT \u2014 All '+tot+' matched correctly!';}else{r.className='pbq-result show partial';r.textContent=ok+'/'+tot+' correct \u2014 Review the highlighted zones.';}document.querySelector('#pbq-'+id+' .pbq-check-btn').disabled=true;}
+function chkVectorDecode(){const rules=[{id:'vd-1',a:'Network — remotely exploitable over the internet'},{id:'vd-2',a:'Low — no special conditions; exploit works reliably'},{id:'vd-3',a:'None — no authentication required; anonymous attacker'},{id:'vd-4',a:'Required — victim must take an action (click link, open file)'},{id:'vd-5',a:'Changed — impact can spread beyond the vulnerable component'},{id:'vd-6',a:'High — total data disclosure; all confidential data exposed'},{id:'vd-7',a:'Low — attacker can modify some data but with limited scope'},{id:'vd-8',a:'None — no availability impact; service remains fully operational'}];let ok=0;rules.forEach(r=>{const s=document.getElementById(r.id);if(s.value===r.a){s.classList.add('correct');ok++;}else if(s.value)s.classList.add('wrong');s.disabled=true;});const res=document.getElementById('pbq-c3-result');res.classList.add('show');if(ok===8){res.className='pbq-result show correct';res.textContent='\u2713 PERFECT \u2014 All 8 vector components decoded correctly!';}else{res.className='pbq-result show partial';res.textContent=ok+'/8 correct \u2014 Review the vector string components.';}document.querySelector('#pbq-c3 .pbq-check-btn').disabled=true;}
+
+const questions=[
+// CVSS Basics
+{id:'CV6-6',domain:'CVSSBasics',type:'mc',
+text:'What is CVSS and what numeric range does it use to score vulnerabilities?',
+options:['Common Vulnerability Scoring System — scores vulnerabilities from 0.0 to 10.0, with higher scores indicating greater severity','Common Vulnerability Scanning System — scores vulnerabilities from 1 to 100 based on exploit availability','Critical Vulnerability Severity Scale — scores from 0 to 5 based on CIA impact only','Common Vulnerability Scoring System — scores from 0 to 10 where 10 is informational and 0 is critical'],
+answer:[0],
+explanation:'CVSS (Common Vulnerability Scoring System) is the industry standard for rating vulnerability severity using a numeric score from 0.0 to 10.0. A higher score means greater severity. It is paired with CVE IDs to help security teams prioritize remediation and is used by NIST NVD, vulnerability scanners (Nessus, Qualys, Rapid7), and SOC teams worldwide. CVSS 3.1 is the current standard.'},
+
+{id:'CV6-7',domain:'CVSSBasics',type:'mc',
+text:'A CVE ID such as CVE-2021-44228 is paired with a CVSS score of 10.0. What does the CVE identifier provide that CVSS does not?',
+options:['The CVSS score details and vector string','A unique, standardized identifier for that specific vulnerability, independent of its severity score','The patch priority level and remediation timeline','The name of the threat actor who discovered the vulnerability'],
+answer:[1],
+explanation:'CVE (Common Vulnerabilities and Exposures) provides a unique, standardized identifier for each known vulnerability (format: CVE-YYYY-NNNNN). CVSS provides the severity score. They work together: CVE names the specific vulnerability; CVSS tells you how severe it is. CVE-2021-44228 is Log4Shell. The authoritative source for published CVSS scores is the NIST National Vulnerability Database (NVD) at nvd.nist.gov.'},
+
+{id:'CV6-8',domain:'CVSSBasics',type:'mc',
+text:'Which of the following is the authoritative source for official CVSS scores assigned to CVE identifiers?',
+options:['MITRE ATT&CK Framework','NIST National Vulnerability Database (NVD) at nvd.nist.gov','The vendor who produced the vulnerable software','OWASP Top 10'],
+answer:[1],
+explanation:'The NIST National Vulnerability Database (NVD) at nvd.nist.gov is the authoritative source for official CVSS scores. It publishes scores and vector strings for each CVE. Note that vendors may publish their own CVSS scores that differ slightly from NVD\u2019s. Vulnerability scanners like Nessus, Qualys, and Rapid7 pull CVSS data from NVD to populate their reports.'},
+
+// Score Ranges
+{id:'CV6-9',domain:'ScoreRanges',type:'mc',
+text:'Log4Shell (CVE-2021-44228) has a CVSS score of 10.0. Which severity rating applies, and what is the expected remediation timeframe?',
+options:['High \u2014 patch within 7\u201330 days','Critical \u2014 emergency patch within 24\u201372 hours','Medium \u2014 schedule remediation within 30\u201390 days','Critical \u2014 accept risk if airgapped'],
+answer:[1],
+explanation:'A CVSS score of 10.0 is Critical (9.0\u201310.0). Critical vulnerabilities require emergency patch response within 24\u201372 hours. Log4Shell scored 10.0 due to: AV:N (remotely exploitable), AC:L (no special conditions), PR:N (no authentication), UI:N (no user interaction needed), and High C/I/A impact. It was one of the most widely exploited vulnerabilities in history, affecting millions of Java-based services.'},
+
+{id:'CV6-10',domain:'ScoreRanges',type:'mc',
+text:'A vulnerability scanner reports a finding with a CVSS score of 5.4. How should a security team prioritize this finding?',
+options:['Emergency patch \u2014 treat as incident-level response','Patch immediately within 24 hours','Schedule remediation within 30\u201390 days; monitor for exploit code release','Accept risk; no patching required for Medium findings'],
+answer:[2],
+explanation:'CVSS 5.4 falls in the Medium range (4.0\u20136.9). Medium vulnerabilities should be scheduled for remediation within 30\u201390 days. Teams should also monitor for exploit code release, which could raise the effective priority. Context matters: a Medium-scored vulnerability on an internet-facing admin panel may warrant faster remediation than a Critical on an airgapped system.'},
+
+{id:'CV6-11',domain:'ScoreRanges',type:'mc',
+text:'A vulnerability is scored 0.0 (None). What does this mean and what action is required?',
+options:['The score is pending NVD review and should be treated as Critical until assessed','An informational finding with no direct exploit path; no urgent patching required but may be reviewed for compliance','The system is fully patched and secure','The vulnerability affects only availability, not confidentiality or integrity'],
+answer:[1],
+explanation:'A CVSS score of 0.0 (None) means the finding is informational \u2014 there is no exploitable vulnerability. These may include best-practice recommendations, configuration notes without an exploit path, or verbose banners. No urgent patching is required, but they may be reviewed for security hygiene or compliance purposes. They do not represent actual security risks.'},
+
+{id:'CV6-12',domain:'ScoreRanges',type:'multi',
+text:'Which TWO of the following real-world vulnerabilities are correctly matched to their CVSS severity? <strong>(Select TWO)</strong>',
+options:['Log4Shell (CVE-2021-44228) \u2014 CVSS 10.0 \u2014 Critical','EternalBlue (MS17-010) \u2014 CVSS 9.3 \u2014 Medium','Heartbleed (CVE-2014-0160) \u2014 CVSS 9.1 \u2014 Critical','Spectre (CVE-2017-5753) \u2014 CVSS 9.8 \u2014 Critical'],
+answer:[0,2],
+explanation:'Log4Shell scored CVSS 10.0 (Critical) \u2014 remotely exploitable, no auth required, maximum impact via JNDI injection. Heartbleed scored CVSS 9.1 (Critical) \u2014 allowed attackers to read server memory and extract private keys and passwords. EternalBlue scored 9.3, which is also Critical (not Medium). Spectre scored 5.6\u20137.5 (Medium to High range), not 9.8.'},
+
+// Attack Vector
+{id:'CV6-13',domain:'AttackVector',type:'mc',
+text:'A vulnerability in a web application\'s login page can be exploited by any unauthenticated attacker from anywhere on the internet. Which Attack Vector (AV) value applies?',
+options:['AV:P (Physical)','AV:L (Local)','AV:A (Adjacent)','AV:N (Network)'],
+answer:[3],
+explanation:'AV:N (Network) means the vulnerability is exploitable remotely over the internet \u2014 no physical or local access required. This carries the highest severity score multiplier (0.85). Web application vulnerabilities like XSS, SQLi, and unauthenticated RCE are all AV:N. This is why internet-facing applications require immediate critical patching when Critical/High CVSSscores are assigned.'},
+
+{id:'CV6-14',domain:'AttackVector',type:'mc',
+text:'An attacker must be on the same Wi-Fi network as the target to exploit a Bluetooth protocol vulnerability. Which Attack Vector (AV) applies?',
+options:['AV:N (Network)','AV:A (Adjacent)','AV:L (Local)','AV:P (Physical)'],
+answer:[1],
+explanation:'AV:A (Adjacent) requires the attacker to be on the same local network, wireless broadcast domain, Bluetooth range, or collision domain as the target. ARP poisoning, Wi-Fi protocol exploits, and DHCP starvation attacks on the local segment are all AV:A. It scores lower than AV:N (score: 0.62 vs 0.85) because the attacker must first gain local network access.'},
+
+{id:'CV6-15',domain:'AttackVector',type:'mc',
+text:'Which Attack Vector (AV) value results in the <strong>lowest</strong> CVSS score contribution, and why?',
+options:['AV:N \u2014 because network access is common','AV:A \u2014 because adjacent attacks are rare','AV:L \u2014 because local access is harder to obtain','AV:P \u2014 because physical access is the most difficult to achieve and significantly limits attacker reach'],
+answer:[3],
+explanation:'AV:P (Physical) has the lowest score contribution (0.20) because it requires the attacker to physically interact with or be present at the vulnerable device. This drastically limits who can exploit it and how easily. Examples include cold boot attacks (physical RAM access), evil maid attacks (tamper with unattended device), and BIOS firmware manipulation requiring hardware access.'},
+
+// Attack Complexity & Privileges Required
+{id:'CV6-16',domain:'MetricsACPR',type:'mc',
+text:'A buffer overflow vulnerability can be reliably exploited every time with no special timing, race conditions, or pre-positioning required. Which Attack Complexity (AC) value applies?',
+options:['AC:H (High) \u2014 because buffer overflows are technically complex','AC:L (Low) \u2014 because no special conditions are required and the exploit works reliably','AC:N (None) \u2014 because no complexity is involved','AC:M (Medium) \u2014 for moderate complexity vulnerabilities'],
+answer:[1],
+explanation:'AC:L (Low) means no special conditions are required beyond the attacker\u2019s control \u2014 the exploit works reliably and repeatably. Most common web vulnerabilities (XSS, SQLi, default credentials) are AC:L. AC:H applies only when the exploit requires specific timing, race conditions, or attacker pre-positioning such as a man-in-the-middle setup. High AC does not mean the exploit is impossible \u2014 just harder.'},
+
+{id:'CV6-17',domain:'MetricsACPR',type:'mc',
+text:'A kernel vulnerability can only be exploited if the attacker already has administrator/root access on the target system. Which Privileges Required (PR) value applies, and how does this affect the CVSS score?',
+options:['PR:N (None) \u2014 raises the CVSS score to maximum','PR:L (Low) \u2014 requires a standard user account','PR:H (High) \u2014 lowers the CVSS score because significant privileges are required first','PR:A (Admin) \u2014 a special admin-level PR value'],
+answer:[2],
+explanation:'PR:H (High) means administrator or root privileges are required before exploitation. This significantly lowers the CVSS score (multiplier: 0.27 vs 0.85 for PR:N) because the attacker must already have significant access. PR:N (None) is the most dangerous \u2014 anonymous attackers can exploit without any account. PR:L requires only a standard user account (e.g., a logged-in web app user).'},
+
+{id:'CV6-18',domain:'MetricsACPR',type:'mc',
+text:'A worm exploits a remote code execution vulnerability and spreads automatically from machine to machine across the internet with no user action required. Which combination of UI and AC metrics best describes this?',
+options:['UI:R (Required), AC:H (High)','UI:N (None), AC:L (Low)','UI:N (None), AC:H (High)','UI:R (Required), AC:L (Low)'],
+answer:[1],
+explanation:'A worm-able vulnerability with no user interaction and reliable exploitation maps to UI:N (None) + AC:L (Low) \u2014 the most dangerous combination. UI:N means the attacker does not need social engineering or victim action. AC:L means the exploit works reliably with no special conditions. EternalBlue (which enabled WannaCry) had exactly these characteristics, allowing it to propagate automatically across networks.'},
+
+// User Interaction & Scope
+{id:'CV6-19',domain:'MetricsUIS',type:'mc',
+text:'A phishing email contains a malicious PDF attachment. When the victim opens it, a vulnerability in the PDF reader is exploited and malware is installed. Which User Interaction (UI) value applies?',
+options:['UI:N (None) \u2014 the attacker can exploit without any user action','UI:R (Required) \u2014 the victim must open the attachment for exploitation to occur','UI:A (Automated) \u2014 because delivery is automated via email','UI:P (Passive) \u2014 for passive user interaction'],
+answer:[1],
+explanation:'UI:R (Required) means a human victim must take a specific action (clicking a link, opening a file, visiting a webpage) for the exploitation to succeed. This reduces the CVSS score compared to UI:N but is still very dangerous \u2014 social engineering (phishing) regularly bridges this gap. XSS triggered by clicking a crafted link and drive-by downloads are also UI:R.'},
+
+{id:'CV6-20',domain:'MetricsUIS',type:'mc',
+text:'Which CVSS metric has <strong>no independent numeric score</strong> of its own but instead <strong>modifies</strong> how impact metrics are calculated in the overall CVSS formula?',
+options:['Attack Vector (AV)','Attack Complexity (AC)','Scope (S)','User Interaction (UI)'],
+answer:[2],
+explanation:'Scope (S) has no independent numeric score \u2014 it acts as a modifier to the impact calculation. S:U (Unchanged) means impact is contained within the vulnerable component. S:C (Changed) means the vulnerability can cross security boundaries and affect other components (VM escape to hypervisor, container breakout to host OS, browser sandbox escape). Changed scope significantly raises the overall CVSS score.'},
+
+{id:'CV6-21',domain:'MetricsUIS',type:'mc',
+text:'An attacker exploits a container vulnerability that allows them to break out of the Docker container and access the underlying host operating system, where other containers also run. The Scope metric for this vulnerability is:',
+options:['S:U (Unchanged) \u2014 impact is limited to the container','S:C (Changed) \u2014 the vulnerability crosses the container trust boundary to reach the host OS','S:L (Limited) \u2014 for limited scope changes','S:N (None) \u2014 because containers are isolated by design'],
+answer:[1],
+explanation:'S:C (Changed) applies when a vulnerability allows the attacker to cross security/trust boundaries and impact components outside the original scope. Container breakout to the host OS is a textbook S:C example \u2014 along with VM escape to the hypervisor, browser sandbox escape to the OS, and any vulnerability that lets an attacker jump from a restricted environment to a broader one. Changed scope dramatically increases the CVSS score.'},
+
+// CIA Impact Metrics
+{id:'CV6-22',domain:'CIAImpact',type:'mc',
+text:'A vulnerability allows an attacker to completely crash a critical web service, rendering it unavailable for all users. No data is accessed or modified. Which CIA impact profile does this represent?',
+options:['C:H / I:H / A:H','C:N / I:N / A:H','C:H / I:N / A:N','C:N / I:H / A:N'],
+answer:[1],
+explanation:'Only Availability is impacted (A:H = High \u2014 full DoS, service completely unavailable). No data is accessed so Confidentiality impact is None (C:N). No data is modified so Integrity impact is None (I:N). Classic examples of A:H only: DoS/DDoS attacks that crash a service, ransomware encrypting files (though ransomware typically also has C:H and I:H).'},
+
+{id:'CV6-23',domain:'CIAImpact',type:'mc',
+text:'A read-only SQL injection vulnerability exposes all user records including names, emails, and hashed passwords from the database. The attacker cannot modify or delete records, and the service stays online. Which CIA profile applies?',
+options:['C:H / I:N / A:N','C:H / I:H / A:N','C:N / I:N / A:H','C:L / I:L / A:L'],
+answer:[0],
+explanation:'Confidentiality is High (C:H) because all user data including credentials is exposed \u2014 total disclosure. Integrity is None (I:N) because the attacker cannot modify data. Availability is None (A:N) because the service remains operational. This is a classic data-exfiltration-only scenario. Examples: Heartbleed exposed private keys from server memory with C:H / I:N / A:N.'},
+
+{id:'CV6-24',domain:'CIAImpact',type:'mc',
+text:'What is the numeric weight used for a <strong>High</strong> CIA impact in CVSS calculations, and why does it matter?',
+options:['0.22 \u2014 partial impact; same weight as Low','0.56 \u2014 maximum impact weight, representing total loss of that CIA property','1.00 \u2014 normalized to full impact','0.85 \u2014 same as the AV:N score multiplier'],
+answer:[1],
+explanation:'High impact carries a weight of 0.56 in the CVSS formula, representing total loss: C:H = all data exposed, I:H = complete data modification control, A:H = full denial of service. Low impact weighs 0.22 (partial, limited scope). None weighs 0.00. These weights feed into the Impact Sub-Score formula: Impact = C + I + A, modified by Scope.'},
+
+// CVSS Score Types
+{id:'CV6-25',domain:'ScoreTypes',type:'mc',
+text:'A CVSS Base Score of 9.8 is published for a vulnerability. A security team adjusts the score downward because exploit code is not yet publicly available and the vendor has released a patch. Which CVSS score type are they using?',
+options:['Environmental Score','Base Score','Temporal Score','Contextual Score'],
+answer:[2],
+explanation:'The Temporal Score adjusts the Base Score based on factors that change over time: exploit code maturity (none available vs. proof-of-concept vs. weaponized), remediation level (official fix available vs. workaround vs. none), and report confidence. A high Base Score may be temporarily adjusted down if no exploit exists, then back up when exploit code is published. Only the Base Score is required; Temporal and Environmental are optional.'},
+
+{id:'CV6-26',domain:'ScoreTypes',type:'mc',
+text:'An organization adjusts a published CVSS score because the vulnerable system is on an airgapped network with no internet connectivity, significantly reducing the real-world risk. Which score type are they calculating?',
+options:['Base Score \u2014 the standard published score','Temporal Score \u2014 adjusting for current exploit availability','Environmental Score \u2014 adjusting for the organization\'s specific deployment context','Adjusted Score \u2014 a formal CVSS subscale for infrastructure adjustments'],
+answer:[2],
+explanation:'The Environmental Score allows organizations to adjust the Base Score based on their specific deployment context: network isolation (airgapped vs. internet-facing), data classification of affected assets, compensating controls already in place, and adjusted CIA requirements for that system. This is why CVSS says it measures TECHNICAL severity, not business risk \u2014 Environmental Score bridges that gap. It is optional but powerful for accurate prioritization.'},
+
+{id:'CV6-27',domain:'ScoreTypes',type:'multi',
+text:'Which TWO CVSS score types are <strong>optional</strong> and supplement the required Base Score? <strong>(Select TWO)</strong>',
+options:['Base Score','Temporal Score','Environmental Score','Vector String Score','CVE Score'],
+answer:[1,2],
+explanation:'Only the Base Score is required in CVSS. The Temporal Score (optional) adjusts for exploit maturity, patch availability, and report confidence \u2014 factors that change over time. The Environmental Score (optional) adjusts for the organization\u2019s specific context: asset importance, compensating controls, and modified CIA requirements. Vector String is a representation format, not a score type. CVE Score is not a CVSS term.'},
+
+// CVSS in Practice & Limitations
+{id:'CV6-28',domain:'CVSSPractice',type:'mc',
+text:'A vulnerability scanner reports a CVSS 9.8 Critical finding on a server. The affected server is on an airgapped industrial control network with no internet connectivity and no external user access. How should the team respond?',
+options:['Immediately patch within 24\u201372 hours regardless of context because CVSS 9.8 = Critical','Ignore the finding permanently because airgapped systems cannot be exploited','Adjust priority using Environmental Score \u2014 the real-world risk is lower than 9.8 due to isolation; patch in next maintenance window with appropriate urgency','Escalate to law enforcement because Critical CVSSs require mandatory reporting'],
+answer:[2],
+explanation:'CVSS measures technical severity, NOT business risk. A 9.8 on an airgapped system has far lower actual risk than a 9.8 on an internet-facing server. The Environmental Score allows teams to adjust for deployment context. Best practice: combine CVSS with threat intelligence and asset context. Patch it in the next maintenance window \u2014 don\u2019t ignore it, but 24\u201372 hour emergency patching is not warranted for a completely isolated system.'},
+
+{id:'CV6-29',domain:'CVSSPractice',type:'mc',
+text:'Which of the following is a known limitation of the CVSS scoring system?',
+options:['CVSS scores are not standardized across different vendors','CVSS measures technical severity but does NOT account for exploit availability, active exploitation in the wild, or organization-specific business risk','CVSS only applies to software vulnerabilities, not configuration weaknesses','CVSS scores cannot be used by automated vulnerability scanners'],
+answer:[1],
+explanation:'CVSS\u2019s primary limitation is that it measures technical severity without considering: whether exploit code is publicly available, whether the vulnerability is being actively exploited in the wild, the business importance of the affected asset, or compensating controls already in place. A Low-scored vulnerability on an internet-facing admin panel with active exploits may be higher priority than a Critical on an airgapped system. Always combine CVSS with threat intelligence.'},
+
+{id:'CV6-30',domain:'CVSSPractice',type:'mc',
+text:'Which vulnerability scanners automatically assign CVSS scores to their findings and display them with severity labels?',
+options:['Wireshark, tcpdump, and Nmap','Nessus, Qualys, and Rapid7 InsightVM','Metasploit, Burp Suite, and OWASP ZAP','Snort, Suricata, and Zeek'],
+answer:[1],
+explanation:'Nessus (Tenable), Qualys, and Rapid7 InsightVM are vulnerability scanners that automatically pull CVSS scores from NVD and display findings with severity labels (Critical/High/Medium/Low) and numeric scores. They allow filtering and sorting by severity to build a prioritized patching queue. Wireshark/tcpdump are packet analyzers; Metasploit is an exploitation framework; Snort/Suricata are IDS/IPS tools.'},
+
+// Vector String interpretation
+{id:'CV6-31',domain:'VectorString',type:'mc',
+text:'A vulnerability has the vector string <code style="color:var(--accent);font-size:0.85em">CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H</code>. Which severity rating applies and what does this tell you about the vulnerability?',
+options:['High \u2014 remotely exploitable but requires user interaction','Critical \u2014 remotely exploitable, no auth required, no user interaction, complete CIA impact on the target component','Medium \u2014 complex conditions required despite high CIA impact','Critical \u2014 but Scope Changed means it affects other systems'],
+answer:[1],
+explanation:'This vector is CVSS 10.0 (Critical): AV:N = remotely exploitable, AC:L = no special conditions, PR:N = no authentication, UI:N = no user interaction required, S:U = impact contained to target, C:H/I:H/A:H = total confidentiality, integrity, and availability impact. Every exploitability metric is at maximum. The only reason it\u2019s not even higher is S:U (Unchanged scope). This is the profile of Log4Shell (CVE-2021-44228).'},
+
+{id:'CV6-32',domain:'VectorString',type:'mc',
+text:'In the vector string <code style="color:var(--accent);font-size:0.85em">CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H</code>, the AV:P value significantly lowers the overall score despite perfect CIA impact. Why?',
+options:['Physical access is more common than network access in enterprise environments','AV:P (Physical) means the attacker must have physical access to the device, which is a much higher barrier than remote exploitation and limits attacker reach','Physical attacks always have lower CIA impact by definition','AV:P requires higher Attack Complexity, which lowers the score'],
+answer:[1],
+explanation:'AV:P (Physical) means the attacker must physically interact with or be present at the target device \u2014 plugging in a malicious USB, performing a cold boot attack, or physically tampering with hardware. Despite perfect C:H/I:H/A:H impact, the physical access requirement dramatically reduces the realistic attacker population and opportunity. AV:P carries the lowest score multiplier (0.20), so even with maximum impact, physical-vector vulnerabilities typically score in the 6\u20137 range.'},
+
+{id:'CV6-33',domain:'VectorString',type:'mc',
+text:'What does the <code style="color:var(--accent);font-size:0.85em">CVSS:3.1</code> prefix in a vector string indicate?',
+options:['The vulnerability was published in version 3.1 of the CVE database','The vulnerability was discovered in 2031','The score was calculated using CVSS version 3.1, the current standard','The impact score is 3.1 out of 10'],
+answer:[2],
+explanation:'The version prefix in a CVSS vector string identifies which version of the CVSS standard was used to calculate the score. CVSS 3.1 is the current standard. CVSS 3.0 is still widely deployed. CVSS 2.0 is legacy and may appear in older scanner reports with different metric definitions. The version matters because the same vulnerability can produce different scores under different versions due to formula changes.'},
+
+{id:'CV6-34',domain:'MetricsACPR',type:'mc',
+text:'A cache poisoning attack requires the attacker to carefully time the exploit to coincide with specific DNS query patterns and pre-position themselves on the network path. Which Attack Complexity (AC) value applies?',
+options:['AC:L \u2014 Low complexity because it is a known attack technique','AC:H \u2014 High complexity because it requires specific timing conditions and attacker pre-positioning outside their control','AC:N \u2014 None because cache poisoning requires no authentication','AC:M \u2014 Medium complexity for conditional attacks'],
+answer:[1],
+explanation:'AC:H (High) applies when successful exploitation depends on conditions outside the attacker\u2019s control: specific timing (race conditions), pre-positioning (MitM setup), or information gathering phases. Cache poisoning requires precise timing and network positioning \u2014 the attacker cannot simply launch the exploit and expect reliable, repeatable success. High AC does not mean impossible \u2014 skilled attackers overcome it regularly given time and resources.'},
+
+{id:'CV6-35',domain:'CVSSPractice',type:'mc',
+text:'A security team receives a scanner report with 50 Critical, 120 High, 200 Medium, and 80 Low findings. Using CVSS patch prioritization guidelines, which group requires emergency response within 24\u201372 hours?',
+options:['All 450 findings should be remediated simultaneously','Only the 50 Critical findings (CVSS 9.0\u201310.0) require emergency patch response within 24\u201372 hours','Critical and High findings both require emergency patching within 24\u201372 hours','The 80 Low findings should be addressed first to reduce total vulnerability count quickly'],
+answer:[1],
+explanation:'CVSS patch prioritization: Critical (9.0\u201310.0) = emergency response within 24\u201372 hours; High (7.0\u20138.9) = patch within 7\u201330 days; Medium (4.0\u20136.9) = schedule within 30\u201390 days; Low (0.1\u20133.9) = address in normal patch cycles. Only the 50 Critical findings trigger emergency response. However, context matters: apply Environmental and Temporal adjustments, prioritize Critical findings on internet-facing systems first, and combine with threat intelligence for active exploits.'},
+];
+
+const state={current:0,userAnswers:[],submitted:[],timerSeconds:45*60,timerInterval:null,timerRunning:false};
+function startTimer(){state.timerRunning=true;state.timerInterval=setInterval(()=>{state.timerSeconds--;updTimer();if(state.timerSeconds<=0){clearInterval(state.timerInterval);showResults();}},1000);}
+function updTimer(){const el=document.getElementById('timer'),m=Math.floor(state.timerSeconds/60),s=state.timerSeconds%60;el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');el.className=state.timerSeconds<60?'danger':state.timerSeconds<300?'warn':'';}
+function toggleTimer(){const btn=document.getElementById('timerBtn');if(state.timerRunning){clearInterval(state.timerInterval);state.timerRunning=false;btn.textContent='RESUME';}else{startTimer();btn.textContent='PAUSE';}}
+function startExam(){document.getElementById('introSection').style.display='none';if(examMode==='full'){activeQuestions=[...questions];document.getElementById('pbqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}else{const sh=[...questions].sort(()=>Math.random()-0.5);activeQuestions=sh.slice(0,randCount);state.timerSeconds=randCount*90;initMCQ();document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}}
+function showMCQ(){document.getElementById('pbqSection').style.display='none';activeQuestions=[...questions];initMCQ();document.getElementById('mcqSection').style.display='block';}
+function initMCQ(){state.userAnswers=activeQuestions.map(()=>[]);state.submitted=activeQuestions.map(()=>false);buildGrid();renderQ(0);}
+function buildGrid(){const g=document.getElementById('qGrid');g.innerHTML='';activeQuestions.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(i===0?' active':'');d.textContent=i+1;d.onclick=()=>renderQ(i);d.id='dot-'+i;g.appendChild(d);});}
+function updGrid(idx){activeQuestions.forEach((_,i)=>{const d=document.getElementById('dot-'+i);if(!d)return;d.classList.remove('active','answered','correct','wrong');if(i===idx)d.classList.add('active');else if(state.submitted[i]){const q=activeQuestions[i],ua=state.userAnswers[i];d.classList.add(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))?'correct':'wrong');}else if(state.userAnswers[i].length>0)d.classList.add('answered');});}
+function renderQ(idx){
+  state.current=idx;updGrid(idx);
+  const q=activeQuestions[idx],isM=q.type==='multi',sub=state.submitted[idx],ua=state.userAnswers[idx];
+  const L=['A','B','C','D','E'],req=q.answer.length,sel=ua.length;
+  let oH=q.options.map((o,i)=>{let c='option'+(isM?' multi-opt':'');if(sub){c+=' disabled';if(q.answer.includes(i))c+=' correct';else if(ua.includes(i))c+=' wrong';}else if(ua.includes(i))c+=' selected';return '<div class="'+c+'" data-oidx="'+i+'"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="opt-letter">'+L[i]+'</span><span>'+o+'</span></div>';}).join('');
+  let cH='';if(isM&&!sub){const d=sel>=req;cH='<div class="multi-counter '+(d?'done':'')+'"> '+(d?'&#10003;':'&#9744;')+' Select '+req+' answer'+(req>1?'s':'')+' &mdash; '+sel+' of '+req+' selected</div>';}
+  let fH='';if(sub){const ok=q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));fH='<div class="feedback '+(ok?'correct':'wrong')+' visible">'+(ok?'&#10003; Correct!':'&#10007; Incorrect. Correct answer'+(req>1?'s':'')+': '+q.answer.map(a=>L[a]).join(', ')+'.')+'</div><div class="explanation-box"><div class="expl-label">&#128218; EXPLANATION</div>'+q.explanation+'</div>';}
+  const isLast=idx===activeQuestions.length-1,canSub=!sub&&ua.length>0;
+  const sL=sub?(isLast?'FINISH':'NEXT &#8594;'):'SUBMIT',sC=sub&&isLast?'submit-btn finish':'submit-btn';
+  const isAC=sub&&q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));
+  document.getElementById('questionContainer').innerHTML='<div class="q-header"><span class="q-num">QUESTION '+(idx+1)+' OF '+activeQuestions.length+' &middot; '+q.id+'</span><span class="q-tag '+(isM?'multi':'mc')+'">'+(isM?'MULTI SELECT ('+req+')':'MULTIPLE CHOICE')+'</span></div><div class="question-card '+(sub?(isAC?'answered-correct':'answered-wrong'):'')+'"><div class="question-text">'+q.text+'</div>'+cH+'<div class="options" id="optCont">'+oH+'</div>'+fH+'</div><div class="q-footer"><button class="nav-btn" onclick="renderQ('+(idx-1)+')" '+(idx===0?'disabled':'')+'>&#8592; PREV</button><button class="'+sC+'" onclick="handleSub('+idx+')" '+(canSub||sub?'':'disabled style="opacity:0.4;cursor:default;"')+'>'+sL+'</button><button class="nav-btn" onclick="renderQ('+(idx+1)+')" '+(idx===activeQuestions.length-1?'disabled':'')+'>NEXT &#8594;</button></div>';
+  if(!sub)document.querySelectorAll('#optCont .option').forEach(el=>el.addEventListener('click',()=>selOpt(idx,parseInt(el.dataset.oidx))));
+  document.getElementById('progressBar').style.width=((idx+1)/activeQuestions.length*100)+'%';
+}
+function selOpt(qi,oi){if(state.submitted[qi])return;const q=activeQuestions[qi],ua=state.userAnswers[qi];if(q.type==='multi'){const p=ua.indexOf(oi);if(p===-1)ua.push(oi);else ua.splice(p,1);}else state.userAnswers[qi]=[oi];renderQ(qi);}
+function handleSub(idx){if(!state.submitted[idx]){if(!state.userAnswers[idx].length)return;state.submitted[idx]=true;updScore();renderQ(idx);}else{if(idx===activeQuestions.length-1)showResults();else renderQ(idx+1);}}
+function updScore(){let ok=0,bad=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i])return;const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});document.getElementById('scoreBig').textContent=ok;document.getElementById('scoreCorrect').textContent=ok;document.getElementById('scoreWrong').textContent=bad;document.getElementById('scorePanel').classList.add('visible');}
+function showResults(){
+  clearInterval(state.timerInterval);['mcqSection','pbqSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('resultsSection').style.display='block';document.getElementById('finishBtn').style.display='none';
+  let ok=0,bad=0,skip=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i]){skip++;return;}const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});
+  const tot=activeQuestions.length,pct=Math.round((ok/tot)*100),pass=pct>=70;
+  document.getElementById('finalScore').textContent=pct+'%';document.getElementById('finalScore').className='final-score '+(pass?'pass':'fail');document.getElementById('finalPct').textContent=ok+'/'+tot+' Correct';document.getElementById('passFailMsg').textContent=pass?'\u2713 PASS \u2014 Well done!':'\u2717 FAIL \u2014 Keep studying!';document.getElementById('passFailMsg').style.color=pass?'var(--green)':'var(--red)';document.getElementById('resCorrect').textContent=ok;document.getElementById('resWrong').textContent=bad;document.getElementById('resSkipped').textContent=skip;
+  const doms={};activeQuestions.forEach((q,i)=>{if(!doms[q.domain])doms[q.domain]={ok:0,tot:0};doms[q.domain].tot++;if(state.submitted[i]){const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))doms[q.domain].ok++;}});
+  const dN={CVSSBasics:'CVSS Basics & CVE/NVD',ScoreRanges:'Score Ranges & Severity Tiers',AttackVector:'Attack Vector (AV)',MetricsACPR:'Attack Complexity & Privileges Required',MetricsUIS:'User Interaction & Scope',CIAImpact:'CIA Impact Metrics',ScoreTypes:'Base / Temporal / Environmental Scores',CVSSPractice:'CVSS in Practice & Limitations',VectorString:'Vector String Interpretation'};
+  const dC={CVSSBasics:'#00d4ff',ScoreRanges:'#ff4757',AttackVector:'#ff6b2b',MetricsACPR:'#ffd32a',MetricsUIS:'#00f5a0',CIAImpact:'#7b2fbe',ScoreTypes:'#00d4ff',CVSSPractice:'#ff6b2b',VectorString:'#00f5a0'};
+  let html='<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(doms).forEach(([k,v])=>{const p=Math.round((v.ok/v.tot)*100),col=dC[k]||'var(--accent)';html+='<div class="domain-card"><div class="domain-card-header"><span class="domain-card-name">'+(dN[k]||k)+'</span><span class="domain-card-pct" style="color:'+col+'">'+p+'%</span></div><div class="domain-bar-track"><div class="domain-bar-fill" style="width:'+p+'%;background:'+col+'"></div></div><div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">'+v.ok+'/'+v.tot+' correct</div></div>';});
+  html+='</div>';document.getElementById('domainSummary').innerHTML=html;
+}
+function reviewAnswers(){document.getElementById('resultsSection').style.display='none';document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';renderQ(0);}
+function applyTheme(t){if(t==='light'){document.body.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='\uD83C\uDF19';document.getElementById('themeLabel').textContent='DARK';}else{document.body.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='\u2600\uFE0F';document.getElementById('themeLabel').textContent='LIGHT';}}
+function toggleTheme(){const n=document.body.hasAttribute('data-theme')?'dark':'light';applyTheme(n);try{localStorage.setItem('bl-theme',n);}catch(e){}}
+(function(){var t='dark';try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}applyTheme(t);})();
+</script>
+</body>
+</html>
