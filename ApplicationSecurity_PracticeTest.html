@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 8: Application Security</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e17;--bg2:#111520;--bg3:#181d2e;--border:#1f2740;--accent:#00d4ff;--accent2:#ff6b2b;--green:#00f5a0;--red:#ff4757;--yellow:#ffd32a;--text:#d0d8f0;--muted:#5a6a8a;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.6;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
+.logo{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logo span{color:var(--accent);}
+.home-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.45rem 0.85rem;border-radius:6px;text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:all 0.3s;display:flex;align-items:center;gap:0.4rem;white-space:nowrap;}
+.home-btn:hover{border-color:var(--accent);background:var(--bg2);}
+.timer-wrap{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+#timer{font-family:var(--mono);font-size:1.05rem;color:var(--accent);font-weight:600;letter-spacing:0.05em;}
+#timer.warn{color:var(--yellow);}
+#timer.danger{color:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.68rem;padding:0.3rem 0.75rem;cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;border-radius:2px;}
+.header-btn:hover{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary:hover{background:var(--accent);color:var(--bg);}
+.progress-bar-wrap{height:3px;background:var(--border);}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width 0.4s ease;width:0%;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 63px);}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:63px;height:calc(100vh - 63px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sidebar-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;padding:0 0.5rem;}
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:1.5rem;}
+.q-dot{aspect-ratio:1;border-radius:3px;border:1px solid var(--border);cursor:pointer;font-family:var(--mono);font-size:0.55rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.15s;background:var(--bg3);}
+.q-dot:hover{border-color:var(--accent);color:var(--accent);}
+.q-dot.answered{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.q-dot.correct{background:var(--green);border-color:var(--green);color:var(--bg);}
+.q-dot.wrong{background:var(--red);border-color:var(--red);color:var(--bg);}
+.q-dot.active{outline:2px solid var(--yellow);outline-offset:1px;}
+.score-panel{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;display:none;}
+.score-panel.visible{display:block;}
+.score-big{font-family:var(--mono);font-size:2rem;font-weight:600;color:var(--accent);text-align:center;}
+.score-label{font-size:0.7rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:0.08em;margin-top:0.25rem;}
+.score-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:1rem;}
+.score-item{text-align:center;}
+.score-item .val{font-family:var(--mono);font-size:1.1rem;font-weight:600;}
+.score-item .lbl{font-size:0.65rem;color:var(--muted);font-family:var(--mono);}
+.score-item.c .val{color:var(--green);}
+.score-item.w .val{color:var(--red);}
+main{padding:2rem 2.5rem;max-width:840px;}
+.intro-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2.5rem;margin-bottom:2rem;}
+.intro-card h1{font-family:var(--mono);font-size:1.25rem;font-weight:600;color:var(--accent);margin-bottom:0.5rem;}
+.intro-card .subtitle{font-size:0.8rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.08em;margin-bottom:1.5rem;}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.intro-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;text-align:center;}
+.intro-stat .n{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--text);}
+.intro-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.start-btn{background:var(--accent);color:var(--bg);border:none;font-family:var(--mono);font-size:0.85rem;font-weight:600;letter-spacing:0.1em;padding:0.8rem 2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.start-btn:hover{background:#00b8e0;transform:translateY(-1px);}
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.mode-card{background:var(--bg2);border:2px solid var(--border);border-radius:6px;padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mode-card:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.mode-card.active{border-color:var(--accent);background:rgba(0,212,255,0.07);}
+.mode-card-title{font-family:var(--mono);font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;}
+.mode-card-sub{font-size:0.72rem;color:var(--muted);}
+.random-options{display:flex;gap:0.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.rand-btn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.78rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.rand-btn:hover,.rand-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+.rand-mode-section{display:none;margin-top:1rem;}
+.rand-mode-section.show{display:block;}
+.q-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.q-num{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
+.q-tag{font-family:var(--mono);font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.08em;}
+.q-tag.mc{background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.2);}
+.q-tag.multi{background:rgba(255,107,43,0.1);color:var(--accent2);border:1px solid rgba(255,107,43,0.2);}
+.question-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
+.question-card.answered-correct{border-color:rgba(0,245,160,0.3);}
+.question-card.answered-wrong{border-color:rgba(255,71,87,0.3);}
+.question-text{font-size:0.95rem;line-height:1.7;color:var(--text);margin-bottom:1.5rem;}
+.question-text strong{color:var(--accent);}
+.options{display:flex;flex-direction:column;gap:0.6rem;}
+.option{display:flex;align-items:flex-start;gap:0.75rem;padding:0.8rem 1rem;border-radius:4px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:var(--bg2);font-size:0.875rem;}
+.option:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.opt-letter{font-family:var(--mono);font-size:0.7rem;font-weight:600;color:var(--muted);min-width:18px;padding-top:1px;transition:color 0.15s;}
+.option:hover .opt-letter{color:var(--accent);}
+.option.selected{border-color:var(--accent);background:rgba(0,212,255,0.08);}
+.option.selected .opt-letter{color:var(--accent);}
+.option.correct{border-color:var(--green);background:rgba(0,245,160,0.08);}
+.option.correct .opt-letter{color:var(--green);}
+.option.wrong{border-color:var(--red);background:rgba(255,71,87,0.08);}
+.option.wrong .opt-letter{color:var(--red);}
+.option.disabled{cursor:default;pointer-events:none;}
+.option .check-box{width:16px;height:16px;min-width:16px;border:1px solid var(--border);border-radius:50%;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.option.multi-opt .check-box{border-radius:3px;}
+.option.selected .check-box{background:var(--accent);border-color:var(--accent);}
+.option.correct .check-box{background:var(--green);border-color:var(--green);}
+.option.wrong .check-box{background:var(--red);border-color:var(--red);}
+.check-box svg{display:none;}
+.option.selected .check-box svg,.option.correct .check-box svg,.option.wrong .check-box svg{display:block;}
+.multi-counter{font-family:var(--mono);font-size:0.7rem;color:var(--accent2);margin-bottom:0.75rem;letter-spacing:0.05em;}
+.multi-counter.done{color:var(--green);}
+.feedback{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:0.85rem;line-height:1.6;}
+.feedback.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.25);color:var(--green);}
+.feedback.wrong{background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.25);color:#ff8a95;}
+.feedback.visible{display:block;}
+.explanation-box{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;background:rgba(123,47,190,0.08);border:1px solid rgba(123,47,190,0.3);font-size:0.83rem;line-height:1.7;color:var(--text);}
+.explanation-box .expl-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:#a06fdb;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.q-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.5rem;}
+.nav-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.72rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;letter-spacing:0.06em;transition:all 0.2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:0.25;cursor:default;}
+.submit-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.5rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.submit-btn:hover{background:#e55e22;transform:translateY(-1px);}
+.submit-btn.finish{background:var(--green);color:var(--bg);}
+.submit-btn.finish:hover{background:#00d488;}
+.results-hero{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3rem 2.5rem;text-align:center;margin-bottom:2rem;}
+.results-hero h2{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;color:var(--muted);margin-bottom:1rem;}
+.final-score{font-family:var(--mono);font-size:4rem;font-weight:600;line-height:1;margin-bottom:0.5rem;}
+.final-score.pass{color:var(--green);}
+.final-score.fail{color:var(--red);}
+.final-pct{font-family:var(--mono);font-size:1.2rem;color:var(--muted);margin-bottom:1.5rem;}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.result-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;}
+.result-stat .v{font-family:var(--mono);font-size:1.8rem;font-weight:600;}
+.result-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.result-stat.g .v{color:var(--green);}
+.result-stat.r .v{color:var(--red);}
+.result-stat.y .v{color:var(--yellow);}
+.review-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;}
+.review-btn:hover{background:var(--accent);color:var(--bg);}
+.restart-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;margin-left:0.75rem;}
+.restart-btn:hover{border-color:var(--text);color:var(--text);}
+.pbq-card{background:var(--bg3);border:1px solid rgba(0,245,160,0.2);border-radius:6px;padding:2rem;margin-bottom:2rem;}
+.pbq-card h3{font-family:var(--mono);font-size:0.8rem;color:var(--green);letter-spacing:0.1em;margin-bottom:1.5rem;}
+.pbq-scenario{font-size:0.82rem;color:var(--text);margin-bottom:1rem;line-height:1.7;}
+.pbq-match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.pbq-col-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;}
+.pbq-items{display:flex;flex-direction:column;gap:0.4rem;}
+.pbq-source-item{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.45rem 0.7rem;font-size:0.75rem;cursor:grab;user-select:none;transition:all 0.15s;font-family:var(--mono);color:var(--text);}
+.pbq-source-item:hover{border-color:var(--accent);color:var(--accent);}
+.pbq-source-item.dragging{opacity:0.4;}
+.pbq-source-item.used{opacity:0.35;cursor:default;border-style:dashed;}
+.pbq-target-row{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.4rem;}
+.pbq-target-label{font-size:0.78rem;color:var(--text);flex:1 1 0;padding-top:0.35rem;}
+.pbq-drop-zone{min-height:34px;min-width:110px;flex:0 0 145px;background:var(--bg2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.65rem;color:var(--muted);transition:all 0.15s;position:relative;cursor:pointer;padding:0.2rem 0.4rem;text-align:center;}
+.pbq-drop-zone.drag-over{border-color:var(--accent);background:rgba(0,212,255,0.06);}
+.pbq-drop-zone.filled{border-style:solid;color:var(--text);}
+.pbq-drop-zone.correct{border-color:var(--green)!important;background:rgba(0,245,160,0.08)!important;color:var(--green)!important;}
+.pbq-drop-zone.wrong{border-color:var(--red)!important;background:rgba(255,71,87,0.08)!important;color:var(--red)!important;}
+.pbq-drop-clear{position:absolute;right:3px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--muted);cursor:pointer;padding:0 2px;}
+.pbq-drop-clear:hover{color:var(--red);}
+.pbq-check-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.4rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:0.75rem;}
+.pbq-check-btn:hover{background:#e55e22;}
+.pbq-check-btn:disabled{opacity:0.5;cursor:default;}
+.pbq-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:3px;font-family:var(--mono);font-size:0.75rem;display:none;}
+.pbq-result.show{display:block;}
+.pbq-result.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.3);color:var(--green);}
+.pbq-result.partial{background:rgba(255,211,42,0.07);border:1px solid rgba(255,211,42,0.3);color:var(--yellow);}
+.pbq-fw-table{width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:1rem;}
+.pbq-fw-table th{background:var(--bg2);border:1px solid var(--border);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-align:left;}
+.pbq-fw-table td{border:1px solid var(--border);padding:0.4rem 0.6rem;vertical-align:middle;}
+.pbq-fw-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.72rem;padding:0.3rem 0.5rem;border-radius:3px;cursor:pointer;width:100%;}
+.pbq-fw-select:focus{outline:none;border-color:var(--accent);}
+.pbq-fw-select.correct{border-color:var(--green);color:var(--green);}
+.pbq-fw-select.wrong{border-color:var(--red);color:var(--red);}
+.pbq-sec{border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;}
+.pbq-sec:first-child{border-top:none;padding-top:0;margin-top:0;}
+.pbq-sec-title{font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;}
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0.75rem 1rem;font-family:var(--mono);font-size:0.78rem;color:var(--text);margin-bottom:0.75rem;white-space:pre;overflow-x:auto;}
+.code-block .bad{color:var(--red);}
+.code-block .good{color:var(--green);}
+.domain-section{margin-top:2rem;}
+.domain-section h3{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;}
+.domain-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:1rem 1.2rem;margin-bottom:0.6rem;}
+.domain-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+.domain-card-name{font-size:0.82rem;color:var(--text);font-weight:500;}
+.domain-card-pct{font-family:var(--mono);font-size:0.85rem;font-weight:600;}
+.domain-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.domain-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+[data-theme="light"]{--bg:#eef1f8;--bg2:#ffffff;--bg3:#dde2f0;--border:#c4ccdf;--accent:#006699;--accent2:#cc4400;--green:#007a52;--red:#c0172e;--yellow:#8a6200;--text:#111827;--muted:#556080;}
+*,*::before,*::after{transition:background-color 0.22s ease,border-color 0.2s ease,color 0.18s ease!important;}
+.theme-toggle{display:flex;align-items:center;gap:0.35rem;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:0.26rem 0.75rem 0.26rem 0.5rem;cursor:pointer;font-family:var(--mono);font-size:0.66rem;color:var(--muted);letter-spacing:0.07em;white-space:nowrap;flex-shrink:0;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.theme-icon{font-size:0.82rem;line-height:1;}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}main{padding:1.5rem;}.intro-stats,.results-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 8: APPLICATION SECURITY</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+    <a href="Practice-tests.html" class="home-btn">&#8592; Back</a>
+    <a href="index.html" class="home-btn">&#8962; Home</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">&#9728;&#65039;</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-title">QUESTIONS</div>
+  <div class="q-grid" id="qGrid"></div>
+  <div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">&ndash;</div>
+    <div class="score-label">SCORE</div>
+    <div class="score-breakdown">
+      <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+      <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+    </div>
+  </div>
+</aside>
+<main>
+
+<!-- INTRO -->
+<div id="introSection">
+<div class="intro-card">
+  <h1>SECTION 8: APPLICATION SECURITY</h1>
+  <div class="subtitle">CompTIA Security+ SY0-701 &middot; BL Study Materials</div>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+    <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+    <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+  </div>
+  <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+  <div class="mode-selector">
+    <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+      <div class="mode-card-title">&#128203; FULL EXAM</div>
+      <div class="mode-card-sub">All 35 questions &middot; 45 min timer &middot; PBQ + MCQ</div>
+    </div>
+    <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+      <div class="mode-card-title">&#127922; RANDOM QUIZ</div>
+      <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+    </div>
+  </div>
+  <div class="rand-mode-section" id="randModeSection">
+    <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+    <div class="random-options">
+      <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+      <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+      <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+    </div>
+  </div>
+  <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;">
+    This quiz covers <strong style="color:var(--text)">Section 8: Application Security</strong> &mdash; SDLC phases &amp; deployment environments (DEV/TEST/STG/PROD), DevOps vs SecOps, CI/CD pipeline stages, OWASP Top 10 Proactive Controls, secure database techniques (parameterized queries, tokenization, normalization), injection vulnerability types (SQLi, XSS, Command, LDAP, XML, HTML), application security techniques (SAST, DAST, fuzzing, code signing, HTTP headers), secure coding issues (race conditions, buffer overflow, memory management), session attacks, and additional attack types (CSRF, SSRF, RCE, Directory Traversal, File Inclusion, API attacks).<br><br>
+    <strong style="color:var(--text)">Tip:</strong> Know the difference between SAST (static — code not running) vs DAST (dynamic — code running). Parameterized queries are the primary defense against SQL injection. CSRF exploits the site's trust in the user; SSRF exploits the server to reach internal systems.
+  </p>
+  <button class="start-btn" onclick="startExam()">START EXAM &#8594;</button>
+</div>
+</div>
+
+<!-- PBQ -->
+<div id="pbqSection" style="display:none">
+<div class="pbq-card">
+  <h3>&#9889; PERFORMANCE-BASED QUESTIONS (AS8-1 &ndash; AS8-5)</h3>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets, or click a source item then click a target zone to assign.</p>
+
+  <!-- AS8-1: SDLC phases -->
+  <div class="pbq-sec" id="pbq-a1">
+    <div class="pbq-sec-title">AS8-1 &mdash; SDLC PHASES: MATCH PHASE TO DESCRIPTION</div>
+    <div class="pbq-scenario">Drag each SDLC phase to its correct description. Phases are listed in order (1&ndash;7).</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">SDLC PHASE</div>
+        <div class="pbq-items" id="a1-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Planning">Planning</div>
+          <div class="pbq-source-item" draggable="true" data-val="Requirements">Requirements</div>
+          <div class="pbq-source-item" draggable="true" data-val="Design">Design</div>
+          <div class="pbq-source-item" draggable="true" data-val="Development">Development</div>
+          <div class="pbq-source-item" draggable="true" data-val="Testing">Testing</div>
+          <div class="pbq-source-item" draggable="true" data-val="Deployment">Deployment</div>
+          <div class="pbq-source-item" draggable="true" data-val="Maintenance">Maintenance</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Define project scope, objectives, timeline, resources, and feasibility before any work begins</div><div class="pbq-drop-zone" data-answer="Planning" data-pbq="a1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Gather and document functional and non-functional requirements from stakeholders</div><div class="pbq-drop-zone" data-answer="Requirements" data-pbq="a1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Architect system design, database models, security controls, and UI wireframes</div><div class="pbq-drop-zone" data-answer="Design" data-pbq="a1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Write, review, and integrate code following secure coding standards and peer review processes</div><div class="pbq-drop-zone" data-answer="Development" data-pbq="a1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Execute QA, functional, security, and performance testing before any release to production</div><div class="pbq-drop-zone" data-answer="Testing" data-pbq="a1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Deliver user training, documentation, and hand off the completed system to the operations team</div><div class="pbq-drop-zone" data-answer="Deployment" data-pbq="a1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Patch management, monitoring, updates, and ongoing technical support post-launch</div><div class="pbq-drop-zone" data-answer="Maintenance" data-pbq="a1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('a1')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-a1-result"></div>
+  </div>
+
+  <!-- AS8-2: Injection types dropdown table -->
+  <div class="pbq-sec" id="pbq-a2">
+    <div class="pbq-sec-title">AS8-2 &mdash; INJECTION VULNERABILITIES: IDENTIFY THE ATTACK TYPE</div>
+    <div class="pbq-scenario">For each scenario, select the correct injection vulnerability type from the dropdown.</div>
+    <table class="pbq-fw-table">
+      <thead><tr><th>#</th><th>SCENARIO</th><th>INJECTION TYPE</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">1</td><td>An attacker enters <code style="color:var(--accent)">admin'--</code> into a login form, causing the backend query to bypass password verification and return all user records.</td><td><select class="pbq-fw-select" id="inj-1" data-answer="SQL Injection (SQLi)"><option value="">-- Select --</option><option>SQL Injection (SQLi)</option><option>Command Injection</option><option>LDAP Injection</option><option>XPath Injection</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">2</td><td>A malicious script is posted in a forum comment. When other users view the page, the script executes in their browsers and sends their session cookies to the attacker's server.</td><td><select class="pbq-fw-select" id="inj-2" data-answer="Cross-Site Scripting (XSS)"><option value="">-- Select --</option><option>SQL Injection (SQLi)</option><option>Cross-Site Scripting (XSS)</option><option>HTML Injection</option><option>CSRF</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">3</td><td>A web application passes user input directly to a system shell. An attacker submits <code style="color:var(--accent)">; cat /etc/passwd</code> and receives the server's password file in the response.</td><td><select class="pbq-fw-select" id="inj-3" data-answer="Command Injection"><option value="">-- Select --</option><option>SQL Injection (SQLi)</option><option>Cross-Site Scripting (XSS)</option><option>Command Injection</option><option>Buffer Overflow</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">4</td><td>An attacker manipulates a login form that queries Active Directory, injecting characters that alter the LDAP filter to return all user objects and bypass authentication.</td><td><select class="pbq-fw-select" id="inj-4" data-answer="LDAP Injection"><option value="">-- Select --</option><option>SQL Injection (SQLi)</option><option>LDAP Injection</option><option>XPath Injection</option><option>XML Injection</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">5</td><td>An attacker injects HTML tags into a user-facing web form. The page renders a fake login prompt inside the legitimate site, tricking users into submitting credentials to a harvesting endpoint.</td><td><select class="pbq-fw-select" id="inj-5" data-answer="HTML Injection"><option value="">-- Select --</option><option>Cross-Site Scripting (XSS)</option><option>HTML Injection</option><option>CSRF</option><option>SSRF</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="pbq-check-btn" onclick="chkInjection()">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-a2-result"></div>
+  </div>
+
+  <!-- AS8-3: Security techniques match -->
+  <div class="pbq-sec" id="pbq-a3">
+    <div class="pbq-sec-title">AS8-3 &mdash; APPLICATION SECURITY TECHNIQUES: MATCH TECHNIQUE TO PURPOSE</div>
+    <div class="pbq-scenario">Drag each security technique to its correct primary purpose.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">TECHNIQUE</div>
+        <div class="pbq-items" id="a3-sources">
+          <div class="pbq-source-item" draggable="true" data-val="SAST">SAST</div>
+          <div class="pbq-source-item" draggable="true" data-val="DAST">DAST</div>
+          <div class="pbq-source-item" draggable="true" data-val="Fuzzing">Fuzzing</div>
+          <div class="pbq-source-item" draggable="true" data-val="Code Signing">Code Signing</div>
+          <div class="pbq-source-item" draggable="true" data-val="Parameterized Queries">Parameterized Queries</div>
+          <div class="pbq-source-item" draggable="true" data-val="Tokenization">Tokenization</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">PURPOSE</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Scan source code WITHOUT executing it to detect vulnerabilities during development — catches issues before deployment</div><div class="pbq-drop-zone" data-answer="SAST" data-pbq="a3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Test a RUNNING application by simulating external attacks to discover runtime and configuration vulnerabilities</div><div class="pbq-drop-zone" data-answer="DAST" data-pbq="a3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Send random, malformed, or unexpected input to an application to uncover crashes, memory errors, and hidden vulnerabilities</div><div class="pbq-drop-zone" data-answer="Fuzzing" data-pbq="a3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Cryptographically sign software packages so recipients can verify authenticity and detect any tampering after release</div><div class="pbq-drop-zone" data-answer="Code Signing" data-pbq="a3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Separate SQL code from user-supplied data using placeholders — the DB engine treats all input as data only, eliminating SQL injection risk</div><div class="pbq-drop-zone" data-answer="Parameterized Queries" data-pbq="a3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Replace sensitive values (e.g., credit card numbers) with non-sensitive tokens; the actual data never appears in application code or logs</div><div class="pbq-drop-zone" data-answer="Tokenization" data-pbq="a3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('a3')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-a3-result"></div>
+  </div>
+
+  <!-- AS8-4: Deployment environments -->
+  <div class="pbq-sec" id="pbq-a4">
+    <div class="pbq-sec-title">AS8-4 &mdash; DEPLOYMENT ENVIRONMENTS: CLASSIFY EACH SCENARIO</div>
+    <div class="pbq-scenario">For each scenario, select the correct deployment environment (DEV / TEST / STAGING / PROD).</div>
+    <table class="pbq-fw-table">
+      <thead><tr><th>#</th><th>SCENARIO</th><th>ENVIRONMENT</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">1</td><td>A developer writes new authentication code on their local machine with debug logging enabled. The code is committed to a feature branch but has not been reviewed yet.</td><td><select class="pbq-fw-select" id="env-1" data-answer="DEV (Development)"><option value="">-- Select --</option><option>DEV (Development)</option><option>TEST / QA</option><option>STAGING / UAT</option><option>PROD (Production)</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">2</td><td>QA engineers run automated regression suites and manual test cases against a build. The code must pass all tests before it can proceed further.</td><td><select class="pbq-fw-select" id="env-2" data-answer="TEST / QA"><option value="">-- Select --</option><option>DEV (Development)</option><option>TEST / QA</option><option>STAGING / UAT</option><option>PROD (Production)</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">3</td><td>A mirror of the production environment is used to run User Acceptance Testing (UAT). Business stakeholders validate the full release against real-world scenarios before go-live approval.</td><td><select class="pbq-fw-select" id="env-3" data-answer="STAGING / UAT"><option value="">-- Select --</option><option>DEV (Development)</option><option>TEST / QA</option><option>STAGING / UAT</option><option>PROD (Production)</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">4</td><td>The live environment serving real customers. All changes require a formal change management approval process. Maximum security controls apply.</td><td><select class="pbq-fw-select" id="env-4" data-answer="PROD (Production)"><option value="">-- Select --</option><option>DEV (Development)</option><option>TEST / QA</option><option>STAGING / UAT</option><option>PROD (Production)</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="pbq-check-btn" onclick="chkEnvs()">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-a4-result"></div>
+  </div>
+
+  <!-- AS8-5: Application attacks match -->
+  <div class="pbq-sec" id="pbq-a5">
+    <div class="pbq-sec-title">AS8-5 &mdash; APPLICATION ATTACKS: MATCH ATTACK TO DESCRIPTION</div>
+    <div class="pbq-scenario">Drag each application attack to its correct description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ATTACK TYPE</div>
+        <div class="pbq-items" id="a5-sources">
+          <div class="pbq-source-item" draggable="true" data-val="CSRF">CSRF</div>
+          <div class="pbq-source-item" draggable="true" data-val="SSRF">SSRF</div>
+          <div class="pbq-source-item" draggable="true" data-val="Directory Traversal">Directory Traversal</div>
+          <div class="pbq-source-item" draggable="true" data-val="Buffer Overflow">Buffer Overflow</div>
+          <div class="pbq-source-item" draggable="true" data-val="Session Replay">Session Replay</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Tricks an authenticated user's browser into submitting unauthorized requests to a trusted site, exploiting the site's trust in the user's active session</div><div class="pbq-drop-zone" data-answer="CSRF" data-pbq="a5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Forces the server itself to make HTTP requests to internal or external systems on behalf of the attacker — can expose cloud metadata endpoints and bypass firewalls</div><div class="pbq-drop-zone" data-answer="SSRF" data-pbq="a5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Uses <code style="color:var(--accent)">../</code> sequences in file path inputs to navigate outside the web root and read sensitive server files like <code style="color:var(--accent)">/etc/passwd</code></div><div class="pbq-drop-zone" data-answer="Directory Traversal" data-pbq="a5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Writing more data into a memory buffer than it can hold, overwriting adjacent memory regions — can enable arbitrary code execution or application crash</div><div class="pbq-drop-zone" data-answer="Buffer Overflow" data-pbq="a5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker captures a valid session token or authentication message and resends it later to impersonate the user — prevented by nonces and short-lived token expiry</div><div class="pbq-drop-zone" data-answer="Session Replay" data-pbq="a5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('a5')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-a5-result"></div>
+  </div>
+
+</div>
+<div style="text-align:center;margin-top:1rem;">
+  <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE &#8594;</button>
+</div>
+</div>
+
+<!-- MCQ -->
+<div id="mcqSection" style="display:none"><div id="questionContainer"></div></div>
+
+<!-- RESULTS -->
+<div id="resultsSection" style="display:none">
+<div class="results-hero">
+  <h2>EXAM COMPLETE &mdash; SECTION 8: APPLICATION SECURITY</h2>
+  <div class="final-score" id="finalScore">0</div>
+  <div class="final-pct" id="finalPct">0/30 Correct</div>
+  <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+  <div class="results-grid">
+    <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+    <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+    <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+  </div>
+  <div>
+    <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+    <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+  </div>
+</div>
+<div class="domain-section" id="domainSummary"></div>
+</div>
+
+</main>
+</div>
+
+<script>
+let examMode='full',randCount=10,activeQuestions=[];
+function setMode(m){examMode=m;document.getElementById('modeFullCard').classList.toggle('active',m==='full');document.getElementById('modeRandCard').classList.toggle('active',m==='random');document.getElementById('randModeSection').classList.toggle('show',m==='random');if(m==='full'){document.getElementById('statQ').textContent='35';document.getElementById('statT').textContent='45';}else updRD();}
+function setRandCount(n){randCount=n;['10','15','20'].forEach(x=>document.getElementById('randBtn'+x).classList.remove('active'));document.getElementById('randBtn'+n).classList.add('active');updRD();}
+function updRD(){document.getElementById('statQ').textContent=randCount;document.getElementById('statT').textContent=Math.round(randCount*1.5);}
+let dragVal=null,clickSel=null;
+document.addEventListener('DOMContentLoaded',()=>{shuffleSrc();initDrag();});
+function shuffleSrc(){['a1-sources','a3-sources','a5-sources'].forEach(id=>{const c=document.getElementById(id);if(!c)return;const it=[...c.children];for(let i=it.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));c.appendChild(it[j]);it.splice(j,1);}});}
+function initDrag(){
+  document.querySelectorAll('.pbq-source-item').forEach(el=>{
+    el.addEventListener('dragstart',()=>{dragVal=el.dataset.val;setTimeout(()=>el.classList.add('dragging'),0);});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>clickSrc(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragVal)assignZ(z,dragVal);});
+  });
+}
+function clickSrc(el){if(el.classList.contains('used'))return;const p=el.closest('[id^="pbq-a"]');if(!p)return;const id=p.id.replace('pbq-','');document.querySelectorAll('#pbq-'+id+' .pbq-source-item').forEach(s=>s.style.outline='');if(clickSel===el.dataset.val){clickSel=null;}else{clickSel=el.dataset.val;el.style.outline='2px solid var(--accent)';}}
+function hdz(z){if(z.classList.contains('correct')||z.classList.contains('wrong'))return;if(clickSel){assignZ(z,clickSel);document.querySelectorAll('.pbq-source-item').forEach(s=>s.style.outline='');clickSel=null;}}
+function assignZ(z,val){const old=z.dataset.current;if(old){const s=document.querySelector('.pbq-source-item[data-val="'+old+'"]');if(s)s.classList.remove('used');}const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.add('used');z.dataset.current=val;z.classList.add('filled');z.childNodes[0].textContent=val;const c=z.querySelector('.pbq-drop-clear');if(c)c.style.display='block';}
+function clrDrop(e,btn){e.stopPropagation();const z=btn.parentElement,val=z.dataset.current;if(val){const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.remove('used');}z.dataset.current='';z.classList.remove('filled');z.childNodes[0].textContent='Drop here';btn.style.display='none';}
+function chkPBQ(id){const zones=document.querySelectorAll('.pbq-drop-zone[data-pbq="'+id+'"]');let ok=0,tot=zones.length;zones.forEach(z=>{const a=z.dataset.answer,c=z.dataset.current;if(!c)return;if(c===a){z.classList.add('correct');ok++;}else z.classList.add('wrong');});const r=document.getElementById('pbq-'+id+'-result');r.classList.add('show');if(ok===tot&&tot>0){r.className='pbq-result show correct';r.textContent='\u2713 PERFECT \u2014 All '+tot+' matched correctly!';}else{r.className='pbq-result show partial';r.textContent=ok+'/'+tot+' correct \u2014 Review the highlighted zones.';}document.querySelector('#pbq-'+id+' .pbq-check-btn').disabled=true;}
+function chkDropTable(rules,pbqId){let ok=0;rules.forEach(r=>{const s=document.getElementById(r.id);if(s.value===r.a){s.classList.add('correct');ok++;}else if(s.value)s.classList.add('wrong');s.disabled=true;});const res=document.getElementById('pbq-'+pbqId+'-result');res.classList.add('show');const tot=rules.length;if(ok===tot){res.className='pbq-result show correct';res.textContent='\u2713 PERFECT \u2014 All '+tot+' classified correctly!';}else{res.className='pbq-result show partial';res.textContent=ok+'/'+tot+' correct \u2014 Review the highlighted rows.';}document.querySelector('#pbq-'+pbqId+' .pbq-check-btn').disabled=true;}
+function chkInjection(){chkDropTable([{id:'inj-1',a:'SQL Injection (SQLi)'},{id:'inj-2',a:'Cross-Site Scripting (XSS)'},{id:'inj-3',a:'Command Injection'},{id:'inj-4',a:'LDAP Injection'},{id:'inj-5',a:'HTML Injection'}],'a2');}
+function chkEnvs(){chkDropTable([{id:'env-1',a:'DEV (Development)'},{id:'env-2',a:'TEST / QA'},{id:'env-3',a:'STAGING / UAT'},{id:'env-4',a:'PROD (Production)'}],'a4');}
+
+const questions=[
+// SDLC
+{id:'AS8-6',domain:'SDLC',type:'mc',
+text:'Security testing and threat modeling should ideally be integrated into which SDLC phase to minimize the cost of fixing vulnerabilities?',
+options:['Maintenance — after real users discover problems in production','Deployment — immediately before go-live when all code is final','Design — before code is written, so security controls are architected in from the start','Testing — after development is complete to catch all issues'],
+answer:[2],
+explanation:'The principle of "shift-left security" means integrating security as early as possible in the SDLC. The Design phase is the optimal time for threat modeling and security architecture — fixing a design flaw at this stage costs far less than patching it in production. The "1-10-100 rule" states that a defect found in design costs $1 to fix, in development $10, and in production $100+.'},
+
+{id:'AS8-7',domain:'SDLC',type:'mc',
+text:'Which SDLC phase involves safely retiring a system — including securely wiping data, archiving documentation, and revoking all user access?',
+options:['Maintenance','Deployment','End of Life & Decommissioning','Testing'],
+answer:[2],
+explanation:'End of Life (EOL) & Decommissioning is the final SDLC phase. It involves: securely wiping all data from storage media, archiving documentation for compliance and audit purposes, revoking all user and service accounts, cancelling licenses, and removing the system from network inventories. Insecure decommissioning can leave sensitive data on discarded hardware — a common data breach vector.'},
+
+{id:'AS8-8',domain:'SDLC',type:'mc',
+text:'In the code deployment pipeline, which environment serves as a <strong>mirror of production</strong> and is used for User Acceptance Testing (UAT) before go-live?',
+options:['DEV — development environment','TEST / QA — automated testing environment','STAGING — production mirror for UAT','PROD — live environment'],
+answer:[2],
+explanation:'The Staging (STG) environment is a production mirror used for User Acceptance Testing (UAT) — business stakeholders validate the full build using real-world scenarios. It uses the same infrastructure, data models, and configuration as production to catch any issues that only emerge at production scale. Code advances from DEV → TEST → STAGING → PROD in sequence.'},
+
+// DevOps & CI/CD
+{id:'AS8-9',domain:'DevOpsCI',type:'mc',
+text:'What is the key difference between Continuous Delivery and Continuous Deployment in a CI/CD pipeline?',
+options:['Continuous Delivery requires more automated tests; Continuous Deployment requires fewer','Continuous Delivery keeps code in a deployable state with a human approving the final push to production; Continuous Deployment automatically deploys every passing change to production without manual approval','Continuous Delivery is for cloud environments only; Continuous Deployment is for on-premises','Continuous Delivery uses SAST; Continuous Deployment uses DAST'],
+answer:[1],
+explanation:'Continuous Delivery: the codebase is always in a deployable state — releases are staged and ready, but a human approves the final push to production for control and accountability. Continuous Deployment: fully automated — every change that passes all tests is automatically deployed to production with no manual step. Continuous Deployment requires extremely high test coverage and robust monitoring to be safe.'},
+
+{id:'AS8-10',domain:'DevOpsCI',type:'mc',
+text:'SecOps (DevSecOps) integrates security into the CI/CD pipeline. Which security scanning technique is embedded in the CI/CD pipeline to analyze code BEFORE it is executed?',
+options:['DAST — dynamic application security testing','Fuzzing — random input generation against running app','SAST — static application security testing of source code','Penetration testing — manual exploitation by a red team'],
+answer:[2],
+explanation:'SAST (Static Application Security Testing) analyzes source code, bytecode, or binaries WITHOUT executing the application. It is integrated early in the CI/CD pipeline (in the Code and Build stages) to catch vulnerabilities before they reach runtime — SQL injection patterns, hardcoded secrets, insecure function calls. DAST tests running applications. Both are used in a mature DevSecOps pipeline but at different stages.'},
+
+{id:'AS8-11',domain:'DevOpsCI',type:'mc',
+text:'Which CI/CD phase provides real-time observability of running applications post-deployment, enabling rapid detection of security events, errors, and performance degradation?',
+options:['Continuous Integration','Continuous Delivery','Continuous Deployment','Continuous Monitoring'],
+answer:[3],
+explanation:'Continuous Monitoring is the post-deployment phase that provides real-time tracking of: application health metrics, security events (anomalous logins, injections detected), error rates, uptime, and latency. It closes the feedback loop in the CI/CD pipeline — issues detected in monitoring can trigger automated alerts or rollbacks. Without continuous monitoring, vulnerabilities or incidents in production may go undetected for days or weeks.'},
+
+// OWASP
+{id:'AS8-12',domain:'OWASP',type:'mc',
+text:'The OWASP Top 10 Proactive Control C3 recommends "Secure Database Access." Which technique BEST implements this control to prevent SQL injection?',
+options:['Input validation alone is sufficient','Using parameterized queries (prepared statements) that separate SQL code from user-supplied data','Encrypting the database at rest with AES-256','Adding a web application firewall in front of the database'],
+answer:[1],
+explanation:'Parameterized queries (also called prepared statements or stored procedures) are the gold standard for preventing SQL injection. They separate the SQL structure from user input — the database engine treats all user-supplied values as data only and never as executable SQL commands. Input validation helps but is not sufficient alone. WAFs can be bypassed. Encryption protects data at rest but does not prevent SQLi.'},
+
+{id:'AS8-13',domain:'OWASP',type:'mc',
+text:'OWASP Proactive Control C5 states "Validate All Inputs." A developer wants to ensure all data received from web form fields matches expected type, format, and length before it reaches the database. This is:',
+options:['Tokenization','Input Validation — the first line of defense against injection attacks','Code Signing','Normalization'],
+answer:[1],
+explanation:'Input Validation verifies that all data from users, APIs, or external sources matches the expected type, format, range, and length before it is processed. It is the first line of defense against injection attacks — malformed or unexpected input is rejected or sanitized before it reaches the database or application logic. However, it should be combined with parameterized queries for defense in depth.'},
+
+{id:'AS8-14',domain:'OWASP',type:'multi',
+text:'Which TWO techniques are part of OWASP\'s recommended approach for secure cookie handling to prevent session hijacking? <strong>(Select TWO)</strong>',
+options:['Set the HttpOnly flag so JavaScript cannot read the cookie','Store session tokens in URL query parameters for visibility','Set the Secure flag so cookies are only transmitted over HTTPS','Use long-lived permanent session tokens to avoid re-authentication','Store session tokens in localStorage for persistence'],
+answer:[0,2],
+explanation:'Secure cookie handling requires: HttpOnly flag (prevents JavaScript from reading the cookie — blocks XSS-based cookie theft), and Secure flag (ensures cookies are only transmitted over HTTPS encrypted connections — prevents network sniffing). The SameSite attribute also helps prevent CSRF. URL-embedded tokens, localStorage, and permanent tokens are all insecure practices.'},
+
+// Injection
+{id:'AS8-15',domain:'Injection',type:'mc',
+text:'An attacker submits the following into a login username field: <code style="color:var(--accent);\">admin\' OR \'1\'=\'1</code>. The application executes the resulting query and logs the attacker in as admin without a password. What vulnerability is present and what is the fix?',
+options:['XSS — fix with Content Security Policy headers','SQL Injection — fix with parameterized queries that treat all user input as data','Command Injection — fix with input sanitization only','LDAP Injection — fix with whitelisting allowed characters'],
+answer:[1],
+explanation:'This is SQL Injection. The input <code>admin\' OR \'1\'=\'1</code> alters the SQL query\'s logic to always return true, bypassing authentication. The fix is parameterized queries (prepared statements): the SQL structure is predefined and user input is passed as a bound parameter, so the DB engine can never interpret it as SQL code. Input validation is complementary but not the primary fix.'},
+
+{id:'AS8-16',domain:'Injection',type:'mc',
+text:'Which type of injection attack targets the underlying operating system by passing malicious shell commands through an application\'s input fields?',
+options:['SQL Injection','XSS','Command Injection','LDAP Injection'],
+answer:[2],
+explanation:'Command Injection occurs when an application passes user input directly to a system shell without proper sanitization. Attackers inject OS commands (e.g., <code>; cat /etc/passwd</code>, <code>| whoami</code>) that execute on the web server with the application\'s privileges. This can grant full shell access. Defense: never pass user input to OS commands; use language-level APIs instead of shell invocations; apply strict input validation.'},
+
+{id:'AS8-17',domain:'Injection',type:'mc',
+text:'An attacker injects a malicious script that is stored in a database and executes in every user\'s browser when they view the affected page. This is called:',
+options:['Reflected XSS — the script is in the URL and reflected back once','Stored (Persistent) XSS — the script is saved in the database and served to all future visitors','DOM-based XSS — the script modifies the DOM without server interaction','CSRF — the script submits cross-site requests'],
+answer:[1],
+explanation:'Stored (Persistent) XSS injects malicious scripts that are saved in the application\'s database (e.g., in a comment, forum post, or profile field). Every user who views the infected content has the script execute in their browser — stealing session cookies, redirecting, or performing actions on their behalf. This is more dangerous than Reflected XSS (which requires tricking one user at a time via a crafted link).'},
+
+{id:'AS8-18',domain:'Injection',type:'mc',
+text:'XML External Entity (XEE) attacks are a subtype of which injection vulnerability?',
+options:['SQL Injection','Command Injection','XML Injection','XPath Injection'],
+answer:[2],
+explanation:'XEE (XML External Entity) attacks are a subtype of XML Injection. The attacker embeds a reference to an external entity in the XML input — the XML parser fetches external resources, potentially exposing sensitive server files (/etc/passwd), performing SSRF to internal services, or enabling denial of service. Defense: disable external entity processing in XML parsers; use JSON instead of XML where possible.'},
+
+// Security Techniques
+{id:'AS8-19',domain:'SecTechniques',type:'mc',
+text:'A developer pushes new code and the CI/CD pipeline automatically scans the source files for hardcoded API keys, insecure function calls, and SQL injection patterns — without executing the code. This is:',
+options:['DAST — Dynamic Application Security Testing','Fuzzing — random input testing','SAST — Static Application Security Testing','Manual Code Review — expert human analysis'],
+answer:[2],
+explanation:'SAST (Static Application Security Testing) analyzes source code, bytecode, or binaries WITHOUT running the application. It is integrated early in the CI/CD pipeline to catch vulnerabilities during development. SAST tools include SonarQube, Checkmarx, Semgrep, and Veracode. They catch hardcoded credentials, injection patterns, insecure crypto usage, and known-dangerous function calls. Limitation: cannot detect runtime/configuration issues.'},
+
+{id:'AS8-20',domain:'SecTechniques',type:'mc',
+text:'A security tool launches a test version of a web application and sends thousands of HTTP requests with malformed headers, oversized payloads, and invalid input values to discover how it handles unexpected data. This is:',
+options:['SAST — static analysis of source code','DAST — dynamic testing against a running application using fuzzing-style inputs','Manual Code Review — human expert testing','Vulnerability Scanning — CVE-based checking'],
+answer:[1],
+explanation:'DAST (Dynamic Application Security Testing) tests a RUNNING application by simulating external attacks — sending malicious inputs, examining responses, and detecting runtime vulnerabilities and misconfigurations not visible in source code. Tools include OWASP ZAP and Burp Suite. The scenario also describes fuzzing techniques used within DAST. Key difference: SAST = code not running; DAST = code running and being attacked.'},
+
+{id:'AS8-21',domain:'SecTechniques',type:'mc',
+text:'A payment processor replaces all stored credit card numbers with random strings called tokens. The actual card numbers are stored in a separate, highly secured vault. This security technique is:',
+options:['Encryption — transforming data with a key','Hashing — creating a one-way fingerprint','Tokenization — replacing sensitive data with non-sensitive tokens','Normalization — standardizing data format'],
+answer:[2],
+explanation:'Tokenization replaces sensitive data values (credit card numbers, SSNs, health records) with non-sensitive tokens that have no mathematical relationship to the original data. The actual sensitive data is stored in a secure token vault. Even if the application database is breached, attackers only get useless tokens. PCI-DSS commonly accepts tokenization as a method to reduce cardholder data scope.'},
+
+{id:'AS8-22',domain:'SecTechniques',type:'mc',
+text:'HTTP security header <code style="color:var(--accent)">Content-Security-Policy (CSP)</code> is specifically designed to mitigate which attack?',
+options:['SQL Injection — by filtering malicious database queries','Cross-Site Scripting (XSS) — by defining which sources can execute scripts in the browser','CSRF — by validating request origins with tokens','Buffer Overflow — by limiting memory allocation in HTTP responses'],
+answer:[1],
+explanation:'Content Security Policy (CSP) is an HTTP response header that tells the browser which sources are allowed to load scripts, styles, images, and other resources. By whitelisting trusted sources and blocking inline scripts, CSP dramatically reduces the impact of XSS attacks — even if an attacker injects a script, the browser refuses to execute it if the source is not in the CSP whitelist. Other important headers: HSTS (force HTTPS), X-Frame-Options (prevent clickjacking), X-Content-Type-Options.'},
+
+// Secure Coding Issues
+{id:'AS8-23',domain:'SecureCoding',type:'mc',
+text:'Two threads simultaneously access and modify a shared file permission without proper locking. One thread reads "no admin rights," then the second thread elevates privileges, and the first thread proceeds based on the stale read. This is a:',
+options:['Buffer Overflow — adjacent memory corruption','Integer Overflow — arithmetic wrap-around','Race Condition — concurrent access to shared data causing security logic corruption','Memory Leak — failure to deallocate memory'],
+answer:[2],
+explanation:'A Race Condition (specifically a Time-of-Check to Time-of-Use / TOCTOU vulnerability) occurs when a program checks a condition (permissions check), then acts on it (grants access), but another thread or process modifies the state between the check and the use. Attackers can exploit this window to escalate privileges or bypass security controls. Fix: proper mutex/lock mechanisms and atomic operations for security-critical checks.'},
+
+{id:'AS8-24',domain:'SecureCoding',type:'mc',
+text:'A web application displays the full stack trace, database version, and internal file paths in error messages when an exception occurs. Why is this a security vulnerability?',
+options:['Stack traces slow down application performance for all users','Error message exposure reveals internal architecture details that help attackers plan more targeted attacks','Stack traces are a violation of GDPR data privacy requirements','Database version numbers cannot be displayed in error messages per PCI-DSS'],
+answer:[1],
+explanation:'Error Message Exposure (Information Leakage) occurs when applications reveal implementation details in error messages: database type/version, internal file paths, framework names, class names, or stack traces. This information helps attackers: identify specific CVEs to exploit, understand the technology stack, map internal architecture, and craft more targeted injection attacks. Fix: return generic error messages to users; log detailed errors server-side only.'},
+
+{id:'AS8-25',domain:'SecureCoding',type:'mc',
+text:'A developer includes a third-party JavaScript library that was last updated 3 years ago. A recently published CVE reveals this library version contains an XSS vulnerability. This represents which secure coding concern?',
+options:['Dead Code — unused code paths that contain vulnerabilities','Third-Party Library Risk — vulnerable external dependencies are a top breach vector','Integer Overflow — the version number exceeds maximum value','Memory Management — improper deallocation in the library'],
+answer:[1],
+explanation:'Third-Party Library risk is a critical secure coding concern — vulnerable external dependencies are consistently among the top breach vectors. The application inherits any vulnerabilities in its dependencies. OWASP Top 10 includes "Vulnerable and Outdated Components" as a top risk. Fix: regularly scan dependencies with tools like OWASP Dependency-Check or Snyk; keep libraries updated; remove unused dependencies.'},
+
+{id:'AS8-26',domain:'SecureCoding',type:'mc',
+text:'A C program writes 150 bytes of user input into a 100-byte fixed-size buffer. The excess 50 bytes overwrite adjacent memory, including the function return address. An attacker crafts input to set the return address to their shellcode. This is:',
+options:['Integer Overflow — arithmetic bounds exceeded','Race Condition — concurrent memory access','Buffer Overflow — writing past buffer boundaries enables code execution','Memory Leak — unallocated memory accumulates'],
+answer:[2],
+explanation:'Buffer Overflow occurs when a program writes more data into a buffer than it was allocated to hold, corrupting adjacent memory. By overwriting the function return address or function pointers, attackers can redirect execution to their shellcode, achieving arbitrary code execution. Prevention: bounds checking on all input, use memory-safe languages (Rust, Go), compiler protections (stack canaries, ASLR, DEP/NX), and never use unsafe functions like gets(), strcpy().'},
+
+// Session & Application Attacks
+{id:'AS8-27',domain:'SessionAttacks',type:'mc',
+text:'An attacker sniffs network traffic on an open Wi-Fi network and captures a session cookie from a logged-in user\'s HTTP request. They then paste this cookie into their own browser and gain access to the user\'s account. This attack is called:',
+options:['Session Fixation — forcing a known session ID before login','Session Hijacking / Sidejacking — stealing and reusing an active session token','CSRF — cross-site request forgery using the session','Session Replay — replaying an old captured token'],
+answer:[1],
+explanation:'Session Hijacking (Sidejacking) involves stealing an active session token and reusing it to impersonate the authenticated user. On unencrypted HTTP connections, session cookies are transmitted in plaintext and can be captured by network sniffing. Defense: enforce HTTPS everywhere (HSTS), set the Secure cookie flag, use short session timeouts, and regenerate session IDs after authentication.'},
+
+{id:'AS8-28',domain:'SessionAttacks',type:'mc',
+text:'A developer sets the <code style="color:var(--accent)">HttpOnly</code> flag on all session cookies. What specific attack does this mitigate?',
+options:['SQL Injection — prevents DB access via cookies','CSRF — prevents cross-site form submissions','XSS cookie theft — prevents JavaScript from reading the session cookie value','Session Fixation — prevents pre-login session ID assignment'],
+answer:[2],
+explanation:'The HttpOnly flag instructs the browser to block JavaScript access to the cookie — document.cookie cannot read it. This directly mitigates XSS-based session cookie theft: even if an attacker successfully injects a malicious script, the script cannot read the HttpOnly session cookie to send it to the attacker\'s server. The Secure flag additionally ensures the cookie is only sent over HTTPS connections.'},
+
+{id:'AS8-29',domain:'AppAttacks',type:'mc',
+text:'A vulnerable web server allows users to specify file paths in a URL parameter. An attacker submits <code style="color:var(--accent)">../../../../etc/passwd</code> and retrieves the server\'s password file. This attack is:',
+options:['Remote File Inclusion (RFI)','Local File Inclusion (LFI)','Directory Traversal','Buffer Overflow'],
+answer:[2],
+explanation:'Directory Traversal (also called Path Traversal) uses sequences of <code>../</code> (dot-dot-slash) to navigate up the directory tree and escape the web root, accessing restricted server files like /etc/passwd, web.config, or application credentials. Defense: strict path validation (normalize paths and verify they stay within the intended root), chroot-style access controls, and never passing raw user input into file system operations.'},
+
+{id:'AS8-30',domain:'AppAttacks',type:'mc',
+text:'An attacker discovers that a web application\'s file upload feature allows them to upload a PHP script. When they navigate to the uploaded file\'s URL, the server executes the script, granting them a web shell. This results in:',
+options:['Directory Traversal — navigating to restricted directories','Remote Code Execution (RCE) via unrestricted file upload','Local File Inclusion (LFI) — reading local server files','Integer Overflow — arithmetic error in the upload handler'],
+answer:[1],
+explanation:'Unrestricted File Upload leading to Remote Code Execution (RCE) is one of the most critical application vulnerabilities. The attacker uploads a web shell (PHP, ASPX, JSP script) disguised as an image or document, then executes it by accessing its URL. Defense: validate file types by magic bytes (not just extension), rename uploaded files, store uploads outside the web root, disable script execution in upload directories, and use a CDN or separate domain for user content.'},
+
+{id:'AS8-31',domain:'AppAttacks',type:'mc',
+text:'An attacker crafts a URL pointing to a vulnerable web application\'s URL-fetching feature: <code style="color:var(--accent)">https://app.com/fetch?url=http://169.254.169.254/metadata</code>. The server fetches the AWS metadata endpoint and returns cloud credentials. This is:',
+options:['CSRF — cross-site request forgery','LFI — local file inclusion','SSRF — server-side request forgery exploiting the server to reach internal resources','Directory Traversal — navigating the file system'],
+answer:[2],
+explanation:'Server-Side Request Forgery (SSRF) forces the application server to make HTTP requests to internal or external systems the attacker cannot directly reach. Cloud metadata endpoints (AWS: 169.254.169.254, GCP: metadata.google.internal) are a critical SSRF target — they return IAM credentials, instance metadata, and tokens. SSRF can also reach internal APIs, databases, and services behind firewalls. Defense: whitelist allowed URL schemes/hosts; block cloud metadata endpoints; use IMDSv2 on AWS.'},
+
+{id:'AS8-32',domain:'AppAttacks',type:'mc',
+text:'An arithmetic operation computes <code style="color:var(--accent)">maxInt + 1</code> in a 32-bit signed integer, wrapping around to a large negative number. This causes a security check to pass when it should fail. This vulnerability is a(n):',
+options:['Buffer Overflow — memory boundary exceeded','Race Condition — concurrent thread access','Integer Overflow — arithmetic result exceeds type maximum, causing wrap-around','Stack Overflow — recursive function call depth exceeded'],
+answer:[2],
+explanation:'Integer Overflow occurs when an arithmetic result exceeds the maximum value of the integer type, causing it to wrap around to an unexpected value (e.g., INT_MAX + 1 becomes INT_MIN for signed integers, or 0 for unsigned). This can corrupt security checks (a calculated "safe" size becomes negative), memory allocation sizes, or loop counters. Defense: use arbitrary-precision libraries for security-critical math; validate that arithmetic results stay within expected ranges.'},
+
+{id:'AS8-33',domain:'DevOpsCI',type:'mc',
+text:'In a DevSecOps pipeline, threat modeling is conducted during the <strong>Design</strong> phase. What is the primary goal of threat modeling at this stage?',
+options:['Generate automated test cases for the QA team','Identify potential threats, attack vectors, and trust boundaries in the system architecture before any code is written — so mitigations can be built in from the start','Scan the codebase for known CVEs in third-party libraries','Measure application performance under load'],
+answer:[1],
+explanation:'Threat modeling during the Design phase identifies potential threats, attack surfaces, trust boundaries, and adversary goals before development begins. Frameworks include STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) and PASTA. Finding and addressing threats at design time is dramatically cheaper than fixing them post-deployment. This is the essence of "security by design."'},
+
+{id:'AS8-34',domain:'SecureCoding',type:'mc',
+text:'A developer discovers that 30% of a codebase consists of functions that are never called and a legacy authentication module from 2015 that is no longer used. What secure coding action should they take?',
+options:['Leave the code in place as a backup in case it is needed later','Remove unused code paths and dead code — they may contain unpatched vulnerabilities and increase attack surface unnecessarily','Obfuscate the dead code to prevent reverse engineering','Move the dead code to a separate repository for archiving'],
+answer:[1],
+explanation:'Dead Code and unused code paths increase attack surface and technical debt. Unused legacy modules may contain old vulnerabilities that no longer receive security updates. They make code reviews harder and scanning tools generate false positives. Best practice: remove all dead code, unused libraries, and decommissioned features. Every line of code is a potential vulnerability — the smallest codebase is the most secure.'},
+
+{id:'AS8-35',domain:'OWASP',type:'mc',
+text:'Which OWASP Proactive Control addresses the need to monitor application behavior, capture security-relevant events, and enable forensic investigation after a security incident?',
+options:['C3 — Secure Database Access','C7 — Enforce Access Controls','C9 — Implement Security Logging &amp; Monitoring','C5 — Validate All Inputs'],
+answer:[2],
+explanation:'OWASP Proactive Control C9 — Implement Security Logging &amp; Monitoring — requires that applications log security-relevant events (authentication failures, authorization violations, input validation failures, privilege escalations) and that logs are protected from tampering. Without proper logging, security incidents cannot be detected, investigated, or attributed. Logs should go to a centralized SIEM. This maps directly to the OWASP Top 10 risk "Security Logging and Monitoring Failures."'},
+];
+
+const state={current:0,userAnswers:[],submitted:[],timerSeconds:45*60,timerInterval:null,timerRunning:false};
+function startTimer(){state.timerRunning=true;state.timerInterval=setInterval(()=>{state.timerSeconds--;updT();if(state.timerSeconds<=0){clearInterval(state.timerInterval);showResults();}},1000);}
+function updT(){const el=document.getElementById('timer'),m=Math.floor(state.timerSeconds/60),s=state.timerSeconds%60;el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');el.className=state.timerSeconds<60?'danger':state.timerSeconds<300?'warn':'';}
+function toggleTimer(){const btn=document.getElementById('timerBtn');if(state.timerRunning){clearInterval(state.timerInterval);state.timerRunning=false;btn.textContent='RESUME';}else{startTimer();btn.textContent='PAUSE';}}
+function startExam(){document.getElementById('introSection').style.display='none';if(examMode==='full'){activeQuestions=[...questions];document.getElementById('pbqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}else{const sh=[...questions].sort(()=>Math.random()-0.5);activeQuestions=sh.slice(0,randCount);state.timerSeconds=randCount*90;initMCQ();document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}}
+function showMCQ(){document.getElementById('pbqSection').style.display='none';activeQuestions=[...questions];initMCQ();document.getElementById('mcqSection').style.display='block';}
+function initMCQ(){state.userAnswers=activeQuestions.map(()=>[]);state.submitted=activeQuestions.map(()=>false);buildGrid();renderQ(0);}
+function buildGrid(){const g=document.getElementById('qGrid');g.innerHTML='';activeQuestions.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(i===0?' active':'');d.textContent=i+1;d.onclick=()=>renderQ(i);d.id='dot-'+i;g.appendChild(d);});}
+function updGrid(idx){activeQuestions.forEach((_,i)=>{const d=document.getElementById('dot-'+i);if(!d)return;d.classList.remove('active','answered','correct','wrong');if(i===idx)d.classList.add('active');else if(state.submitted[i]){const q=activeQuestions[i],ua=state.userAnswers[i];d.classList.add(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))?'correct':'wrong');}else if(state.userAnswers[i].length>0)d.classList.add('answered');});}
+function renderQ(idx){
+  state.current=idx;updGrid(idx);
+  const q=activeQuestions[idx],isM=q.type==='multi',sub=state.submitted[idx],ua=state.userAnswers[idx];
+  const L=['A','B','C','D','E'],req=q.answer.length,sel=ua.length;
+  let oH=q.options.map((o,i)=>{let c='option'+(isM?' multi-opt':'');if(sub){c+=' disabled';if(q.answer.includes(i))c+=' correct';else if(ua.includes(i))c+=' wrong';}else if(ua.includes(i))c+=' selected';return '<div class="'+c+'" data-oidx="'+i+'"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="opt-letter">'+L[i]+'</span><span>'+o+'</span></div>';}).join('');
+  let cH='';if(isM&&!sub){const d=sel>=req;cH='<div class="multi-counter '+(d?'done':'')+'"> '+(d?'&#10003;':'&#9744;')+' Select '+req+' answer'+(req>1?'s':'')+' &mdash; '+sel+' of '+req+' selected</div>';}
+  let fH='';if(sub){const ok=q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));fH='<div class="feedback '+(ok?'correct':'wrong')+' visible">'+(ok?'&#10003; Correct!':'&#10007; Incorrect. Correct answer'+(req>1?'s':'')+': '+q.answer.map(a=>L[a]).join(', ')+'.')+'</div><div class="explanation-box"><div class="expl-label">&#128218; EXPLANATION</div>'+q.explanation+'</div>';}
+  const isLast=idx===activeQuestions.length-1,canSub=!sub&&ua.length>0;
+  const sL=sub?(isLast?'FINISH':'NEXT &#8594;'):'SUBMIT',sC=sub&&isLast?'submit-btn finish':'submit-btn';
+  const isAC=sub&&q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));
+  document.getElementById('questionContainer').innerHTML='<div class="q-header"><span class="q-num">QUESTION '+(idx+1)+' OF '+activeQuestions.length+' &middot; '+q.id+'</span><span class="q-tag '+(isM?'multi':'mc')+'">'+(isM?'MULTI SELECT ('+req+')':'MULTIPLE CHOICE')+'</span></div><div class="question-card '+(sub?(isAC?'answered-correct':'answered-wrong'):'')+'"><div class="question-text">'+q.text+'</div>'+cH+'<div class="options" id="optCont">'+oH+'</div>'+fH+'</div><div class="q-footer"><button class="nav-btn" onclick="renderQ('+(idx-1)+')" '+(idx===0?'disabled':'')+'>&#8592; PREV</button><button class="'+sC+'" onclick="handleSub('+idx+')" '+(canSub||sub?'':'disabled style="opacity:0.4;cursor:default;"')+'>'+sL+'</button><button class="nav-btn" onclick="renderQ('+(idx+1)+')" '+(idx===activeQuestions.length-1?'disabled':'')+'>NEXT &#8594;</button></div>';
+  if(!sub)document.querySelectorAll('#optCont .option').forEach(el=>el.addEventListener('click',()=>selOpt(idx,parseInt(el.dataset.oidx))));
+  document.getElementById('progressBar').style.width=((idx+1)/activeQuestions.length*100)+'%';
+}
+function selOpt(qi,oi){if(state.submitted[qi])return;const q=activeQuestions[qi],ua=state.userAnswers[qi];if(q.type==='multi'){const p=ua.indexOf(oi);if(p===-1)ua.push(oi);else ua.splice(p,1);}else state.userAnswers[qi]=[oi];renderQ(qi);}
+function handleSub(idx){if(!state.submitted[idx]){if(!state.userAnswers[idx].length)return;state.submitted[idx]=true;updScore();renderQ(idx);}else{if(idx===activeQuestions.length-1)showResults();else renderQ(idx+1);}}
+function updScore(){let ok=0,bad=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i])return;const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});document.getElementById('scoreBig').textContent=ok;document.getElementById('scoreCorrect').textContent=ok;document.getElementById('scoreWrong').textContent=bad;document.getElementById('scorePanel').classList.add('visible');}
+function showResults(){
+  clearInterval(state.timerInterval);['mcqSection','pbqSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('resultsSection').style.display='block';document.getElementById('finishBtn').style.display='none';
+  let ok=0,bad=0,skip=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i]){skip++;return;}const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});
+  const tot=activeQuestions.length,pct=Math.round((ok/tot)*100),pass=pct>=70;
+  document.getElementById('finalScore').textContent=pct+'%';document.getElementById('finalScore').className='final-score '+(pass?'pass':'fail');document.getElementById('finalPct').textContent=ok+'/'+tot+' Correct';document.getElementById('passFailMsg').textContent=pass?'\u2713 PASS \u2014 Well done!':'\u2717 FAIL \u2014 Keep studying!';document.getElementById('passFailMsg').style.color=pass?'var(--green)':'var(--red)';document.getElementById('resCorrect').textContent=ok;document.getElementById('resWrong').textContent=bad;document.getElementById('resSkipped').textContent=skip;
+  const doms={};activeQuestions.forEach((q,i)=>{if(!doms[q.domain])doms[q.domain]={ok:0,tot:0};doms[q.domain].tot++;if(state.submitted[i]){const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))doms[q.domain].ok++;}});
+  const dN={SDLC:'SDLC & Deployment Environments',DevOpsCI:'DevOps / SecOps & CI/CD Pipeline',OWASP:'OWASP Top 10 & Proactive Controls',Injection:'Injection Vulnerabilities',SecTechniques:'Application Security Techniques',SecureCoding:'Secure Coding Issues',SessionAttacks:'Session Attacks',AppAttacks:'Application Attacks (CSRF/SSRF/RCE/etc.)'};
+  const dC={SDLC:'#00d4ff',DevOpsCI:'#ff6b2b',OWASP:'#ffd32a',Injection:'#ff4757',SecTechniques:'#00f5a0',SecureCoding:'#7b2fbe',SessionAttacks:'#ff6b2b',AppAttacks:'#00d4ff'};
+  let html='<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(doms).forEach(([k,v])=>{const p=Math.round((v.ok/v.tot)*100),col=dC[k]||'var(--accent)';html+='<div class="domain-card"><div class="domain-card-header"><span class="domain-card-name">'+(dN[k]||k)+'</span><span class="domain-card-pct" style="color:'+col+'">'+p+'%</span></div><div class="domain-bar-track"><div class="domain-bar-fill" style="width:'+p+'%;background:'+col+'"></div></div><div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">'+v.ok+'/'+v.tot+' correct</div></div>';});
+  html+='</div>';document.getElementById('domainSummary').innerHTML=html;
+}
+function reviewAnswers(){document.getElementById('resultsSection').style.display='none';document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';renderQ(0);}
+function applyTheme(t){if(t==='light'){document.body.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='\uD83C\uDF19';document.getElementById('themeLabel').textContent='DARK';}else{document.body.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='\u2600\uFE0F';document.getElementById('themeLabel').textContent='LIGHT';}}
+function toggleTheme(){const n=document.body.hasAttribute('data-theme')?'dark':'light';applyTheme(n);try{localStorage.setItem('bl-theme',n);}catch(e){}}
+(function(){var t='dark';try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}applyTheme(t);})();
+</script>
+</body>
+</html>
