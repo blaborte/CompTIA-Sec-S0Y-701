@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 7: Penetration Testing</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e17;--bg2:#111520;--bg3:#181d2e;--border:#1f2740;--accent:#00d4ff;--accent2:#ff6b2b;--green:#00f5a0;--red:#ff4757;--yellow:#ffd32a;--text:#d0d8f0;--muted:#5a6a8a;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.6;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
+.logo{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logo span{color:var(--accent);}
+.home-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.45rem 0.85rem;border-radius:6px;text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:all 0.3s;display:flex;align-items:center;gap:0.4rem;white-space:nowrap;}
+.home-btn:hover{border-color:var(--accent);background:var(--bg2);}
+.timer-wrap{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+#timer{font-family:var(--mono);font-size:1.05rem;color:var(--accent);font-weight:600;letter-spacing:0.05em;}
+#timer.warn{color:var(--yellow);}
+#timer.danger{color:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.68rem;padding:0.3rem 0.75rem;cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;border-radius:2px;}
+.header-btn:hover{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary:hover{background:var(--accent);color:var(--bg);}
+.progress-bar-wrap{height:3px;background:var(--border);}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width 0.4s ease;width:0%;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 63px);}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:63px;height:calc(100vh - 63px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sidebar-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;padding:0 0.5rem;}
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:1.5rem;}
+.q-dot{aspect-ratio:1;border-radius:3px;border:1px solid var(--border);cursor:pointer;font-family:var(--mono);font-size:0.55rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.15s;background:var(--bg3);}
+.q-dot:hover{border-color:var(--accent);color:var(--accent);}
+.q-dot.answered{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.q-dot.correct{background:var(--green);border-color:var(--green);color:var(--bg);}
+.q-dot.wrong{background:var(--red);border-color:var(--red);color:var(--bg);}
+.q-dot.active{outline:2px solid var(--yellow);outline-offset:1px;}
+.score-panel{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;display:none;}
+.score-panel.visible{display:block;}
+.score-big{font-family:var(--mono);font-size:2rem;font-weight:600;color:var(--accent);text-align:center;}
+.score-label{font-size:0.7rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:0.08em;margin-top:0.25rem;}
+.score-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:1rem;}
+.score-item{text-align:center;}
+.score-item .val{font-family:var(--mono);font-size:1.1rem;font-weight:600;}
+.score-item .lbl{font-size:0.65rem;color:var(--muted);font-family:var(--mono);}
+.score-item.c .val{color:var(--green);}
+.score-item.w .val{color:var(--red);}
+main{padding:2rem 2.5rem;max-width:840px;}
+.intro-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2.5rem;margin-bottom:2rem;}
+.intro-card h1{font-family:var(--mono);font-size:1.25rem;font-weight:600;color:var(--accent);margin-bottom:0.5rem;}
+.intro-card .subtitle{font-size:0.8rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.08em;margin-bottom:1.5rem;}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.intro-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;text-align:center;}
+.intro-stat .n{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--text);}
+.intro-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.start-btn{background:var(--accent);color:var(--bg);border:none;font-family:var(--mono);font-size:0.85rem;font-weight:600;letter-spacing:0.1em;padding:0.8rem 2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.start-btn:hover{background:#00b8e0;transform:translateY(-1px);}
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.mode-card{background:var(--bg2);border:2px solid var(--border);border-radius:6px;padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mode-card:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.mode-card.active{border-color:var(--accent);background:rgba(0,212,255,0.07);}
+.mode-card-title{font-family:var(--mono);font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;}
+.mode-card-sub{font-size:0.72rem;color:var(--muted);}
+.random-options{display:flex;gap:0.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.rand-btn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.78rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.rand-btn:hover,.rand-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+.rand-mode-section{display:none;margin-top:1rem;}
+.rand-mode-section.show{display:block;}
+.q-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.q-num{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
+.q-tag{font-family:var(--mono);font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.08em;}
+.q-tag.mc{background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.2);}
+.q-tag.multi{background:rgba(255,107,43,0.1);color:var(--accent2);border:1px solid rgba(255,107,43,0.2);}
+.question-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
+.question-card.answered-correct{border-color:rgba(0,245,160,0.3);}
+.question-card.answered-wrong{border-color:rgba(255,71,87,0.3);}
+.question-text{font-size:0.95rem;line-height:1.7;color:var(--text);margin-bottom:1.5rem;}
+.question-text strong{color:var(--accent);}
+.options{display:flex;flex-direction:column;gap:0.6rem;}
+.option{display:flex;align-items:flex-start;gap:0.75rem;padding:0.8rem 1rem;border-radius:4px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:var(--bg2);font-size:0.875rem;}
+.option:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.opt-letter{font-family:var(--mono);font-size:0.7rem;font-weight:600;color:var(--muted);min-width:18px;padding-top:1px;transition:color 0.15s;}
+.option:hover .opt-letter{color:var(--accent);}
+.option.selected{border-color:var(--accent);background:rgba(0,212,255,0.08);}
+.option.selected .opt-letter{color:var(--accent);}
+.option.correct{border-color:var(--green);background:rgba(0,245,160,0.08);}
+.option.correct .opt-letter{color:var(--green);}
+.option.wrong{border-color:var(--red);background:rgba(255,71,87,0.08);}
+.option.wrong .opt-letter{color:var(--red);}
+.option.disabled{cursor:default;pointer-events:none;}
+.option .check-box{width:16px;height:16px;min-width:16px;border:1px solid var(--border);border-radius:50%;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.option.multi-opt .check-box{border-radius:3px;}
+.option.selected .check-box{background:var(--accent);border-color:var(--accent);}
+.option.correct .check-box{background:var(--green);border-color:var(--green);}
+.option.wrong .check-box{background:var(--red);border-color:var(--red);}
+.check-box svg{display:none;}
+.option.selected .check-box svg,.option.correct .check-box svg,.option.wrong .check-box svg{display:block;}
+.multi-counter{font-family:var(--mono);font-size:0.7rem;color:var(--accent2);margin-bottom:0.75rem;letter-spacing:0.05em;}
+.multi-counter.done{color:var(--green);}
+.feedback{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:0.85rem;line-height:1.6;}
+.feedback.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.25);color:var(--green);}
+.feedback.wrong{background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.25);color:#ff8a95;}
+.feedback.visible{display:block;}
+.explanation-box{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;background:rgba(123,47,190,0.08);border:1px solid rgba(123,47,190,0.3);font-size:0.83rem;line-height:1.7;color:var(--text);}
+.explanation-box .expl-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:#a06fdb;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.q-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.5rem;}
+.nav-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.72rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;letter-spacing:0.06em;transition:all 0.2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:0.25;cursor:default;}
+.submit-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.5rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.submit-btn:hover{background:#e55e22;transform:translateY(-1px);}
+.submit-btn.finish{background:var(--green);color:var(--bg);}
+.submit-btn.finish:hover{background:#00d488;}
+.results-hero{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3rem 2.5rem;text-align:center;margin-bottom:2rem;}
+.results-hero h2{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;color:var(--muted);margin-bottom:1rem;}
+.final-score{font-family:var(--mono);font-size:4rem;font-weight:600;line-height:1;margin-bottom:0.5rem;}
+.final-score.pass{color:var(--green);}
+.final-score.fail{color:var(--red);}
+.final-pct{font-family:var(--mono);font-size:1.2rem;color:var(--muted);margin-bottom:1.5rem;}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.result-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;}
+.result-stat .v{font-family:var(--mono);font-size:1.8rem;font-weight:600;}
+.result-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.result-stat.g .v{color:var(--green);}
+.result-stat.r .v{color:var(--red);}
+.result-stat.y .v{color:var(--yellow);}
+.review-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;}
+.review-btn:hover{background:var(--accent);color:var(--bg);}
+.restart-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;margin-left:0.75rem;}
+.restart-btn:hover{border-color:var(--text);color:var(--text);}
+.pbq-card{background:var(--bg3);border:1px solid rgba(0,245,160,0.2);border-radius:6px;padding:2rem;margin-bottom:2rem;}
+.pbq-card h3{font-family:var(--mono);font-size:0.8rem;color:var(--green);letter-spacing:0.1em;margin-bottom:1.5rem;}
+.pbq-scenario{font-size:0.82rem;color:var(--text);margin-bottom:1rem;line-height:1.7;}
+.pbq-match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.pbq-col-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;}
+.pbq-items{display:flex;flex-direction:column;gap:0.4rem;}
+.pbq-source-item{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.45rem 0.7rem;font-size:0.76rem;cursor:grab;user-select:none;transition:all 0.15s;font-family:var(--mono);color:var(--text);}
+.pbq-source-item:hover{border-color:var(--accent);color:var(--accent);}
+.pbq-source-item.dragging{opacity:0.4;}
+.pbq-source-item.used{opacity:0.35;cursor:default;border-style:dashed;}
+.pbq-target-row{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.4rem;}
+.pbq-target-label{font-size:0.78rem;color:var(--text);flex:1 1 0;padding-top:0.35rem;}
+.pbq-drop-zone{min-height:34px;min-width:110px;flex:0 0 145px;background:var(--bg2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.65rem;color:var(--muted);transition:all 0.15s;position:relative;cursor:pointer;padding:0.2rem 0.4rem;text-align:center;}
+.pbq-drop-zone.drag-over{border-color:var(--accent);background:rgba(0,212,255,0.06);}
+.pbq-drop-zone.filled{border-style:solid;color:var(--text);}
+.pbq-drop-zone.correct{border-color:var(--green)!important;background:rgba(0,245,160,0.08)!important;color:var(--green)!important;}
+.pbq-drop-zone.wrong{border-color:var(--red)!important;background:rgba(255,71,87,0.08)!important;color:var(--red)!important;}
+.pbq-drop-clear{position:absolute;right:3px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--muted);cursor:pointer;padding:0 2px;}
+.pbq-drop-clear:hover{color:var(--red);}
+.pbq-check-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.4rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:0.75rem;}
+.pbq-check-btn:hover{background:#e55e22;}
+.pbq-check-btn:disabled{opacity:0.5;cursor:default;}
+.pbq-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:3px;font-family:var(--mono);font-size:0.75rem;display:none;}
+.pbq-result.show{display:block;}
+.pbq-result.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.3);color:var(--green);}
+.pbq-result.partial{background:rgba(255,211,42,0.07);border:1px solid rgba(255,211,42,0.3);color:var(--yellow);}
+.pbq-fw-table{width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:1rem;}
+.pbq-fw-table th{background:var(--bg2);border:1px solid var(--border);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-align:left;}
+.pbq-fw-table td{border:1px solid var(--border);padding:0.4rem 0.6rem;vertical-align:middle;}
+.pbq-fw-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.72rem;padding:0.3rem 0.5rem;border-radius:3px;cursor:pointer;width:100%;}
+.pbq-fw-select:focus{outline:none;border-color:var(--accent);}
+.pbq-fw-select.correct{border-color:var(--green);color:var(--green);}
+.pbq-fw-select.wrong{border-color:var(--red);color:var(--red);}
+.pbq-sec{border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;}
+.pbq-sec:first-child{border-top:none;padding-top:0;margin-top:0;}
+.pbq-sec-title{font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;}
+.domain-section{margin-top:2rem;}
+.domain-section h3{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;}
+.domain-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:1rem 1.2rem;margin-bottom:0.6rem;}
+.domain-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+.domain-card-name{font-size:0.82rem;color:var(--text);font-weight:500;}
+.domain-card-pct{font-family:var(--mono);font-size:0.85rem;font-weight:600;}
+.domain-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.domain-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+[data-theme="light"]{--bg:#eef1f8;--bg2:#ffffff;--bg3:#dde2f0;--border:#c4ccdf;--accent:#006699;--accent2:#cc4400;--green:#007a52;--red:#c0172e;--yellow:#8a6200;--text:#111827;--muted:#556080;}
+*,*::before,*::after{transition:background-color 0.22s ease,border-color 0.2s ease,color 0.18s ease!important;}
+.theme-toggle{display:flex;align-items:center;gap:0.35rem;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:0.26rem 0.75rem 0.26rem 0.5rem;cursor:pointer;font-family:var(--mono);font-size:0.66rem;color:var(--muted);letter-spacing:0.07em;white-space:nowrap;flex-shrink:0;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.theme-icon{font-size:0.82rem;line-height:1;}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}main{padding:1.5rem;}.intro-stats,.results-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 7: PENETRATION TESTING</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+    <a href="Practice-tests.html" class="home-btn">&#8592; Back</a>
+    <a href="index.html" class="home-btn">&#8962; Home</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">&#9728;&#65039;</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-title">QUESTIONS</div>
+  <div class="q-grid" id="qGrid"></div>
+  <div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">&ndash;</div>
+    <div class="score-label">SCORE</div>
+    <div class="score-breakdown">
+      <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+      <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+    </div>
+  </div>
+</aside>
+<main>
+
+<!-- INTRO -->
+<div id="introSection">
+<div class="intro-card">
+  <h1>SECTION 7: PENETRATION TESTING</h1>
+  <div class="subtitle">CompTIA Security+ SY0-701 &middot; BL Study Materials</div>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+    <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+    <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+  </div>
+  <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+  <div class="mode-selector">
+    <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+      <div class="mode-card-title">&#128203; FULL EXAM</div>
+      <div class="mode-card-sub">All 35 questions &middot; 45 min timer &middot; PBQ + MCQ</div>
+    </div>
+    <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+      <div class="mode-card-title">&#127922; RANDOM QUIZ</div>
+      <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+    </div>
+  </div>
+  <div class="rand-mode-section" id="randModeSection">
+    <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+    <div class="random-options">
+      <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+      <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+      <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+    </div>
+  </div>
+  <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;">
+    This quiz covers <strong style="color:var(--text)">Section 7: Penetration Testing</strong> &mdash; Pen test purpose &amp; output, team types (Red/Blue/Purple/Physical), knowledge levels (White/Gray/Black Box), Rules of Engagement, Active vs Passive Reconnaissance, the 5-phase attack lifecycle (Initial Access &rarr; Pivoting &rarr; Lateral Movement &rarr; Persistence &rarr; Privilege Escalation), key tools, and Security Audits (Internal/External/Third-Party).<br><br>
+    <strong style="color:var(--text)">Tip:</strong> Know Gray Box = most common, Black Box = most realistic, and that the ROE must be signed <em>before</em> any testing begins. Active recon leaves traces; passive recon does not.
+  </p>
+  <button class="start-btn" onclick="startExam()">START EXAM &#8594;</button>
+</div>
+</div>
+
+<!-- PBQ -->
+<div id="pbqSection" style="display:none">
+<div class="pbq-card">
+  <h3>&#9889; PERFORMANCE-BASED QUESTIONS (PT7-1 &ndash; PT7-5)</h3>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets, or click a source item then click a target zone to assign.</p>
+
+  <!-- PT7-1: Team types -->
+  <div class="pbq-sec" id="pbq-p1">
+    <div class="pbq-sec-title">PT7-1 &mdash; TEAM TYPES: MATCH TEAM TO ITS ROLE &amp; APPROACH</div>
+    <div class="pbq-scenario">Drag each pen testing team type to its correct description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">TEAM TYPE</div>
+        <div class="pbq-items" id="p1-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Red Team">Red Team</div>
+          <div class="pbq-source-item" draggable="true" data-val="Blue Team">Blue Team</div>
+          <div class="pbq-source-item" draggable="true" data-val="Purple Team">Purple Team</div>
+          <div class="pbq-source-item" draggable="true" data-val="Physical Pen Test">Physical Pen Test</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Offensive team simulating a full APT campaign using real-world TTPs — phishing, exploitation, lateral movement — without advance notice to defenders</div><div class="pbq-drop-zone" data-answer="Red Team" data-pbq="p1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Defensive team that monitors SIEM alerts, IDS/IPS, and EDR tools; validates SOC response time and measures MTTD and MTTR</div><div class="pbq-drop-zone" data-answer="Blue Team" data-pbq="p1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Red and Blue teams collaborate in real-time — attacker adjusts techniques while defender explains what was/wasn't detected; highest learning value</div><div class="pbq-drop-zone" data-answer="Purple Team" data-pbq="p1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Evaluates physical security controls by attempting to bypass locks, badge readers, mantraps, and guards; may include fake contractors or dumpster diving</div><div class="pbq-drop-zone" data-answer="Physical Pen Test" data-pbq="p1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('p1')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-p1-result"></div>
+  </div>
+
+  <!-- PT7-2: Knowledge levels -->
+  <div class="pbq-sec" id="pbq-p2">
+    <div class="pbq-sec-title">PT7-2 &mdash; KNOWLEDGE LEVELS: CLASSIFY EACH ENGAGEMENT DESCRIPTION</div>
+    <div class="pbq-scenario">Match each pen test knowledge level (White Box / Gray Box / Black Box) to its correct set of characteristics.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">KNOWLEDGE LEVEL</div>
+        <div class="pbq-items" id="p2-sources">
+          <div class="pbq-source-item" draggable="true" data-val="White Box">White Box</div>
+          <div class="pbq-source-item" draggable="true" data-val="Gray Box">Gray Box</div>
+          <div class="pbq-source-item" draggable="true" data-val="Black Box">Black Box</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">CHARACTERISTICS</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Tester receives full documentation, source code, credentials, and network diagrams — acts with insider-level knowledge; cheapest and fastest; best for code review and finding all hidden vulnerabilities</div><div class="pbq-drop-zone" data-answer="White Box" data-pbq="p2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Tester receives partial information (e.g., a standard user account); simulates insider threat or compromised user; most common real-world engagement; best balance of speed, cost, and realism</div><div class="pbq-drop-zone" data-answer="Gray Box" data-pbq="p2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Tester starts with zero prior knowledge — pure adversarial simulation from scratch; most realistic reflection of a real external attacker; most expensive and time-consuming</div><div class="pbq-drop-zone" data-answer="Black Box" data-pbq="p2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('p2')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-p2-result"></div>
+  </div>
+
+  <!-- PT7-3: Attack lifecycle phases -->
+  <div class="pbq-sec" id="pbq-p3">
+    <div class="pbq-sec-title">PT7-3 &mdash; ATTACK LIFECYCLE: MATCH PHASE TO TECHNIQUE</div>
+    <div class="pbq-scenario">Match each attack lifecycle phase to the technique that belongs in that phase.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">PHASE</div>
+        <div class="pbq-items" id="p3-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Initial Access">Initial Access</div>
+          <div class="pbq-source-item" draggable="true" data-val="Pivoting">Pivoting</div>
+          <div class="pbq-source-item" draggable="true" data-val="Lateral Movement">Lateral Movement</div>
+          <div class="pbq-source-item" draggable="true" data-val="Persistence">Persistence</div>
+          <div class="pbq-source-item" draggable="true" data-val="Privilege Escalation">Privilege Escalation</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">TECHNIQUE EXAMPLE</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">A spear phishing email with a malicious Office macro delivers a reverse shell, giving the attacker their first foothold in the environment</div><div class="pbq-drop-zone" data-answer="Initial Access" data-pbq="p3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">The attacker sets up a SOCKS proxy through the compromised host using Metasploit's route command to reach internal subnets not directly accessible</div><div class="pbq-drop-zone" data-answer="Pivoting" data-pbq="p3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Using BloodHound to map Active Directory attack paths, then using Pass-the-Hash to authenticate to additional Windows hosts across the network</div><div class="pbq-drop-zone" data-answer="Lateral Movement" data-pbq="p3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Planting a web shell on a compromised web server and creating a scheduled task that re-establishes the backdoor after every reboot</div><div class="pbq-drop-zone" data-answer="Persistence" data-pbq="p3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Exploiting a misconfigured SUDO rule on Linux to gain root, then using DCSync to extract all Active Directory password hashes from the domain</div><div class="pbq-drop-zone" data-answer="Privilege Escalation" data-pbq="p3" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('p3')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-p3-result"></div>
+  </div>
+
+  <!-- PT7-4: Active vs Passive recon dropdown table -->
+  <div class="pbq-sec" id="pbq-p4">
+    <div class="pbq-sec-title">PT7-4 &mdash; RECONNAISSANCE: CLASSIFY EACH TECHNIQUE AS ACTIVE OR PASSIVE</div>
+    <div class="pbq-scenario">For each reconnaissance technique, determine whether it is Active (directly engages or touches target systems) or Passive (gathers intel without direct contact with target).</div>
+    <table class="pbq-fw-table">
+      <thead><tr><th>TECHNIQUE</th><th>TOOL / METHOD</th><th>TYPE</th></tr></thead>
+      <tbody>
+        <tr><td>Port scanning the target's web server to enumerate open services</td><td style="font-family:var(--mono);color:var(--accent);font-size:0.72rem">Nmap</td><td><select class="pbq-fw-select" id="rc-1" data-answer="Active"><option value="">-- Select --</option><option>Active</option><option>Passive</option></select></td></tr>
+        <tr><td>Searching Shodan for exposed services associated with the target's IP range without directly touching their systems</td><td style="font-family:var(--mono);color:var(--accent);font-size:0.72rem">Shodan</td><td><select class="pbq-fw-select" id="rc-2" data-answer="Passive"><option value="">-- Select --</option><option>Active</option><option>Passive</option></select></td></tr>
+        <tr><td>Querying the target's DNS server directly to attempt a zone transfer</td><td style="font-family:var(--mono);color:var(--accent);font-size:0.72rem">DNS Zone Transfer</td><td><select class="pbq-fw-select" id="rc-3" data-answer="Active"><option value="">-- Select --</option><option>Active</option><option>Passive</option></select></td></tr>
+        <tr><td>Reviewing the target's employee LinkedIn profiles, job postings, and GitHub repos for technology stack and infrastructure hints</td><td style="font-family:var(--mono);color:var(--accent);font-size:0.72rem">OSINT</td><td><select class="pbq-fw-select" id="rc-4" data-answer="Passive"><option value="">-- Select --</option><option>Active</option><option>Passive</option></select></td></tr>
+        <tr><td>Running a vulnerability scanner against the target's public-facing web application</td><td style="font-family:var(--mono);color:var(--accent);font-size:0.72rem">Vuln Scanner</td><td><select class="pbq-fw-select" id="rc-5" data-answer="Active"><option value="">-- Select --</option><option>Active</option><option>Passive</option></select></td></tr>
+        <tr><td>Using Google dorking (advanced search operators) to find exposed config files and directories indexed by the search engine</td><td style="font-family:var(--mono);color:var(--accent);font-size:0.72rem">Google Dorks</td><td><select class="pbq-fw-select" id="rc-6" data-answer="Passive"><option value="">-- Select --</option><option>Active</option><option>Passive</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="pbq-check-btn" onclick="chkRecon()">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-p4-result"></div>
+  </div>
+
+  <!-- PT7-5: ROE components -->
+  <div class="pbq-sec" id="pbq-p5">
+    <div class="pbq-sec-title">PT7-5 &mdash; RULES OF ENGAGEMENT: MATCH COMPONENT TO DESCRIPTION</div>
+    <div class="pbq-scenario">Drag each ROE component to its correct description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ROE COMPONENT</div>
+        <div class="pbq-items" id="p5-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Scope Definition">Scope Definition</div>
+          <div class="pbq-source-item" draggable="true" data-val="Client Contact Details">Client Contact Details</div>
+          <div class="pbq-source-item" draggable="true" data-val="IT Team Notification">IT Team Notification</div>
+          <div class="pbq-source-item" draggable="true" data-val="Data Handling">Data Handling</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Defines which IP ranges, domains, and systems are in-scope, which are explicitly out-of-scope (e.g., production databases), and permitted testing windows</div><div class="pbq-drop-zone" data-answer="Scope Definition" data-pbq="p5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Primary and emergency contacts, who to notify if a critical vulnerability is discovered, and the legal signatory who authorized the engagement</div><div class="pbq-drop-zone" data-answer="Client Contact Details" data-pbq="p5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Whether the test is announced (IT team knows) or unannounced; helps coordinate maintenance schedules and prevents the SOC from accidentally triggering incident response</div><div class="pbq-drop-zone" data-answer="IT Team Notification" data-pbq="p5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">How captured credentials and sensitive data are stored during the test, data retention and destruction requirements post-engagement, and NDA terms</div><div class="pbq-drop-zone" data-answer="Data Handling" data-pbq="p5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('p5')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-p5-result"></div>
+  </div>
+
+</div>
+<div style="text-align:center;margin-top:1rem;">
+  <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE &#8594;</button>
+</div>
+</div>
+
+<!-- MCQ -->
+<div id="mcqSection" style="display:none"><div id="questionContainer"></div></div>
+
+<!-- RESULTS -->
+<div id="resultsSection" style="display:none">
+<div class="results-hero">
+  <h2>EXAM COMPLETE &mdash; SECTION 7: PENETRATION TESTING</h2>
+  <div class="final-score" id="finalScore">0</div>
+  <div class="final-pct" id="finalPct">0/30 Correct</div>
+  <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+  <div class="results-grid">
+    <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+    <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+    <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+  </div>
+  <div>
+    <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+    <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+  </div>
+</div>
+<div class="domain-section" id="domainSummary"></div>
+</div>
+
+</main>
+</div>
+
+<script>
+let examMode='full',randCount=10,activeQuestions=[];
+function setMode(m){examMode=m;document.getElementById('modeFullCard').classList.toggle('active',m==='full');document.getElementById('modeRandCard').classList.toggle('active',m==='random');document.getElementById('randModeSection').classList.toggle('show',m==='random');if(m==='full'){document.getElementById('statQ').textContent='35';document.getElementById('statT').textContent='45';}else updRD();}
+function setRandCount(n){randCount=n;['10','15','20'].forEach(x=>document.getElementById('randBtn'+x).classList.remove('active'));document.getElementById('randBtn'+n).classList.add('active');updRD();}
+function updRD(){document.getElementById('statQ').textContent=randCount;document.getElementById('statT').textContent=Math.round(randCount*1.5);}
+
+let dragVal=null,clickSel=null;
+document.addEventListener('DOMContentLoaded',()=>{shuffleSrc();initDrag();});
+function shuffleSrc(){['p1-sources','p2-sources','p3-sources','p5-sources'].forEach(id=>{const c=document.getElementById(id);if(!c)return;const it=[...c.children];for(let i=it.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));c.appendChild(it[j]);it.splice(j,1);}});}
+function initDrag(){
+  document.querySelectorAll('.pbq-source-item').forEach(el=>{
+    el.addEventListener('dragstart',()=>{dragVal=el.dataset.val;setTimeout(()=>el.classList.add('dragging'),0);});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>clickSrc(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragVal)assignZ(z,dragVal);});
+  });
+}
+function clickSrc(el){if(el.classList.contains('used'))return;const p=el.closest('[id^="pbq-p"]');if(!p)return;const id=p.id.replace('pbq-','');document.querySelectorAll('#pbq-'+id+' .pbq-source-item').forEach(s=>s.style.outline='');if(clickSel===el.dataset.val){clickSel=null;}else{clickSel=el.dataset.val;el.style.outline='2px solid var(--accent)';}}
+function hdz(z){if(z.classList.contains('correct')||z.classList.contains('wrong'))return;if(clickSel){assignZ(z,clickSel);document.querySelectorAll('.pbq-source-item').forEach(s=>s.style.outline='');clickSel=null;}}
+function assignZ(z,val){const old=z.dataset.current;if(old){const s=document.querySelector('.pbq-source-item[data-val="'+old+'"]');if(s)s.classList.remove('used');}const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.add('used');z.dataset.current=val;z.classList.add('filled');z.childNodes[0].textContent=val;const c=z.querySelector('.pbq-drop-clear');if(c)c.style.display='block';}
+function clrDrop(e,btn){e.stopPropagation();const z=btn.parentElement,val=z.dataset.current;if(val){const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.remove('used');}z.dataset.current='';z.classList.remove('filled');z.childNodes[0].textContent='Drop here';btn.style.display='none';}
+function chkPBQ(id){const zones=document.querySelectorAll('.pbq-drop-zone[data-pbq="'+id+'"]');let ok=0,tot=zones.length;zones.forEach(z=>{const a=z.dataset.answer,c=z.dataset.current;if(!c)return;if(c===a){z.classList.add('correct');ok++;}else z.classList.add('wrong');});const r=document.getElementById('pbq-'+id+'-result');r.classList.add('show');if(ok===tot&&tot>0){r.className='pbq-result show correct';r.textContent='\u2713 PERFECT \u2014 All '+tot+' matched correctly!';}else{r.className='pbq-result show partial';r.textContent=ok+'/'+tot+' correct \u2014 Review the highlighted zones.';}document.querySelector('#pbq-'+id+' .pbq-check-btn').disabled=true;}
+function chkRecon(){const rules=[{id:'rc-1',a:'Active'},{id:'rc-2',a:'Passive'},{id:'rc-3',a:'Active'},{id:'rc-4',a:'Passive'},{id:'rc-5',a:'Active'},{id:'rc-6',a:'Passive'}];let ok=0;rules.forEach(r=>{const s=document.getElementById(r.id);if(s.value===r.a){s.classList.add('correct');ok++;}else if(s.value)s.classList.add('wrong');s.disabled=true;});const res=document.getElementById('pbq-p4-result');res.classList.add('show');if(ok===6){res.className='pbq-result show correct';res.textContent='\u2713 PERFECT \u2014 All 6 techniques classified correctly!';}else{res.className='pbq-result show partial';res.textContent=ok+'/6 correct \u2014 Remember: Active = directly touches target; Passive = no direct contact.';}document.querySelector('#pbq-p4 .pbq-check-btn').disabled=true;}
+
+const questions=[
+{id:'PT7-6',domain:'PenTestBasics',type:'mc',
+text:'What is the <strong>key difference</strong> between a penetration test and a vulnerability scan?',
+options:['A vulnerability scan is more expensive and time-consuming than a pen test','A penetration test actively exploits discovered vulnerabilities to demonstrate real-world impact; a vulnerability scan only identifies and reports potential weaknesses without exploiting them','A penetration test only tests web applications; a vulnerability scan tests the entire network','Vulnerability scans require a signed ROE; penetration tests do not'],
+answer:[1],
+explanation:'A vulnerability scan identifies and reports potential weaknesses but does NOT exploit them. A penetration test goes further \u2014 it actively exploits vulnerabilities (with authorization) to prove they are real, measure actual impact, and demonstrate what an attacker could achieve. This is why pen tests produce proof-of-concept (PoC) exploit demonstrations alongside the findings report.'},
+
+{id:'PT7-7',domain:'PenTestBasics',type:'mc',
+text:'Which of the following is a valid output of a penetration test engagement?',
+options:['A list of all CVEs published in the past year affecting the target software','Proof-of-concept exploit demonstrations, a detailed findings report with risk ratings, and remediation recommendations','A real-time network traffic capture of all internal communications','An automatic patch deployment to all discovered vulnerabilities'],
+answer:[1],
+explanation:'Pen test outputs include: (1) detailed findings report with risk ratings, (2) proof-of-concept (PoC) exploit demonstrations that prove vulnerabilities are real and exploitable, (3) remediation recommendations with priority levels, and (4) an executive summary for non-technical stakeholders. The pen tester identifies and demonstrates \u2014 they do not deploy patches or perform actual remediation.'},
+
+{id:'PT7-8',domain:'PenTestBasics',type:'multi',
+text:'Which TWO of the following are legitimate purposes of penetration testing? <strong>(Select TWO)</strong>',
+options:['Identify exploitable vulnerabilities before real attackers do','Replace the need for vulnerability scanning permanently','Satisfy compliance requirements such as PCI-DSS, HIPAA, and SOC 2','Automatically remediate all discovered vulnerabilities','Monitor network traffic for anomalies in real time'],
+answer:[0,2],
+explanation:'Pen testing serves to: (1) proactively find exploitable vulnerabilities before real attackers do, and (2) satisfy compliance requirements \u2014 PCI-DSS, HIPAA, SOC 2, and ISO 27001 all require or recommend periodic pen testing. Pen tests do NOT replace vulnerability scanning (complementary tools), do NOT auto-remediate, and are not continuous monitoring tools.'},
+
+// Team Types
+{id:'PT7-9',domain:'TeamTypes',type:'mc',
+text:'A security firm is hired to conduct a 6-week engagement simulating an advanced persistent threat (APT). The target\'s IT team is NOT informed of the test. The firm uses phishing, exploitation, lateral movement, and data exfiltration techniques. This is a:',
+options:['Blue Team exercise','Gray Box assessment','Red Team engagement','Purple Team collaboration'],
+answer:[2],
+explanation:'A Red Team engagement simulates a full, real-world APT campaign with no advance notice to the defending team. The red team uses all attacker TTPs \u2014 phishing, exploitation, lateral movement, persistence, and exfiltration. The goal is to achieve a defined objective (e.g., exfiltrate crown-jewel data) and reveal gaps in both detection and prevention. The lack of IT notification tests real detection capabilities.'},
+
+{id:'PT7-10',domain:'TeamTypes',type:'mc',
+text:'A security team configures their SIEM with new detection rules, then has a red team run specific attack techniques to verify the rules trigger correctly. The red team and defenders are in constant communication throughout the exercise. This is a:',
+options:['Red Team engagement','Blue Team exercise','Black Box assessment','Purple Team exercise'],
+answer:[3],
+explanation:'A Purple Team exercise is the most collaborative approach \u2014 the red team attacks while the blue team monitors simultaneously. They communicate in real-time: the blue team explains what they saw/missed, the red team adjusts techniques to find detection gaps. This provides the highest learning value and best ROI for mature security programs looking to improve detection coverage.'},
+
+{id:'PT7-11',domain:'TeamTypes',type:'mc',
+text:'A security tester poses as a delivery driver to gain physical access to a server room. They badge-tail an employee through a mantrap and plant a rogue device on the network. This is an example of:',
+options:['Red Team social engineering via phishing','Purple Team collaboration','Physical penetration testing','Blue Team incident response validation'],
+answer:[2],
+explanation:'Physical penetration testing evaluates physical security controls by attempting real-world bypass techniques: tailgating/piggybacking through secure doors, bypassing badge readers and mantraps, impersonating contractors or delivery personnel, and planting rogue hardware. Physical pen tests require explicit written authorization to avoid trespassing charges, and they often combine physical access with technical exploitation to prove the full impact chain.'},
+
+{id:'PT7-12',domain:'TeamTypes',type:'mc',
+text:'Which metric does the Blue Team use to measure how quickly their SOC detects and responds to simulated attack activity?',
+options:['CVSSv3 score and CVSS vector string','MTTD (Mean Time to Detect) and MTTR (Mean Time to Respond)','CVSS Environmental Score','Reconnaissance footprint coverage percentage'],
+answer:[1],
+explanation:'Blue Team exercises produce operational metrics: MTTD (Mean Time to Detect) measures how long it takes defenders to identify that an attack is occurring, and MTTR (Mean Time to Respond) measures how long to contain and remediate it. These metrics help organizations benchmark their SOC effectiveness, justify security investments, and track improvement over time.'},
+
+// Knowledge Levels
+{id:'PT7-13',domain:'KnowledgeLevels',type:'mc',
+text:'A client wants the most realistic simulation of an external attacker who has no inside knowledge of their systems. Which pen test knowledge level should they choose?',
+options:['White Box \u2014 full documentation provided for maximum coverage','Gray Box \u2014 partial information for a balanced approach','Black Box \u2014 zero prior knowledge, most realistic external attacker simulation','Purple Box \u2014 combined offensive and defensive knowledge'],
+answer:[2],
+explanation:'Black Box testing gives the tester zero prior knowledge \u2014 they start from scratch exactly as a real external attacker would. This is the most realistic simulation of a true threat actor. The tradeoff is that it is the most expensive and time-consuming approach because the tester must perform all reconnaissance from scratch. Exam tip: Black Box = most realistic; Gray Box = most common in practice; White Box = cheapest/fastest.'},
+
+{id:'PT7-14',domain:'KnowledgeLevels',type:'mc',
+text:'An organization wants to test how an attacker with a compromised standard employee account could escalate privileges and move laterally. The tester is given a regular domain user account but no other information. Which knowledge level is this?',
+options:['White Box \u2014 full credentials are provided','Black Box \u2014 no information given','Gray Box \u2014 partial information simulating an insider threat or compromised user','Physical Box \u2014 physical access credentials provided'],
+answer:[2],
+explanation:'Gray Box testing provides partial information \u2014 in this case, a standard user account. This simulates an insider threat scenario or a situation where an attacker has compromised a regular employee credential. Gray Box is the most common real-world engagement type because it balances thoroughness with realism, tests privilege escalation paths realistically, and costs less than a full Black Box engagement.'},
+
+// Rules of Engagement
+{id:'PT7-15',domain:'ROE',type:'mc',
+text:'A penetration tester begins scanning a client\'s network after receiving verbal approval from the IT manager over the phone. The legal team was not involved. Which critical mistake was made?',
+options:['The tester should have used passive reconnaissance only before getting written approval','Verbal approval is never sufficient — a signed Rules of Engagement (ROE) document must be in place before any testing begins','The tester should have notified the SOC team first','The IT manager should have co-signed the scan results'],
+answer:[1],
+explanation:'No ROE = no legal protection. A penetration tester who operates without a signed, written Rules of Engagement document may face criminal charges under the Computer Fraud and Abuse Act (CFAA) regardless of verbal approval. The ROE must be signed by authorized legal signatories BEFORE any testing begins. It defines scope, permitted actions, contacts, and data handling \u2014 protecting both the tester and the client.'},
+
+{id:'PT7-16',domain:'ROE',type:'mc',
+text:'The ROE document specifies that a production database server at 10.5.0.15 is explicitly <strong>out of scope</strong>. During testing, the pen tester discovers a path that leads directly to this server. What should they do?',
+options:['Exploit the path to demonstrate the risk, then document it in the report','Ignore the finding entirely since it is out of scope','Stop at the boundary and immediately notify the client contact per the ROE, documenting the discovered path without exploiting the out-of-scope system','Continue the test and include the database server in the final report without notifying the client'],
+answer:[2],
+explanation:'Respecting scope boundaries is a legal and ethical obligation. If a path to an out-of-scope system is discovered, the tester must stop at the boundary and notify the designated client contact per the ROE procedures. They document the discovered path as a finding (which is valuable intelligence) but do NOT exploit the out-of-scope system. Violating scope boundaries can void the engagement contract and expose the tester to legal liability.'},
+
+// Reconnaissance
+{id:'PT7-17',domain:'Reconnaissance',type:'mc',
+text:'A security researcher uses Shodan to find all internet-exposed services associated with a target company\'s ASN, then reviews their SSL certificates on crt.sh to enumerate subdomains \u2014 all without sending a single packet to the target. This is:',
+options:['Active reconnaissance \u2014 because Shodan actively probes target systems','Passive reconnaissance \u2014 because the researcher is not directly interacting with or sending traffic to the target','Gray Box reconnaissance \u2014 because Shodan has inside knowledge','War driving \u2014 because wireless networks are surveyed'],
+answer:[1],
+explanation:'Passive reconnaissance gathers intelligence without directly touching target systems. Shodan indexes internet-facing services by probing them independently \u2014 using Shodan is passive from the tester\'s perspective. Certificate transparency logs (crt.sh) are public records. WHOIS, Google dorking, LinkedIn research, and reviewing job postings are all passive. Passive recon leaves no traces on the target and cannot trigger IDS/IPS alerts.'},
+
+{id:'PT7-18',domain:'Reconnaissance',type:'mc',
+text:'Which tool is specifically designed for discovering internet-exposed devices, services, and open ports across the public internet without the tester needing to directly scan target systems?',
+options:['Nmap \u2014 active port scanner','Shodan \u2014 search engine for internet-exposed devices','Metasploit \u2014 exploitation framework','BloodHound \u2014 Active Directory attack path mapper'],
+answer:[1],
+explanation:'Shodan is a search engine that continuously crawls and indexes internet-facing devices \u2014 servers, routers, webcams, SCADA systems, and any internet-exposed service. A tester can search for a target organization\'s IP ranges and find exposed services without ever touching the target. This makes Shodan passive from the tester\'s perspective. Nmap is active (sends packets). Metasploit is an exploitation framework. BloodHound is for AD post-exploitation.'},
+
+{id:'PT7-19',domain:'Reconnaissance',type:'mc',
+text:'A penetration tester uses Nmap to scan a target\'s external web server, sending SYN packets to discover open ports and identify running services via banner grabbing. The scan appears in the target\'s firewall logs. This is:',
+options:['Passive reconnaissance \u2014 because Nmap uses standard network protocols','Active reconnaissance \u2014 because it directly interacts with the target system and leaves detectable footprints','War driving \u2014 because wireless protocols are involved','OSINT \u2014 because Nmap uses publicly available information'],
+answer:[1],
+explanation:'Active reconnaissance directly engages target systems \u2014 Nmap sends packets to the target, which appear in firewall and IDS logs. Active recon includes port scanning, banner grabbing, vulnerability scanning, DNS zone transfer attempts, and any technique that generates traffic visible to the target. It provides more accurate, current information than passive recon but risks detection. Testers prefer passive recon first to avoid alerting defenders.'},
+
+{id:'PT7-20',domain:'Reconnaissance',type:'multi',
+text:'Which TWO of the following are examples of <strong>passive</strong> reconnaissance techniques? <strong>(Select TWO)</strong>',
+options:['Performing an Nmap SYN scan against target servers','Reviewing the target company\'s job postings to infer technology stack (AWS, Kubernetes, React)','Querying WHOIS records to identify domain registration details and name servers','Sending crafted SMB packets to enumerate network shares','Running a vulnerability scanner against the target web application'],
+answer:[1,2],
+explanation:'Passive recon collects intelligence without directly touching target systems. Reviewing job postings for technology clues is completely passive \u2014 it uses public information. WHOIS queries use public registrar databases and do not contact the target. Nmap SYN scans, SMB enumeration, and vulnerability scanning all directly interact with target systems (active recon) and leave traces in logs.'},
+
+// Exploitation Phases
+{id:'PT7-21',domain:'ExploitPhases',type:'mc',
+text:'After gaining initial access to a web server in a DMZ, the attacker uses Metasploit\'s route command to set up a SOCKS proxy that allows their attack tools to reach the internal 10.0.0.0/8 network, which was previously unreachable. This phase is called:',
+options:['Lateral Movement','Persistence','Pivoting','Privilege Escalation'],
+answer:[2],
+explanation:'Pivoting uses a compromised system as a jump box or relay to reach internal network segments that are not directly accessible to the attacker. The compromised DMZ server becomes a gateway into the internal network. Techniques include SSH tunneling, SOCKS proxies via Metasploit, and double-pivot through multiple compromised hosts. This is distinct from lateral movement (which is moving between systems within the already-reachable network).'},
+
+{id:'PT7-22',domain:'ExploitPhases',type:'mc',
+text:'An attacker uses Pass-the-Hash to authenticate as a domain administrator to additional servers across the network, then uses PsExec to execute commands on those systems. This attack lifecycle phase is:',
+options:['Initial Access','Pivoting','Lateral Movement','Persistence'],
+answer:[2],
+explanation:'Lateral Movement involves moving between systems within the network after gaining initial access, expanding the attacker\'s foothold and access scope. Techniques include Pass-the-Hash (reusing NTLM hashes without knowing the plaintext password), Pass-the-Ticket (Kerberos token reuse), RDP or SMB to additional hosts, BloodHound for AD path discovery, and Living-off-the-Land tools like PowerShell, WMI, and PsExec.'},
+
+{id:'PT7-23',domain:'ExploitPhases',type:'mc',
+text:'An attacker creates a scheduled task that runs a PowerShell script every 5 minutes to re-establish a reverse shell back to their C2 server. They also add a registry run key and create a hidden admin account as backup. This phase is:',
+options:['Initial Access \u2014 establishing the first foothold','Lateral Movement \u2014 moving to other systems','Persistence \u2014 maintaining access after reboots or credential changes','Privilege Escalation \u2014 gaining higher permissions'],
+answer:[2],
+explanation:'Persistence ensures the attacker maintains access even after reboots, password changes, or security tool cleanup. Common persistence mechanisms include: scheduled tasks/cron jobs that re-establish backdoors, registry run keys (Windows auto-start), web shells on compromised web servers, backdoor admin accounts, and startup scripts. Mature attackers install multiple persistence mechanisms so losing one doesn\u2019t end the engagement.'},
+
+{id:'PT7-24',domain:'ExploitPhases',type:'mc',
+text:'Using BloodHound, an attacker maps Active Directory trust relationships and discovers that a service account has an SPN set. They extract the service account\'s Kerberos hash and crack it offline to obtain the plaintext password, gaining domain admin rights. This technique is called:',
+options:['Pass-the-Hash','DCSync attack','Kerberoasting','BloodHound enumeration'],
+answer:[2],
+explanation:'Kerberoasting is a Privilege Escalation technique targeting Active Directory service accounts with SPNs (Service Principal Names). Any authenticated domain user can request Kerberos service tickets for these accounts \u2014 the ticket contains the service account\u2019s password hash, which can be cracked offline. If the service account password is weak, the attacker gains its credentials. BloodHound helps identify which service accounts are worth targeting.'},
+
+// Tools
+{id:'PT7-25',domain:'PenTestTools',type:'mc',
+text:'Which tool is used to map Active Directory attack paths, visualize trust relationships, and identify the shortest privilege escalation route to Domain Admin?',
+options:['Nmap \u2014 network port scanner','BloodHound \u2014 AD attack path mapper','Mimikatz \u2014 credential dumping tool','theHarvester \u2014 OSINT email and domain collector'],
+answer:[1],
+explanation:'BloodHound uses graph theory to map Active Directory relationships and visualize attack paths. It ingests data collected by SharpHound and displays the shortest path from any low-privileged user to Domain Admin. It reveals misconfigurations like GenericAll permissions, unconstrained delegation, and Kerberoastable accounts. BloodHound is used in the Lateral Movement and Privilege Escalation phases.'},
+
+{id:'PT7-26',domain:'PenTestTools',type:'mc',
+text:'A tester compromises a Windows domain controller and runs a tool that extracts all NTLM password hashes, Kerberos tickets, and plaintext passwords from LSASS memory. Which tool is being used?',
+options:['Nmap','BloodHound','Mimikatz','Recon-ng'],
+answer:[2],
+explanation:'Mimikatz is a post-exploitation credential dumping tool that extracts NTLM hashes, Kerberos tickets, and sometimes cleartext passwords from Windows LSASS (Local Security Authority Subsystem Service) memory. It enables Pass-the-Hash and Pass-the-Ticket attacks. It was developed by Benjamin Delpy and remains one of the most widely used (and detected) tools in red team engagements.'},
+
+{id:'PT7-27',domain:'PenTestTools',type:'mc',
+text:'A penetration tester uses theHarvester during the reconnaissance phase. What does this tool primarily collect?',
+options:['Network topology maps and routing tables','Email addresses, subdomains, and open ports associated with a target domain from public sources','Active Directory group memberships and user accounts','Vulnerability scanner output formatted for CVSS scoring'],
+answer:[1],
+explanation:'theHarvester is a passive/OSINT reconnaissance tool that collects email addresses, subdomains, IP addresses, and open ports by querying public sources: search engines (Google, Bing), DNS, Shodan, LinkedIn, and certificate databases. It is used in the early passive reconnaissance phase to build a target profile without directly touching systems.'},
+
+// Security Audits
+{id:'PT7-28',domain:'SecurityAudits',type:'mc',
+text:'What is the fundamental difference between a security audit and a penetration test?',
+options:['A security audit costs more and takes longer than a penetration test','A security audit evaluates compliance against defined standards and policies without actively exploiting vulnerabilities; a pen test actively exploits vulnerabilities to demonstrate real-world impact','A security audit is performed by external firms only; pen tests are performed internally','A security audit covers only network security; a pen test covers physical security as well'],
+answer:[1],
+explanation:'A security audit is a structured evaluation against defined standards (ISO 27001, PCI-DSS, NIST) \u2014 it checks whether controls exist and are documented. A pen test actively exploits vulnerabilities to demonstrate real-world impact. The key distinction: audits verify compliance; pen tests verify exploitability. Both are needed for full security assurance. An organization can be fully compliant per audit but still be exploitable by a skilled pen tester.'},
+
+{id:'PT7-29',domain:'SecurityAudits',type:'mc',
+text:'PCI-DSS requires that a Qualified Security Assessor (QSA) perform the compliance validation. Which type of security audit does this requirement describe?',
+options:['Internal audit performed by the organization\'s own staff','External audit performed by an independent third-party security firm','Penetration test performed by a certified ethical hacker','Vulnerability scan performed by an automated scanner'],
+answer:[1],
+explanation:'An External audit is conducted by independent reviewers from outside the organization. PCI-DSS QSA (Qualified Security Assessor) requirements are a classic example \u2014 only a certified external firm can perform the official compliance assessment. External audits carry higher credibility for compliance reporting to regulators and customers because they eliminate internal bias. SOC 2 Type II also requires external auditors.'},
+
+{id:'PT7-30',domain:'SecurityAudits',type:'mc',
+text:'An organization wants to pursue ISO 27001 certification. Which audit type is required?',
+options:['Internal audit only \u2014 self-assessment is sufficient for ISO 27001','External audit by any accredited firm','Independent third-party audit by an accredited certification body','Red team engagement combined with a vulnerability scan'],
+answer:[2],
+explanation:'ISO 27001 certification requires a fully independent third-party audit by an accredited certification body \u2014 complete independence with no conflicts of interest. The certification body assesses the organization\'s Information Security Management System (ISMS) against ISO 27001 requirements. This highest-assurance audit type is also required for FedRAMP. Results are accepted by regulators, insurers, and business partners as evidence of security maturity.'},
+
+{id:'PT7-31',domain:'SecurityAudits',type:'mc',
+text:'An organization\'s internal security team conducts a quarterly review of their firewall rules, access control lists, and patch levels against their internal security policy. What type of assessment is this?',
+options:['External audit','Third-party certification audit','Internal audit','Red team engagement'],
+answer:[2],
+explanation:'An internal audit is conducted by the organization\'s own staff using internal knowledge of systems and policies. Advantages: lower cost (no external fees), fast execution using inside knowledge. Disadvantages: potential bias or blind spots from familiarity. Internal audits are good for routine compliance checks, self-assessment, and preparation before external audits. They are not sufficient for regulatory compliance frameworks that require external validation.'},
+
+// Scenario-based
+{id:'PT7-32',domain:'PenTestBasics',type:'mc',
+text:'A mature security organization has been running quarterly vulnerability scans and annual pen tests for three years. They want to improve their detection and response capabilities. Which engagement type provides the <strong>best ROI</strong> for this goal?',
+options:['Add more frequent Black Box pen tests','Upgrade to a Purple Team exercise where Red and Blue teams collaborate in real-time','Switch entirely to passive reconnaissance only','Implement additional automated vulnerability scanners'],
+answer:[1],
+explanation:'For mature security programs that already perform regular pen testing, Purple Team exercises provide the best ROI for improving detection and response. The real-time collaboration between attacker (Red) and defender (Blue) creates a direct feedback loop: Blue explains what they saw/missed, Red adjusts to find detection gaps, and both sides build shared knowledge of TTPs. This directly improves SIEM rules, IDS/IPS signatures, and SOC procedures.'},
+
+{id:'PT7-33',domain:'ROE',type:'mc',
+text:'During a pen test, a tester discovers credentials for a system that is explicitly listed as out-of-scope in the ROE. A second tester on the team argues they should use the credentials to demonstrate the full attack chain. What is the correct action?',
+options:['Use the credentials to demonstrate the full attack chain \u2014 the risk justifies the scope violation','Report the discovered credentials to the client immediately without using them against the out-of-scope system, then document the finding','Delete the credentials to protect the client','Proceed with exploitation if the client\u2019s CISO is reachable by phone'],
+answer:[1],
+explanation:'Scope boundaries are legally binding. Using credentials against an out-of-scope system \u2014 even to demonstrate risk \u2014 constitutes unauthorized access under the CFAA regardless of intent. The correct action: immediately notify the client contact (per ROE procedures), document the discovered credentials as a significant finding, and note the potential attack path. This demonstrates the risk without crossing legal boundaries.'},
+
+{id:'PT7-34',domain:'ExploitPhases',type:'mc',
+text:'A tester has compromised a low-privileged web server. The server can reach the internal network at 192.168.10.0/24 but the tester\'s attack machine cannot. The tester sets up a SOCKS5 proxy through the compromised server to route their Metasploit modules into the internal network. What attack lifecycle phase and technique is this?',
+options:['Lateral Movement using Pass-the-Hash','Persistence using a scheduled task backdoor','Pivoting using proxy tunneling through a compromised host','Initial Access using phishing'],
+answer:[2],
+explanation:'This is Pivoting \u2014 using the compromised web server as a relay (jump box) to reach the internal network that is not directly accessible. SOCKS proxying through Metasploit (or SSH tunneling) allows the attacker\u2019s tools to treat the internal network as if they were on it. This is distinct from Lateral Movement, which is moving between hosts within the already-reachable internal network.'},
+
+{id:'PT7-35',domain:'PenTestTools',type:'mc',
+text:'Which framework maps penetration testing attack techniques and procedures to real-world threat actor behaviors, serving as a reference for both red teams planning attacks and blue teams building detection rules?',
+options:['CVSS \u2014 vulnerability scoring system','OWASP Top 10 \u2014 web application risks','MITRE ATT&CK \u2014 adversary tactics, techniques, and procedures framework','CIS Controls \u2014 security best practices framework'],
+answer:[2],
+explanation:'MITRE ATT&CK (Adversary Tactics, Techniques, and Common Knowledge) is a globally accessible knowledge base of real-world adversary TTPs observed in actual attacks. It maps attack lifecycle phases (Reconnaissance, Initial Access, Execution, Persistence, Privilege Escalation, etc.) to specific techniques used by real threat actors. Red teams use it to plan realistic attack scenarios; blue teams use it to build detection rules and assess coverage gaps. Available at attack.mitre.org.'},
+];
+
+const state={current:0,userAnswers:[],submitted:[],timerSeconds:45*60,timerInterval:null,timerRunning:false};
+function startTimer(){state.timerRunning=true;state.timerInterval=setInterval(()=>{state.timerSeconds--;updT();if(state.timerSeconds<=0){clearInterval(state.timerInterval);showResults();}},1000);}
+function updT(){const el=document.getElementById('timer'),m=Math.floor(state.timerSeconds/60),s=state.timerSeconds%60;el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');el.className=state.timerSeconds<60?'danger':state.timerSeconds<300?'warn':'';}
+function toggleTimer(){const btn=document.getElementById('timerBtn');if(state.timerRunning){clearInterval(state.timerInterval);state.timerRunning=false;btn.textContent='RESUME';}else{startTimer();btn.textContent='PAUSE';}}
+function startExam(){document.getElementById('introSection').style.display='none';if(examMode==='full'){activeQuestions=[...questions];document.getElementById('pbqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}else{const sh=[...questions].sort(()=>Math.random()-0.5);activeQuestions=sh.slice(0,randCount);state.timerSeconds=randCount*90;initMCQ();document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}}
+function showMCQ(){document.getElementById('pbqSection').style.display='none';activeQuestions=[...questions];initMCQ();document.getElementById('mcqSection').style.display='block';}
+function initMCQ(){state.userAnswers=activeQuestions.map(()=>[]);state.submitted=activeQuestions.map(()=>false);buildGrid();renderQ(0);}
+function buildGrid(){const g=document.getElementById('qGrid');g.innerHTML='';activeQuestions.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(i===0?' active':'');d.textContent=i+1;d.onclick=()=>renderQ(i);d.id='dot-'+i;g.appendChild(d);});}
+function updGrid(idx){activeQuestions.forEach((_,i)=>{const d=document.getElementById('dot-'+i);if(!d)return;d.classList.remove('active','answered','correct','wrong');if(i===idx)d.classList.add('active');else if(state.submitted[i]){const q=activeQuestions[i],ua=state.userAnswers[i];d.classList.add(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))?'correct':'wrong');}else if(state.userAnswers[i].length>0)d.classList.add('answered');});}
+function renderQ(idx){
+  state.current=idx;updGrid(idx);
+  const q=activeQuestions[idx],isM=q.type==='multi',sub=state.submitted[idx],ua=state.userAnswers[idx];
+  const L=['A','B','C','D','E'],req=q.answer.length,sel=ua.length;
+  let oH=q.options.map((o,i)=>{let c='option'+(isM?' multi-opt':'');if(sub){c+=' disabled';if(q.answer.includes(i))c+=' correct';else if(ua.includes(i))c+=' wrong';}else if(ua.includes(i))c+=' selected';return '<div class="'+c+'" data-oidx="'+i+'"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="opt-letter">'+L[i]+'</span><span>'+o+'</span></div>';}).join('');
+  let cH='';if(isM&&!sub){const d=sel>=req;cH='<div class="multi-counter '+(d?'done':'')+'"> '+(d?'&#10003;':'&#9744;')+' Select '+req+' answer'+(req>1?'s':'')+' &mdash; '+sel+' of '+req+' selected</div>';}
+  let fH='';if(sub){const ok=q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));fH='<div class="feedback '+(ok?'correct':'wrong')+' visible">'+(ok?'&#10003; Correct!':'&#10007; Incorrect. Correct answer'+(req>1?'s':'')+': '+q.answer.map(a=>L[a]).join(', ')+'.')+'</div><div class="explanation-box"><div class="expl-label">&#128218; EXPLANATION</div>'+q.explanation+'</div>';}
+  const isLast=idx===activeQuestions.length-1,canSub=!sub&&ua.length>0;
+  const sL=sub?(isLast?'FINISH':'NEXT &#8594;'):'SUBMIT',sC=sub&&isLast?'submit-btn finish':'submit-btn';
+  const isAC=sub&&q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));
+  document.getElementById('questionContainer').innerHTML='<div class="q-header"><span class="q-num">QUESTION '+(idx+1)+' OF '+activeQuestions.length+' &middot; '+q.id+'</span><span class="q-tag '+(isM?'multi':'mc')+'">'+(isM?'MULTI SELECT ('+req+')':'MULTIPLE CHOICE')+'</span></div><div class="question-card '+(sub?(isAC?'answered-correct':'answered-wrong'):'')+'"><div class="question-text">'+q.text+'</div>'+cH+'<div class="options" id="optCont">'+oH+'</div>'+fH+'</div><div class="q-footer"><button class="nav-btn" onclick="renderQ('+(idx-1)+')" '+(idx===0?'disabled':'')+'>&#8592; PREV</button><button class="'+sC+'" onclick="handleSub('+idx+')" '+(canSub||sub?'':'disabled style="opacity:0.4;cursor:default;"')+'>'+sL+'</button><button class="nav-btn" onclick="renderQ('+(idx+1)+')" '+(idx===activeQuestions.length-1?'disabled':'')+'>NEXT &#8594;</button></div>';
+  if(!sub)document.querySelectorAll('#optCont .option').forEach(el=>el.addEventListener('click',()=>selOpt(idx,parseInt(el.dataset.oidx))));
+  document.getElementById('progressBar').style.width=((idx+1)/activeQuestions.length*100)+'%';
+}
+function selOpt(qi,oi){if(state.submitted[qi])return;const q=activeQuestions[qi],ua=state.userAnswers[qi];if(q.type==='multi'){const p=ua.indexOf(oi);if(p===-1)ua.push(oi);else ua.splice(p,1);}else state.userAnswers[qi]=[oi];renderQ(qi);}
+function handleSub(idx){if(!state.submitted[idx]){if(!state.userAnswers[idx].length)return;state.submitted[idx]=true;updScore();renderQ(idx);}else{if(idx===activeQuestions.length-1)showResults();else renderQ(idx+1);}}
+function updScore(){let ok=0,bad=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i])return;const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});document.getElementById('scoreBig').textContent=ok;document.getElementById('scoreCorrect').textContent=ok;document.getElementById('scoreWrong').textContent=bad;document.getElementById('scorePanel').classList.add('visible');}
+function showResults(){
+  clearInterval(state.timerInterval);['mcqSection','pbqSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('resultsSection').style.display='block';document.getElementById('finishBtn').style.display='none';
+  let ok=0,bad=0,skip=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i]){skip++;return;}const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});
+  const tot=activeQuestions.length,pct=Math.round((ok/tot)*100),pass=pct>=70;
+  document.getElementById('finalScore').textContent=pct+'%';document.getElementById('finalScore').className='final-score '+(pass?'pass':'fail');document.getElementById('finalPct').textContent=ok+'/'+tot+' Correct';document.getElementById('passFailMsg').textContent=pass?'\u2713 PASS \u2014 Well done!':'\u2717 FAIL \u2014 Keep studying!';document.getElementById('passFailMsg').style.color=pass?'var(--green)':'var(--red)';document.getElementById('resCorrect').textContent=ok;document.getElementById('resWrong').textContent=bad;document.getElementById('resSkipped').textContent=skip;
+  const doms={};activeQuestions.forEach((q,i)=>{if(!doms[q.domain])doms[q.domain]={ok:0,tot:0};doms[q.domain].tot++;if(state.submitted[i]){const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))doms[q.domain].ok++;}});
+  const dN={PenTestBasics:'Pen Test Basics & Purpose',TeamTypes:'Team Types (Red/Blue/Purple/Physical)',KnowledgeLevels:'Knowledge Levels (White/Gray/Black Box)',ROE:'Rules of Engagement',Reconnaissance:'Reconnaissance (Active vs Passive)',ExploitPhases:'Attack Lifecycle Phases',PenTestTools:'Pen Test Tools',SecurityAudits:'Security Audits (Internal/External/Third-Party)'};
+  const dC={PenTestBasics:'#00d4ff',TeamTypes:'#ff4757',KnowledgeLevels:'#ffd32a',ROE:'#ff6b2b',Reconnaissance:'#00f5a0',ExploitPhases:'#7b2fbe',PenTestTools:'#00d4ff',SecurityAudits:'#ff6b2b'};
+  let html='<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(doms).forEach(([k,v])=>{const p=Math.round((v.ok/v.tot)*100),col=dC[k]||'var(--accent)';html+='<div class="domain-card"><div class="domain-card-header"><span class="domain-card-name">'+(dN[k]||k)+'</span><span class="domain-card-pct" style="color:'+col+'">'+p+'%</span></div><div class="domain-bar-track"><div class="domain-bar-fill" style="width:'+p+'%;background:'+col+'"></div></div><div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">'+v.ok+'/'+v.tot+' correct</div></div>';});
+  html+='</div>';document.getElementById('domainSummary').innerHTML=html;
+}
+function reviewAnswers(){document.getElementById('resultsSection').style.display='none';document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';renderQ(0);}
+function applyTheme(t){if(t==='light'){document.body.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='\uD83C\uDF19';document.getElementById('themeLabel').textContent='DARK';}else{document.body.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='\u2600\uFE0F';document.getElementById('themeLabel').textContent='LIGHT';}}
+function toggleTheme(){const n=document.body.hasAttribute('data-theme')?'dark':'light';applyTheme(n);try{localStorage.setItem('bl-theme',n);}catch(e){}}
+(function(){var t='dark';try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}applyTheme(t);})();
+</script>
+</body>
+</html>
