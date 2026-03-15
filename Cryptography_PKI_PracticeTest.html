@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 9: Cryptography &amp; PKI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e17;--bg2:#111520;--bg3:#181d2e;--border:#1f2740;--accent:#00d4ff;--accent2:#ff6b2b;--green:#00f5a0;--red:#ff4757;--yellow:#ffd32a;--text:#d0d8f0;--muted:#5a6a8a;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.6;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
+.logo{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logo span{color:var(--accent);}
+.home-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.45rem 0.85rem;border-radius:6px;text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:all 0.3s;display:flex;align-items:center;gap:0.4rem;white-space:nowrap;}
+.home-btn:hover{border-color:var(--accent);background:var(--bg2);}
+.timer-wrap{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+#timer{font-family:var(--mono);font-size:1.05rem;color:var(--accent);font-weight:600;letter-spacing:0.05em;}
+#timer.warn{color:var(--yellow);}
+#timer.danger{color:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.68rem;padding:0.3rem 0.75rem;cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;border-radius:2px;}
+.header-btn:hover{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary:hover{background:var(--accent);color:var(--bg);}
+.progress-bar-wrap{height:3px;background:var(--border);}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width 0.4s ease;width:0%;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 63px);}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:63px;height:calc(100vh - 63px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sidebar-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;padding:0 0.5rem;}
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:1.5rem;}
+.q-dot{aspect-ratio:1;border-radius:3px;border:1px solid var(--border);cursor:pointer;font-family:var(--mono);font-size:0.55rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.15s;background:var(--bg3);}
+.q-dot:hover{border-color:var(--accent);color:var(--accent);}
+.q-dot.answered{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.q-dot.correct{background:var(--green);border-color:var(--green);color:var(--bg);}
+.q-dot.wrong{background:var(--red);border-color:var(--red);color:var(--bg);}
+.q-dot.active{outline:2px solid var(--yellow);outline-offset:1px;}
+.score-panel{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;display:none;}
+.score-panel.visible{display:block;}
+.score-big{font-family:var(--mono);font-size:2rem;font-weight:600;color:var(--accent);text-align:center;}
+.score-label{font-size:0.7rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:0.08em;margin-top:0.25rem;}
+.score-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:1rem;}
+.score-item{text-align:center;}
+.score-item .val{font-family:var(--mono);font-size:1.1rem;font-weight:600;}
+.score-item .lbl{font-size:0.65rem;color:var(--muted);font-family:var(--mono);}
+.score-item.c .val{color:var(--green);}
+.score-item.w .val{color:var(--red);}
+main{padding:2rem 2.5rem;max-width:840px;}
+.intro-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2.5rem;margin-bottom:2rem;}
+.intro-card h1{font-family:var(--mono);font-size:1.25rem;font-weight:600;color:var(--accent);margin-bottom:0.5rem;}
+.intro-card .subtitle{font-size:0.8rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.08em;margin-bottom:1.5rem;}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.intro-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;text-align:center;}
+.intro-stat .n{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--text);}
+.intro-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.start-btn{background:var(--accent);color:var(--bg);border:none;font-family:var(--mono);font-size:0.85rem;font-weight:600;letter-spacing:0.1em;padding:0.8rem 2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.start-btn:hover{background:#00b8e0;transform:translateY(-1px);}
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.mode-card{background:var(--bg2);border:2px solid var(--border);border-radius:6px;padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mode-card:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.mode-card.active{border-color:var(--accent);background:rgba(0,212,255,0.07);}
+.mode-card-title{font-family:var(--mono);font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;}
+.mode-card-sub{font-size:0.72rem;color:var(--muted);}
+.random-options{display:flex;gap:0.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.rand-btn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.78rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.rand-btn:hover,.rand-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+.rand-mode-section{display:none;margin-top:1rem;}
+.rand-mode-section.show{display:block;}
+.q-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.q-num{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
+.q-tag{font-family:var(--mono);font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.08em;}
+.q-tag.mc{background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.2);}
+.q-tag.multi{background:rgba(255,107,43,0.1);color:var(--accent2);border:1px solid rgba(255,107,43,0.2);}
+.question-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
+.question-card.answered-correct{border-color:rgba(0,245,160,0.3);}
+.question-card.answered-wrong{border-color:rgba(255,71,87,0.3);}
+.question-text{font-size:0.95rem;line-height:1.7;color:var(--text);margin-bottom:1.5rem;}
+.question-text strong{color:var(--accent);}
+.options{display:flex;flex-direction:column;gap:0.6rem;}
+.option{display:flex;align-items:flex-start;gap:0.75rem;padding:0.8rem 1rem;border-radius:4px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:var(--bg2);font-size:0.875rem;}
+.option:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.opt-letter{font-family:var(--mono);font-size:0.7rem;font-weight:600;color:var(--muted);min-width:18px;padding-top:1px;transition:color 0.15s;}
+.option:hover .opt-letter{color:var(--accent);}
+.option.selected{border-color:var(--accent);background:rgba(0,212,255,0.08);}
+.option.selected .opt-letter{color:var(--accent);}
+.option.correct{border-color:var(--green);background:rgba(0,245,160,0.08);}
+.option.correct .opt-letter{color:var(--green);}
+.option.wrong{border-color:var(--red);background:rgba(255,71,87,0.08);}
+.option.wrong .opt-letter{color:var(--red);}
+.option.disabled{cursor:default;pointer-events:none;}
+.option .check-box{width:16px;height:16px;min-width:16px;border:1px solid var(--border);border-radius:50%;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.option.multi-opt .check-box{border-radius:3px;}
+.option.selected .check-box{background:var(--accent);border-color:var(--accent);}
+.option.correct .check-box{background:var(--green);border-color:var(--green);}
+.option.wrong .check-box{background:var(--red);border-color:var(--red);}
+.check-box svg{display:none;}
+.option.selected .check-box svg,.option.correct .check-box svg,.option.wrong .check-box svg{display:block;}
+.multi-counter{font-family:var(--mono);font-size:0.7rem;color:var(--accent2);margin-bottom:0.75rem;letter-spacing:0.05em;}
+.multi-counter.done{color:var(--green);}
+.feedback{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:0.85rem;line-height:1.6;}
+.feedback.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.25);color:var(--green);}
+.feedback.wrong{background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.25);color:#ff8a95;}
+.feedback.visible{display:block;}
+.explanation-box{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;background:rgba(123,47,190,0.08);border:1px solid rgba(123,47,190,0.3);font-size:0.83rem;line-height:1.7;color:var(--text);}
+.explanation-box .expl-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:#a06fdb;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.q-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.5rem;}
+.nav-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.72rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;letter-spacing:0.06em;transition:all 0.2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:0.25;cursor:default;}
+.submit-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.5rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.submit-btn:hover{background:#e55e22;transform:translateY(-1px);}
+.submit-btn.finish{background:var(--green);color:var(--bg);}
+.submit-btn.finish:hover{background:#00d488;}
+.results-hero{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3rem 2.5rem;text-align:center;margin-bottom:2rem;}
+.results-hero h2{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;color:var(--muted);margin-bottom:1rem;}
+.final-score{font-family:var(--mono);font-size:4rem;font-weight:600;line-height:1;margin-bottom:0.5rem;}
+.final-score.pass{color:var(--green);}
+.final-score.fail{color:var(--red);}
+.final-pct{font-family:var(--mono);font-size:1.2rem;color:var(--muted);margin-bottom:1.5rem;}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.result-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;}
+.result-stat .v{font-family:var(--mono);font-size:1.8rem;font-weight:600;}
+.result-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.result-stat.g .v{color:var(--green);}
+.result-stat.r .v{color:var(--red);}
+.result-stat.y .v{color:var(--yellow);}
+.review-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;}
+.review-btn:hover{background:var(--accent);color:var(--bg);}
+.restart-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;margin-left:0.75rem;}
+.restart-btn:hover{border-color:var(--text);color:var(--text);}
+.pbq-card{background:var(--bg3);border:1px solid rgba(0,245,160,0.2);border-radius:6px;padding:2rem;margin-bottom:2rem;}
+.pbq-card h3{font-family:var(--mono);font-size:0.8rem;color:var(--green);letter-spacing:0.1em;margin-bottom:1.5rem;}
+.pbq-scenario{font-size:0.82rem;color:var(--text);margin-bottom:1rem;line-height:1.7;}
+.pbq-match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.pbq-col-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;}
+.pbq-items{display:flex;flex-direction:column;gap:0.4rem;}
+.pbq-source-item{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.45rem 0.7rem;font-size:0.76rem;cursor:grab;user-select:none;transition:all 0.15s;font-family:var(--mono);color:var(--text);}
+.pbq-source-item:hover{border-color:var(--accent);color:var(--accent);}
+.pbq-source-item.dragging{opacity:0.4;}
+.pbq-source-item.used{opacity:0.35;cursor:default;border-style:dashed;}
+.pbq-target-row{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.4rem;}
+.pbq-target-label{font-size:0.78rem;color:var(--text);flex:1 1 0;padding-top:0.4rem;}
+.pbq-drop-zone{min-height:34px;min-width:120px;flex:0 0 145px;background:var(--bg2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.68rem;color:var(--muted);transition:all 0.15s;position:relative;cursor:pointer;padding:0.2rem 0.4rem;text-align:center;}
+.pbq-drop-zone.drag-over{border-color:var(--accent);background:rgba(0,212,255,0.06);}
+.pbq-drop-zone.filled{border-style:solid;color:var(--text);}
+.pbq-drop-zone.correct{border-color:var(--green)!important;background:rgba(0,245,160,0.08)!important;color:var(--green)!important;}
+.pbq-drop-zone.wrong{border-color:var(--red)!important;background:rgba(255,71,87,0.08)!important;color:var(--red)!important;}
+.pbq-drop-clear{position:absolute;right:3px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--muted);cursor:pointer;padding:0 2px;}
+.pbq-drop-clear:hover{color:var(--red);}
+.pbq-check-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.4rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:0.75rem;}
+.pbq-check-btn:hover{background:#e55e22;}
+.pbq-check-btn:disabled{opacity:0.5;cursor:default;}
+.pbq-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:3px;font-family:var(--mono);font-size:0.75rem;display:none;}
+.pbq-result.show{display:block;}
+.pbq-result.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.3);color:var(--green);}
+.pbq-result.partial{background:rgba(255,211,42,0.07);border:1px solid rgba(255,211,42,0.3);color:var(--yellow);}
+.pbq-fw-table{width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:1rem;}
+.pbq-fw-table th{background:var(--bg2);border:1px solid var(--border);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-align:left;}
+.pbq-fw-table td{border:1px solid var(--border);padding:0.4rem 0.6rem;vertical-align:middle;font-size:0.78rem;}
+.pbq-fw-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.72rem;padding:0.3rem 0.5rem;border-radius:3px;cursor:pointer;width:100%;}
+.pbq-fw-select:focus{outline:none;border-color:var(--accent);}
+.pbq-fw-select.correct{border-color:var(--green);color:var(--green);}
+.pbq-fw-select.wrong{border-color:var(--red);color:var(--red);}
+.pbq-sec{border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;}
+.pbq-sec:first-child{border-top:none;padding-top:0;margin-top:0;}
+.pbq-sec-title{font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;}
+.domain-section{margin-top:2rem;}
+.domain-section h3{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;}
+.domain-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:1rem 1.2rem;margin-bottom:0.6rem;}
+.domain-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+.domain-card-name{font-size:0.82rem;color:var(--text);font-weight:500;}
+.domain-card-pct{font-family:var(--mono);font-size:0.85rem;font-weight:600;}
+.domain-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.domain-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+[data-theme="light"]{--bg:#eef1f8;--bg2:#ffffff;--bg3:#dde2f0;--border:#c4ccdf;--accent:#006699;--accent2:#cc4400;--green:#007a52;--red:#c0172e;--yellow:#8a6200;--text:#111827;--muted:#556080;}
+*,*::before,*::after{transition:background-color 0.22s ease,border-color 0.2s ease,color 0.18s ease!important;}
+.theme-toggle{display:flex;align-items:center;gap:0.35rem;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:0.26rem 0.75rem 0.26rem 0.5rem;cursor:pointer;font-family:var(--mono);font-size:0.66rem;color:var(--muted);letter-spacing:0.07em;white-space:nowrap;flex-shrink:0;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.theme-icon{font-size:0.82rem;line-height:1;}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}main{padding:1.5rem;}.intro-stats,.results-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 9: CRYPTOGRAPHY &amp; PKI</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+    <a href="Practice-tests.html" class="home-btn">&#8592; Back</a>
+    <a href="index.html" class="home-btn">&#8962; Home</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">&#9728;&#65039;</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-title">QUESTIONS</div>
+  <div class="q-grid" id="qGrid"></div>
+  <div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">&ndash;</div>
+    <div class="score-label">SCORE</div>
+    <div class="score-breakdown">
+      <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+      <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+    </div>
+  </div>
+</aside>
+<main>
+
+<!-- INTRO -->
+<div id="introSection">
+<div class="intro-card">
+  <h1>SECTION 9: CRYPTOGRAPHY &amp; PKI</h1>
+  <div class="subtitle">CompTIA Security+ SY0-701 &middot; BL Study Materials</div>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+    <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+    <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+  </div>
+  <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+  <div class="mode-selector">
+    <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+      <div class="mode-card-title">&#128203; FULL EXAM</div>
+      <div class="mode-card-sub">All 35 questions &middot; 45 min timer &middot; PBQ + MCQ</div>
+    </div>
+    <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+      <div class="mode-card-title">&#127922; RANDOM QUIZ</div>
+      <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+    </div>
+  </div>
+  <div class="rand-mode-section" id="randModeSection">
+    <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+    <div class="random-options">
+      <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+      <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+      <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+    </div>
+  </div>
+  <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;" id="modeDescription">
+    This quiz covers <strong style="color:var(--text)">Section 9: Cryptography &amp; PKI</strong> &mdash; PKI hierarchy (CA, RA, Root CA, Sub-CA), certificate revocation (CRL, OCSP, Stapling), certificate formats (PEM/DER/PFX/P7B/CSR), symmetric vs. asymmetric algorithms (AES/RSA/ECC), cipher modes (ECB/CBC/GCM), hashing (SHA-256/MD5), key stretching (bcrypt/PBKDF2), Diffie-Hellman key exchange, Perfect Forward Secrecy, and key management (HSM/Key Escrow/DRA).<br><br>
+    <strong style="color:var(--text)">Tip:</strong> ECB vs CBC, CRL vs OCSP vs Stapling, and symmetric vs asymmetric use cases are classic exam traps.
+  </p>
+  <button class="start-btn" onclick="startExam()">START EXAM &#8594;</button>
+</div>
+</div>
+
+<!-- PBQ -->
+<div id="pbqSection" style="display:none">
+<div class="pbq-card">
+  <h3>&#9889; PERFORMANCE-BASED QUESTIONS (C9-1 &ndash; C9-5)</h3>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets, or click a source then click a target to assign.</p>
+
+  <!-- C9-1: PKI Components -->
+  <div class="pbq-sec" id="pbq-q1">
+    <div class="pbq-sec-title">C9-1 &mdash; PKI COMPONENTS: MATCH COMPONENT TO ROLE</div>
+    <div class="pbq-scenario">Match each PKI component to its primary role in the infrastructure.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">COMPONENT</div>
+        <div class="pbq-items" id="q1-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Root CA">Root CA</div>
+          <div class="pbq-source-item" draggable="true" data-val="Subordinate CA">Subordinate CA</div>
+          <div class="pbq-source-item" draggable="true" data-val="RA">RA</div>
+          <div class="pbq-source-item" draggable="true" data-val="CRL">CRL</div>
+          <div class="pbq-source-item" draggable="true" data-val="OCSP">OCSP</div>
+          <div class="pbq-source-item" draggable="true" data-val="HSM">HSM</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">ROLE</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">The trust anchor at the top of the PKI hierarchy; signs its own certificate; must be kept offline and highly secured</div><div class="pbq-drop-zone" data-answer="Root CA" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Intermediate CA between Root CA and end-entity certificates; handles day-to-day certificate issuance so Root CA stays offline</div><div class="pbq-drop-zone" data-answer="Subordinate CA" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Validates and processes incoming certificate requests on behalf of the CA; verifies identity before the CA issues a certificate</div><div class="pbq-drop-zone" data-answer="RA" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">A periodically published list of revoked certificate serial numbers; not real-time — can contain stale data between updates</div><div class="pbq-drop-zone" data-answer="CRL" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Real-time protocol that allows clients to query a responder to check a certificate's current status (good/revoked/unknown)</div><div class="pbq-drop-zone" data-answer="OCSP" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">FIPS 140-2 Level 3 certified dedicated hardware device that generates, stores, and manages cryptographic keys in tamper-resistant hardware</div><div class="pbq-drop-zone" data-answer="HSM" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q1')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q1-result"></div>
+  </div>
+
+  <!-- C9-2: Symmetric algorithms -->
+  <div class="pbq-sec" id="pbq-q2">
+    <div class="pbq-sec-title">C9-2 &mdash; SYMMETRIC ALGORITHMS: MATCH ALGORITHM TO KEY ATTRIBUTE</div>
+    <div class="pbq-scenario">Match each symmetric encryption algorithm to its key size and status description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ALGORITHM</div>
+        <div class="pbq-items" id="q2-sources">
+          <div class="pbq-source-item" draggable="true" data-val="DES">DES</div>
+          <div class="pbq-source-item" draggable="true" data-val="3DES">3DES</div>
+          <div class="pbq-source-item" draggable="true" data-val="AES">AES</div>
+          <div class="pbq-source-item" draggable="true" data-val="RC4">RC4</div>
+          <div class="pbq-source-item" draggable="true" data-val="Twofish">Twofish</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">KEY SIZE / STATUS</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">56-bit key; legacy symmetric cipher; now insecure and easily brute-forced with modern hardware</div><div class="pbq-drop-zone" data-answer="DES" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">168-bit effective key; applies DES three times; deprecated and being actively phased out</div><div class="pbq-drop-zone" data-answer="3DES" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">128-bit or 256-bit key; current gold standard — fastest and most secure symmetric algorithm in widespread use</div><div class="pbq-drop-zone" data-answer="AES" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Variable key length; stream cipher; deprecated — vulnerable to known attacks (used in old WEP Wi-Fi)</div><div class="pbq-drop-zone" data-answer="RC4" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">128-bit block cipher; AES finalist; still considered secure and a viable alternative to AES</div><div class="pbq-drop-zone" data-answer="Twofish" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q2')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q2-result"></div>
+  </div>
+
+  <!-- C9-3: Certificate formats table -->
+  <div class="pbq-sec" id="pbq-q3">
+    <div class="pbq-sec-title">C9-3 &mdash; CERTIFICATE FORMATS: IDENTIFY THE CORRECT FORMAT</div>
+    <div class="pbq-scenario">For each scenario, select the appropriate certificate format or file type.</div>
+    <table class="pbq-fw-table">
+      <thead><tr><th>#</th><th>SCENARIO</th><th>FORMAT</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">1</td><td>A Linux web admin needs to configure an Apache web server with an SSL certificate. The format must be Base64-encoded and human-readable. Common extensions are .pem, .crt, or .cer.</td><td><select class="pbq-fw-select" id="cf-1" data-answer="PEM"><option value="">-- Select --</option><option>PEM</option><option>DER</option><option>PFX/PKCS#12</option><option>P7B</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">2</td><td>A Windows administrator needs to export a certificate WITH its private key and the entire certificate chain into a single encrypted file for backup and transfer. The file will have a .pfx extension.</td><td><select class="pbq-fw-select" id="cf-2" data-answer="PFX/PKCS#12"><option value="">-- Select --</option><option>PEM</option><option>DER</option><option>PFX/PKCS#12</option><option>P7B</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">3</td><td>A developer needs to submit a certificate request to a CA for a new server certificate. The file contains the public key and identity information but no certificate yet.</td><td><select class="pbq-fw-select" id="cf-3" data-answer="CSR"><option value="">-- Select --</option><option>PEM</option><option>CSR</option><option>PFX/PKCS#12</option><option>DER</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">4</td><td>A Java Tomcat administrator needs to import a certificate chain. The format is Base64-encoded, can store the chain but NOT the private key, and uses .p7b or .p7c extensions.</td><td><select class="pbq-fw-select" id="cf-4" data-answer="P7B/PKCS#7"><option value="">-- Select --</option><option>PEM</option><option>DER</option><option>P7B/PKCS#7</option><option>PFX/PKCS#12</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">5</td><td>A Java application requires a certificate in binary (non-human-readable) format. The admin provides a file with a .der extension that cannot be opened as text.</td><td><select class="pbq-fw-select" id="cf-5" data-answer="DER"><option value="">-- Select --</option><option>PEM</option><option>DER</option><option>PFX/PKCS#12</option><option>P7B/PKCS#7</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="pbq-check-btn" onclick="chkFormats()">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q3-result"></div>
+  </div>
+
+  <!-- C9-4: Cipher Modes -->
+  <div class="pbq-sec" id="pbq-q4">
+    <div class="pbq-sec-title">C9-4 &mdash; CIPHER MODES: MATCH MODE TO CHARACTERISTIC</div>
+    <div class="pbq-scenario">Match each cipher mode of operation to its defining characteristic.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">CIPHER MODE</div>
+        <div class="pbq-items" id="q4-sources">
+          <div class="pbq-source-item" draggable="true" data-val="ECB">ECB</div>
+          <div class="pbq-source-item" draggable="true" data-val="CBC">CBC</div>
+          <div class="pbq-source-item" draggable="true" data-val="GCM">GCM</div>
+          <div class="pbq-source-item" draggable="true" data-val="CTR">CTR</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">CHARACTERISTIC</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">INSECURE — each block encrypted independently; identical plaintext blocks always produce identical ciphertext blocks, revealing data patterns</div><div class="pbq-drop-zone" data-answer="ECB" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Each plaintext block is XORed with the previous ciphertext block before encryption; requires an Initialization Vector (IV) for the first block</div><div class="pbq-drop-zone" data-answer="CBC" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Provides Authenticated Encryption (AE) — combines encryption AND integrity verification in one pass; preferred modern mode for AES</div><div class="pbq-drop-zone" data-answer="GCM" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Converts a block cipher into a stream cipher using an incrementing counter; parallelizable and efficient; counter must be unique per message</div><div class="pbq-drop-zone" data-answer="CTR" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q4')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q4-result"></div>
+  </div>
+
+  <!-- C9-5: Asymmetric algorithms -->
+  <div class="pbq-sec" id="pbq-q5">
+    <div class="pbq-sec-title">C9-5 &mdash; ASYMMETRIC ALGORITHMS &amp; KEY EXCHANGE: MATCH TO DESCRIPTION</div>
+    <div class="pbq-scenario">Match each asymmetric algorithm or protocol to its description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ALGORITHM</div>
+        <div class="pbq-items" id="q5-sources">
+          <div class="pbq-source-item" draggable="true" data-val="RSA">RSA</div>
+          <div class="pbq-source-item" draggable="true" data-val="DSA">DSA</div>
+          <div class="pbq-source-item" draggable="true" data-val="ECC">ECC</div>
+          <div class="pbq-source-item" draggable="true" data-val="DHE">DHE</div>
+          <div class="pbq-source-item" draggable="true" data-val="ECDHE">ECDHE</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Most widely used asymmetric algorithm; based on the difficulty of factoring large prime numbers; minimum 2048-bit key for security</div><div class="pbq-drop-zone" data-answer="RSA" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Digital Signature Algorithm — used ONLY for signing, not encryption; U.S. federal standard for digital signatures</div><div class="pbq-drop-zone" data-answer="DSA" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Elliptic Curve Cryptography — achieves equivalent security to RSA with much smaller key sizes; ideal for mobile and IoT devices</div><div class="pbq-drop-zone" data-answer="ECC" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Ephemeral Diffie-Hellman — generates a new key pair for each session, providing Perfect Forward Secrecy</div><div class="pbq-drop-zone" data-answer="DHE" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Combines Elliptic Curve with ephemeral key generation — provides both efficiency (small keys) AND Perfect Forward Secrecy; preferred in modern TLS</div><div class="pbq-drop-zone" data-answer="ECDHE" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q5')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q5-result"></div>
+  </div>
+
+</div>
+<div style="text-align:center;margin-top:1rem;">
+  <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE &#8594;</button>
+</div>
+</div>
+
+<!-- MCQ -->
+<div id="mcqSection" style="display:none"><div id="questionContainer"></div></div>
+
+<!-- RESULTS -->
+<div id="resultsSection" style="display:none">
+<div class="results-hero">
+  <h2>EXAM COMPLETE &mdash; SECTION 9: CRYPTOGRAPHY &amp; PKI</h2>
+  <div class="final-score" id="finalScore">0</div>
+  <div class="final-pct" id="finalPct">0/30 Correct</div>
+  <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+  <div class="results-grid">
+    <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+    <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+    <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+  </div>
+  <div>
+    <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+    <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+  </div>
+</div>
+<div class="domain-section" id="domainSummary"></div>
+</div>
+
+</main>
+</div>
+<script>
+let examMode='full',randCount=10,activeQuestions=[];
+function setMode(m){examMode=m;document.getElementById('modeFullCard').classList.toggle('active',m==='full');document.getElementById('modeRandCard').classList.toggle('active',m==='random');document.getElementById('randModeSection').classList.toggle('show',m==='random');if(m==='full'){document.getElementById('statQ').textContent='35';document.getElementById('statT').textContent='45';}else updateRandDescription();}
+function setRandCount(n){randCount=n;['10','15','20'].forEach(x=>document.getElementById('randBtn'+x).classList.remove('active'));document.getElementById('randBtn'+n).classList.add('active');updateRandDescription();}
+function updateRandDescription(){document.getElementById('statQ').textContent=randCount;document.getElementById('statT').textContent=Math.round(randCount*1.5);}
+
+let dragVal=null,clickSel=null;
+document.addEventListener('DOMContentLoaded',()=>{shuffleSources();initDrag();});
+function shuffleSources(){['q1-sources','q2-sources','q4-sources','q5-sources'].forEach(id=>{const c=document.getElementById(id);if(!c)return;const it=[...c.children];for(let i=it.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));c.appendChild(it[j]);it.splice(j,1);}});}
+function initDrag(){
+  document.querySelectorAll('.pbq-source-item').forEach(el=>{
+    el.addEventListener('dragstart',()=>{dragVal=el.dataset.val;setTimeout(()=>el.classList.add('dragging'),0);});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>clickSource(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragVal)assignZone(z,dragVal);});
+  });
+}
+function clickSource(el){if(el.classList.contains('used'))return;const pbqEl=el.closest('[id^="pbq-q"]');if(!pbqEl)return;const id=pbqEl.id.replace('pbq-','');document.querySelectorAll('#pbq-'+id+' .pbq-source-item').forEach(s=>s.style.outline='');if(clickSel===el.dataset.val){clickSel=null;}else{clickSel=el.dataset.val;el.style.outline='2px solid var(--accent)';}}
+function hdz(z){if(z.classList.contains('correct')||z.classList.contains('wrong'))return;if(clickSel){assignZone(z,clickSel);document.querySelectorAll('.pbq-source-item').forEach(s=>s.style.outline='');clickSel=null;}}
+function assignZone(z,val){const old=z.dataset.current;if(old){const s=document.querySelector('.pbq-source-item[data-val="'+old+'"]');if(s)s.classList.remove('used');}const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.add('used');z.dataset.current=val;z.classList.add('filled');z.childNodes[0].textContent=val;const c=z.querySelector('.pbq-drop-clear');if(c)c.style.display='block';}
+function clrDrop(e,btn){e.stopPropagation();const z=btn.parentElement,val=z.dataset.current;if(val){const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.remove('used');}z.dataset.current='';z.classList.remove('filled');z.childNodes[0].textContent='Drop here';btn.style.display='none';}
+function chkPBQ(id){const zones=document.querySelectorAll('.pbq-drop-zone[data-pbq="'+id+'"]');let ok=0,tot=zones.length;zones.forEach(z=>{const a=z.dataset.answer,c=z.dataset.current;if(!c)return;if(c===a){z.classList.add('correct');ok++;}else z.classList.add('wrong');});const r=document.getElementById('pbq-'+id+'-result');r.classList.add('show');if(ok===tot&&tot>0){r.className='pbq-result show correct';r.textContent='\u2713 PERFECT \u2014 All '+tot+' matched correctly!';}else{r.className='pbq-result show partial';r.textContent=ok+'/'+tot+' correct \u2014 Review highlighted zones.';}document.querySelector('#pbq-'+id+' .pbq-check-btn').disabled=true;}
+function chkFormats(){const rules=[{id:'cf-1',a:'PEM'},{id:'cf-2',a:'PFX/PKCS#12'},{id:'cf-3',a:'CSR'},{id:'cf-4',a:'P7B/PKCS#7'},{id:'cf-5',a:'DER'}];let ok=0;rules.forEach(r=>{const s=document.getElementById(r.id);if(s.value===r.a){s.classList.add('correct');ok++;}else if(s.value)s.classList.add('wrong');s.disabled=true;});const res=document.getElementById('pbq-q3-result');res.classList.add('show');if(ok===5){res.className='pbq-result show correct';res.textContent='\u2713 PERFECT \u2014 All 5 formats identified correctly!';}else{res.className='pbq-result show partial';res.textContent=ok+'/5 correct \u2014 Review certificate formats.';}document.querySelector('#pbq-q3 .pbq-check-btn').disabled=true;}
+
+const questions=[
+// PKI
+{id:'C9-6',domain:'PKI',type:'mc',
+text:'A company deploys a PKI where the Root CA is kept offline in a vault and never directly issues end-entity certificates. Intermediate CAs handle daily operations. Why is the Root CA kept offline?',
+options:['To reduce server hardware costs','If the Root CA is compromised, all certificates in the entire hierarchy are invalidated — keeping it offline dramatically reduces the attack surface','Online Root CAs are prohibited by NIST standards','Offline Root CAs issue certificates faster than online ones'],
+answer:[1],
+explanation:'The Root CA is the trust anchor for the entire PKI hierarchy. If it is compromised, every certificate it has ever signed — directly or indirectly — is untrusted, requiring a full PKI rebuild. Keeping it air-gapped (offline) dramatically reduces the chance of compromise. Subordinate (intermediate) CAs handle daily certificate issuance, keeping the Root CA safely offline except when signing new Sub-CA certificates.'},
+
+{id:'C9-7',domain:'PKI',type:'mc',
+text:'What is the purpose of OCSP Stapling (Certificate Stapling)?',
+options:['It allows the client to pin an expected certificate hash into the application code','The web server pre-fetches and caches a signed OCSP response and delivers it directly to the client during the TLS handshake, eliminating the client\'s need to contact the OCSP responder','It publishes a list of revoked certificate serial numbers for client download','It issues a new certificate when the current one expires'],
+answer:[1],
+explanation:'OCSP Stapling solves two problems with traditional OCSP: (1) Privacy — with regular OCSP, the OCSP responder can see which sites users visit; with stapling, the server handles the OCSP query privately. (2) Performance — the server caches the signed response and staples it to the TLS handshake, saving the client a round-trip. The stapled response is still signed by the CA, so it cannot be forged.'},
+
+{id:'C9-8',domain:'PKI',type:'mc',
+text:'An application has the expected certificate public key hardcoded into its binary. When the server presents a certificate during TLS negotiation, the application rejects it if it does not match — even if it was issued by a trusted CA. This technique is:',
+options:['OCSP Stapling','Certificate Transparency','Certificate Pinning','Certificate Chaining'],
+answer:[2],
+explanation:'Certificate Pinning (also called HTTP Public Key Pinning or HPKP) hardcodes the expected certificate or public key fingerprint into the application. This prevents MITM attacks even if an attacker obtains a fraudulently issued certificate from a different CA. The tradeoff: if the server certificate changes (renewal, replacement), the application must be updated — otherwise it will reject the valid new certificate.'},
+
+{id:'C9-9',domain:'PKI',type:'multi',
+text:'Which TWO statements about the CRL (Certificate Revocation List) are accurate? <strong>(Select TWO)</strong>',
+options:['CRL provides real-time certificate status with no delay','CRL is a periodically published list of revoked certificate serial numbers signed by the CA','CRL can contain stale data because it is updated on a schedule, not in real-time','CRL queries require the client to contact a live OCSP responder server','CRL and OCSP Stapling are the same mechanism'],
+answer:[1,2],
+explanation:'A CRL is a list of revoked certificate serial numbers published and signed by the CA at scheduled intervals (e.g., daily or weekly). The key limitation is staleness — between updates, a revoked certificate may not yet appear on the CRL. OCSP was developed to address this with real-time status checking. OCSP Stapling further improves on OCSP by having the server cache and deliver the OCSP response.'},
+
+{id:'C9-10',domain:'PKI',type:'mc',
+text:'In a PKI hierarchy, what is "certificate chaining"?',
+options:['Linking multiple CRLs together for faster revocation checking','The chain of trust from an end-entity certificate through one or more Subordinate CAs up to the Root CA — each certificate signed by the one above it','Binding a certificate to a specific IP address chain','Connecting multiple HSMs for redundancy'],
+answer:[1],
+explanation:'Certificate chaining (the chain of trust) allows a client to verify an end-entity certificate by tracing the signature chain: end-entity cert signed by Sub-CA → Sub-CA cert signed by Root CA → Root CA is pre-trusted in the OS/browser trust store. The client validates each signature in the chain. If any link is broken or untrusted, the entire chain fails. This is why all trust ultimately traces to pre-installed Root CAs.'},
+
+{id:'C9-11',domain:'PKI',type:'mc',
+text:'What is the primary difference between a Public CA and a Private CA?',
+options:['Public CAs use asymmetric encryption; Private CAs use symmetric encryption','Public CAs are commercial third-parties (e.g., DigiCert) trusted by browsers and OS by default; Private CAs are internally managed and only trusted within the organization','Public CAs issue free certificates; Private CAs charge for certificates','Private CAs cannot issue TLS certificates; only Public CAs can'],
+answer:[1],
+explanation:'A Public CA (DigiCert, Let\'s Encrypt, Comodo) is a commercial third-party CA whose root certificates are pre-installed in browsers and operating systems — making their certificates automatically trusted by the public internet. A Private CA is managed internally by an organization for internal systems, intranet sites, or employee certificates. Private CA certificates are NOT trusted by public browsers unless manually added to the trust store.'},
+
+{id:'C9-12',domain:'PKI',type:'mc',
+text:'What does a digital certificate contain? Select the MOST complete and accurate answer.',
+options:['Only the owner\'s public key','The owner\'s public key, identity information, expiration date, and the CA\'s digital signature','The owner\'s private key, public key, and identity information','Only the CA\'s digital signature and expiration date'],
+answer:[1],
+explanation:'A digital certificate (X.509) contains: (1) the subject\'s public key, (2) identity information (subject CN, organization, country), (3) validity period (not before / not after dates), (4) the issuing CA\'s identity, (5) the CA\'s digital signature over all the above, and (6) other extensions (key usage, SANs). Critically, a certificate NEVER contains the private key — that stays with the owner.'},
+
+// Symmetric vs Asymmetric
+{id:'C9-13',domain:'Algorithms',type:'mc',
+text:'Which of the following is a key advantage of asymmetric encryption over symmetric encryption?',
+options:['Asymmetric encryption is significantly faster than symmetric','Asymmetric encryption solves the key distribution problem — public keys can be shared openly without compromising security','Asymmetric encryption uses shorter key lengths to achieve the same security level','Asymmetric encryption is used for bulk data encryption because it is more efficient'],
+answer:[1],
+explanation:'The key distribution problem: with symmetric encryption, how do you securely share a secret key over an insecure channel? If you could send it securely, you wouldn\'t need encryption. Asymmetric encryption solves this — anyone can have your public key; only your private key can decrypt. In practice, asymmetric is used for key exchange and signatures, while symmetric (AES) is used for bulk data encryption due to speed.'},
+
+{id:'C9-14',domain:'Algorithms',type:'mc',
+text:'A security architect designs a TLS connection where a new session key is generated for every HTTPS connection. Even if the server\'s long-term private key is stolen in the future, past sessions cannot be decrypted. This property is called:',
+options:['Key Escrow','Certificate Pinning','Perfect Forward Secrecy (PFS)','Key Stretching'],
+answer:[2],
+explanation:'Perfect Forward Secrecy (PFS) generates a unique, temporary (ephemeral) session key for every session. This key is never stored — it exists only in memory for that session. If the long-term private key is compromised later, attackers cannot use it to decrypt previously recorded sessions because each session used its own unique key. PFS is achieved using DHE or ECDHE key exchange in TLS.'},
+
+{id:'C9-15',domain:'Algorithms',type:'mc',
+text:'A mobile IoT device needs to perform asymmetric encryption with minimal CPU overhead. The security architect recommends ECC over RSA. Why?',
+options:['ECC is only available on mobile platforms; RSA requires server hardware','ECC achieves equivalent cryptographic security with significantly smaller key sizes, reducing computational overhead — a 256-bit ECC key provides similar security to a 3072-bit RSA key','ECC is a symmetric algorithm and therefore faster to compute','ECC is not patent-protected, making it cheaper to implement'],
+answer:[1],
+explanation:'ECC (Elliptic Curve Cryptography) is based on the mathematical properties of elliptic curves, which allow much smaller keys to achieve the same security level as RSA. A 256-bit ECC key ≈ 3072-bit RSA key in security. Smaller keys mean faster computation, less power consumption, and less bandwidth — ideal for mobile, IoT, and embedded devices. ECC is used in ECDH and ECDSA (Elliptic Curve DSA).'},
+
+{id:'C9-16',domain:'Algorithms',type:'mc',
+text:'What is the fundamental operational difference between AES (symmetric) and RSA (asymmetric) encryption?',
+options:['AES uses a key pair; RSA uses a single shared key','AES uses the same key to encrypt and decrypt; RSA uses a mathematically linked public key to encrypt and private key to decrypt','AES is only for data at rest; RSA is only for data in transit','AES generates a new key per session; RSA uses a permanent key'],
+answer:[1],
+explanation:'AES (symmetric): one shared secret key encrypts AND decrypts — fast, efficient for large data, but requires a secure key exchange mechanism. RSA (asymmetric): two mathematically linked keys — the PUBLIC key encrypts (anyone can encrypt a message to you), and the PRIVATE key decrypts (only you can read it). In TLS, RSA/ECDHE handles the key exchange, then AES handles the actual data encryption.'},
+
+// Hashing
+{id:'C9-17',domain:'Hashing',type:'mc',
+text:'Why is MD5 considered cryptographically broken for security applications?',
+options:['MD5 produces hashes that are too short to be unique','MD5 is vulnerable to collision attacks — two different inputs can be crafted to produce the same MD5 hash value','MD5 is too slow for modern password hashing workloads','MD5 cannot hash files larger than 1MB'],
+answer:[1],
+explanation:'MD5 is broken because of collision attacks — researchers can craft two different inputs that produce the same MD5 hash. This breaks a fundamental property of cryptographic hash functions (collision resistance). For password storage, MD5 is also too fast — billions of hashes per second with GPUs, making brute-force trivial. MD5 can still be used for non-security purposes (file integrity checksums, deduplication), but never for security applications.'},
+
+{id:'C9-18',domain:'Hashing',type:'mc',
+text:'An organization uses SHA-256 to generate a hash of a software update package. The hash is published on the vendor\'s website. Users download the package and compute its SHA-256 hash and compare it to the published value. Which security goal does this serve?',
+options:['Confidentiality — only authorized users can decrypt the package','Non-repudiation — the vendor cannot deny publishing the update','Integrity — verifying the downloaded file has not been tampered with or corrupted in transit','Authentication — verifying the identity of the downloader'],
+answer:[2],
+explanation:'Hashing for file distribution serves INTEGRITY — detecting if a file has been modified or corrupted. If the hashes match, the downloaded file is identical to the original. If they differ, the file was tampered with or corrupted. SHA-256 is appropriate here (SHA-1 and MD5 are deprecated for this use). This does NOT provide authentication (who published it) or non-repudiation — that requires a digital signature.'},
+
+{id:'C9-19',domain:'Hashing',type:'mc',
+text:'What is the purpose of adding a "salt" to a password before hashing it?',
+options:['A salt increases the key length, making the hash longer and more secure','A salt is a random unique value added to each password before hashing — preventing pre-computed rainbow table attacks and ensuring two identical passwords produce different hashes','A salt encrypts the hash so it cannot be read without the salt key','A salt speeds up the hashing process for better login performance'],
+answer:[1],
+explanation:'Without salting, two users with the same password produce the same hash — an attacker who compromises the database can crack all identical passwords at once, and pre-computed rainbow tables work perfectly. A salt is a random unique value generated per user and added to the password before hashing. Now even identical passwords produce different hashes, and rainbow tables are useless. Salts are stored alongside the hash (they\'re not secret) — their value is uniqueness, not secrecy.'},
+
+{id:'C9-20',domain:'Hashing',type:'mc',
+text:'Which key stretching algorithm is used in Windows WPA2 Wi-Fi encryption and is NIST-recommended for password hashing?',
+options:['bcrypt','SHA-256','PBKDF2','Argon2'],
+answer:[2],
+explanation:'PBKDF2 (Password-Based Key Derivation Function 2) applies a pseudorandom function (typically HMAC-SHA256) thousands to millions of times to a password + salt. The iteration count is configurable — as hardware gets faster, the count increases to maintain difficulty. PBKDF2 is used in WPA2-Personal (Wi-Fi) and is NIST-recommended (SP 800-132). bcrypt is also excellent for passwords (used widely in web apps). Argon2 won the Password Hashing Competition (2015).'},
+
+// Data Protection
+{id:'C9-21',domain:'DataProtection',type:'mc',
+text:'A laptop containing sensitive HR data is stolen from a car. Fortunately, the organization had deployed BitLocker on all Windows laptops. Why does BitLocker protect the data even though the attacker has physical access?',
+options:['BitLocker requires an internet connection to function, which the attacker lacks','BitLocker encrypts the entire disk — without the correct BitLocker key (typically stored in TPM), the data is unreadable regardless of physical access','BitLocker deletes sensitive files when the device is reported stolen','BitLocker requires Active Directory authentication before the OS can boot'],
+answer:[1],
+explanation:'BitLocker implements Full Disk Encryption (FDE) — the entire disk (OS, system files, user data) is encrypted with AES. The decryption key is typically stored in the TPM chip, tied to the specific hardware configuration. If the disk is removed and placed in another machine, or if the boot configuration changes, the key is not released and the disk is unreadable. This is the primary defense against data theft from stolen devices.'},
+
+{id:'C9-22',domain:'DataProtection',type:'mc',
+text:'Which data state is the <strong>HARDEST</strong> to protect cryptographically and typically requires specialized technologies like Trusted Execution Environments (TEE)?',
+options:['Data-at-Rest (stored on disk)','Data-in-Transit (moving across a network)','Data-in-Use (actively being processed in RAM/CPU)','Data-in-Archive (stored in backups)'],
+answer:[2],
+explanation:'Data-in-Use is actively loaded in RAM and CPU registers during processing — it must be decrypted to be used, which means the plaintext exists in memory. Traditional encryption cannot protect data while it is being computed on. Solutions include: Trusted Execution Environments (TEE) which isolate computation in secure enclaves (Intel SGX), and Homomorphic Encryption which allows computation on ciphertext without decrypting.'},
+
+{id:'C9-23',domain:'DataProtection',type:'mc',
+text:'What is Homomorphic Encryption and what problem does it solve?',
+options:['An encryption algorithm that uses the same key for both encryption and decryption','Encryption that allows computation on ciphertext without decrypting it first — enabling cloud providers to process sensitive data without ever seeing the plaintext','An encryption method specifically designed for hash functions','An algorithm that converts plaintext into multiple ciphertext formats simultaneously'],
+answer:[1],
+explanation:'Homomorphic Encryption solves the cloud processing dilemma: normally, to process encrypted data you must decrypt it first — exposing it to the cloud provider. Homomorphic encryption allows mathematical operations to be performed directly on encrypted data, with the result — when decrypted — matching what would have been produced if the computation were performed on the plaintext. This keeps data private even from the processing environment. Currently computationally expensive but an active research area.'},
+
+// Crypto Techniques
+{id:'C9-24',domain:'CryptoTechniques',type:'mc',
+text:'What is a cryptographic nonce and what attack does it prevent?',
+options:['A nonce is a secret key used once for symmetric encryption of session data','A nonce is a unique random value used only once in a cryptographic operation — preventing replay attacks by ensuring each transaction is distinct','A nonce is a hash of the previous block in a blockchain, ensuring immutability','A nonce is a weak password substitute used in legacy systems'],
+answer:[1],
+explanation:'A nonce (Number Used Once) is a random or pseudo-random value that is used only once per cryptographic operation. Without a nonce, an attacker who captures a valid authentication message or transaction could replay it later to authenticate again. The nonce ensures each operation is unique — a replayed message will have the old nonce, which will be rejected. Nonces are used in TLS handshakes, challenge-response authentication, and blockchain mining.'},
+
+{id:'C9-25',domain:'CryptoTechniques',type:'mc',
+text:'An analyst suspects that sensitive documents are being exfiltrated hidden inside seemingly innocent JPEG image files on a file share. This technique of hiding data inside other files is called:',
+options:['Obfuscation','Cryptographic Diffusion','Steganography','Data Masking'],
+answer:[2],
+explanation:'Steganography hides secret data within ordinary carrier files (images, audio, video, documents) without visibly altering the carrier. Unlike encryption (which hides content but reveals that something is encrypted), steganography hides the existence of the hidden message. Common techniques include LSB (Least Significant Bit) manipulation in image pixels. Detection requires steganalysis tools that look for statistical anomalies in files.'},
+
+{id:'C9-26',domain:'CryptoTechniques',type:'mc',
+text:'Diffie-Hellman key exchange allows two parties to establish a shared secret over an insecure channel. What is the mathematical hard problem that makes this secure?',
+options:['The difficulty of factoring the product of two large prime numbers','The Discrete Logarithm Problem — it is easy to compute g^x mod p, but computationally infeasible to reverse (find x given g^x mod p)','The inability to solve polynomial equations of degree greater than 5','The complexity of computing elliptic curve point multiplication in reverse'],
+answer:[1],
+explanation:'Diffie-Hellman security is based on the Discrete Logarithm Problem: given a prime p, base g, and the result g^x mod p, it is computationally infeasible to determine x with large primes. Two parties can exchange public values and independently compute the same shared secret without ever transmitting the secret itself. Even if an adversary intercepts both public values, they cannot derive the shared secret without solving the discrete logarithm problem.'},
+
+{id:'C9-27',domain:'CryptoTechniques',type:'mc',
+text:'ROT13 and simple substitution ciphers are easily broken by which classical cryptanalysis technique?',
+options:['Brute-force key search across all 26 possible shifts','Frequency analysis — letter frequencies in ciphertext preserve natural language patterns, revealing the substitution scheme','Known-plaintext attack requiring a sample of decrypted data','Birthday attack exploiting hash collisions'],
+answer:[1],
+explanation:'Frequency analysis exploits the fact that substitution ciphers preserve letter frequency patterns. In English, "E" is the most common letter (~13%), followed by "T", "A", "O". In the ciphertext, the most frequent letter is almost certainly "E". Frequency analysis can crack any simple monoalphabetic substitution cipher. Caesar/ROT13 can also be brute-forced in 25 attempts. Modern block ciphers (AES) destroy frequency patterns through diffusion and confusion.'},
+
+{id:'C9-28',domain:'CryptoTechniques',type:'mc',
+text:'What is the ECB cipher mode\'s critical security weakness that makes it unsuitable for most data?',
+options:['ECB requires an IV (Initialization Vector) which is difficult to generate securely','ECB is too slow for real-time data encryption','Identical plaintext blocks always produce identical ciphertext blocks — revealing data patterns in the encrypted output (the "ECB penguin" problem)','ECB cannot be used with AES — it is only compatible with DES'],
+answer:[2],
+explanation:'ECB (Electronic Code Book) encrypts each block independently. This means the same plaintext block always produces the same ciphertext block with the same key. When encrypting structured data (images, documents), recognizable patterns persist in the ciphertext. The famous demonstration is the "ECB penguin" — a Linux Tux penguin image encrypted in ECB mode where the penguin outline is clearly visible in the ciphertext. CBC, CTR, or GCM should be used instead.'},
+
+// Key Management
+{id:'C9-29',domain:'KeyManagement',type:'mc',
+text:'An organization stores a copy of its encryption keys with a trusted escrow agent. An authorized law enforcement agency presents a court order requiring access to encrypted communications. Which key management concept enables this authorized access?',
+options:['Perfect Forward Secrecy','Key Escrow','Hardware Security Module (HSM)','Data Recovery Agent (DRA)'],
+answer:[1],
+explanation:'Key Escrow stores a copy of cryptographic keys with a trusted third party (government agency, escrow service, or internal auditor). The escrowed copy can be retrieved by authorized parties (with proper legal authority like a court order) if the original key is lost or in response to a lawful request. Key escrow is controversial — any escrowed copy is also a potential high-value attack target. Strong access controls, audit logging, and physical security around escrowed keys are critical.'},
+
+{id:'C9-30',domain:'KeyManagement',type:'mc',
+text:'An HSM (Hardware Security Module) is described as providing FIPS 140-2 Level 3 certified key storage. What makes HSM key storage fundamentally different from storing keys in software or a file?',
+options:['HSMs store keys in a cloud-encrypted database accessible by authorized services','All cryptographic operations run inside the HSM hardware — the private keys NEVER leave the device in plaintext, and the device is tamper-resistant (tamper-evident and zeroizes keys if physical tampering is detected)','HSMs automatically rotate keys every 30 days for maximum security','HSMs compress keys to reduce storage requirements'],
+answer:[1],
+explanation:'An HSM is a dedicated hardware device where cryptographic operations (signing, encryption, key generation) occur entirely within the secure hardware boundary. Private keys never leave the HSM in plaintext — external requests result in "perform operation X with key Y" and only the result is returned. The hardware is tamper-resistant (typically Level 3: physical barriers against tampering) and tamper-evident (Level 4: zeroizes keys if tampering is detected). Examples: Thales Luna, AWS CloudHSM, YubiHSM.'},
+
+{id:'C9-31',domain:'KeyManagement',type:'mc',
+text:'In a Windows enterprise environment using EFS (Encrypting File System), a Data Recovery Agent (DRA) is configured via Group Policy. An employee who encrypted their files has left the company. What is the DRA\'s role?',
+options:['The DRA resets the former employee\'s Windows account password to regain access','The DRA is a designated account whose private key can decrypt any EFS-encrypted file in the domain — even without the original user\'s private key','The DRA forces Windows to re-encrypt all EFS files with the new employee\'s key','The DRA contacts Microsoft to recover the original user\'s private key'],
+answer:[1],
+explanation:'In Windows EFS, each file is encrypted with a File Encryption Key (FEK), which is then encrypted with the user\'s public key. If the user\'s private key is unavailable (employee left, key lost), the FEK is also encrypted with the DRA\'s public key during file creation — providing a recovery path. The DRA can decrypt any EFS file because its public key is used in every EFS encryption operation domain-wide. Critical: the DRA private key must be stored securely offline — it is a skeleton key for all EFS files.'},
+
+{id:'C9-32',domain:'Algorithms',type:'mc',
+text:'A security engineer is reviewing the TLS configuration of a web server. The cipher suite includes "ECDHE-RSA-AES256-GCM-SHA384". What does the "ECDHE" component indicate?',
+options:['The data will be encrypted using ECC instead of AES','An Elliptic Curve Diffie-Hellman Ephemeral key exchange is used — generating a new session key for each connection, providing Perfect Forward Secrecy','The server uses ECDSA instead of RSA for its certificate','SHA-384 is used as the key exchange algorithm'],
+answer:[1],
+explanation:'In a TLS cipher suite, each component has a role: ECDHE = key exchange algorithm (Elliptic Curve Diffie-Hellman Ephemeral — provides PFS), RSA = authentication (verifying the server\'s certificate), AES256-GCM = bulk encryption algorithm and mode (256-bit AES in GCM mode — provides encryption + integrity), SHA384 = hash/MAC algorithm. The "E" in ECDHE is critical — ephemeral keys mean each session has unique keys, so compromising the long-term RSA key doesn\'t expose past sessions.'},
+
+{id:'C9-33',domain:'PKI',type:'mc',
+text:'Why is a Certificate Signing Request (CSR) sent to a CA rather than just sending the certificate directly?',
+options:['CSR files are smaller and easier to transmit than full certificates','The CSR contains the public key and identity information that the CA uses to create and sign the certificate — the applicant generates the key pair, keeps the private key, and sends only the public portion via the CSR for the CA to sign','CSRs are used to request private key recovery from a CA','The CA requires a CSR to set the expiration date of the certificate'],
+answer:[1],
+explanation:'A CSR (Certificate Signing Request, PKCS#10) is the mechanism that keeps private keys private. The applicant generates their own key pair, then creates a CSR containing: public key + identity information (CN, SANs, organization). The CSR is sent to the CA, which verifies the identity, signs the public key + identity info with its private key, and returns the signed certificate. The applicant\'s private key NEVER leaves their control — only the public key travels to the CA.'},
+
+{id:'C9-34',domain:'CryptoTechniques',type:'mc',
+text:'What distinguishes a stream cipher from a block cipher?',
+options:['Stream ciphers use asymmetric keys; block ciphers use symmetric keys','Stream ciphers encrypt data one bit or byte at a time continuously; block ciphers encrypt fixed-size chunks (blocks) of data — e.g., 128-bit blocks for AES','Stream ciphers are always faster than block ciphers for all use cases','Block ciphers can only encrypt text; stream ciphers handle binary data'],
+answer:[1],
+explanation:'A stream cipher encrypts data one bit or byte at a time using a key stream XORed with the plaintext — fast and good for real-time or continuous data (e.g., ChaCha20 in TLS, RC4 in legacy WEP). A block cipher encrypts fixed-size blocks (AES uses 128-bit blocks) — requires padding if data is not a multiple of block size. Block ciphers are more common in modern applications and, when used in modes like GCM, provide both encryption and authentication.'},
+
+{id:'C9-35',domain:'KeyManagement',type:'multi',
+text:'Which TWO statements about Perfect Forward Secrecy (PFS) are accurate? <strong>(Select TWO)</strong>',
+options:['PFS is achieved by using the same RSA key pair for both authentication and key exchange','PFS generates a unique ephemeral session key for each connection — the key is discarded after the session ends','If a server\'s long-term private key is compromised, past sessions protected by PFS cannot be decrypted retroactively','PFS is implemented using static Diffie-Hellman (non-ephemeral), which stores session keys for potential audit','PFS is optional and provides no meaningful security benefit in practice'],
+answer:[1,2],
+explanation:'PFS works by generating a fresh, temporary (ephemeral) key pair for each TLS session using DHE or ECDHE. After the session ends, the ephemeral private key is destroyed and never stored. This means: even if an attacker records all encrypted traffic AND later compromises the server\'s long-term RSA private key, they CANNOT decrypt past sessions — each session used a unique key that no longer exists. This is why modern TLS 1.3 mandates ephemeral key exchange.'},
+];
+
+const state={current:0,userAnswers:[],submitted:[],timerSeconds:45*60,timerInterval:null,timerRunning:false};
+function startTimer(){state.timerRunning=true;state.timerInterval=setInterval(()=>{state.timerSeconds--;updateTimer();if(state.timerSeconds<=0){clearInterval(state.timerInterval);showResults();}},1000);}
+function updateTimer(){const el=document.getElementById('timer'),m=Math.floor(state.timerSeconds/60),s=state.timerSeconds%60;el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');el.className=state.timerSeconds<60?'danger':state.timerSeconds<300?'warn':'';}
+function toggleTimer(){const btn=document.getElementById('timerBtn');if(state.timerRunning){clearInterval(state.timerInterval);state.timerRunning=false;btn.textContent='RESUME';}else{startTimer();btn.textContent='PAUSE';}}
+function startExam(){document.getElementById('introSection').style.display='none';if(examMode==='full'){activeQuestions=[...questions];document.getElementById('pbqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}else{const sh=[...questions].sort(()=>Math.random()-0.5);activeQuestions=sh.slice(0,randCount);state.timerSeconds=randCount*90;initMCQ();document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}}
+function showMCQ(){document.getElementById('pbqSection').style.display='none';activeQuestions=[...questions];initMCQ();document.getElementById('mcqSection').style.display='block';}
+function initMCQ(){state.userAnswers=activeQuestions.map(()=>[]);state.submitted=activeQuestions.map(()=>false);buildGrid();renderQ(0);}
+function buildGrid(){const g=document.getElementById('qGrid');g.innerHTML='';activeQuestions.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(i===0?' active':'');d.textContent=i+1;d.onclick=()=>renderQ(i);d.id='dot-'+i;g.appendChild(d);});}
+function updGrid(idx){activeQuestions.forEach((_,i)=>{const d=document.getElementById('dot-'+i);if(!d)return;d.classList.remove('active','answered','correct','wrong');if(i===idx)d.classList.add('active');else if(state.submitted[i]){const q=activeQuestions[i],ua=state.userAnswers[i];d.classList.add(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))?'correct':'wrong');}else if(state.userAnswers[i].length>0)d.classList.add('answered');});}
+function renderQ(idx){
+  state.current=idx;updGrid(idx);
+  const q=activeQuestions[idx],isM=q.type==='multi',sub=state.submitted[idx],ua=state.userAnswers[idx];
+  const L=['A','B','C','D','E'],req=q.answer.length,sel=ua.length;
+  let oH=q.options.map((o,i)=>{let c='option'+(isM?' multi-opt':'');if(sub){c+=' disabled';if(q.answer.includes(i))c+=' correct';else if(ua.includes(i))c+=' wrong';}else if(ua.includes(i))c+=' selected';return '<div class="'+c+'" data-oidx="'+i+'"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="opt-letter">'+L[i]+'</span><span>'+o+'</span></div>';}).join('');
+  let cH='';if(isM&&!sub){const d=sel>=req;cH='<div class="multi-counter '+(d?'done':'')+'"> '+(d?'&#10003;':'&#9744;')+' Select '+req+' answer'+(req>1?'s':'')+' &mdash; '+sel+' of '+req+' selected</div>';}
+  let fH='';if(sub){const ok=q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));fH='<div class="feedback '+(ok?'correct':'wrong')+' visible"><div class="feedback-icon">'+(ok?'&#10003;':'&#10007;')+'</div>'+(ok?'Correct!':'Incorrect. Correct answer'+(req>1?'s':'')+': '+q.answer.map(a=>L[a]).join(', ')+'.')+'</div><div class="explanation-box"><div class="expl-label">&#128218; EXPLANATION</div>'+q.explanation+'</div>';}
+  const isLast=idx===activeQuestions.length-1,canSub=!sub&&ua.length>0;
+  const sLbl=sub?(isLast?'FINISH':'NEXT &#8594;'):'SUBMIT',sCls=sub&&isLast?'submit-btn finish':'submit-btn';
+  const isAC=sub&&q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));
+  document.getElementById('questionContainer').innerHTML='<div class="q-header"><span class="q-num">QUESTION '+(idx+1)+' OF '+activeQuestions.length+' &middot; '+q.id+'</span><span class="q-tag '+(isM?'multi':'mc')+'">'+(isM?'MULTI SELECT ('+req+')':'MULTIPLE CHOICE')+'</span></div><div class="question-card '+(sub?(isAC?'answered-correct':'answered-wrong'):'')+'"><div class="question-text">'+q.text+'</div>'+cH+'<div class="options" id="optCont">'+oH+'</div>'+fH+'</div><div class="q-footer"><button class="nav-btn" onclick="renderQ('+(idx-1)+')" '+(idx===0?'disabled':'')+'>&#8592; PREV</button><button class="'+sCls+'" onclick="handleSub('+idx+')" '+(canSub||sub?'':'disabled style="opacity:0.4;cursor:default;"')+'>'+sLbl+'</button><button class="nav-btn" onclick="renderQ('+(idx+1)+')" '+(idx===activeQuestions.length-1?'disabled':'')+'>NEXT &#8594;</button></div>';
+  if(!sub)document.querySelectorAll('#optCont .option').forEach(el=>el.addEventListener('click',()=>selOpt(idx,parseInt(el.dataset.oidx))));
+  document.getElementById('progressBar').style.width=((idx+1)/activeQuestions.length*100)+'%';
+}
+function selOpt(qi,oi){if(state.submitted[qi])return;const q=activeQuestions[qi],ua=state.userAnswers[qi];if(q.type==='multi'){const p=ua.indexOf(oi);if(p===-1)ua.push(oi);else ua.splice(p,1);}else state.userAnswers[qi]=[oi];renderQ(qi);}
+function handleSub(idx){if(!state.submitted[idx]){if(!state.userAnswers[idx].length)return;state.submitted[idx]=true;updScore();renderQ(idx);}else{if(idx===activeQuestions.length-1)showResults();else renderQ(idx+1);}}
+function updScore(){let ok=0,bad=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i])return;const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});document.getElementById('scoreBig').textContent=ok;document.getElementById('scoreCorrect').textContent=ok;document.getElementById('scoreWrong').textContent=bad;document.getElementById('scorePanel').classList.add('visible');}
+function showResults(){
+  clearInterval(state.timerInterval);['mcqSection','pbqSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('resultsSection').style.display='block';document.getElementById('finishBtn').style.display='none';
+  let ok=0,bad=0,skip=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i]){skip++;return;}const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});
+  const tot=activeQuestions.length,pct=Math.round((ok/tot)*100),pass=pct>=70;
+  document.getElementById('finalScore').textContent=pct+'%';document.getElementById('finalScore').className='final-score '+(pass?'pass':'fail');document.getElementById('finalPct').textContent=ok+'/'+tot+' Correct';document.getElementById('passFailMsg').textContent=pass?'\u2713 PASS \u2014 Well done!':'\u2717 FAIL \u2014 Keep studying!';document.getElementById('passFailMsg').style.color=pass?'var(--green)':'var(--red)';document.getElementById('resCorrect').textContent=ok;document.getElementById('resWrong').textContent=bad;document.getElementById('resSkipped').textContent=skip;
+  const doms={};activeQuestions.forEach((q,i)=>{if(!doms[q.domain])doms[q.domain]={ok:0,tot:0};doms[q.domain].tot++;if(state.submitted[i]){const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))doms[q.domain].ok++;}});
+  const dN={PKI:'PKI & Certificates',Algorithms:'Symmetric / Asymmetric Algorithms',Hashing:'Hashing & Key Stretching',DataProtection:'Data Protection (At Rest / In Transit / In Use)',CryptoTechniques:'Cryptographic Techniques',KeyManagement:'Key Management (HSM / Escrow / DRA)'};
+  const dC={PKI:'#00d4ff',Algorithms:'#ff6b2b',Hashing:'#ffd32a',DataProtection:'#00f5a0',CryptoTechniques:'#7b2fbe',KeyManagement:'#ff4757'};
+  let html='<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(doms).forEach(([k,v])=>{const p=Math.round((v.ok/v.tot)*100),col=dC[k]||'var(--accent)';html+='<div class="domain-card"><div class="domain-card-header"><span class="domain-card-name">'+(dN[k]||k)+'</span><span class="domain-card-pct" style="color:'+col+'">'+p+'%</span></div><div class="domain-bar-track"><div class="domain-bar-fill" style="width:'+p+'%;background:'+col+'"></div></div><div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">'+v.ok+'/'+v.tot+' correct</div></div>';});
+  html+='</div>';document.getElementById('domainSummary').innerHTML=html;
+}
+function reviewAnswers(){document.getElementById('resultsSection').style.display='none';document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';renderQ(0);}
+function applyTheme(t){if(t==='light'){document.body.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='\uD83C\uDF19';document.getElementById('themeLabel').textContent='DARK';}else{document.body.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='\u2600\uFE0F';document.getElementById('themeLabel').textContent='LIGHT';}}
+function toggleTheme(){const n=document.body.hasAttribute('data-theme')?'dark':'light';applyTheme(n);try{localStorage.setItem('bl-theme',n);}catch(e){}}
+(function(){var t='dark';try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}applyTheme(t);})();
+</script>
+</body>
+</html>
