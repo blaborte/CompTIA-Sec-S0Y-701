@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security+ SY0-701 | Section 10: Cryptographic Attacks</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e17;--bg2:#111520;--bg3:#181d2e;--border:#1f2740;--accent:#00d4ff;--accent2:#ff6b2b;--green:#00f5a0;--red:#ff4757;--yellow:#ffd32a;--text:#d0d8f0;--muted:#5a6a8a;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.6;}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
+.logo{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;flex-shrink:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logo span{color:var(--accent);}
+.home-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:0.45rem 0.85rem;border-radius:6px;text-decoration:none;font-family:var(--mono);font-size:0.75rem;transition:all 0.3s;display:flex;align-items:center;gap:0.4rem;white-space:nowrap;}
+.home-btn:hover{border-color:var(--accent);background:var(--bg2);}
+.timer-wrap{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+#timer{font-family:var(--mono);font-size:1.05rem;color:var(--accent);font-weight:600;letter-spacing:0.05em;}
+#timer.warn{color:var(--yellow);}
+#timer.danger{color:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.68rem;padding:0.3rem 0.75rem;cursor:pointer;letter-spacing:0.08em;transition:all 0.2s;border-radius:2px;}
+.header-btn:hover{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary{border-color:var(--accent);color:var(--accent);}
+.header-btn.primary:hover{background:var(--accent);color:var(--bg);}
+.progress-bar-wrap{height:3px;background:var(--border);}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width 0.4s ease;width:0%;}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 63px);}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:63px;height:calc(100vh - 63px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.sidebar-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;padding:0 0.5rem;}
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:1.5rem;}
+.q-dot{aspect-ratio:1;border-radius:3px;border:1px solid var(--border);cursor:pointer;font-family:var(--mono);font-size:0.55rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.15s;background:var(--bg3);}
+.q-dot:hover{border-color:var(--accent);color:var(--accent);}
+.q-dot.answered{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.q-dot.correct{background:var(--green);border-color:var(--green);color:var(--bg);}
+.q-dot.wrong{background:var(--red);border-color:var(--red);color:var(--bg);}
+.q-dot.active{outline:2px solid var(--yellow);outline-offset:1px;}
+.score-panel{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1rem;display:none;}
+.score-panel.visible{display:block;}
+.score-big{font-family:var(--mono);font-size:2rem;font-weight:600;color:var(--accent);text-align:center;}
+.score-label{font-size:0.7rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:0.08em;margin-top:0.25rem;}
+.score-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:1rem;}
+.score-item{text-align:center;}
+.score-item .val{font-family:var(--mono);font-size:1.1rem;font-weight:600;}
+.score-item .lbl{font-size:0.65rem;color:var(--muted);font-family:var(--mono);}
+.score-item.c .val{color:var(--green);}
+.score-item.w .val{color:var(--red);}
+main{padding:2rem 2.5rem;max-width:840px;}
+.intro-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2.5rem;margin-bottom:2rem;}
+.intro-card h1{font-family:var(--mono);font-size:1.25rem;font-weight:600;color:var(--accent);margin-bottom:0.5rem;}
+.intro-card .subtitle{font-size:0.8rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.08em;margin-bottom:1.5rem;}
+.intro-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.intro-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;text-align:center;}
+.intro-stat .n{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--text);}
+.intro-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.start-btn{background:var(--accent);color:var(--bg);border:none;font-family:var(--mono);font-size:0.85rem;font-weight:600;letter-spacing:0.1em;padding:0.8rem 2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.start-btn:hover{background:#00b8e0;transform:translateY(-1px);}
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.mode-card{background:var(--bg2);border:2px solid var(--border);border-radius:6px;padding:1.25rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mode-card:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.mode-card.active{border-color:var(--accent);background:rgba(0,212,255,0.07);}
+.mode-card-title{font-family:var(--mono);font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;}
+.mode-card-sub{font-size:0.72rem;color:var(--muted);}
+.random-options{display:flex;gap:0.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.rand-btn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.78rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.rand-btn:hover,.rand-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+.rand-mode-section{display:none;margin-top:1rem;}
+.rand-mode-section.show{display:block;}
+.q-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.q-num{font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
+.q-tag{font-family:var(--mono);font-size:0.6rem;padding:0.2rem 0.6rem;border-radius:2px;letter-spacing:0.08em;}
+.q-tag.mc{background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.2);}
+.q-tag.multi{background:rgba(255,107,43,0.1);color:var(--accent2);border:1px solid rgba(255,107,43,0.2);}
+.question-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:2rem;margin-bottom:1.5rem;transition:border-color 0.3s;}
+.question-card.answered-correct{border-color:rgba(0,245,160,0.3);}
+.question-card.answered-wrong{border-color:rgba(255,71,87,0.3);}
+.question-text{font-size:0.95rem;line-height:1.7;color:var(--text);margin-bottom:1.5rem;}
+.question-text strong{color:var(--accent);}
+.options{display:flex;flex-direction:column;gap:0.6rem;}
+.option{display:flex;align-items:flex-start;gap:0.75rem;padding:0.8rem 1rem;border-radius:4px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:var(--bg2);font-size:0.875rem;}
+.option:hover{border-color:var(--accent);background:rgba(0,212,255,0.04);}
+.opt-letter{font-family:var(--mono);font-size:0.7rem;font-weight:600;color:var(--muted);min-width:18px;padding-top:1px;transition:color 0.15s;}
+.option:hover .opt-letter{color:var(--accent);}
+.option.selected{border-color:var(--accent);background:rgba(0,212,255,0.08);}
+.option.selected .opt-letter{color:var(--accent);}
+.option.correct{border-color:var(--green);background:rgba(0,245,160,0.08);}
+.option.correct .opt-letter{color:var(--green);}
+.option.wrong{border-color:var(--red);background:rgba(255,71,87,0.08);}
+.option.wrong .opt-letter{color:var(--red);}
+.option.disabled{cursor:default;pointer-events:none;}
+.option .check-box{width:16px;height:16px;min-width:16px;border:1px solid var(--border);border-radius:50%;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.option.multi-opt .check-box{border-radius:3px;}
+.option.selected .check-box{background:var(--accent);border-color:var(--accent);}
+.option.correct .check-box{background:var(--green);border-color:var(--green);}
+.option.wrong .check-box{background:var(--red);border-color:var(--red);}
+.check-box svg{display:none;}
+.option.selected .check-box svg,.option.correct .check-box svg,.option.wrong .check-box svg{display:block;}
+.multi-counter{font-family:var(--mono);font-size:0.7rem;color:var(--accent2);margin-bottom:0.75rem;letter-spacing:0.05em;}
+.multi-counter.done{color:var(--green);}
+.feedback{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:0.85rem;line-height:1.6;}
+.feedback.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.25);color:var(--green);}
+.feedback.wrong{background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.25);color:#ff8a95;}
+.feedback.visible{display:block;}
+.explanation-box{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;background:rgba(123,47,190,0.08);border:1px solid rgba(123,47,190,0.3);font-size:0.83rem;line-height:1.7;color:var(--text);}
+.explanation-box .expl-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:#a06fdb;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.q-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.5rem;}
+.nav-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.72rem;padding:0.5rem 1.2rem;cursor:pointer;border-radius:3px;letter-spacing:0.06em;transition:all 0.2s;}
+.nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:0.25;cursor:default;}
+.submit-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.5rem;cursor:pointer;border-radius:3px;transition:all 0.2s;}
+.submit-btn:hover{background:#e55e22;transform:translateY(-1px);}
+.submit-btn.finish{background:var(--green);color:var(--bg);}
+.submit-btn.finish:hover{background:#00d488;}
+.results-hero{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3rem 2.5rem;text-align:center;margin-bottom:2rem;}
+.results-hero h2{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.15em;color:var(--muted);margin-bottom:1rem;}
+.final-score{font-family:var(--mono);font-size:4rem;font-weight:600;line-height:1;margin-bottom:0.5rem;}
+.final-score.pass{color:var(--green);}
+.final-score.fail{color:var(--red);}
+.final-pct{font-family:var(--mono);font-size:1.2rem;color:var(--muted);margin-bottom:1.5rem;}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.result-stat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem;}
+.result-stat .v{font-family:var(--mono);font-size:1.8rem;font-weight:600;}
+.result-stat .l{font-size:0.65rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.1em;margin-top:0.2rem;}
+.result-stat.g .v{color:var(--green);}
+.result-stat.r .v{color:var(--red);}
+.result-stat.y .v{color:var(--yellow);}
+.review-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;}
+.review-btn:hover{background:var(--accent);color:var(--bg);}
+.restart-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;padding:0.7rem 1.8rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:1.5rem;margin-left:0.75rem;}
+.restart-btn:hover{border-color:var(--text);color:var(--text);}
+.pbq-card{background:var(--bg3);border:1px solid rgba(0,245,160,0.2);border-radius:6px;padding:2rem;margin-bottom:2rem;}
+.pbq-card h3{font-family:var(--mono);font-size:0.8rem;color:var(--green);letter-spacing:0.1em;margin-bottom:1.5rem;}
+.pbq-scenario{font-size:0.82rem;color:var(--text);margin-bottom:1rem;line-height:1.7;}
+.pbq-match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.pbq-col-title{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;}
+.pbq-items{display:flex;flex-direction:column;gap:0.4rem;}
+.pbq-source-item{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.45rem 0.7rem;font-size:0.76rem;cursor:grab;user-select:none;transition:all 0.15s;font-family:var(--mono);color:var(--text);}
+.pbq-source-item:hover{border-color:var(--accent);color:var(--accent);}
+.pbq-source-item.dragging{opacity:0.4;}
+.pbq-source-item.used{opacity:0.35;cursor:default;border-style:dashed;}
+.pbq-target-row{display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:0.4rem;}
+.pbq-target-label{font-size:0.78rem;color:var(--text);flex:1 1 0;padding-top:0.4rem;}
+.pbq-drop-zone{min-height:34px;min-width:120px;flex:0 0 155px;background:var(--bg2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.68rem;color:var(--muted);transition:all 0.15s;position:relative;cursor:pointer;padding:0.2rem 0.4rem;text-align:center;}
+.pbq-drop-zone.drag-over{border-color:var(--accent);background:rgba(0,212,255,0.06);}
+.pbq-drop-zone.filled{border-style:solid;color:var(--text);}
+.pbq-drop-zone.correct{border-color:var(--green)!important;background:rgba(0,245,160,0.08)!important;color:var(--green)!important;}
+.pbq-drop-zone.wrong{border-color:var(--red)!important;background:rgba(255,71,87,0.08)!important;color:var(--red)!important;}
+.pbq-drop-clear{position:absolute;right:3px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--muted);cursor:pointer;padding:0 2px;}
+.pbq-drop-clear:hover{color:var(--red);}
+.pbq-check-btn{background:var(--accent2);border:none;color:white;font-family:var(--mono);font-size:0.72rem;font-weight:600;letter-spacing:0.08em;padding:0.5rem 1.4rem;cursor:pointer;border-radius:3px;transition:all 0.2s;margin-top:0.75rem;}
+.pbq-check-btn:hover{background:#e55e22;}
+.pbq-check-btn:disabled{opacity:0.5;cursor:default;}
+.pbq-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:3px;font-family:var(--mono);font-size:0.75rem;display:none;}
+.pbq-result.show{display:block;}
+.pbq-result.correct{background:rgba(0,245,160,0.07);border:1px solid rgba(0,245,160,0.3);color:var(--green);}
+.pbq-result.partial{background:rgba(255,211,42,0.07);border:1px solid rgba(255,211,42,0.3);color:var(--yellow);}
+.pbq-fw-table{width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:1rem;}
+.pbq-fw-table th{background:var(--bg2);border:1px solid var(--border);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.06em;text-align:left;}
+.pbq-fw-table td{border:1px solid var(--border);padding:0.4rem 0.6rem;vertical-align:middle;font-size:0.78rem;}
+.pbq-fw-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.72rem;padding:0.3rem 0.5rem;border-radius:3px;cursor:pointer;width:100%;}
+.pbq-fw-select:focus{outline:none;border-color:var(--accent);}
+.pbq-fw-select.correct{border-color:var(--green);color:var(--green);}
+.pbq-fw-select.wrong{border-color:var(--red);color:var(--red);}
+.pbq-sec{border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;}
+.pbq-sec:first-child{border-top:none;padding-top:0;margin-top:0;}
+.pbq-sec-title{font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;}
+.domain-section{margin-top:2rem;}
+.domain-section h3{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:1rem;}
+.domain-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:1rem 1.2rem;margin-bottom:0.6rem;}
+.domain-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;}
+.domain-card-name{font-size:0.82rem;color:var(--text);font-weight:500;}
+.domain-card-pct{font-family:var(--mono);font-size:0.85rem;font-weight:600;}
+.domain-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.domain-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+[data-theme="light"]{--bg:#eef1f8;--bg2:#ffffff;--bg3:#dde2f0;--border:#c4ccdf;--accent:#006699;--accent2:#cc4400;--green:#007a52;--red:#c0172e;--yellow:#8a6200;--text:#111827;--muted:#556080;}
+*,*::before,*::after{transition:background-color 0.22s ease,border-color 0.2s ease,color 0.18s ease!important;}
+.theme-toggle{display:flex;align-items:center;gap:0.35rem;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:0.26rem 0.75rem 0.26rem 0.5rem;cursor:pointer;font-family:var(--mono);font-size:0.66rem;color:var(--muted);letter-spacing:0.07em;white-space:nowrap;flex-shrink:0;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--bg2);}
+.theme-icon{font-size:0.82rem;line-height:1;}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}main{padding:1.5rem;}.intro-stats,.results-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BL STUDY MATERIALS / <span>SY0-701</span> / SECTION 10: CRYPTOGRAPHIC ATTACKS</div>
+  <div class="timer-wrap">
+    <span id="timer">45:00</span>
+    <button class="header-btn" onclick="toggleTimer()" id="timerBtn">PAUSE</button>
+    <button class="header-btn primary" onclick="showResults()" id="finishBtn" style="display:none">FINISH</button>
+  </div>
+  <div style="display:flex;gap:0.5rem;align-items:center;flex-shrink:0;">
+    <a href="Practice-tests.html" class="home-btn">&#8592; Back</a>
+    <a href="index.html" class="home-btn">&#8962; Home</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon" id="themeIcon">&#9728;&#65039;</span><span id="themeLabel">LIGHT</span></button>
+  </div>
+</header>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-title">QUESTIONS</div>
+  <div class="q-grid" id="qGrid"></div>
+  <div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">&ndash;</div>
+    <div class="score-label">SCORE</div>
+    <div class="score-breakdown">
+      <div class="score-item c"><div class="val" id="scoreCorrect">0</div><div class="lbl">CORRECT</div></div>
+      <div class="score-item w"><div class="val" id="scoreWrong">0</div><div class="lbl">WRONG</div></div>
+    </div>
+  </div>
+</aside>
+<main>
+
+<!-- INTRO -->
+<div id="introSection">
+<div class="intro-card">
+  <h1>SECTION 10: CRYPTOGRAPHIC ATTACKS</h1>
+  <div class="subtitle">CompTIA Security+ SY0-701 &middot; BL Study Materials</div>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="n" id="statQ">35</div><div class="l">QUESTIONS</div></div>
+    <div class="intro-stat"><div class="n" id="statT">45</div><div class="l">MINUTES</div></div>
+    <div class="intro-stat"><div class="n">70%</div><div class="l">PASSING</div></div>
+  </div>
+  <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;margin-top:0.5rem;">SELECT EXAM MODE</div>
+  <div class="mode-selector">
+    <div class="mode-card active" id="modeFullCard" onclick="setMode('full')">
+      <div class="mode-card-title">&#128203; FULL EXAM</div>
+      <div class="mode-card-sub">All 35 questions &middot; 45 min timer &middot; PBQ + MCQ</div>
+    </div>
+    <div class="mode-card" id="modeRandCard" onclick="setMode('random')">
+      <div class="mode-card-title">&#127922; RANDOM QUIZ</div>
+      <div class="mode-card-sub">Pick 10, 15, or 20 randomized questions</div>
+    </div>
+  </div>
+  <div class="rand-mode-section" id="randModeSection">
+    <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.5rem;">HOW MANY QUESTIONS?</div>
+    <div class="random-options">
+      <button class="rand-btn active" id="randBtn10" onclick="setRandCount(10)">10 Questions</button>
+      <button class="rand-btn" id="randBtn15" onclick="setRandCount(15)">15 Questions</button>
+      <button class="rand-btn" id="randBtn20" onclick="setRandCount(20)">20 Questions</button>
+    </div>
+  </div>
+  <p style="font-size:0.83rem;color:var(--muted);line-height:1.7;margin:1.25rem 0;">
+    This quiz covers <strong style="color:var(--text)">Section 10: Cryptographic Attacks</strong> &mdash; all 10 attack types: Brute Force, Known Plaintext, Chosen Plaintext, Adaptive Chosen Plaintext, Chosen Ciphertext, Side-Channel, Collision, Birthday, Man-in-the-Middle, and Meet-in-the-Middle. Questions test definitions, real-world scenarios, defenses, and the key distinctions the Security+ exam loves to test.<br><br>
+    <strong style="color:var(--text)">Tip:</strong> Know the difference between Birthday vs Collision, MitM vs Meet-in-the-Middle, and why Side-Channel attacks are unique &mdash; those are classic exam traps.
+  </p>
+  <button class="start-btn" onclick="startExam()">START EXAM &#8594;</button>
+</div>
+</div>
+
+<!-- PBQ -->
+<div id="pbqSection" style="display:none">
+<div class="pbq-card">
+  <h3>&#9889; PERFORMANCE-BASED QUESTIONS (CA10-1 &ndash; CA10-5)</h3>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">Drag answers to their matching targets, or click a source then click a target to assign.</p>
+
+  <!-- CA10-1: Match attack to definition -->
+  <div class="pbq-sec" id="pbq-q1">
+    <div class="pbq-sec-title">CA10-1 &mdash; ATTACK TYPES: MATCH ATTACK TO DEFINITION</div>
+    <div class="pbq-scenario">Match each cryptographic attack to its defining description.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ATTACK</div>
+        <div class="pbq-items" id="q1-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Brute Force">Brute Force</div>
+          <div class="pbq-source-item" draggable="true" data-val="Known Plaintext">Known Plaintext</div>
+          <div class="pbq-source-item" draggable="true" data-val="Chosen Plaintext">Chosen Plaintext</div>
+          <div class="pbq-source-item" draggable="true" data-val="Side-Channel">Side-Channel</div>
+          <div class="pbq-source-item" draggable="true" data-val="Meet-in-the-Middle">Meet-in-the-Middle</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DEFINITION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Systematically tries every possible key until the correct one is found; guaranteed success but time-limited by key length</div><div class="pbq-drop-zone" data-answer="Brute Force" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker possesses both a plaintext sample AND its corresponding ciphertext, using the pair to deduce key information</div><div class="pbq-drop-zone" data-answer="Known Plaintext" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker selects specific plaintexts and obtains their ciphertexts to reveal key patterns — more powerful than Known Plaintext</div><div class="pbq-drop-zone" data-answer="Chosen Plaintext" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Exploits physical implementation leaks — timing differences, power consumption, EM emissions — rather than mathematical weaknesses</div><div class="pbq-drop-zone" data-answer="Side-Channel" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacks double encryption by encrypting from one end and decrypting from the other, matching in the middle — why 2DES is insecure</div><div class="pbq-drop-zone" data-answer="Meet-in-the-Middle" data-pbq="q1" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q1')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q1-result"></div>
+  </div>
+
+  <!-- CA10-2: Collision / Birthday / Hash attacks -->
+  <div class="pbq-sec" id="pbq-q2">
+    <div class="pbq-sec-title">CA10-2 &mdash; HASH ATTACKS: MATCH ATTACK TO CHARACTERISTIC</div>
+    <div class="pbq-scenario">Match each hash-related attack or concept to its defining characteristic.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ATTACK / CONCEPT</div>
+        <div class="pbq-items" id="q2-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Collision Attack">Collision Attack</div>
+          <div class="pbq-source-item" draggable="true" data-val="Birthday Attack">Birthday Attack</div>
+          <div class="pbq-source-item" draggable="true" data-val="Birthday Paradox">Birthday Paradox</div>
+          <div class="pbq-source-item" draggable="true" data-val="Preimage Attack">Preimage Attack</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">CHARACTERISTIC</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Finding ANY two different inputs that produce the same hash output — breaks hash integrity and authenticity</div><div class="pbq-drop-zone" data-answer="Collision Attack" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Uses the birthday paradox to find collisions faster than brute force; effective against MD5 and SHA-1 at the n/2 bound</div><div class="pbq-drop-zone" data-answer="Birthday Attack" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Statistical principle: in a group of 23 people, there is a ~50% chance two share a birthday — probability grows faster than intuition suggests</div><div class="pbq-drop-zone" data-answer="Birthday Paradox" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Given a hash value, finding any input that produces that exact hash — harder than a collision attack; used to reverse hash functions</div><div class="pbq-drop-zone" data-answer="Preimage Attack" data-pbq="q2" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q2')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q2-result"></div>
+  </div>
+
+  <!-- CA10-3: Scenario table -->
+  <div class="pbq-sec" id="pbq-q3">
+    <div class="pbq-sec-title">CA10-3 &mdash; ATTACK SCENARIOS: IDENTIFY THE CORRECT ATTACK</div>
+    <div class="pbq-scenario">For each real-world scenario, select the cryptographic attack being described.</div>
+    <table class="pbq-fw-table">
+      <thead><tr><th>#</th><th>SCENARIO</th><th>ATTACK TYPE</th></tr></thead>
+      <tbody>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">1</td><td>A researcher compromises a TLS session by positioning themselves between a client and server, silently decrypting, reading, and re-encrypting traffic in real time. Neither party is aware of the interception.</td><td><select class="pbq-fw-select" id="sc-1" data-answer="Man-in-the-Middle"><option value="">-- Select --</option><option>Brute Force</option><option>Man-in-the-Middle</option><option>Chosen Ciphertext</option><option>Side-Channel</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">2</td><td>An analyst uses a power-monitoring device next to an HSM and notices that the device draws slightly different electrical current during different stages of an RSA private key operation. They use the power traces to infer bits of the private key.</td><td><select class="pbq-fw-select" id="sc-2" data-answer="Side-Channel"><option value="">-- Select --</option><option>Known Plaintext</option><option>Brute Force</option><option>Side-Channel</option><option>Collision Attack</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">3</td><td>A cryptanalyst obtains a database of intercepted messages from WWII Enigma communications along with some known plaintext messages (weather reports with predictable phrasing). They use these pairs to deduce the Enigma key settings.</td><td><select class="pbq-fw-select" id="sc-3" data-answer="Known Plaintext"><option value="">-- Select --</option><option>Chosen Plaintext</option><option>Known Plaintext</option><option>Brute Force</option><option>Meet-in-the-Middle</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">4</td><td>A security researcher submits two different PDF documents to an MD5 hash function and discovers they both produce the identical hash value — allowing a malicious PDF to be swapped for a legitimate one without detection.</td><td><select class="pbq-fw-select" id="sc-4" data-answer="Collision Attack"><option value="">-- Select --</option><option>Birthday Attack</option><option>Brute Force</option><option>Collision Attack</option><option>Preimage Attack</option></select></td></tr>
+        <tr><td style="font-family:var(--mono);color:var(--muted)">5</td><td>An attacker compromised a 2DES implementation by encrypting all possible keys from one end and decrypting with all possible keys from the other end, then matching results in the middle — reducing the effective key search space from 2^112 to approximately 2^57.</td><td><select class="pbq-fw-select" id="sc-5" data-answer="Meet-in-the-Middle"><option value="">-- Select --</option><option>Brute Force</option><option>Chosen Plaintext</option><option>Meet-in-the-Middle</option><option>Birthday Attack</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="pbq-check-btn" onclick="chkScenarios()">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q3-result"></div>
+  </div>
+
+  <!-- CA10-4: Attacks vs defenses -->
+  <div class="pbq-sec" id="pbq-q4">
+    <div class="pbq-sec-title">CA10-4 &mdash; DEFENSES: MATCH ATTACK TO ITS PRIMARY DEFENSE</div>
+    <div class="pbq-scenario">Match each attack to the control that MOST directly mitigates it.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ATTACK</div>
+        <div class="pbq-items" id="q4-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Brute Force">Brute Force</div>
+          <div class="pbq-source-item" draggable="true" data-val="Man-in-the-Middle">Man-in-the-Middle</div>
+          <div class="pbq-source-item" draggable="true" data-val="Birthday / Collision">Birthday / Collision</div>
+          <div class="pbq-source-item" draggable="true" data-val="Side-Channel">Side-Channel</div>
+          <div class="pbq-source-item" draggable="true" data-val="Meet-in-the-Middle">Meet-in-the-Middle</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">PRIMARY DEFENSE</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Use long keys (AES-256, RSA 2048+), rate limiting, and account lockout policies</div><div class="pbq-drop-zone" data-answer="Brute Force" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Mutual authentication, TLS with certificate pinning, and HSTS to prevent interception and impersonation</div><div class="pbq-drop-zone" data-answer="Man-in-the-Middle" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Use SHA-256 or higher (avoid MD5/SHA-1); longer hash output makes collisions computationally infeasible</div><div class="pbq-drop-zone" data-answer="Birthday / Collision" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Constant-time algorithms, physical shielding/Faraday caging, and noise injection to mask physical signals</div><div class="pbq-drop-zone" data-answer="Side-Channel" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Use 3DES or AES instead of 2DES — triple encryption increases key space beyond practical meet-in-the-middle range</div><div class="pbq-drop-zone" data-answer="Meet-in-the-Middle" data-pbq="q4" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q4')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q4-result"></div>
+  </div>
+
+  <!-- CA10-5: Chosen attacks comparison -->
+  <div class="pbq-sec" id="pbq-q5">
+    <div class="pbq-sec-title">CA10-5 &mdash; CHOSEN / ADAPTIVE ATTACKS: MATCH TO DESCRIPTION</div>
+    <div class="pbq-scenario">Match each attack variant to the description that best distinguishes it from the others.</div>
+    <div class="pbq-match-wrap">
+      <div>
+        <div class="pbq-col-title">ATTACK VARIANT</div>
+        <div class="pbq-items" id="q5-sources">
+          <div class="pbq-source-item" draggable="true" data-val="Chosen Plaintext">Chosen Plaintext</div>
+          <div class="pbq-source-item" draggable="true" data-val="Adaptive Chosen Plaintext">Adaptive Chosen Plaintext</div>
+          <div class="pbq-source-item" draggable="true" data-val="Chosen Ciphertext">Chosen Ciphertext</div>
+          <div class="pbq-source-item" draggable="true" data-val="Known Plaintext">Known Plaintext</div>
+        </div>
+      </div>
+      <div>
+        <div class="pbq-col-title">DESCRIPTION</div>
+        <div class="pbq-items">
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker passively holds matched plaintext-ciphertext pairs from prior communications and uses them offline to analyze the key</div><div class="pbq-drop-zone" data-answer="Known Plaintext" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker actively feeds selected plaintexts into an encryption oracle and analyzes the resulting ciphertexts to infer key structure</div><div class="pbq-drop-zone" data-answer="Chosen Plaintext" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Same as the above, but each plaintext is chosen based on the results of previous encryptions — iterative and adaptive</div><div class="pbq-drop-zone" data-answer="Adaptive Chosen Plaintext" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+          <div class="pbq-target-row"><div class="pbq-target-label">Attacker submits selected ciphertexts to a decryption oracle and observes the resulting plaintexts to reverse-engineer the key</div><div class="pbq-drop-zone" data-answer="Chosen Ciphertext" data-pbq="q5" onclick="hdz(this)">Drop here<span class="pbq-drop-clear" style="display:none" onclick="clrDrop(event,this)">&#10005;</span></div></div>
+        </div>
+      </div>
+    </div>
+    <button class="pbq-check-btn" onclick="chkPBQ('q5')">CHECK ANSWERS</button>
+    <div class="pbq-result" id="pbq-q5-result"></div>
+  </div>
+
+</div>
+<div style="text-align:center;margin-top:1rem;">
+  <button class="start-btn" onclick="showMCQ()">CONTINUE TO MULTIPLE CHOICE &#8594;</button>
+</div>
+</div>
+
+<!-- MCQ -->
+<div id="mcqSection" style="display:none"><div id="questionContainer"></div></div>
+
+<!-- RESULTS -->
+<div id="resultsSection" style="display:none">
+<div class="results-hero">
+  <h2>EXAM COMPLETE &mdash; SECTION 10: CRYPTOGRAPHIC ATTACKS</h2>
+  <div class="final-score" id="finalScore">0</div>
+  <div class="final-pct" id="finalPct">0/30 Correct</div>
+  <div id="passFailMsg" style="font-family:var(--mono);font-size:0.8rem;letter-spacing:0.08em;"></div>
+  <div class="results-grid">
+    <div class="result-stat g"><div class="v" id="resCorrect">0</div><div class="l">CORRECT</div></div>
+    <div class="result-stat r"><div class="v" id="resWrong">0</div><div class="l">WRONG</div></div>
+    <div class="result-stat y"><div class="v" id="resSkipped">0</div><div class="l">SKIPPED</div></div>
+  </div>
+  <div>
+    <button class="review-btn" onclick="reviewAnswers()">REVIEW ANSWERS</button>
+    <button class="restart-btn" onclick="location.reload()">RESTART EXAM</button>
+  </div>
+</div>
+<div class="domain-section" id="domainSummary"></div>
+</div>
+
+</main>
+</div>
+<script>
+let examMode='full',randCount=10,activeQuestions=[];
+function setMode(m){examMode=m;document.getElementById('modeFullCard').classList.toggle('active',m==='full');document.getElementById('modeRandCard').classList.toggle('active',m==='random');document.getElementById('randModeSection').classList.toggle('show',m==='random');if(m==='full'){document.getElementById('statQ').textContent='35';document.getElementById('statT').textContent='45';}else updateRandDescription();}
+function setRandCount(n){randCount=n;['10','15','20'].forEach(x=>document.getElementById('randBtn'+x).classList.remove('active'));document.getElementById('randBtn'+n).classList.add('active');updateRandDescription();}
+function updateRandDescription(){document.getElementById('statQ').textContent=randCount;document.getElementById('statT').textContent=Math.round(randCount*1.5);}
+
+let dragVal=null,clickSel=null;
+document.addEventListener('DOMContentLoaded',()=>{shuffleSources();initDrag();});
+function shuffleSources(){['q1-sources','q2-sources','q4-sources','q5-sources'].forEach(id=>{const c=document.getElementById(id);if(!c)return;const it=[...c.children];for(let i=it.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));c.appendChild(it[j]);it.splice(j,1);}});}
+function initDrag(){
+  document.querySelectorAll('.pbq-source-item').forEach(el=>{
+    el.addEventListener('dragstart',()=>{dragVal=el.dataset.val;setTimeout(()=>el.classList.add('dragging'),0);});
+    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.addEventListener('click',()=>clickSource(el));
+  });
+  document.querySelectorAll('.pbq-drop-zone').forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over');});
+    z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragVal)assignZone(z,dragVal);});
+  });
+}
+function clickSource(el){if(el.classList.contains('used'))return;const pbqEl=el.closest('[id^="pbq-q"]');if(!pbqEl)return;const id=pbqEl.id.replace('pbq-','');document.querySelectorAll('#pbq-'+id+' .pbq-source-item').forEach(s=>s.style.outline='');if(clickSel===el.dataset.val){clickSel=null;}else{clickSel=el.dataset.val;el.style.outline='2px solid var(--accent)';}}
+function hdz(z){if(z.classList.contains('correct')||z.classList.contains('wrong'))return;if(clickSel){assignZone(z,clickSel);document.querySelectorAll('.pbq-source-item').forEach(s=>s.style.outline='');clickSel=null;}}
+function assignZone(z,val){const old=z.dataset.current;if(old){const s=document.querySelector('.pbq-source-item[data-val="'+old+'"]');if(s)s.classList.remove('used');}const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.add('used');z.dataset.current=val;z.classList.add('filled');z.childNodes[0].textContent=val;const c=z.querySelector('.pbq-drop-clear');if(c)c.style.display='block';}
+function clrDrop(e,btn){e.stopPropagation();const z=btn.parentElement,val=z.dataset.current;if(val){const s=document.querySelector('.pbq-source-item[data-val="'+val+'"]');if(s)s.classList.remove('used');}z.dataset.current='';z.classList.remove('filled');z.childNodes[0].textContent='Drop here';btn.style.display='none';}
+function chkPBQ(id){const zones=document.querySelectorAll('.pbq-drop-zone[data-pbq="'+id+'"]');let ok=0,tot=zones.length;zones.forEach(z=>{const a=z.dataset.answer,c=z.dataset.current;if(!c)return;if(c===a){z.classList.add('correct');ok++;}else z.classList.add('wrong');});const r=document.getElementById('pbq-'+id+'-result');r.classList.add('show');if(ok===tot&&tot>0){r.className='pbq-result show correct';r.textContent='\u2713 PERFECT \u2014 All '+tot+' matched correctly!';}else{r.className='pbq-result show partial';r.textContent=ok+'/'+tot+' correct \u2014 Review highlighted zones.';}document.querySelector('#pbq-'+id+' .pbq-check-btn').disabled=true;}
+function chkScenarios(){const rules=[{id:'sc-1',a:'Man-in-the-Middle'},{id:'sc-2',a:'Side-Channel'},{id:'sc-3',a:'Known Plaintext'},{id:'sc-4',a:'Collision Attack'},{id:'sc-5',a:'Meet-in-the-Middle'}];let ok=0;rules.forEach(r=>{const s=document.getElementById(r.id);if(s.value===r.a){s.classList.add('correct');ok++;}else if(s.value)s.classList.add('wrong');s.disabled=true;});const res=document.getElementById('pbq-q3-result');res.classList.add('show');if(ok===5){res.className='pbq-result show correct';res.textContent='\u2713 PERFECT \u2014 All 5 scenarios identified correctly!';}else{res.className='pbq-result show partial';res.textContent=ok+'/5 correct \u2014 Review attack scenario descriptions.';}document.querySelector('#pbq-q3 .pbq-check-btn').disabled=true;}
+
+const questions=[
+// Brute Force
+{id:'CA10-6',domain:'BruteForce',type:'mc',
+text:'An attacker uses a GPU cluster running Hashcat to attempt every possible combination of characters against a stolen MD5 password hash. At 10 billion attempts per second, an 8-character password is cracked in under an hour. This is a:',
+options:['Dictionary Attack — uses a wordlist of known passwords','Offline Brute Force Attack — exhaustively tries all key combinations against a stolen hash with no lockout constraints','Online Brute Force Attack — submits guesses directly to the live login portal','Hybrid Attack — combines a wordlist with brute-force variations'],
+answer:[1],
+explanation:'This is an offline brute force attack. Offline = working against a stolen hash file on the attacker\'s own hardware, not against a live portal. No rate limiting. No lockout. Just raw compute power. At 10B MD5 attempts/sec, 8-character passwords fall quickly. Defense: bcrypt/Argon2 (much slower hashing), longer passwords (14+), and never storing MD5 hashes.'},
+
+{id:'CA10-7',domain:'BruteForce',type:'mc',
+text:'Why does doubling the key length of a symmetric cipher (e.g., from 128-bit to 256-bit AES) provide dramatically more protection against brute force — not just double?',
+options:['256-bit AES uses a different algorithm than 128-bit','Doubling the key length squares the number of possible keys — 2^256 possible keys vs 2^128, making brute force astronomically harder','A 256-bit key has more entropy only if generated by a hardware RNG','Key length affects only decryption speed, not brute-force resistance'],
+answer:[1],
+explanation:'Key length works exponentially. 128-bit = 2^128 ≈ 3.4 × 10^38 possible keys. 256-bit = 2^256 ≈ 1.16 × 10^77 possible keys. That\'s not twice as many — it\'s 2^128 times more keys. Even with all the computing power on Earth working for the age of the universe, brute-forcing AES-256 is computationally infeasible. This is why AES-128 is "secure" and AES-256 is used for top-secret data.'},
+
+// Known / Chosen Plaintext
+{id:'CA10-8',domain:'ChosenKnown',type:'mc',
+text:'During WWII, Allied cryptanalysts at Bletchley Park obtained German Enigma messages that included predictable phrasing — weather reports always began with "WETTER" (weather), and some messages contained known content. They used these matched plaintext-ciphertext pairs to deduce Enigma key settings. This is a classic example of:',
+options:['Chosen Plaintext Attack','Known Plaintext Attack','Brute Force Attack','Adaptive Chosen Ciphertext Attack'],
+answer:[1],
+explanation:'A Known Plaintext Attack occurs when the attacker possesses both a sample of plaintext AND the corresponding ciphertext from prior communications. They use these pairs to deduce key information. The analyst does NOT choose the plaintext — they work with what was already sent. The Enigma attacks at Bletchley Park are the textbook historical example. Defense: modern strong algorithms (AES) are resistant to known plaintext attacks.'},
+
+{id:'CA10-9',domain:'ChosenKnown',type:'mc',
+text:'A penetration tester has access to an encryption oracle — a black box that will encrypt any input they submit. They carefully select specific plaintexts designed to reveal information about the key structure and submit them for encryption. This is a:',
+options:['Known Plaintext Attack','Brute Force Attack','Chosen Plaintext Attack','Side-Channel Attack'],
+answer:[2],
+explanation:'A Chosen Plaintext Attack (CPA) occurs when the attacker has active access to an encryption oracle and can CHOOSE what to encrypt. By selecting plaintexts that probe specific parts of the key schedule or block structure, they can extract information about the key. This is more powerful than Known Plaintext because the attacker controls the input. Adaptive CPA = same concept but each choice is informed by the previous result.'},
+
+{id:'CA10-10',domain:'ChosenKnown',type:'mc',
+text:'What is the key distinction between a Chosen Plaintext Attack and an Adaptive Chosen Plaintext Attack?',
+options:['Chosen Plaintext requires physical access; Adaptive Chosen Plaintext is remote','In an Adaptive CPA, each plaintext is chosen iteratively based on results of previous encryptions, allowing increasingly targeted analysis; in basic CPA, all plaintexts are chosen upfront','Adaptive CPA targets hash functions; basic CPA targets symmetric ciphers','They are the same attack with different names for the same algorithm'],
+answer:[1],
+explanation:'Adaptive Chosen Plaintext Attack (ACPA) is the more powerful variant. In basic CPA, the attacker selects all their test plaintexts before starting — they don\'t adapt based on results. In ACPA, each chosen plaintext is informed by what was learned from previous encryptions — essentially an interactive, iterative attack. The attacker refines their strategy round by round. Modern cipher security proofs typically prove resistance against ACPA, the strongest of the chosen-input attack models.'},
+
+{id:'CA10-11',domain:'ChosenKnown',type:'mc',
+text:'An attacker who submits selected ciphertexts to a decryption service and observes the resulting plaintexts to deduce the decryption key is performing a:',
+options:['Known Plaintext Attack','Chosen Plaintext Attack','Chosen Ciphertext Attack','Meet-in-the-Middle Attack'],
+answer:[2],
+explanation:'A Chosen Ciphertext Attack (CCA) is the mirror of a Chosen Plaintext Attack. Instead of feeding plaintexts into an encryption oracle, the attacker feeds ciphertexts into a DECRYPTION oracle and observes the resulting plaintexts. By carefully choosing ciphertexts (especially malformed ones), they can extract information about the decryption key or algorithm. RSA PKCS#1 v1.5 was famously vulnerable to a chosen ciphertext attack (Bleichenbacher\'s attack / "million message attack").'},
+
+// Side-Channel
+{id:'CA10-12',domain:'SideChannel',type:'mc',
+text:'A researcher demonstrates that they can extract an RSA private key from a laptop by analyzing the acoustic noise (sound) the CPU makes during decryption operations — different operations produce subtly different sounds. Which type of attack is this?',
+options:['Chosen Ciphertext Attack — the attacker chooses ciphertexts to observe decryption','Known Plaintext Attack — the sounds represent known data','Side-Channel Attack — exploiting physical implementation leaks rather than mathematical weaknesses','Brute Force Attack — the sound guides key guessing'],
+answer:[2],
+explanation:'This is a Side-Channel Attack — specifically an acoustic side-channel attack. It exploits a physical characteristic of the implementation (CPU acoustic emissions) rather than a mathematical weakness in the algorithm itself. Other side-channel variants: timing attacks (operations take different time for different key bits), power analysis (differential power analysis / DPA), electromagnetic analysis (EM emissions), and cache-timing attacks. Defense: constant-time algorithms, physical shielding, noise injection.'},
+
+{id:'CA10-13',domain:'SideChannel',type:'mc',
+text:'Why are Side-Channel Attacks particularly dangerous even against strong cryptographic algorithms like AES-256?',
+options:['AES-256 is vulnerable to mathematical attacks that make side-channel analysis unnecessary','Side-channel attacks bypass the mathematical strength of the algorithm entirely — they exploit how the algorithm is IMPLEMENTED in hardware or software, not the algorithm itself','Side-channel attacks only work on symmetric algorithms, not asymmetric ones','AES-256 has not been evaluated for side-channel resistance'],
+answer:[1],
+explanation:'The critical insight: a mathematically perfect algorithm can still be broken through its implementation. AES may be unbreakable mathematically, but if the hardware implementation takes 0.001ms longer when processing a "1" bit vs a "0" bit, that timing difference can be measured and exploited to recover the key. Side-channel attacks target the physical world — timing, power, EM, heat, sound — not the math. This is why FIPS-validated HSMs are required for high-security environments: they implement countermeasures like constant-time execution and physical shielding.'},
+
+{id:'CA10-14',domain:'SideChannel',type:'multi',
+text:'Which TWO of the following are examples of Side-Channel Attack vectors? <strong>(Select TWO)</strong>',
+options:['Timing Attack — measuring how long a decryption operation takes to infer key bits','Dictionary Attack — using a wordlist of common passwords against a hash','Power Analysis — monitoring electrical power consumption during cryptographic operations to infer key values','Birthday Attack — exploiting hash collision probability to find matching outputs','Replay Attack — retransmitting a captured valid authentication message'],
+answer:[0,2],
+explanation:'Side-channel attacks exploit physical characteristics of the implementation: Timing attacks measure operation duration (different key bits may cause different branch paths with different execution times). Power analysis (SPA/DPA — Simple/Differential Power Analysis) monitors the device\'s power consumption during cryptographic operations — each operation step draws slightly different power. Dictionary, Birthday, and Replay attacks are different attack categories entirely.'},
+
+// Collision / Birthday
+{id:'CA10-15',domain:'HashAttacks',type:'mc',
+text:'A digital certificate is signed using an MD5 hash. A researcher crafts a malicious certificate that has the SAME MD5 hash as a legitimate one, allowing it to pass signature verification despite having different content. This exploits:',
+options:['A Birthday Attack — using probability to find collisions faster than brute force','A Preimage Attack — reversing the hash to find the original input','A Collision Attack — finding two different inputs that produce the same hash output','A Brute Force Attack — systematically trying all possible inputs'],
+answer:[2],
+explanation:'This is a Collision Attack — the researcher finds two DIFFERENT inputs (legitimate cert vs malicious cert) that produce the SAME MD5 hash. Since the signature is over the hash, a matching hash means the malicious certificate passes validation. This is exactly what happened in 2008 when researchers created a rogue CA certificate by exploiting MD5 collisions. It led to mandatory deprecation of MD5 in certificates. SHA-256 and higher are collision-resistant.'},
+
+{id:'CA10-16',domain:'HashAttacks',type:'mc',
+text:'The Birthday Attack gets its name from the Birthday Paradox. What does the birthday paradox demonstrate that makes it relevant to hash security?',
+options:['Hash functions should use birth dates as seeds for better randomness','In a group of only 23 people, there is ~50% probability two share a birthday — collisions occur far sooner than expected; hash collisions can be found in approximately 2^(n/2) attempts rather than 2^n','Birthday attacks only apply to password hashing, not certificate signing','The paradox shows that all hash functions have the same collision probability'],
+answer:[1],
+explanation:'The Birthday Paradox shows that collisions in a space of N values can be found with only ~√N attempts (the "birthday bound"). For a hash with n-bit output, brute-force collision would require ~2^n attempts, but birthday-based attacks require only ~2^(n/2). This halves the effective security in bits. For SHA-1 (160-bit), birthday bound is ~2^80. For SHA-256 (256-bit), it\'s ~2^128 — still computationally infeasible. This is why MD5 (128-bit, birthday bound 2^64) is broken.'},
+
+{id:'CA10-17',domain:'HashAttacks',type:'mc',
+text:'Which hash algorithm is currently recommended for security applications, and why is MD5 insufficient?',
+options:['MD5 is still acceptable for password storage if used with a salt','SHA-256 (or higher) is recommended — MD5 is broken due to known practical collision attacks and is too fast for password hashing','SHA-1 is the current recommendation as it has not been practically broken yet','MD5 with a 256-bit key is as secure as SHA-256'],
+answer:[1],
+explanation:'MD5 is broken for two reasons: (1) Collision attacks are practical — researchers have demonstrated real-world MD5 collisions (Flame malware, 2008 rogue CA cert). (2) MD5 is too fast — designed for speed, not security; GPUs compute billions of MD5 hashes/sec, making brute-force trivial. SHA-1 was deprecated in 2017 after Google\'s SHAttered attack proved practical collisions. Current recommendations: SHA-256 for general hashing, bcrypt/Argon2/PBKDF2 for password storage.'},
+
+// MitM
+{id:'CA10-18',domain:'MitM',type:'mc',
+text:'An attacker sets up a rogue Wi-Fi access point with the same SSID as the corporate network. Employees connect to it and all their HTTPS traffic is proxied through the attacker\'s device, which presents spoofed certificates. This is a:',
+options:['Side-Channel Attack exploiting wireless radio emissions','Man-in-the-Middle Attack — the attacker intercepts and relays communication between the victim and real servers','Chosen Ciphertext Attack — the attacker selects which ciphertexts to decrypt','Brute Force Attack — attempting to crack HTTPS encryption by key guessing'],
+answer:[1],
+explanation:'This is a Man-in-the-Middle (MitM) attack. The attacker positions themselves between the client and legitimate server, intercepting, reading, and optionally modifying traffic. The evil twin AP is the interception point. The spoofed certificates attempt to defeat TLS protection. Defenses: mutual TLS authentication, certificate pinning (app rejects unexpected certs), HSTS (browser refuses HTTP downgrade), and educating users to verify certificate details.'},
+
+{id:'CA10-19',domain:'MitM',type:'mc',
+text:'Which defense is MOST effective at preventing a Man-in-the-Middle attack against HTTPS communications?',
+options:['Using AES-256 instead of AES-128 for bulk encryption','Certificate Pinning combined with mutual TLS authentication — the client validates the server\'s exact certificate/key and the server validates the client\'s certificate','Switching from TCP to UDP to reduce interception surface','Using a longer RSA key (4096-bit instead of 2048-bit)'],
+answer:[1],
+explanation:'Certificate Pinning prevents MitM by hardcoding the expected certificate/public key in the application — even if an attacker obtains a fraudulent CA-signed certificate, it won\'t match the pinned one and the connection is rejected. Mutual TLS adds client certificate authentication, ensuring both parties prove their identity. HSTS prevents protocol downgrade attacks. Longer RSA keys help against brute force, not MitM. AES key length is irrelevant if the key exchange is compromised.'},
+
+// Meet-in-the-Middle
+{id:'CA10-20',domain:'MeetInMiddle',type:'mc',
+text:'Why is 2DES (Double DES — applying DES encryption twice with two different keys) considered insecure despite having a theoretical key space of 2^112?',
+options:['2DES is insecure because DES was never approved for double application by NIST','The Meet-in-the-Middle attack reduces the effective key space from 2^112 to approximately 2^57 — making 2DES only marginally stronger than single DES','2DES uses the same key for both DES operations, making it equivalent to single DES','Double encryption with any algorithm always reduces security due to key correlation'],
+answer:[1],
+explanation:'The Meet-in-the-Middle attack defeats 2DES\'s apparent 2^112 strength. The attacker encrypts a known plaintext with all 2^56 possible DES keys (building a lookup table) AND decrypts the corresponding ciphertext with all 2^56 possible DES keys. When a match is found in the middle, the two keys are revealed. Total effort: 2 × 2^56 ≈ 2^57 rather than 2^112. This is why NIST never standardized 2DES — triple DES (3DES) uses three keys and remains resistant.'},
+
+{id:'CA10-21',domain:'MeetInMiddle',type:'mc',
+text:'The Meet-in-the-Middle attack requires the attacker to have access to what information to execute the attack?',
+options:['Access to the target\'s physical hardware and power consumption traces','At least one known plaintext-ciphertext pair from the target system','The CA\'s private key to generate fraudulent certificates','The target\'s public key and a sample of encrypted traffic'],
+answer:[1],
+explanation:'Meet-in-the-Middle requires at least one known plaintext-ciphertext pair. The attack works by: (1) Encrypting the known plaintext with all possible first-level keys and storing the results, (2) Decrypting the known ciphertext with all possible second-level keys, (3) Finding a match between the two sets — that match reveals both keys. Without a known plaintext-ciphertext pair, the attacker cannot verify which middle-meet values correspond to the correct key pair.'},
+
+// Scenario-based multi
+{id:'CA10-22',domain:'BruteForce',type:'mc',
+text:'A security engineer wants to protect a system against brute force attacks on stored credentials. Which combination of controls provides the STRONGEST defense?',
+options:['MD5 hashing with a 16-byte salt and 10-attempt lockout','bcrypt with cost factor 12 + unique salt per user + account lockout after 5 attempts + MFA','AES-256 encryption of the password database with a master key','SHA-256 hashing with no salt and CAPTCHA after 3 failed attempts'],
+answer:[1],
+explanation:'bcrypt is designed specifically to be slow — cost factor 12 means ~100-300ms per hash, making GPU brute force impractical (compare: MD5 at billions/sec vs bcrypt at ~300/sec per GPU). Unique salt per user prevents rainbow tables and ensures identical passwords produce different hashes. Account lockout limits online attack attempts. MFA ensures that even a cracked password is insufficient for account access. This is defense in depth applied to credential storage.'},
+
+{id:'CA10-23',domain:'SideChannel',type:'mc',
+text:'A developer implements AES encryption where the code uses a branch statement: "if key_bit == 1: do operation A; else: do operation B." Operation A takes 0.5ms and operation B takes 0.3ms. A timing side-channel attack is possible because:',
+options:['The key bits are transmitted alongside the ciphertext in this implementation','The timing difference leaks information about key bits — an attacker measuring execution time can determine which branch was taken and thus infer the key bit values','Branch statements are forbidden in cryptographic code by FIPS standards','AES is not compatible with conditional branching'],
+answer:[1],
+explanation:'This is a textbook timing side-channel vulnerability. The 0.2ms difference between operations reveals key bit values through observable timing. After many measurements, the attacker can reconstruct the full key bit by bit. Defense: constant-time implementation — all code paths take exactly the same time regardless of key values. The `crypto/subtle` packages in modern languages (Go, Rust) provide constant-time comparison functions. This is why hardware crypto accelerators with constant-time guarantees are preferred for high-security applications.'},
+
+{id:'CA10-24',domain:'HashAttacks',type:'mc',
+text:'An attacker wants to substitute a malicious software update for a legitimate one. The update server verifies downloads using SHA-256 hashes. Which attack would the attacker need to successfully execute, and how feasible is it?',
+options:['A Collision Attack against SHA-256 — feasible with modern GPUs in a few hours','A Collision Attack against SHA-256 — currently computationally infeasible; SHA-256\'s birthday bound of ~2^128 makes practical collisions impossible with current technology','A Brute Force Attack against the SHA-256 key — feasible with a botnet','A Known Plaintext Attack against SHA-256 — requires only a sample of the original file'],
+answer:[1],
+explanation:'To substitute a malicious file, the attacker needs a COLLISION — a different file with the same SHA-256 hash. SHA-256 has a birthday bound of ~2^128. Current world computing power cannot approach this — it would take longer than the age of the universe. This is why SHA-256 is the current standard. MD5 and SHA-1 ARE practically breakable with collisions (Flame malware used MD5 collision; Google broke SHA-1 in 2017 with SHAttered). Use SHA-256 or SHA-3 for security-critical hashing.'},
+
+{id:'CA10-25',domain:'MitM',type:'mc',
+text:'ARP Spoofing / ARP Poisoning is used to redirect LAN traffic through an attacker\'s machine. In terms of cryptographic attack taxonomy, ARP Spoofing is used to SET UP which type of attack?',
+options:['Side-Channel Attack — it exploits physical network signals','Man-in-the-Middle Attack — it routes traffic through the attacker so they can intercept, read, or modify communications','Collision Attack — it exploits ARP table hash collisions','Brute Force Attack — it tries all possible ARP entries until the correct one is found'],
+answer:[1],
+explanation:'ARP Spoofing/Poisoning is a technique used to position an attacker for a Man-in-the-Middle attack on a LAN. By sending fake ARP replies that associate the attacker\'s MAC address with a legitimate IP (default gateway, server), the attacker causes victim traffic to flow through their machine. Once in position, they can: (1) eavesdrop on unencrypted traffic, (2) attempt to decrypt encrypted traffic, or (3) downgrade HTTPS to HTTP. Defense: dynamic ARP inspection (DAI), HTTPS, and certificate pinning.'},
+
+{id:'CA10-26',domain:'ChosenKnown',type:'mc',
+text:'A cryptanalyst has intercepted ciphertexts and suspects they were encrypted with a stream cipher. They notice that some encrypted messages contain predictable headers (e.g., "From:", "Subject:") in known positions. They use these known-position patterns to infer the keystream. This is a:',
+options:['Chosen Ciphertext Attack','Adaptive Chosen Plaintext Attack','Known Plaintext Attack','Birthday Attack'],
+answer:[2],
+explanation:'This is a Known Plaintext Attack against a stream cipher. Stream ciphers XOR plaintext with a keystream: ciphertext = plaintext XOR keystream. If the attacker knows the plaintext at certain positions (e.g., "From:" header), they can compute: keystream = plaintext XOR ciphertext. Once they have keystream bits, they can decrypt other parts of the message or future messages using the same key. This is why stream ciphers (especially RC4/WEP) must never reuse the same key — keystream reuse enables known plaintext recovery of all traffic.'},
+
+{id:'CA10-27',domain:'MeetInMiddle',type:'mc',
+text:'Why does 3DES (Triple DES) resist the Meet-in-the-Middle attack that breaks 2DES?',
+options:['3DES uses a different algorithm than DES, so the meet-in-the-middle approach does not apply','3DES uses three keys with three encryption stages, which increases the meet-in-the-middle complexity to approximately 2^112 — practically infeasible despite the theoretical attack still existing','3DES eliminates meet-in-the-middle by using the same key for all three operations','NIST patched the meet-in-the-middle vulnerability in the 3DES specification'],
+answer:[1],
+explanation:'3DES (EDE — Encrypt-Decrypt-Encrypt) applies DES three times with two or three distinct keys. The meet-in-the-middle attack can theoretically be applied to 3DES, but the complexity jumps dramatically. With three stages and three keys, finding a match requires ~2^112 operations and ~2^56 storage — computationally infeasible with current hardware. That said, 3DES is being phased out in favor of AES due to its block size (64-bit = vulnerable to SWEET32 birthday attack on long sessions) and relative slowness.'},
+
+{id:'CA10-28',domain:'BruteForce',type:'multi',
+text:'Which TWO statements correctly describe the difference between an ONLINE and OFFLINE brute force attack? <strong>(Select TWO)</strong>',
+options:['Online brute force targets a live authentication portal and is limited by rate limiting, lockout policies, and CAPTCHAs','Offline brute force works against stolen credential hashes on the attacker\'s own hardware with no lockout or rate limiting','Online attacks are always faster because they have access to the target server\'s GPU','Offline attacks require physical access to the target machine','Both online and offline attacks are equally constrained by account lockout policies'],
+answer:[0,1],
+explanation:'Online brute force: attacks a LIVE system (web portal, SSH, RDP) — constrained by rate limiting, account lockout after N failures, CAPTCHAs, and IP blocking. Typically limited to thousands of attempts/hour. Offline brute force: works against a STOLEN hash database on the attacker\'s own hardware — NO lockout, NO rate limiting, just raw GPU compute. Modern GPUs can test billions of MD5 hashes per second. Defense for offline: strong slow-hash algorithms (bcrypt, Argon2). Defense for online: lockout + MFA.'},
+
+{id:'CA10-29',domain:'MitM',type:'mc',
+text:'SSL Stripping is a type of Man-in-the-Middle attack. What does it do, and which defense specifically counters it?',
+options:['SSL Stripping removes certificate expiry dates — countered by shorter certificate lifetimes','SSL Stripping downgrades an HTTPS connection to HTTP by intercepting the initial redirect — HSTS (HTTP Strict Transport Security) counters it by instructing browsers to always use HTTPS for that domain','SSL Stripping breaks certificate chains — countered by OCSP Stapling','SSL Stripping exploits weak cipher suites — countered by TLS 1.3'],
+answer:[1],
+explanation:'SSL Stripping (Moxie Marlinspike, 2009): when a user types "paypal.com" the browser first makes an HTTP request, then gets redirected to HTTPS. The MitM attacker intercepts the initial HTTP request and makes the HTTPS connection to the real server on the victim\'s behalf — but serves the victim HTTP. The victim communicates over unencrypted HTTP while the attacker communicates with the server over HTTPS. Defense: HSTS tells browsers to ONLY use HTTPS for that domain (even on the first request, via preload lists). Certificate pinning also helps.'},
+
+{id:'CA10-30',domain:'HashAttacks',type:'mc',
+text:'In the context of digital signatures, why does a successful collision attack against the hash function undermine the entire signature scheme?',
+options:['Collision attacks break the private key, allowing the attacker to forge signatures','Digital signatures sign the HASH of a message, not the message itself — if an attacker can produce a malicious message with the same hash as a legitimate signed message, the legitimate signature validates the malicious content','Collision attacks only affect symmetric encryption, not asymmetric signature schemes','Hash collisions invalidate the CA\'s certificate, breaking the entire PKI'],
+answer:[1],
+explanation:'Digital signatures work by: (1) Hash the message with SHA-256, (2) Sign the hash with the private key. The signature is over the HASH, not the full message. If an attacker finds a collision (two messages with the same hash), they can swap Message A (benign, legitimately signed) for Message B (malicious, same hash) — and Message B will pass signature verification because its hash matches the original signature. This is exactly what happened with the 2008 MD5 rogue CA attack. Defense: use collision-resistant hashes (SHA-256+) in signature schemes.'},
+
+{id:'CA10-31',domain:'SideChannel',type:'mc',
+text:'Which of the following is NOT a side-channel attack vector?',
+options:['Cache-timing analysis — observing CPU cache hit/miss patterns to infer key values','Power analysis — monitoring electrical current draw during cryptographic operations','Known Plaintext Analysis — using matched plaintext/ciphertext pairs to deduce the key','Acoustic analysis — analyzing sounds emitted by hardware during encryption'],
+answer:[2],
+explanation:'Known Plaintext Analysis is NOT a side-channel attack — it\'s a cryptanalytic attack that exploits the mathematical relationship between plaintext and ciphertext. Side-channel attacks exclusively exploit PHYSICAL implementation characteristics: timing (cache, branch, memory), power (SPA/DPA), electromagnetic emissions, acoustic emissions, temperature, and optical emissions. The defining feature: side-channel attacks bypass the math of the algorithm entirely, targeting how it runs in the physical world.'},
+
+{id:'CA10-32',domain:'BruteForce',type:'mc',
+text:'A security policy states that all passwords must be at least 12 characters. A CISO argues that increasing the requirement to 16 characters provides significantly more protection against brute force than just 4 additional characters might suggest. Why?',
+options:['16-character passwords use a different hashing algorithm internally','Each additional character multiplies the search space by the size of the character set — 4 more characters with a 70-character set increases the key space by 70^4 ≈ 24 million times, making brute force exponentially harder','The 16-character policy triggers automatic HSM protection in Windows Active Directory','Only the first 12 characters are actually hashed in most systems'],
+answer:[1],
+explanation:'Password strength scales multiplicatively. If the character set is 70 characters (lowercase + uppercase + numbers + symbols), each additional character multiplies the search space by 70. Four additional characters: 70^4 = 24,010,000 — about 24 million times harder. Going from 12 to 16 characters turns a feasible brute force into an infeasible one. Combined with a slow hash (bcrypt), this makes offline brute force practically impossible for any hardware available today.'},
+
+{id:'CA10-33',domain:'ChosenKnown',type:'mc',
+text:'A penetration tester exploits a padding oracle vulnerability in a web application to decrypt session tokens without knowing the encryption key. The oracle tells them whether a submitted ciphertext decrypts to valid padding. They iteratively modify ciphertexts based on the oracle\'s responses until they recover the plaintext. This is an example of:',
+options:['A Brute Force Attack — trying all possible plaintexts','An Adaptive Chosen Ciphertext Attack — the tester submits chosen ciphertexts and uses oracle responses to adaptively recover the plaintext','A Known Plaintext Attack — the tester already knows part of the session token','A Birthday Attack — exploiting collision probability in the padding scheme'],
+answer:[1],
+explanation:'The PKCS#7 padding oracle attack (Rizzo & Duong, 2010 — POODLE, BEAST, Lucky13) is a classic Adaptive Chosen Ciphertext Attack. The tester CHOOSES ciphertexts, submits them to the decryption oracle (the web app), and uses the oracle\'s response (valid/invalid padding) as a bit of information. Each response reveals bits of the plaintext. After ~8 oracle calls per byte, the full plaintext is recovered. The "adaptive" part: each submitted ciphertext is chosen based on previous oracle responses. Defense: authenticated encryption (AES-GCM), which detects tampering before decryption.'},
+
+{id:'CA10-34',domain:'MeetInMiddle',type:'mc',
+text:'Which real-world encryption standard was specifically designed to defeat the Meet-in-the-Middle attack that made 2DES impractical?',
+options:['RC4 — stream cipher with variable key length','3DES (Triple DES) using three independent keys — the third encryption stage defeats practical meet-in-the-middle by dramatically increasing complexity','AES-CBC mode — the chaining prevents middle-meeting','RSA-2048 — asymmetric encryption is immune to meet-in-the-middle'],
+answer:[1],
+explanation:'3DES (Triple DES, TDEA) was developed specifically to replace DES and defeat meet-in-the-middle without abandoning existing DES hardware. Using three keys (K1, K2, K3) in an Encrypt-Decrypt-Encrypt pattern: E(K1) → D(K2) → E(K3). With three independent 56-bit keys, the meet-in-the-middle complexity is ~2^112 — currently infeasible. However, 3DES\'s 64-bit block size makes it vulnerable to the SWEET32 birthday attack on long-duration sessions, which is why NIST deprecated 3DES in 2019 in favor of AES.'},
+
+{id:'CA10-35',domain:'SideChannel',type:'mc',
+text:'Spectre and Meltdown (2018) are CPU vulnerabilities that allow attackers to read arbitrary kernel memory from user space by exploiting speculative execution timing differences. From a cryptographic attack taxonomy perspective, these are:',
+options:['Chosen Plaintext Attacks — the CPU speculatively executes chosen code paths','Side-Channel Attacks — they exploit timing differences in CPU hardware implementation (cache side-channel via speculative execution) to infer private memory contents','Brute Force Attacks — they enumerate all possible kernel memory addresses','Meet-in-the-Middle Attacks — they exploit CPU branch prediction from two directions simultaneously'],
+answer:[1],
+explanation:'Spectre and Meltdown are cache-timing side-channel attacks against CPU hardware. They exploit speculative execution: the CPU speculatively runs code ahead of time for performance. When speculation is wrong, the CPU rolls back the computation — but leaves traces in the CPU cache. By measuring cache hit/miss timing (FLUSH+RELOAD), an attacker can infer what data was speculatively accessed, including secret kernel memory. This is pure side-channel: exploiting observable physical behavior (timing) of a hardware implementation, not the cryptographic algorithm\'s math.'},
+];
+
+const state={current:0,userAnswers:[],submitted:[],timerSeconds:45*60,timerInterval:null,timerRunning:false};
+function startTimer(){state.timerRunning=true;state.timerInterval=setInterval(()=>{state.timerSeconds--;updateTimer();if(state.timerSeconds<=0){clearInterval(state.timerInterval);showResults();}},1000);}
+function updateTimer(){const el=document.getElementById('timer'),m=Math.floor(state.timerSeconds/60),s=state.timerSeconds%60;el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');el.className=state.timerSeconds<60?'danger':state.timerSeconds<300?'warn':'';}
+function toggleTimer(){const btn=document.getElementById('timerBtn');if(state.timerRunning){clearInterval(state.timerInterval);state.timerRunning=false;btn.textContent='RESUME';}else{startTimer();btn.textContent='PAUSE';}}
+function startExam(){document.getElementById('introSection').style.display='none';if(examMode==='full'){activeQuestions=[...questions];document.getElementById('pbqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}else{const sh=[...questions].sort(()=>Math.random()-0.5);activeQuestions=sh.slice(0,randCount);state.timerSeconds=randCount*90;initMCQ();document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';startTimer();}}
+function showMCQ(){document.getElementById('pbqSection').style.display='none';activeQuestions=[...questions];initMCQ();document.getElementById('mcqSection').style.display='block';}
+function initMCQ(){state.userAnswers=activeQuestions.map(()=>[]);state.submitted=activeQuestions.map(()=>false);buildGrid();renderQ(0);}
+function buildGrid(){const g=document.getElementById('qGrid');g.innerHTML='';activeQuestions.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(i===0?' active':'');d.textContent=i+1;d.onclick=()=>renderQ(i);d.id='dot-'+i;g.appendChild(d);});}
+function updGrid(idx){activeQuestions.forEach((_,i)=>{const d=document.getElementById('dot-'+i);if(!d)return;d.classList.remove('active','answered','correct','wrong');if(i===idx)d.classList.add('active');else if(state.submitted[i]){const q=activeQuestions[i],ua=state.userAnswers[i];d.classList.add(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a))?'correct':'wrong');}else if(state.userAnswers[i].length>0)d.classList.add('answered');});}
+function renderQ(idx){
+  state.current=idx;updGrid(idx);
+  const q=activeQuestions[idx],isM=q.type==='multi',sub=state.submitted[idx],ua=state.userAnswers[idx];
+  const L=['A','B','C','D','E'],req=q.answer.length,sel=ua.length;
+  let oH=q.options.map((o,i)=>{let c='option'+(isM?' multi-opt':'');if(sub){c+=' disabled';if(q.answer.includes(i))c+=' correct';else if(ua.includes(i))c+=' wrong';}else if(ua.includes(i))c+=' selected';return '<div class="'+c+'" data-oidx="'+i+'"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="opt-letter">'+L[i]+'</span><span>'+o+'</span></div>';}).join('');
+  let cH='';if(isM&&!sub){const d=sel>=req;cH='<div class="multi-counter '+(d?'done':'')+'"> '+(d?'&#10003;':'&#9744;')+' Select '+req+' answer'+(req>1?'s':'')+' &mdash; '+sel+' of '+req+' selected</div>';}
+  let fH='';if(sub){const ok=q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));fH='<div class="feedback '+(ok?'correct':'wrong')+' visible">'+(ok?'&#10003; Correct!':'&#10007; Incorrect. Correct answer'+(req>1?'s':'')+': '+q.answer.map(a=>L[a]).join(', ')+'.')+'</div><div class="explanation-box"><div class="expl-label">&#128218; EXPLANATION</div>'+q.explanation+'</div>';}
+  const isLast=idx===activeQuestions.length-1,canSub=!sub&&ua.length>0;
+  const sLbl=sub?(isLast?'FINISH':'NEXT &#8594;'):'SUBMIT',sCls=sub&&isLast?'submit-btn finish':'submit-btn';
+  const isAC=sub&&q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a));
+  document.getElementById('questionContainer').innerHTML='<div class="q-header"><span class="q-num">QUESTION '+(idx+1)+' OF '+activeQuestions.length+' &middot; '+q.id+'</span><span class="q-tag '+(isM?'multi':'mc')+'">'+(isM?'MULTI SELECT ('+req+')':'MULTIPLE CHOICE')+'</span></div><div class="question-card '+(sub?(isAC?'answered-correct':'answered-wrong'):'')+'"><div class="question-text">'+q.text+'</div>'+cH+'<div class="options" id="optCont">'+oH+'</div>'+fH+'</div><div class="q-footer"><button class="nav-btn" onclick="renderQ('+(idx-1)+')" '+(idx===0?'disabled':'')+'>&#8592; PREV</button><button class="'+sCls+'" onclick="handleSub('+idx+')" '+(canSub||sub?'':'disabled style="opacity:0.4;cursor:default;"')+'>'+sLbl+'</button><button class="nav-btn" onclick="renderQ('+(idx+1)+')" '+(idx===activeQuestions.length-1?'disabled':'')+'>NEXT &#8594;</button></div>';
+  if(!sub)document.querySelectorAll('#optCont .option').forEach(el=>el.addEventListener('click',()=>selOpt(idx,parseInt(el.dataset.oidx))));
+  document.getElementById('progressBar').style.width=((idx+1)/activeQuestions.length*100)+'%';
+}
+function selOpt(qi,oi){if(state.submitted[qi])return;const q=activeQuestions[qi],ua=state.userAnswers[qi];if(q.type==='multi'){const p=ua.indexOf(oi);if(p===-1)ua.push(oi);else ua.splice(p,1);}else state.userAnswers[qi]=[oi];renderQ(qi);}
+function handleSub(idx){if(!state.submitted[idx]){if(!state.userAnswers[idx].length)return;state.submitted[idx]=true;updScore();renderQ(idx);}else{if(idx===activeQuestions.length-1)showResults();else renderQ(idx+1);}}
+function updScore(){let ok=0,bad=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i])return;const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});document.getElementById('scoreBig').textContent=ok;document.getElementById('scoreCorrect').textContent=ok;document.getElementById('scoreWrong').textContent=bad;document.getElementById('scorePanel').classList.add('visible');}
+function showResults(){
+  clearInterval(state.timerInterval);['mcqSection','pbqSection'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('resultsSection').style.display='block';document.getElementById('finishBtn').style.display='none';
+  let ok=0,bad=0,skip=0;activeQuestions.forEach((q,i)=>{if(!state.submitted[i]){skip++;return;}const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))ok++;else bad++;});
+  const tot=activeQuestions.length,pct=Math.round((ok/tot)*100),pass=pct>=70;
+  document.getElementById('finalScore').textContent=pct+'%';document.getElementById('finalScore').className='final-score '+(pass?'pass':'fail');document.getElementById('finalPct').textContent=ok+'/'+tot+' Correct';document.getElementById('passFailMsg').textContent=pass?'\u2713 PASS \u2014 Well done!':'\u2717 FAIL \u2014 Keep studying!';document.getElementById('passFailMsg').style.color=pass?'var(--green)':'var(--red)';document.getElementById('resCorrect').textContent=ok;document.getElementById('resWrong').textContent=bad;document.getElementById('resSkipped').textContent=skip;
+  const doms={};activeQuestions.forEach((q,i)=>{if(!doms[q.domain])doms[q.domain]={ok:0,tot:0};doms[q.domain].tot++;if(state.submitted[i]){const ua=state.userAnswers[i];if(q.answer.every(a=>ua.includes(a))&&ua.every(a=>q.answer.includes(a)))doms[q.domain].ok++;}});
+  const dN={BruteForce:'Brute Force Attacks',ChosenKnown:'Known / Chosen Plaintext & Ciphertext',SideChannel:'Side-Channel Attacks',HashAttacks:'Collision, Birthday & Hash Attacks',MitM:'Man-in-the-Middle Attacks',MeetInMiddle:'Meet-in-the-Middle Attacks'};
+  const dC={BruteForce:'#00d4ff',ChosenKnown:'#ff6b2b',SideChannel:'#ffd32a',HashAttacks:'#00f5a0',MitM:'#7b2fbe',MeetInMiddle:'#ff4757'};
+  let html='<div class="domain-section"><h3>PERFORMANCE BY TOPIC</h3>';
+  Object.entries(doms).forEach(([k,v])=>{const p=Math.round((v.ok/v.tot)*100),col=dC[k]||'var(--accent)';html+='<div class="domain-card"><div class="domain-card-header"><span class="domain-card-name">'+(dN[k]||k)+'</span><span class="domain-card-pct" style="color:'+col+'">'+p+'%</span></div><div class="domain-bar-track"><div class="domain-bar-fill" style="width:'+p+'%;background:'+col+'"></div></div><div style="font-size:0.72rem;color:var(--muted);font-family:var(--mono);margin-top:0.3rem;">'+v.ok+'/'+v.tot+' correct</div></div>';});
+  html+='</div>';document.getElementById('domainSummary').innerHTML=html;
+}
+function reviewAnswers(){document.getElementById('resultsSection').style.display='none';document.getElementById('mcqSection').style.display='block';document.getElementById('finishBtn').style.display='inline-block';renderQ(0);}
+function applyTheme(t){if(t==='light'){document.body.setAttribute('data-theme','light');document.getElementById('themeIcon').textContent='\uD83C\uDF19';document.getElementById('themeLabel').textContent='DARK';}else{document.body.removeAttribute('data-theme');document.getElementById('themeIcon').textContent='\u2600\uFE0F';document.getElementById('themeLabel').textContent='LIGHT';}}
+function toggleTheme(){const n=document.body.hasAttribute('data-theme')?'dark':'light';applyTheme(n);try{localStorage.setItem('bl-theme',n);}catch(e){}}
+(function(){var t='dark';try{t=localStorage.getItem('bl-theme')||'dark';}catch(e){}applyTheme(t);})();
+</script>
+</body>
+</html>
