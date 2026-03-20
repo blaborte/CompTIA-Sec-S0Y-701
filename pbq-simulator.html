@@ -1056,6 +1056,36 @@
       <div class="psc-badge">Form Config</div>
       <div class="psc-arrow">→</div>
     </div>
+    <div class="pbq-select-card" onclick="showTab('attacks', this, 15)" style="--card-accent:var(--red)">
+      <div class="psc-icon">⚔️</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-15</div>
+        <div class="psc-title">Attack Identification</div>
+        <div class="psc-desc">Match each attack scenario to the correct attack type and best preventative/remediation action using drop-down selectors. (Q#73)</div>
+      </div>
+      <div class="psc-badge">Drop-Down</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('fwlog', this, 16)" style="--card-accent:var(--yellow)">
+      <div class="psc-icon">🔥</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-16</div>
+        <div class="psc-title">Firewall Log Analysis</div>
+        <div class="psc-desc">Investigate antivirus and firewall logs across 5 hosts to identify which is the infection origin and classify each as Origin, Infected, or Clean.</div>
+      </div>
+      <div class="psc-badge">Click to Label</div>
+      <div class="psc-arrow">→</div>
+    </div>
+    <div class="pbq-select-card" onclick="showTab('cloudarch', this, 17)" style="--card-accent:var(--purple)">
+      <div class="psc-icon">☁️</div>
+      <div class="psc-body">
+        <div class="psc-num">PBQ-17</div>
+        <div class="psc-title">Cloud Architecture</div>
+        <div class="psc-desc">Drag cloud components (Database, WAF, Instances, Load Balancer) to their correct numbered positions in a multi-tier cloud architecture diagram.</div>
+      </div>
+      <div class="psc-badge">Drag & Drop</div>
+      <div class="psc-arrow">→</div>
+    </div>
     </div>
   </div>
 
@@ -1067,12 +1097,12 @@
     <!-- Progress -->
     <div class="pbq-progress">
       <span class="pbq-progress-label">PBQ PROGRESS</span>
-      <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:7.14%"></div></div>
-      <span class="pbq-progress-score" id="prog-label">1 / 14</span>
+      <div class="pbq-progress-bar"><div class="pbq-progress-fill" id="prog-fill" style="width:5.88%"></div></div>
+      <span class="pbq-progress-score" id="prog-label">1 / 17</span>
     </div>
 
     <!-- NAV TABS -->
-    <div class="nav-tabs"><button class="nav-tab active" data-tab="acl" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button><button class="nav-tab" data-tab="net" onclick="switchTab('net',this,2)">🌐 Network</button><button class="nav-tab" data-tab="log" onclick="switchTab('log',this,3)">📋 Log Analysis</button><button class="nav-tab" data-tab="ir" onclick="switchTab('ir',this,4)">🚨 Incident Response</button><button class="nav-tab" data-tab="ports" onclick="switchTab('ports',this,5)">🔌 Port Matching</button><button class="nav-tab" data-tab="crypto" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button><button class="nav-tab" data-tab="vuln" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button><button class="nav-tab" data-tab="iam" onclick="switchTab('iam',this,8)">👤 Access Control</button><button class="nav-tab" data-tab="malware" onclick="switchTab('malware',this,9)">🦠 Malware ID</button><button class="nav-tab" data-tab="wireless" onclick="switchTab('wireless',this,10)">📶 Wireless Config</button><button class="nav-tab" data-tab="csr" onclick="switchTab('csr',this,11)">📜 CSR / PKI</button><button class="nav-tab" data-tab="wap" onclick="switchTab('wap',this,12)">🔒 WAP Hardening</button><button class="nav-tab" data-tab="sqlnet" onclick="switchTab('sqlnet',this,13)">💉 SQL Injection</button><button class="nav-tab" data-tab="vpn" onclick="switchTab('vpn',this,14)">🔗 VPN Config</button></div>
+    <div class="nav-tabs"><button class="nav-tab active" data-tab="acl" onclick="switchTab('acl',this,1)">🛡️ Firewall ACL</button><button class="nav-tab" data-tab="net" onclick="switchTab('net',this,2)">🌐 Network</button><button class="nav-tab" data-tab="log" onclick="switchTab('log',this,3)">📋 Log Analysis</button><button class="nav-tab" data-tab="ir" onclick="switchTab('ir',this,4)">🚨 Incident Response</button><button class="nav-tab" data-tab="ports" onclick="switchTab('ports',this,5)">🔌 Port Matching</button><button class="nav-tab" data-tab="crypto" onclick="switchTab('crypto',this,6)">🔐 Cryptography</button><button class="nav-tab" data-tab="vuln" onclick="switchTab('vuln',this,7)">🎯 Vuln Prioritization</button><button class="nav-tab" data-tab="iam" onclick="switchTab('iam',this,8)">👤 Access Control</button><button class="nav-tab" data-tab="malware" onclick="switchTab('malware',this,9)">🦠 Malware ID</button><button class="nav-tab" data-tab="wireless" onclick="switchTab('wireless',this,10)">📶 Wireless Config</button><button class="nav-tab" data-tab="csr" onclick="switchTab('csr',this,11)">📜 CSR / PKI</button><button class="nav-tab" data-tab="wap" onclick="switchTab('wap',this,12)">🔒 WAP Hardening</button><button class="nav-tab" data-tab="sqlnet" onclick="switchTab('sqlnet',this,13)">💉 SQL Injection</button><button class="nav-tab" data-tab="vpn" onclick="switchTab('vpn',this,14)">🔗 VPN Config</button><button class="nav-tab" data-tab="attacks" onclick="switchTab('attacks',this,15)">⚔️ Attack ID</button><button class="nav-tab" data-tab="fwlog" onclick="switchTab('fwlog',this,16)">🔥 FW Log Analysis</button><button class="nav-tab" data-tab="cloudarch" onclick="switchTab('cloudarch',this,17)">☁️ Cloud Arch</button></div>
 
     <!-- TAB CONTENTS -->
     
@@ -2217,6 +2247,446 @@
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PBQ-15 · ATTACK IDENTIFICATION (Q#73)             -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-attacks">
+  <div class="scenario-card">
+    <div class="scenario-badge">PBQ-15 · Attack Identification</div>
+    <div class="scenario-title">Match Attacks to Types and Remediations</div>
+    <div class="scenario-desc">
+      Select the correct <strong>Attack Identified</strong> and <strong>Best Preventative or Remediation Action</strong> from each drop-down to label the corresponding attack scenario.
+      <br><em>Note: Not all attacks and remediation actions will be used.</em>
+    </div>
+
+    <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+      <thead>
+        <tr style="background:var(--bg3);border-bottom:2px solid var(--border);">
+          <th style="padding:0.75rem 1rem;text-align:left;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.08em;color:var(--muted);">ATTACK DESCRIPTION</th>
+          <th style="padding:0.75rem 0.5rem;text-align:left;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.08em;color:var(--muted);">TARGET</th>
+          <th style="padding:0.75rem 0.5rem;text-align:left;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.08em;color:var(--accent);">ATTACK IDENTIFIED</th>
+          <th style="padding:0.75rem 0.5rem;text-align:left;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.08em;color:var(--accent);">BEST REMEDIATION ACTION</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Row 1 -->
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:0.75rem 1rem;color:var(--text);line-height:1.5;">An attacker sends multiple SYN packets from multiple sources.</td>
+          <td style="padding:0.75rem 0.5rem;font-family:var(--mono);font-size:0.78rem;color:var(--purple);">Web server</td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk1-type" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Botnet</option><option>RAT</option><option>Logic Bomb</option><option>Backdoor</option>
+              <option>Virus</option><option>Spyware</option><option>Worm</option><option>Adware</option>
+              <option>Ransomware</option><option>Keylogger</option><option>Phishing</option>
+            </select>
+          </td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk1-rem" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Enable DDoS protection</option><option>Patch vulnerable systems</option>
+              <option>Disable vulnerable services</option><option>Change the default system password</option>
+              <option>Update the cryptographic algorithms</option><option>Change the default application password</option>
+              <option>Implement 2FA using push notification</option><option>Conduct a code review</option>
+              <option>Implement application fuzzing</option><option>Implement a host-based IPS</option>
+              <option>Disable remote access services</option>
+            </select>
+          </td>
+        </tr>
+        <!-- Row 2 -->
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:0.75rem 1rem;color:var(--text);line-height:1.5;">The attack establishes a connection, which allows remote commands to be executed.</td>
+          <td style="padding:0.75rem 0.5rem;font-family:var(--mono);font-size:0.78rem;color:var(--purple);">User</td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk2-type" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Botnet</option><option>RAT</option><option>Logic Bomb</option><option>Backdoor</option>
+              <option>Virus</option><option>Spyware</option><option>Worm</option><option>Adware</option>
+              <option>Ransomware</option><option>Keylogger</option><option>Phishing</option>
+            </select>
+          </td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk2-rem" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Enable DDoS protection</option><option>Patch vulnerable systems</option>
+              <option>Disable vulnerable services</option><option>Change the default system password</option>
+              <option>Update the cryptographic algorithms</option><option>Change the default application password</option>
+              <option>Implement 2FA using push notification</option><option>Conduct a code review</option>
+              <option>Implement application fuzzing</option><option>Implement a host-based IPS</option>
+              <option>Disable remote access services</option>
+            </select>
+          </td>
+        </tr>
+        <!-- Row 3 -->
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:0.75rem 1rem;color:var(--text);line-height:1.5;">The attack is self propagating and compromises a SQL database using well-known credentials as it moves through the network.</td>
+          <td style="padding:0.75rem 0.5rem;font-family:var(--mono);font-size:0.78rem;color:var(--purple);">Database server</td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk3-type" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Botnet</option><option>RAT</option><option>Logic Bomb</option><option>Backdoor</option>
+              <option>Virus</option><option>Spyware</option><option>Worm</option><option>Adware</option>
+              <option>Ransomware</option><option>Keylogger</option><option>Phishing</option>
+            </select>
+          </td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk3-rem" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Enable DDoS protection</option><option>Patch vulnerable systems</option>
+              <option>Disable vulnerable services</option><option>Change the default system password</option>
+              <option>Update the cryptographic algorithms</option><option>Change the default application password</option>
+              <option>Implement 2FA using push notification</option><option>Conduct a code review</option>
+              <option>Implement application fuzzing</option><option>Implement a host-based IPS</option>
+              <option>Disable remote access services</option>
+            </select>
+          </td>
+        </tr>
+        <!-- Row 4 -->
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:0.75rem 1rem;color:var(--text);line-height:1.5;">The attacker uses hardware to remotely monitor a user's input activity to harvest credentials.</td>
+          <td style="padding:0.75rem 0.5rem;font-family:var(--mono);font-size:0.78rem;color:var(--purple);">Executive</td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk4-type" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Botnet</option><option>RAT</option><option>Logic Bomb</option><option>Backdoor</option>
+              <option>Virus</option><option>Spyware</option><option>Worm</option><option>Adware</option>
+              <option>Ransomware</option><option>Keylogger</option><option>Phishing</option>
+            </select>
+          </td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk4-rem" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Enable DDoS protection</option><option>Patch vulnerable systems</option>
+              <option>Disable vulnerable services</option><option>Change the default system password</option>
+              <option>Update the cryptographic algorithms</option><option>Change the default application password</option>
+              <option>Implement 2FA using push notification</option><option>Conduct a code review</option>
+              <option>Implement application fuzzing</option><option>Implement a host-based IPS</option>
+              <option>Disable remote access services</option>
+            </select>
+          </td>
+        </tr>
+        <!-- Row 5 -->
+        <tr>
+          <td style="padding:0.75rem 1rem;color:var(--text);line-height:1.5;">The attacker embeds hidden access in an internally developed application that bypasses account login.</td>
+          <td style="padding:0.75rem 0.5rem;font-family:var(--mono);font-size:0.78rem;color:var(--purple);">Application</td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk5-type" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Botnet</option><option>RAT</option><option>Logic Bomb</option><option>Backdoor</option>
+              <option>Virus</option><option>Spyware</option><option>Worm</option><option>Adware</option>
+              <option>Ransomware</option><option>Keylogger</option><option>Phishing</option>
+            </select>
+          </td>
+          <td style="padding:0.75rem 0.5rem;">
+            <select id="atk5-rem" style="width:100%;padding:0.4rem;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:5px;font-size:0.82rem;">
+              <option value="">-- Select --</option>
+              <option>Enable DDoS protection</option><option>Patch vulnerable systems</option>
+              <option>Disable vulnerable services</option><option>Change the default system password</option>
+              <option>Update the cryptographic algorithms</option><option>Change the default application password</option>
+              <option>Implement 2FA using push notification</option><option>Conduct a code review</option>
+              <option>Implement application fuzzing</option><option>Implement a host-based IPS</option>
+              <option>Disable remote access services</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="checkAttacks()">&#9654; CHECK ANSWERS</button>
+      <button class="btn-secondary" onclick="resetAttacks()">&#8635; RESET</button>
+    </div>
+    <div class="feedback" id="fb-attacks"></div>
+  </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PBQ-16 · FIREWALL LOG ANALYSIS                    -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-fwlog">
+  <div class="scenario-card">
+    <div class="scenario-badge">PBQ-16 · Firewall Log Analysis</div>
+    <div class="scenario-title">Identify Infection Origin from Logs</div>
+    <div class="scenario-desc">
+      You are a security administrator investigating a potential infection on a network.
+      Review the antivirus and firewall logs for each host to determine which host <strong>originated</strong> the infection,
+      then label each remaining host as <strong>Infected</strong> or <strong>Clean</strong>.
+      <br><br>
+      <strong style="color:var(--accent);">Definitions:</strong>
+      <em style="color:var(--yellow);">Origin</em> — the host that first introduced the threat.
+      <em style="color:var(--red);">Infected</em> — has the virus but antivirus needs updating.
+      <em style="color:var(--green);">Clean</em> — antivirus ran successfully via FW, no threat found.
+    </div>
+
+    <!-- Log terminals -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+      <!-- 192.168.10.22 -->
+      <div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);margin-bottom:0.4rem;">192.168.10.22 — R&amp;D Network</div>
+        <div class="log-terminal" style="max-height:180px;font-size:0.72rem;">
+          <div class="log-line"><span class="log-time">4/17 14:30</span><span class="log-msg ok">Scheduled scan initiated</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:31</span><span class="log-msg">Checking for update</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:32</span><span class="log-msg warn">No update available</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:35</span><span class="log-msg">Scan type = full</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:41</span><span class="log-msg ok">Scan complete</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:42</span><span class="log-msg ok">Files removed: 0</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:43</span><span class="log-msg ok">Files quarantined: 0</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:44</span><span class="log-msg ok">Boot sector: clean</span></div>
+          <div class="log-line"><span class="log-time">4/18 02:31</span><span class="log-msg err">Warn: Scheduled scan disabled by svch0st.exe</span></div>
+          <div class="log-line"><span class="log-time">4/18 02:32</span><span class="log-msg err">Warn: Scheduled update disabled by svch0st.exe</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.5rem;" id="label-22">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host22" value="Origin"> <span style="color:var(--yellow);">Origin</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host22" value="Infected"> <span style="color:var(--red);">Infected</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host22" value="Clean"> <span style="color:var(--green);">Clean</span></label>
+        </div>
+      </div>
+      <!-- 192.168.10.37 -->
+      <div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);margin-bottom:0.4rem;">192.168.10.37 — R&amp;D Network</div>
+        <div class="log-terminal" style="max-height:180px;font-size:0.72rem;">
+          <div class="log-line"><span class="log-time">4/17 14:30</span><span class="log-msg ok">Scheduled scan initiated</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:43</span><span class="log-msg ok">Files quarantined: 0</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:44</span><span class="log-msg ok">Boot sector: clean</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:30</span><span class="log-msg ok">Scheduled scan initiated</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:34</span><span class="log-msg ok">Update available v10.2.3.4440</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:35</span><span class="log-msg ok">Definition update complete</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg warn">File found svch0st.exe match def v10.2.3.4440</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg ok">File quarantined svch0st.exe</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.5rem;" id="label-37">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host37" value="Origin"> <span style="color:var(--yellow);">Origin</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host37" value="Infected"> <span style="color:var(--red);">Infected</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host37" value="Clean"> <span style="color:var(--green);">Clean</span></label>
+        </div>
+      </div>
+      <!-- 192.168.10.41 -->
+      <div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);margin-bottom:0.4rem;">192.168.10.41 — R&amp;D Network</div>
+        <div class="log-terminal" style="max-height:180px;font-size:0.72rem;">
+          <div class="log-line"><span class="log-time">4/17 14:30</span><span class="log-msg ok">Scan start</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:42</span><span class="log-msg ok">Files removed: 0</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:43</span><span class="log-msg ok">Files quarantined: 0</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:44</span><span class="log-msg ok">Boot sector: clean</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:34</span><span class="log-msg err">Error: Unable to reach update server</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg warn">File svch0st.exe match heuristic pattern 0c09488c08d0f3k</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg err">Error: Unable to quarantine file svch0st.exe</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:43</span><span class="log-msg warn">File quarantine file (failed)</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.5rem;" id="label-41">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host41" value="Origin"> <span style="color:var(--yellow);">Origin</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host41" value="Infected"> <span style="color:var(--red);">Infected</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host41" value="Clean"> <span style="color:var(--green);">Clean</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;max-width:700px;">
+      <!-- 10.10.9.18 -->
+      <div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);margin-bottom:0.4rem;">10.10.9.18 — Engineering Network</div>
+        <div class="log-terminal" style="max-height:180px;font-size:0.72rem;">
+          <div class="log-line"><span class="log-time">4/17 14:30</span><span class="log-msg ok">Scheduled scan initiated</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:41</span><span class="log-msg ok">Scan complete</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:42</span><span class="log-msg ok">Files removed: 0</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:43</span><span class="log-msg ok">Files quarantined: 0</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:44</span><span class="log-msg ok">Boot sector: clean</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:34</span><span class="log-msg err">Error: Unable to reach update server</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg warn">File svch0st.exe match heuristic pattern 0c09488c08d0f3k</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg err">Error: Unable to quarantine file svch0st.exe</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.5rem;" id="label-918">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host918" value="Origin"> <span style="color:var(--yellow);">Origin</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host918" value="Infected"> <span style="color:var(--red);">Infected</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host918" value="Clean"> <span style="color:var(--green);">Clean</span></label>
+        </div>
+      </div>
+      <!-- 10.10.9.12 -->
+      <div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);margin-bottom:0.4rem;">10.10.9.12 — Engineering Network</div>
+        <div class="log-terminal" style="max-height:180px;font-size:0.72rem;">
+          <div class="log-line"><span class="log-time">4/17 14:30</span><span class="log-msg ok">Scheduled scan initiated</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:41</span><span class="log-msg ok">Scan complete</span></div>
+          <div class="log-line"><span class="log-time">4/17 14:43</span><span class="log-msg ok">Files quarantined: 0</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:34</span><span class="log-msg ok">Update available v10.2.3.4440</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:35</span><span class="log-msg ok">Definition update complete</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg warn">File found svch0st.exe match definition v10.2.3.4440</span></div>
+          <div class="log-line"><span class="log-time">4/18 14:37</span><span class="log-msg ok">File quarantined svch0st.exe ✓</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.5rem;" id="label-912">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host912" value="Origin"> <span style="color:var(--yellow);">Origin</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host912" value="Infected"> <span style="color:var(--red);">Infected</span></label>
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.82rem;cursor:pointer;"><input type="radio" name="host912" value="Clean"> <span style="color:var(--green);">Clean</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="checkFWLog()">&#9654; CHECK ANSWERS</button>
+      <button class="btn-secondary" onclick="resetFWLog()">&#8635; RESET</button>
+    </div>
+    <div class="feedback" id="fb-fwlog"></div>
+  </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- PBQ-17 · CLOUD ARCHITECTURE                       -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-cloudarch">
+  <div class="scenario-card">
+    <div class="scenario-badge">PBQ-17 · Cloud Architecture Component Placement</div>
+    <div class="scenario-title">Place Cloud Components in the Correct Positions</div>
+    <div class="scenario-desc">
+      Drag each cloud infrastructure component from the pool below to its correct numbered position in the multi-tier cloud architecture diagram. 
+      The diagram has 8 positions across 4 tiers: <strong>Management</strong>, <strong>Web</strong>, <strong>Application</strong>, and <strong>Data</strong>.
+      An <strong>Internet Gateway</strong> is already placed on the right side.
+    </div>
+
+    <!-- Component pool -->
+    <div style="margin-bottom:1.5rem;">
+      <div class="col-label accent">Available Components (drag to numbered slots)</div>
+      <div id="cloud-pool" style="display:flex;flex-wrap:wrap;gap:0.5rem;padding:0.75rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;min-height:56px;"
+        ondragover="dov(event)" ondrop="cloudDropPool(event)" ondragleave="dlv(event)">
+        <div class="drag-item" draggable="true" data-comp="Database" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>🗄️ Database</div>
+        <div class="drag-item" draggable="true" data-comp="WAF" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>🛡️ WAF</div>
+        <div class="drag-item" draggable="true" data-comp="Instance" data-id="inst1" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>💻 Instance</div>
+        <div class="drag-item" draggable="true" data-comp="Instance" data-id="inst2" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>💻 Instance</div>
+        <div class="drag-item" draggable="true" data-comp="Autoscaling Instance" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>⚡ Autoscaling Instance</div>
+        <div class="drag-item" draggable="true" data-comp="WAF" data-id="waf2" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>🛡️ WAF</div>
+        <div class="drag-item" draggable="true" data-comp="Instance" data-id="inst3" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>💻 Instance</div>
+        <div class="drag-item" draggable="true" data-comp="Load Balancer" ondragstart="ds(event,'cloud')" ondragend="de(event)"><span class="handle">⠿</span>⚖️ Load Balancer</div>
+      </div>
+    </div>
+
+    <!-- Architecture Diagram -->
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem;font-family:var(--mono);">
+
+      <!-- Tier labels + positions visual -->
+      <div style="display:flex;gap:1rem;align-items:stretch;">
+        <!-- Left tier labels -->
+        <div style="display:flex;flex-direction:column;gap:0.5rem;width:110px;flex-shrink:0;justify-content:space-around;">
+          <div style="font-size:0.65rem;letter-spacing:0.08em;color:var(--accent);text-align:right;padding:0.5rem 0;border-right:2px solid var(--accent);">MANAGEMENT</div>
+          <div style="font-size:0.65rem;letter-spacing:0.08em;color:var(--yellow);text-align:right;padding:0.5rem 0;border-right:2px solid var(--yellow);">WEB TIER</div>
+          <div style="font-size:0.65rem;letter-spacing:0.08em;color:var(--purple);text-align:right;padding:0.5rem 0;border-right:2px solid var(--purple);">APP TIER</div>
+          <div style="font-size:0.65rem;letter-spacing:0.08em;color:var(--green);text-align:right;padding:0.5rem 0;border-right:2px solid var(--green);">DATA TIER</div>
+        </div>
+
+        <!-- Diagram rows -->
+        <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
+
+          <!-- Row 1: Management tier - slot 8 centered -->
+          <div style="display:flex;justify-content:center;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);border-radius:8px;padding:0.5rem;">
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 8</div>
+              <div class="cloud-slot" id="cslot-8" data-pos="8"
+                style="width:140px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-8')" ondragleave="dlv(event)">
+                <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop here</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Web tier - slots 7 and 6 -->
+          <div style="display:flex;justify-content:center;gap:1rem;background:rgba(255,211,42,0.04);border:1px solid rgba(255,211,42,0.15);border-radius:8px;padding:0.5rem;">
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 7</div>
+              <div class="cloud-slot" id="cslot-7" data-pos="7"
+                style="width:140px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-7')" ondragleave="dlv(event)">
+                <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop here</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 6</div>
+              <div class="cloud-slot" id="cslot-6" data-pos="6"
+                style="width:140px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-6')" ondragleave="dlv(event)">
+                <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop here</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: App tier - slot 5 centered (Autoscaling) -->
+          <div style="display:flex;justify-content:center;background:rgba(180,122,255,0.04);border:1px solid rgba(180,122,255,0.15);border-radius:8px;padding:0.5rem;">
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 5</div>
+              <div class="cloud-slot" id="cslot-5" data-pos="5"
+                style="width:160px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-5')" ondragleave="dlv(event)">
+                <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop here</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 4: Data tier - slots 2, 3, 9 -->
+          <div style="display:flex;justify-content:center;gap:0.75rem;background:rgba(0,245,160,0.04);border:1px solid rgba(0,245,160,0.15);border-radius:8px;padding:0.5rem;">
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 2</div>
+              <div class="cloud-slot" id="cslot-2" data-pos="2"
+                style="width:110px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-2')" ondragleave="dlv(event)">
+                <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 3</div>
+              <div class="cloud-slot" id="cslot-3" data-pos="3"
+                style="width:110px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-3')" ondragleave="dlv(event)">
+                <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 9</div>
+              <div class="cloud-slot" id="cslot-9" data-pos="9"
+                style="width:110px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-9')" ondragleave="dlv(event)">
+                <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 5: Bottom - slot 1 (Load Balancer?) -->
+          <div style="display:flex;justify-content:center;background:rgba(255,71,87,0.04);border:1px solid rgba(255,71,87,0.15);border-radius:8px;padding:0.5rem;">
+            <div>
+              <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:0.3rem;">Position 1 &amp; 10</div>
+              <div style="display:flex;gap:0.75rem;">
+                <div class="cloud-slot" id="cslot-1" data-pos="1"
+                  style="width:110px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                  ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-1')" ondragleave="dlv(event)">
+                  <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop</span>
+                </div>
+                <div class="cloud-slot" id="cslot-10" data-pos="10"
+                  style="width:110px;min-height:44px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0.25rem;"
+                  ondragover="dov(event)" ondrop="cloudDrop(event,'cslot-10')" ondragleave="dlv(event)">
+                  <span class="drop-hint" style="font-size:0.7rem;padding:0.5rem;">drop</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /diagram rows -->
+
+        <!-- Right side: Internet Gateway static -->
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:80px;flex-shrink:0;">
+          <div style="background:rgba(0,212,255,0.1);border:1px solid var(--accent);border-radius:8px;padding:0.5rem;text-align:center;">
+            <div style="font-size:1.1rem;">🌐</div>
+            <div style="font-size:0.62rem;color:var(--accent);margin-top:0.25rem;">Internet<br>Gateway</div>
+          </div>
+        </div>
+      </div><!-- /flex row -->
+    </div><!-- /diagram -->
+
+    <div class="btn-row" style="margin-top:1.5rem;">
+      <button class="btn-primary" onclick="checkCloudArch()">&#9654; CHECK PLACEMENT</button>
+      <button class="btn-secondary" onclick="resetCloudArch()">&#8635; RESET</button>
+    </div>
+    <div class="feedback" id="fb-cloudarch"></div>
+  </div>
+  </div>
+
   </div><!-- /pbq-simulator -->
 
 </div><!-- /container -->
@@ -2258,8 +2728,8 @@ function switchTab(id, btn, n) {
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
-  document.getElementById('prog-fill').style.width = (n / 14 * 100) + '%';
-  document.getElementById('prog-label').textContent = n + ' / 14';
+  document.getElementById('prog-fill').style.width = (n / 17 * 100) + '%';
+  document.getElementById('prog-label').textContent = n + ' / 17';
 }
 
 // ── GENERIC DRAG HELPERS ──
@@ -2951,6 +3421,187 @@ function resetVPN() {
    });
   document.getElementById('fb-vpn').className = 'feedback';
 }
+
+// ── PBQ-15 · ATTACK IDENTIFICATION ──
+function checkAttacks() {
+  attempts++; updScore();
+  const answers = [
+    { typeId:'atk1-type', remId:'atk1-rem', correctType:'Botnet', correctRem:'Enable DDoS protection',
+      typeHint:'Multiple SYN packets from multiple sources = DDoS via Botnet (distributed bot network)',
+      remHint:'Enable DDoS protection is the primary defense against volumetric DDoS attacks' },
+    { typeId:'atk2-type', remId:'atk2-rem', correctType:'RAT', correctRem:'Disable remote access services',
+      typeHint:'Establishes a connection for remote command execution = RAT (Remote Access Trojan)',
+      remHint:'Disabling remote access services removes the RAT\'s communication channel' },
+    { typeId:'atk3-type', remId:'atk3-rem', correctType:'Worm', correctRem:'Change the default system password',
+      typeHint:'Self-propagating + uses well-known credentials = Worm spreading via default passwords',
+      remHint:'Changing default system passwords removes the credential vector the worm exploits' },
+    { typeId:'atk4-type', remId:'atk4-rem', correctType:'Keylogger', correctRem:'Implement 2FA using push notification',
+      typeHint:'Hardware device monitoring user input to harvest credentials = Keylogger',
+      remHint:'2FA with push notification stops credential harvesting — stolen credentials alone cannot log in' },
+    { typeId:'atk5-type', remId:'atk5-rem', correctType:'Backdoor', correctRem:'Conduct a code review',
+      typeHint:'Hidden access in an internally developed application that bypasses login = Backdoor',
+      remHint:'Code review discovers and removes intentionally planted backdoors in source code' },
+  ];
+  const issues = [];
+  let allCorrect = true;
+  answers.forEach((a, i) => {
+    const typeVal = document.getElementById(a.typeId).value;
+    const remVal  = document.getElementById(a.remId).value;
+    if (typeVal !== a.correctType) { issues.push(`Row ${i+1} Attack Type: expected <strong>${a.correctType}</strong> — ${a.typeHint}`); allCorrect = false; }
+    if (remVal !== a.correctRem)   { issues.push(`Row ${i+1} Remediation: expected <strong>${a.correctRem}</strong> — ${a.remHint}`); allCorrect = false; }
+  });
+  const fb = document.getElementById('fb-attacks');
+  fb.classList.add('show');
+  if (allCorrect) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <strong>All correct!</strong><br><br>
+      1️⃣ SYN flood from multiple sources → <strong>Botnet</strong> → Enable DDoS protection<br>
+      2️⃣ Remote command execution → <strong>RAT</strong> → Disable remote access services<br>
+      3️⃣ Self-propagating via default creds → <strong>Worm</strong> → Change default system password<br>
+      4️⃣ Hardware input monitoring → <strong>Keylogger</strong> → Implement 2FA push notification<br>
+      5️⃣ Hidden login bypass in app → <strong>Backdoor</strong> → Conduct a code review`;
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+  }
+}
+function resetAttacks() {
+  ['atk1-type','atk1-rem','atk2-type','atk2-rem','atk3-type','atk3-rem','atk4-type','atk4-rem','atk5-type','atk5-rem']
+    .forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fb-attacks').className = 'feedback';
+}
+
+// ── PBQ-16 · FIREWALL LOG ANALYSIS ──
+function checkFWLog() {
+  attempts++; updScore();
+  // Correct answers based on the PDF log analysis:
+  // 192.168.10.22 = Origin (scan disabled by svch0st.exe — it INTRODUCED the threat)
+  // 192.168.10.37 = Clean  (updated AV, successfully quarantined)
+  // 192.168.10.41 = Infected (detected via heuristic but UNABLE to quarantine)
+  // 10.10.9.18    = Infected (detected via heuristic but UNABLE to quarantine)
+  // 10.10.9.12    = Clean  (updated AV, successfully quarantined)
+  const expected = {
+    host22:  { val:'Origin',   hint:'192.168.10.22 — svch0st.exe disabled the scheduled scan and updates, indicating this host INTRODUCED the infection' },
+    host37:  { val:'Clean',    hint:'192.168.10.37 — AV updated to v10.2.3.4440 and successfully quarantined svch0st.exe' },
+    host41:  { val:'Infected', hint:'192.168.10.41 — svch0st.exe was detected (heuristic match) but the quarantine FAILED — needs AV update' },
+    host918: { val:'Infected', hint:'10.10.9.18 — detected via heuristic but unable to quarantine — AV definitions are outdated' },
+    host912: { val:'Clean',    hint:'10.10.9.12 — AV updated and successfully quarantined svch0st.exe' },
+  };
+  const issues = [];
+  let allCorrect = true;
+  Object.entries(expected).forEach(([name, info]) => {
+    const selected = document.querySelector('input[name="' + name + '"]:checked');
+    if (!selected) { issues.push('No selection for host ' + name.replace('host','')); allCorrect = false; return; }
+    if (selected.value !== info.val) { issues.push('<strong>' + name.replace('host','') + '</strong>: expected <strong>' + info.val + '</strong> — ' + info.hint); allCorrect = false; }
+  });
+  const fb = document.getElementById('fb-fwlog');
+  fb.classList.add('show');
+  if (allCorrect) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <strong>Correct!</strong><br><br>
+      🔴 <strong>192.168.10.22 — Origin</strong>: svch0st.exe disabled scheduled scans and definition updates, indicating this host first introduced the threat.<br>
+      🟢 <strong>192.168.10.37 — Clean</strong>: AV definitions updated; file detected and successfully quarantined.<br>
+      🟡 <strong>192.168.10.41 — Infected</strong>: Heuristic detection but quarantine failed — AV definitions are outdated and could not remove the file.<br>
+      🟡 <strong>10.10.9.18 — Infected</strong>: Same as .41 — heuristic match but unable to quarantine; outdated AV.<br>
+      🟢 <strong>10.10.9.12 — Clean</strong>: AV updated to latest definitions; svch0st.exe detected and quarantined successfully.<br><br>
+      <em>Key insight: The origin is identified by the timestamp when svch0st.exe first DISABLED security processes — that host introduced the worm. Infected hosts have the file but cannot remove it. Clean hosts successfully updated and removed it.</em>`;
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+  }
+}
+function resetFWLog() {
+  ['host22','host37','host41','host918','host912'].forEach(name => {
+    const checked = document.querySelector('input[name="' + name + '"]:checked');
+    if (checked) checked.checked = false;
+  });
+  document.getElementById('fb-fwlog').className = 'feedback';
+}
+
+// ── PBQ-17 · CLOUD ARCHITECTURE ──
+function cloudDrop(e, slotId) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'cloud') return;
+  const slot = document.getElementById(slotId);
+  // Return existing item to pool
+  const existing = slot.querySelector('.drag-item');
+  if (existing) document.getElementById('cloud-pool').appendChild(existing);
+  const hint = slot.querySelector('.drop-hint'); if (hint) hint.remove();
+  slot.appendChild(dragSrc);
+}
+function cloudDropPool(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  if (!dragSrc || dragType !== 'cloud') return;
+  document.getElementById('cloud-pool').appendChild(dragSrc);
+}
+function checkCloudArch() {
+  attempts++; updScore();
+  // Correct mapping from the PDF answer image:
+  // Pos 8 = Database (top management tier)
+  // Pos 7 = Instance, Pos 6 = Instance (Web tier, two instances)
+  // Pos 5 = Autoscaling Instance (App tier)
+  // Pos 2 = WAF, Pos 3 = Instance, Pos 9 = WAF (Data tier row)
+  // Pos 1 = Database? Actually looking at the PDF more carefully:
+  // The answer shows: 1=Database, 2=WAF, 3=Instance, 4=Instance, 5=Autoscaling Instance, 6=WAF, 7=Instance, 8=Load Balancer, 9&10 = bottom row
+  // Re-reading: numbered 1-8 in the list: 1.Database 2.WAF 3.Instance 4.Instance 5.AutoscalingInstance 6.WAF 7.Instance 8.LoadBalancer
+  // Positions in diagram correspond to these numbers
+  const correctMap = {
+    'cslot-8': 'Load Balancer',   // pos 8 = top = Load Balancer
+    'cslot-7': 'Instance',        // pos 7 = web tier left = Instance
+    'cslot-6': 'WAF',             // pos 6 = web tier right = WAF
+    'cslot-5': 'Autoscaling Instance', // pos 5 = app tier = Autoscaling Instance
+    'cslot-2': 'WAF',             // pos 2 = data tier left = WAF
+    'cslot-3': 'Instance',        // pos 3 = data tier mid = Instance
+    'cslot-9': 'Instance',        // pos 9 = data tier right = Instance
+    'cslot-1': 'Database',        // pos 1 = bottom left = Database
+    'cslot-10': 'Instance',       // pos 10 = bottom right = Instance (if used)
+  };
+  // Only check positions 1-9 (not 10)
+  const checkSlots = ['cslot-8','cslot-7','cslot-6','cslot-5','cslot-2','cslot-3','cslot-9','cslot-1'];
+  const issues = [];
+  let allCorrect = true;
+  checkSlots.forEach(slotId => {
+    const slot = document.getElementById(slotId);
+    const item = slot.querySelector('.drag-item');
+    const pos = slot.dataset.pos;
+    const placed = item ? item.dataset.comp : null;
+    const expected = correctMap[slotId];
+    if (!placed) { issues.push(`Position ${pos}: empty — should be <strong>${expected}</strong>`); allCorrect = false; }
+    else if (placed !== expected) { issues.push(`Position ${pos}: placed <strong>${placed}</strong>, expected <strong>${expected}</strong>`); allCorrect = false; }
+  });
+  const fb = document.getElementById('fb-cloudarch');
+  fb.classList.add('show');
+  if (allCorrect) {
+    correct++; updScore();
+    fb.className = 'feedback show correct';
+    fb.innerHTML = `✅ <strong>Correct cloud architecture!</strong><br><br>
+      <strong>Position 8 (Top/Management)</strong>: Load Balancer — distributes traffic across tiers<br>
+      <strong>Positions 7 &amp; 6 (Web Tier)</strong>: Instance + WAF — web-facing instances protected by WAF<br>
+      <strong>Position 5 (App Tier)</strong>: Autoscaling Instance — scales automatically with demand<br>
+      <strong>Positions 2, 3, 9 (Data Tier)</strong>: WAF + Instance + Instance — multiple instances with WAF<br>
+      <strong>Position 1 (Base)</strong>: Database — persistent data storage at the foundation<br><br>
+      <em>Key concepts: WAFs protect web-facing layers; Autoscaling handles variable load; Load Balancers distribute traffic; Database sits deepest in the architecture for security.</em>`;
+  } else {
+    fb.className = 'feedback show incorrect';
+    fb.innerHTML = '❌ <strong>' + issues.length + ' issue(s):</strong><br>• ' + issues.join('<br>• ');
+  }
+}
+function resetCloudArch() {
+  const pool = document.getElementById('cloud-pool');
+  ['cslot-1','cslot-2','cslot-3','cslot-5','cslot-6','cslot-7','cslot-8','cslot-9','cslot-10'].forEach(id => {
+    const slot = document.getElementById(id);
+    const item = slot.querySelector('.drag-item');
+    if (item) pool.appendChild(item);
+    if (!slot.querySelector('.drop-hint')) {
+      const hint = document.createElement('span'); hint.className='drop-hint'; hint.style.fontSize='0.7rem'; hint.style.padding='0.5rem'; hint.textContent='drop here';
+      slot.appendChild(hint);
+    }
+  });
+  document.getElementById('fb-cloudarch').className = 'feedback';
+}
+
 
 </script>
 <script>
